@@ -1,10 +1,10 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { Sample } from '../../../../domain/Sample';
 
 @ObjectType()
 export class SampleResponse {
-  @Field()
+  @Field(() => ID)
   id: string;
 
   @Field()

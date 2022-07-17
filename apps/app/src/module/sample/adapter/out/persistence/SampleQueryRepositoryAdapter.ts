@@ -1,9 +1,11 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { Injectable } from '@nestjs/common';
 import { Sample as OrmSample } from '@prisma/client';
 
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
 import { Sample } from '../../../domain/Sample';
 
+@Injectable()
 export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();
@@ -15,7 +17,11 @@ export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
       .then(this.toDomainSample);
   }
 
-  private toDomainSample(ormEntity: OrmSample | null): Sample {
+  private toDomainSample(ormEntity: OrmSample | null): Sample | null {
+    if (!ormEntity) {
+      return null;
+    }
+
     return Object.assign(Sample.empty(), ormEntity);
   }
 }

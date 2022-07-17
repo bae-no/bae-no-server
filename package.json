@@ -86,7 +86,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1"
+      "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
+      "^@app/domain(|/.*)$": "<rootDir>/libs/domain/src/$1"
     }
   }
 }

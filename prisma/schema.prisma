@@ -13,5 +13,5 @@ datasource db {
 model Sample {
   id    String  @id @default(auto()) @map("_id") @db.ObjectId
   email String  @unique
-  name  String?
+  name  String
 }

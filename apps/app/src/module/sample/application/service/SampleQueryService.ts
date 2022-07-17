@@ -1,3 +1,4 @@
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Injectable } from '@nestjs/common';
 
 import { Sample } from '../../domain/Sample';
@@ -16,7 +17,7 @@ export class SampleQueryService extends SampleQueryUseCase {
     const sample = await this.sampleQueryRepositoryPort.findById(id);
 
     if (!sample) {
-      throw new Error('sample 이 존재하지 않습니다');
+      throw new NotFoundException('sample 이 존재하지 않습니다');
     }
 
     return sample;

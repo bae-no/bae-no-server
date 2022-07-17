@@ -5,7 +5,7 @@
   "monorepo": true,
   "root": "apps/app",
   "compilerOptions": {
-    "webpack": true,
+    "webpack": false,
     "tsConfigPath": "apps/app/tsconfig.app.json"
   },
   "projects": {
@@ -16,6 +16,24 @@
       "sourceRoot": "apps/app/src",
       "compilerOptions": {
         "tsConfigPath": "apps/app/tsconfig.app.json"
+      }
+    },
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+      }
+    },
+    "domain": {
+      "type": "library",
+      "root": "libs/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/domain/tsconfig.lib.json"
       }
     }
   }

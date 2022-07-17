@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateSampleInput {
+  email: String!
+  name: String!
+}
+
+type Mutation {
+  create(input: CreateSampleInput!): SampleResponse!
+}
+
 type Query {
-  sample: String!
+  findById(id: ID!): SampleResponse!
+}
+
+type SampleResponse {
+  email: String!
+  id: String!
+  name: String!
 }

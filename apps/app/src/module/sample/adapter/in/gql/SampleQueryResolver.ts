@@ -1,4 +1,4 @@
-import { TE } from '@app/domain/fp-ts';
+import { toResponse } from '@app/domain/fp-ts';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
@@ -15,10 +15,7 @@ export class SampleQueryResolver {
   ): Promise<SampleResponse> {
     return pipe(
       this.sampleQueryUseCase.findById(id),
-      TE.map(SampleResponse.of),
-      TE.getOrElse((err) => {
-        throw err;
-      }),
+      toResponse(SampleResponse.of),
     )();
   }
 }

@@ -1,4 +1,6 @@
+import { toResponse } from '@app/domain/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { pipe } from 'fp-ts/function';
 
 import { CreateSampleCommand } from '../../../application/port/in/CreateSampleCommand';
 import { SampleCommandUseCase } from '../../../application/port/in/SampleCommandUseCase';
@@ -11,8 +13,10 @@ export class SampleMutationResolver {
 
   @Mutation(() => SampleResponse)
   create(@Args('input') input: CreateSampleInput): Promise<SampleResponse> {
-    const command = new CreateSampleCommand(input.name, input.email);
-
-    return this.sampleCommandUseCase.create(command).then(SampleResponse.of);
+    return pipe(
+      new CreateSampleCommand(input.name, input.email),
+      (command) => this.sampleCommandUseCase.create(command),
+      toResponse(SampleResponse.of),
+    )();
   }
 }

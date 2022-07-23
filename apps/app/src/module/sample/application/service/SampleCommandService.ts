@@ -1,4 +1,7 @@
+import { DBError } from '@app/domain/error/DBError';
 import { Injectable } from '@nestjs/common';
+import { pipe } from 'fp-ts/function';
+import { TaskEither } from 'fp-ts/TaskEither';
 
 import { Sample } from '../../domain/Sample';
 import { CreateSampleCommand } from '../port/in/CreateSampleCommand';
@@ -11,9 +14,10 @@ export class SampleCommandService extends SampleCommandUseCase {
     super();
   }
 
-  override async create(command: CreateSampleCommand): Promise<Sample> {
-    const sample = Sample.of({ name: command.name, email: command.email });
-
-    return this.sampleRepositoryPort.save(sample);
+  override create(command: CreateSampleCommand): TaskEither<DBError, Sample> {
+    return pipe(
+      Sample.of({ name: command.name, email: command.email }),
+      (sample) => this.sampleRepositoryPort.save(sample),
+    );
   }
 }

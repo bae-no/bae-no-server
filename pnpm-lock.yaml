@@ -24,6 +24,7 @@ specifiers:
   eslint-plugin-jest-formatting: ^3.1.0
   eslint-plugin-node: ^11.1.0
   eslint-plugin-prettier: ^4.2.1
+  fp-ts: ^2.12.1
   graphql: ^16.5.0
   husky: ^8.0.1
   jest: 28.1.3
@@ -49,6 +50,7 @@ dependencies:
   '@nestjs/platform-express': 9.0.3_2loxls3fbqb44dvsophl4n3naa
   '@prisma/client': 4.0.0_prisma@4.0.0
   apollo-server-express: 3.10.0_g7snex6epo2tsaz6yhvyva23iq
+  fp-ts: 2.12.1
   graphql: 16.5.0
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
@@ -3252,6 +3254,10 @@ packages:
   /forwarded/0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
+
+  /fp-ts/2.12.1:
+    resolution: {integrity: sha512-oxvgqUYR6O9VkKXrxkJ0NOyU0FrE705MeqgBUMEPWyTu6Pwn768cJbHChw2XOBlgFLKfIHxjr2OOBFpv2mUGZw==}
+    dev: false
 
   /fresh/0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}

@@ -9,6 +9,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
 import { Sample } from '../../../domain/Sample';
+import { SampleOrmMapper } from './SampleOrmMapper';
 
 @Injectable()
 export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
@@ -24,9 +25,6 @@ export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
   }
 
   private toDomainSample(ormEntity: OrmSample | null): Option<Sample> {
-    return pipe(
-      O.fromNullable(ormEntity),
-      O.map((v) => Object.assign(Sample.empty(), v)),
-    );
+    return pipe(O.fromNullable(ormEntity), O.map(SampleOrmMapper.toDomain));
   }
 }

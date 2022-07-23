@@ -1,8 +1,8 @@
 import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
+import { TE } from '@app/domain/fp-ts';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import * as TE from 'fp-ts/TaskEither';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { Sample } from '../../domain/Sample';

@@ -1,11 +1,10 @@
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import { O, TE } from '@app/domain/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { Sample as OrmSample } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
-import * as O from 'fp-ts/Option';
-import * as TE from 'fp-ts/TaskEither';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';

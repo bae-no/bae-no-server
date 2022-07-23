@@ -1,6 +1,6 @@
+import { TE } from '@app/domain/fp-ts';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
-import * as TE from 'fp-ts/TaskEither';
 
 import { SampleQueryUseCase } from '../../../application/port/in/SampleQueryUseCase';
 import { SampleResponse } from './response/SampleResponse';

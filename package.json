@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.0.0",
     "apollo-server-express": "^3.10.0",
+    "fp-ts": "^2.12.1",
     "graphql": "^16.5.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

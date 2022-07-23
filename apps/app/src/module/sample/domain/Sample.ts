@@ -5,32 +5,25 @@ export interface CreateSampleProps {
   name: string;
 }
 
-export class Sample extends BaseEntity {
-  private _email: string;
-  private _name: string;
+export interface SampleProps {
+  email: string;
+  name: string;
+}
 
-  private constructor() {
-    super();
+export class Sample extends BaseEntity<SampleProps> {
+  private constructor(props: SampleProps) {
+    super(props);
   }
 
-  static of({ email, name }: CreateSampleProps) {
-    const entity = new Sample();
-
-    entity._email = email;
-    entity._name = name;
-
-    return entity;
-  }
-
-  static empty() {
-    return new Sample();
+  static of(props: CreateSampleProps) {
+    return new Sample(props);
   }
 
   get email(): string {
-    return this._email;
+    return this.props.email;
   }
 
   get name(): string {
-    return this._name;
+    return this.props.name;
   }
 }

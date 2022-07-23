@@ -17,6 +17,6 @@ type Query {
 
 type SampleResponse {
   email: String!
-  id: String!
+  id: ID!
   name: String!
 }

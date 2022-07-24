@@ -9,7 +9,7 @@ import {
 } from '../../../../fixture';
 
 describe('SampleQueryRepositoryAdapter', () => {
-  let service: SampleQueryRepositoryAdapter;
+  let sampleQueryRepositoryAdapter: SampleQueryRepositoryAdapter;
   let prisma: PrismaService;
 
   beforeAll(async () => {
@@ -17,7 +17,7 @@ describe('SampleQueryRepositoryAdapter', () => {
       providers: [SampleQueryRepositoryAdapter, PrismaService],
     }).compile();
 
-    service = module.get(SampleQueryRepositoryAdapter);
+    sampleQueryRepositoryAdapter = module.get(SampleQueryRepositoryAdapter);
     prisma = module.get(PrismaService);
   });
 
@@ -31,7 +31,7 @@ describe('SampleQueryRepositoryAdapter', () => {
       const id = '507f191e810c19729de860ea';
 
       // when
-      const result = service.findById(id);
+      const result = sampleQueryRepositoryAdapter.findById(id);
 
       // then
       await assertResolvesRight(result, (value) => {
@@ -46,7 +46,7 @@ describe('SampleQueryRepositoryAdapter', () => {
       });
 
       // when
-      const result = service.findById(createdSample.id);
+      const result = sampleQueryRepositoryAdapter.findById(createdSample.id);
 
       // then
       await assertResolvesRight(result, (value) => {

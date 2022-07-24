@@ -6,7 +6,7 @@ import { Sample } from '../../../../../src/module/sample/domain/Sample';
 import { assertResolvesRight } from '../../../../fixture';
 
 describe('SampleRepositoryAdapter', () => {
-  let service: SampleRepositoryAdapter;
+  let sampleRepositoryAdapter: SampleRepositoryAdapter;
   let prisma: PrismaService;
 
   beforeAll(async () => {
@@ -14,7 +14,7 @@ describe('SampleRepositoryAdapter', () => {
       providers: [SampleRepositoryAdapter, PrismaService],
     }).compile();
 
-    service = module.get(SampleRepositoryAdapter);
+    sampleRepositoryAdapter = module.get(SampleRepositoryAdapter);
     prisma = module.get(PrismaService);
   });
 
@@ -31,7 +31,7 @@ describe('SampleRepositoryAdapter', () => {
       });
 
       // when
-      const result = service.save(sample);
+      const result = sampleRepositoryAdapter.save(sample);
 
       // then
       await assertResolvesRight(result, (value) => {

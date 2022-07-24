@@ -5,4 +5,4 @@ import { AppModule } from './AppModule';
 async function bootstrap() {
   await repl(AppModule);
 }
-bootstrap().catch();
+void bootstrap().catch();

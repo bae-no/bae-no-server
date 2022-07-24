@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Sample {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email String  @unique
-  name  String
+  email     String   @unique
+  name      String
 }

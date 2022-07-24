@@ -6,8 +6,8 @@ export interface BaseEntityProps {
 
 export abstract class BaseEntity<T> implements BaseEntityProps {
   private readonly _id: string;
-  private readonly _createdAt: Date = new Date();
-  private _updatedAt: Date = new Date();
+  private readonly _createdAt: Date;
+  private _updatedAt: Date;
 
   protected props: T;
 

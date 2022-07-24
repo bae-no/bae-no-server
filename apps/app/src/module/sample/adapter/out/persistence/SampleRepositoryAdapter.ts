@@ -17,7 +17,14 @@ export class SampleRepositoryAdapter extends SampleRepositoryPort {
 
   override save(sample: Sample): TaskEither<DBError, Sample> {
     return pipe(
-      tryCatchDB(() => this.prisma.sample.create({ data: sample })),
+      tryCatchDB(() =>
+        this.prisma.sample.create({
+          data: {
+            name: sample.name,
+            email: sample.email,
+          },
+        }),
+      ),
       TE.map(SampleOrmMapper.toDomain),
     );
   }

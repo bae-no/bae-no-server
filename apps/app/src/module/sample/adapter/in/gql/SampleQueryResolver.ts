@@ -10,7 +10,7 @@ export class SampleQueryResolver {
   constructor(private readonly sampleQueryUseCase: SampleQueryUseCase) {}
 
   @Query(() => SampleResponse)
-  findById(
+  async findById(
     @Args({ name: 'id', type: () => ID }) id: string,
   ): Promise<SampleResponse> {
     return pipe(

@@ -12,7 +12,9 @@ export class SampleMutationResolver {
   constructor(private readonly sampleCommandUseCase: SampleCommandUseCase) {}
 
   @Mutation(() => SampleResponse)
-  create(@Args('input') input: CreateSampleInput): Promise<SampleResponse> {
+  async create(
+    @Args('input') input: CreateSampleInput,
+  ): Promise<SampleResponse> {
     return pipe(
       new CreateSampleCommand(input.name, input.email),
       (command) => this.sampleCommandUseCase.create(command),

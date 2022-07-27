@@ -20,3 +20,7 @@ type SampleResponse {
   id: ID!
   name: String!
 }
+
+type Subscription {
+  sampleAdded: SampleResponse!
+}

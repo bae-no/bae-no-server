@@ -4,6 +4,7 @@ import { PrismaModule } from '@app/prisma/PrismaModule';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { SampleModule } from './module/sample/SampleModule';
 
@@ -13,6 +14,11 @@ import { SampleModule } from './module/sample/SampleModule';
       driver: ApolloDriver,
       autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
       sortSchema: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     PrismaModule,
     SampleModule,

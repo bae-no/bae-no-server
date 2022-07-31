@@ -6,16 +6,13 @@ on:
       - "**"
 
 jobs:
-  docker:
+  test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Start containers
-        run: docker-compose -f "docker-compose.yml" up -d --build
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -51,7 +48,3 @@ jobs:
           fail-on-error: 'false'
           reporter: jest-junit
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Stop containers
-        if: always()
-        run: docker-compose -f "docker-compose.yml" down

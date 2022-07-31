@@ -13,23 +13,25 @@ describe('SampleQueryResolver', () => {
   const sampleQueryUseCase = mock<SampleQueryUseCase>();
 
   beforeAll(async () => {
-    app = await graphQLTestHelper([
-      SampleQueryResolver,
-      {
-        provide: SampleQueryUseCase,
-        useValue: sampleQueryUseCase,
-      },
-    ]);
+    app = await graphQLTestHelper({
+      providers: [
+        SampleQueryResolver,
+        {
+          provide: SampleQueryUseCase,
+          useValue: sampleQueryUseCase,
+        },
+      ],
+    });
   });
 
   afterAll(async () => app.close());
 
-  describe('findById', () => {
+  describe('sample', () => {
     it('주어진 샘플을 조회한다', async () => {
       // given
       // language=GraphQL
       const query = `query {
-        findById(id: "507f191e810c19729de860ea") {
+        sample(id: "507f191e810c19729de860ea") {
           name
           email
         }
@@ -44,7 +46,7 @@ describe('SampleQueryResolver', () => {
 
       // then
       expect(response.body).toEqual({
-        data: { findById: { name: sample.name, email: sample.email } },
+        data: { sample: { name: sample.name, email: sample.email } },
       });
     });
   });

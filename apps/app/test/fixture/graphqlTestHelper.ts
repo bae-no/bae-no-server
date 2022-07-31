@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { INestApplication, Provider } from '@nestjs/common';
+import { INestApplication, ModuleMetadata } from '@nestjs/common';
 import { GraphQLModule, Query, Resolver } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -12,7 +12,7 @@ export class TestQueryResolver {
 }
 
 export async function graphQLTestHelper(
-  providers: Provider[],
+  metadata: ModuleMetadata,
 ): Promise<INestApplication> {
   const module: TestingModule = await Test.createTestingModule({
     imports: [
@@ -20,8 +20,9 @@ export async function graphQLTestHelper(
         driver: ApolloDriver,
         autoSchemaFile: true,
       }),
+      ...(metadata.imports || []),
     ],
-    providers: [TestQueryResolver, ...providers],
+    providers: [TestQueryResolver, ...(metadata.providers || [])],
   }).compile();
 
   return module.createNestApplication().init();

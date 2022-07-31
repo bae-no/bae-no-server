@@ -23,8 +23,8 @@ export async function graphQLTestHelper(
     providers: [CategoryQueryResolver, ...(metadata.providers || [])],
   }).compile();
 
-  const app = await module.createNestApplication().init();
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
-  return app;
+  return module
+    .createNestApplication()
+    .useGlobalPipes(new ValidationPipe({ transform: true }))
+    .init();
 }

@@ -5,7 +5,7 @@ import { PubSubAdapter } from './PubSubAdapter';
 
 @Global()
 @Module({
-  providers: [PubSubAdapter],
-  exports: [{ provide: PubSubPort, useClass: PubSubAdapter }],
+  providers: [{ provide: PubSubPort, useClass: PubSubAdapter }],
+  exports: [PubSubPort],
 })
 export class PubSubModule {}

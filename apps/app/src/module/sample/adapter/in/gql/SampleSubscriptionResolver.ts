@@ -1,14 +1,14 @@
+import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Resolver, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
 
 import { SampleResponse } from './response/SampleResponse';
 
-const pubSub = new PubSub();
-
 @Resolver()
 export class SampleSubscriptionResolver {
+  constructor(private readonly pubSubPort: PubSubPort) {}
+
   @Subscription(() => SampleResponse)
-  async sampleAdded() {
-    return pubSub.asyncIterator('sampleAdded');
+  async sampleAdded(): Promise<AsyncIterator<SampleResponse>> {
+    return this.pubSubPort.subscribe('sampleAdded');
   }
 }

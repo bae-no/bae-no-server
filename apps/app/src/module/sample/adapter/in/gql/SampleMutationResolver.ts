@@ -1,31 +1,32 @@
-import { toResponse } from '@app/domain/fp-ts';
+import { TE, toResponse } from '@app/domain/fp-ts';
+import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
-import { PubSub } from 'graphql-subscriptions';
 
 import { CreateSampleCommand } from '../../../application/port/in/CreateSampleCommand';
 import { SampleCommandUseCase } from '../../../application/port/in/SampleCommandUseCase';
 import { CreateSampleInput } from './input/CreateSampleInput';
 import { SampleResponse } from './response/SampleResponse';
 
-const pubSub = new PubSub();
-
 @Resolver()
 export class SampleMutationResolver {
-  constructor(private readonly sampleCommandUseCase: SampleCommandUseCase) {}
+  constructor(
+    private readonly sampleCommandUseCase: SampleCommandUseCase,
+    private readonly pubSubPort: PubSubPort,
+  ) {}
 
   @Mutation(() => SampleResponse)
-  async createSample(
-    @Args('input') input: CreateSampleInput,
-  ): Promise<SampleResponse> {
-    const response = await pipe(
+  async createSample(@Args('input') input: CreateSampleInput) {
+    return pipe(
       new CreateSampleCommand(input.name, input.email),
       (command) => this.sampleCommandUseCase.create(command),
-      toResponse(SampleResponse.of),
+      TE.map((sample) => {
+        const response = SampleResponse.of(sample);
+        this.pubSubPort.publish('sampleAdded', { sampleAdded: response });
+
+        return sample;
+      }),
+      toResponse(),
     )();
-
-    await pubSub.publish('sampleAdded', { sampleAdded: response });
-
-    return response;
   }
 }

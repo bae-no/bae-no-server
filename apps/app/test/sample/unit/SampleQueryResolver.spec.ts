@@ -45,7 +45,7 @@ describe('SampleQueryResolver', () => {
         .send({ query });
 
       // then
-      expect(response.body).toEqual({
+      expect(response.body).toStrictEqual({
         data: { sample: { name: sample.name, email: sample.email } },
       });
     });

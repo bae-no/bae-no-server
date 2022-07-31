@@ -36,8 +36,8 @@ describe('SampleRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (value) => {
         expect(value.id).not.toBeUndefined();
-        expect(value.name).toEqual(sample.name);
-        expect(value.email).toEqual(sample.email);
+        expect(value.name).toBe(sample.name);
+        expect(value.email).toBe(sample.email);
       });
     });
   });

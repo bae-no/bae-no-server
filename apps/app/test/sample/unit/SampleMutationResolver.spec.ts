@@ -52,7 +52,7 @@ describe('SampleMutationResolver', () => {
         .send({ query: mutation, variables: { input } });
 
       // then
-      expect(response.body).toEqual({
+      expect(response.body).toStrictEqual({
         data: { createSample: { name: sample.name, email: sample.email } },
       });
     });

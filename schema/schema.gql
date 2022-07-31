@@ -8,15 +8,19 @@ input CreateSampleInput {
 }
 
 type Mutation {
-  create(input: CreateSampleInput!): SampleResponse!
+  createSample(input: CreateSampleInput!): SampleResponse!
 }
 
 type Query {
-  findById(id: ID!): SampleResponse!
+  sample(id: ID!): SampleResponse!
 }
 
 type SampleResponse {
   email: String!
   id: ID!
   name: String!
+}
+
+type Subscription {
+  sampleAdded: SampleResponse!
 }

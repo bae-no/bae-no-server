@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { SampleMutationResolver } from './adapter/in/gql/SampleMutationResolver';
 import { SampleQueryResolver } from './adapter/in/gql/SampleQueryResolver';
+import { SampleSubscriptionResolver } from './adapter/in/gql/SampleSubscriptionResolver';
 import { SampleQueryRepositoryAdapter } from './adapter/out/persistence/SampleQueryRepositoryAdapter';
 import { SampleRepositoryAdapter } from './adapter/out/persistence/SampleRepositoryAdapter';
 import { SampleCommandUseCase } from './application/port/in/SampleCommandUseCase';
@@ -15,6 +16,7 @@ import { SampleQueryService } from './application/service/SampleQueryService';
   providers: [
     SampleQueryResolver,
     SampleMutationResolver,
+    SampleSubscriptionResolver,
     {
       provide: SampleQueryUseCase,
       useClass: SampleQueryService,

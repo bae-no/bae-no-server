@@ -35,6 +35,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/domain/tsconfig.lib.json"
       }
+    },
+    "pub-sub": {
+      "type": "library",
+      "root": "libs/pub-sub",
+      "entryFile": "index",
+      "sourceRoot": "libs/pub-sub/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/pub-sub/tsconfig.lib.json"
+      }
     }
   }
 }

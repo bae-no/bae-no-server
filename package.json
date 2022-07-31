@@ -36,6 +36,8 @@
     "@prisma/client": "^4.0.0",
     "apollo-server-core": "^3.10.0",
     "apollo-server-express": "^3.10.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "fp-ts": "^2.12.1",
     "graphql": "^16.5.0",
     "graphql-subscriptions": "^2.0.0",

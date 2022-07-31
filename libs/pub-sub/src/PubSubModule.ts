@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
+import { Global, Module } from '@nestjs/common';
 
-import { PubSubService } from './PubSubService';
+import { PubSubAdapter } from './PubSubAdapter';
 
+@Global()
 @Module({
-  providers: [PubSubService],
-  exports: [PubSubService],
+  providers: [PubSubAdapter],
+  exports: [{ provide: PubSubPort, useClass: PubSubAdapter }],
 })
 export class PubSubModule {}

@@ -22,3 +22,24 @@ echo '127.0.0.1 mongo1' | sudo tee -a /etc/hosts
 echo '127.0.0.1 mongo2' | sudo tee -a /etc/hosts
 echo '127.0.0.1 mongo3' | sudo tee -a /etc/hosts
 ```
+
+## 서버 실행
+
+본 프로젝트는 패키지 매니저로 pnpm 을 사용합니다.  
+다음 명령어를 수행해 의존성을 설치합니다.
+
+```shell
+pnpm install
+```
+
+`.env.sample` 파일을 `.env` 로 복사합니다.
+
+```shell
+cp .env.sample .env
+```
+
+다음 명령어를 실행합니다.
+
+```shell
+pnpm start
+```

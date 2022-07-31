@@ -1,5 +1,5 @@
 import { AuthType } from './AuthType';
 
-class Auth {
+export class Auth {
   constructor(readonly socialId: string, readonly type: AuthType) {}
 }

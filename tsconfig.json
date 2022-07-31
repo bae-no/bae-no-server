@@ -20,6 +20,8 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "strictPropertyInitialization": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "@app/prisma": [
         "libs/prisma/src"

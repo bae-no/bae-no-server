@@ -2,16 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthCategory {
+  code: AuthType!
+  name: String!
+}
+
+"""로그인 유형"""
+enum AuthType {
+  APPLE
+  GOOGLE
+  KAKAO
+}
+
+type CategoryResponse {
+  auth: [AuthCategory!]!
+}
+
 input CreateSampleInput {
   email: String!
   name: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
+
+  """회원 가입 & 로그인"""
+  signIn(input: SignInInput!): SignInResponse!
 }
 
 type Query {
+  """카테고리 목록"""
+  categories: CategoryResponse!
   sample(id: ID!): SampleResponse!
 }
 
@@ -19,6 +45,16 @@ type SampleResponse {
   email: String!
   id: ID!
   name: String!
+}
+
+input SignInInput {
+  code: String!
+  type: AuthType!
+}
+
+type SignInResponse {
+  accessToken: String!
+  expiredAt: DateTime!
 }
 
 type Subscription {

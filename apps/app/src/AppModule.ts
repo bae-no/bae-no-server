@@ -9,6 +9,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { CategoryModule } from './module/category/CategoryModule';
 import { SampleModule } from './module/sample/SampleModule';
+import { UserModule } from './module/user/UserModule';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SampleModule } from './module/sample/SampleModule';
     PubSubModule,
     CategoryModule,
     SampleModule,
+    UserModule,
   ],
 })
 export class AppModule {}

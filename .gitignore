@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # Jest
 junit-*.xml
+
+# Env
+.env

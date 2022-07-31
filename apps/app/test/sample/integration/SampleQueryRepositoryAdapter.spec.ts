@@ -1,12 +1,8 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { SampleQueryRepositoryAdapter } from '../../../../../src/module/sample/adapter/out/persistence/SampleQueryRepositoryAdapter';
-import {
-  assertNone,
-  assertResolvesRight,
-  assertSome,
-} from '../../../../fixture';
+import { SampleQueryRepositoryAdapter } from '../../../src/module/sample/adapter/out/persistence/SampleQueryRepositoryAdapter';
+import { assertNone, assertResolvesRight, assertSome } from '../../fixture';
 
 describe('SampleQueryRepositoryAdapter', () => {
   let sampleQueryRepositoryAdapter: SampleQueryRepositoryAdapter;

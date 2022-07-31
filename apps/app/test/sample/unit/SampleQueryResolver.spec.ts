@@ -3,10 +3,10 @@ import { right } from 'fp-ts/TaskEither';
 import { mock } from 'jest-mock-extended';
 import * as request from 'supertest';
 
-import { SampleQueryResolver } from '../../../../../src/module/sample/adapter/in/gql/SampleQueryResolver';
-import { SampleQueryUseCase } from '../../../../../src/module/sample/application/port/in/SampleQueryUseCase';
-import { Sample } from '../../../../../src/module/sample/domain/Sample';
-import { graphQLTestHelper } from '../../../../fixture/graphqlTestHelper';
+import { SampleQueryResolver } from '../../../src/module/sample/adapter/in/gql/SampleQueryResolver';
+import { SampleQueryUseCase } from '../../../src/module/sample/application/port/in/SampleQueryUseCase';
+import { Sample } from '../../../src/module/sample/domain/Sample';
+import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
 
 describe('SampleQueryResolver', () => {
   let app: INestApplication;

@@ -3,10 +3,10 @@ import { none, some } from 'fp-ts/Option';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { SampleQueryRepositoryPort } from '../../../../src/module/sample/application/port/out/SampleQueryRepositoryPort';
-import { SampleQueryService } from '../../../../src/module/sample/application/service/SampleQueryService';
-import { Sample } from '../../../../src/module/sample/domain/Sample';
-import { assertResolvesLeft, assertResolvesRight } from '../../../fixture';
+import { SampleQueryRepositoryPort } from '../../../src/module/sample/application/port/out/SampleQueryRepositoryPort';
+import { SampleQueryService } from '../../../src/module/sample/application/service/SampleQueryService';
+import { Sample } from '../../../src/module/sample/domain/Sample';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 
 describe('SampleQueryService', () => {
   const sampleQueryRepositoryPort = mock<SampleQueryRepositoryPort>();

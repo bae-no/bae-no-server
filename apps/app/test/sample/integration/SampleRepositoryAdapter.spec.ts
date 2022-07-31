@@ -1,9 +1,9 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { SampleRepositoryAdapter } from '../../../../../src/module/sample/adapter/out/persistence/SampleRepositoryAdapter';
-import { Sample } from '../../../../../src/module/sample/domain/Sample';
-import { assertResolvesRight } from '../../../../fixture';
+import { SampleRepositoryAdapter } from '../../../src/module/sample/adapter/out/persistence/SampleRepositoryAdapter';
+import { Sample } from '../../../src/module/sample/domain/Sample';
+import { assertResolvesRight } from '../../fixture';
 
 describe('SampleRepositoryAdapter', () => {
   let sampleRepositoryAdapter: SampleRepositoryAdapter;

@@ -3,12 +3,12 @@ import { right } from 'fp-ts/TaskEither';
 import { mock } from 'jest-mock-extended';
 import * as request from 'supertest';
 
-import { StubPubSubModule } from '../../../../../../../libs/pub-sub/test/StubPubSubModule';
-import { CreateSampleInput } from '../../../../../src/module/sample/adapter/in/gql/input/CreateSampleInput';
-import { SampleMutationResolver } from '../../../../../src/module/sample/adapter/in/gql/SampleMutationResolver';
-import { SampleCommandUseCase } from '../../../../../src/module/sample/application/port/in/SampleCommandUseCase';
-import { Sample } from '../../../../../src/module/sample/domain/Sample';
-import { graphQLTestHelper } from '../../../../fixture/graphqlTestHelper';
+import { StubPubSubModule } from '../../../../../libs/pub-sub/test/StubPubSubModule';
+import { CreateSampleInput } from '../../../src/module/sample/adapter/in/gql/input/CreateSampleInput';
+import { SampleMutationResolver } from '../../../src/module/sample/adapter/in/gql/SampleMutationResolver';
+import { SampleCommandUseCase } from '../../../src/module/sample/application/port/in/SampleCommandUseCase';
+import { Sample } from '../../../src/module/sample/domain/Sample';
+import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
 
 describe('SampleMutationResolver', () => {
   const sampleCommandUserCase = mock<SampleCommandUseCase>();

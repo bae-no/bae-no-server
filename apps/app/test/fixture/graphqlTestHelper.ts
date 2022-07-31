@@ -1,5 +1,9 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { INestApplication, ModuleMetadata } from '@nestjs/common';
+import {
+  INestApplication,
+  ModuleMetadata,
+  ValidationPipe,
+} from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -19,5 +23,8 @@ export async function graphQLTestHelper(
     providers: [CategoryQueryResolver, ...(metadata.providers || [])],
   }).compile();
 
-  return module.createNestApplication().init();
+  const app = await module.createNestApplication().init();
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  return app;
 }

@@ -20,6 +20,7 @@ import { SampleModule } from './module/sample/SampleModule';
       },
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      introspection: true,
     }),
     PrismaModule,
     PubSubModule,

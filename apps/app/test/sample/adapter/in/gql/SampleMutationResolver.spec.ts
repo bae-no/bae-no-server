@@ -3,6 +3,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock } from 'jest-mock-extended';
 import * as request from 'supertest';
 
+import { StubPubSubModule } from '../../../../../../../libs/pub-sub/test/StubPubSubModule';
 import { CreateSampleInput } from '../../../../../src/module/sample/adapter/in/gql/input/CreateSampleInput';
 import { SampleMutationResolver } from '../../../../../src/module/sample/adapter/in/gql/SampleMutationResolver';
 import { SampleCommandUseCase } from '../../../../../src/module/sample/application/port/in/SampleCommandUseCase';
@@ -14,18 +15,21 @@ describe('SampleMutationResolver', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    app = await graphQLTestHelper([
-      SampleMutationResolver,
-      {
-        provide: SampleCommandUseCase,
-        useValue: sampleCommandUserCase,
-      },
-    ]);
+    app = await graphQLTestHelper({
+      imports: [StubPubSubModule],
+      providers: [
+        SampleMutationResolver,
+        {
+          provide: SampleCommandUseCase,
+          useValue: sampleCommandUserCase,
+        },
+      ],
+    });
   });
 
   afterAll(async () => app.close());
 
-  describe('create', () => {
+  describe('createSample', () => {
     it('주어진 샘플을 생성한다', async () => {
       // given
       const input = new CreateSampleInput();
@@ -34,7 +38,7 @@ describe('SampleMutationResolver', () => {
 
       // language=GraphQL
       const mutation = `mutation create($input: CreateSampleInput!) {
-        create(input: $input) {
+        createSample(input: $input) {
           name
           email
         }
@@ -49,7 +53,7 @@ describe('SampleMutationResolver', () => {
 
       // then
       expect(response.body).toEqual({
-        data: { create: { name: sample.name, email: sample.email } },
+        data: { createSample: { name: sample.name, email: sample.email } },
       });
     });
   });

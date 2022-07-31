@@ -52,9 +52,16 @@ describe('SampleMutationResolver', () => {
         .send({ query: mutation, variables: { input } });
 
       // then
-      expect(response.body).toStrictEqual({
-        data: { createSample: { name: sample.name, email: sample.email } },
-      });
+      expect(response.body).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "createSample": Object {
+              "email": "email",
+              "name": "name",
+            },
+          },
+        }
+      `);
     });
   });
 });

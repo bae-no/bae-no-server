@@ -45,9 +45,16 @@ describe('SampleQueryResolver', () => {
         .send({ query });
 
       // then
-      expect(response.body).toStrictEqual({
-        data: { sample: { name: sample.name, email: sample.email } },
-      });
+      expect(response.body).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "sample": Object {
+              "email": "email",
+              "name": "name",
+            },
+          },
+        }
+      `);
     });
   });
 });

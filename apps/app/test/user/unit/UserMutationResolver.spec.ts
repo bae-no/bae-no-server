@@ -45,7 +45,7 @@ describe('UserMutationResolver', () => {
 
       const authToken = new AuthToken();
       authToken.accessToken = 'accessToken';
-      authToken.expiredAt = new Date();
+      authToken.expiredAt = new Date('2022-08-01 11:22:33');
       userCommandUseCase.signIn.mockReturnValue(right(authToken));
 
       // when
@@ -54,9 +54,16 @@ describe('UserMutationResolver', () => {
         .send({ query: mutation, variables: { input } });
 
       // then
-      expect(response.body).toStrictEqual({
-        data: { signIn: authToken },
-      });
+      expect(response.body).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "signIn": Object {
+              "accessToken": "accessToken",
+              "expiredAt": "2022-08-01T02:22:33.000Z",
+            },
+          },
+        }
+      `);
     });
   });
 });

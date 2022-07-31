@@ -1,17 +1,21 @@
-import { Logger } from '@nestjs/common';
+import { toResponse } from '@app/domain/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { pipe } from 'fp-ts/function';
 
+import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseCase';
 import { SignInInput } from './input/SignInInput';
 import { SignInResponse } from './response/SignInResponse';
 
 @Resolver()
 export class UserMutationResolver {
-  private readonly logger = new Logger(UserMutationResolver.name);
+  constructor(private readonly userCommandUseCase: UserCommandUseCase) {}
 
   @Mutation(() => SignInResponse, { description: '회원 가입 & 로그인' })
   async signIn(@Args('input') input: SignInInput): Promise<SignInResponse> {
-    this.logger.log(input);
-
-    return {} as any;
+    return pipe(
+      input.toCommand(),
+      (command) => this.userCommandUseCase.signIn(command),
+      toResponse(SignInResponse.of),
+    )();
   }
 }

@@ -10,7 +10,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import got, { GotRequestFunction } from 'got';
 
 @Injectable()
-export class HttpClientService implements HttpClientPort {
+export class HttpClientService extends HttpClientPort {
   private readonly instance = got.extend({
     timeout: {
       connect: 5000,
@@ -18,19 +18,31 @@ export class HttpClientService implements HttpClientPort {
     },
   });
 
-  get(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override get(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse> {
     return this.send(this.instance.get, url, option);
   }
 
-  post(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override post(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse> {
     return this.send(this.instance.post, url, option);
   }
 
-  put(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override put(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse> {
     return this.send(this.instance.put, url, option);
   }
 
-  patch(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override patch(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse> {
     return this.send(this.instance.patch, url, option);
   }
 

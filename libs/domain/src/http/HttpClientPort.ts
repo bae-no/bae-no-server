@@ -8,8 +8,29 @@ export interface HttpOption {
   body?: Record<string, any>;
 }
 
-export interface HttpClientPort {
-  get(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse>;
+export abstract class HttpClientPort {
+  abstract get(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse>;
 
-  post(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse>;
+  abstract post(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse>;
+
+  abstract put(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse>;
+
+  abstract patch(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse>;
+
+  abstract delete(
+    url: string,
+    option?: HttpOption,
+  ): TaskEither<HttpError, HttpResponse>;
 }

@@ -44,6 +44,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/pub-sub/tsconfig.lib.json"
       }
+    },
+    "http-client": {
+      "type": "library",
+      "root": "libs/http-client",
+      "entryFile": "index",
+      "sourceRoot": "libs/http-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/http-client/tsconfig.lib.json"
+      }
     }
   }
 }

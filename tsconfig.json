@@ -40,6 +40,12 @@
       ],
       "@app/pub-sub/*": [
         "libs/pub-sub/src/*"
+      ],
+      "@app/http-client": [
+        "libs/http-client/src"
+      ],
+      "@app/http-client/*": [
+        "libs/http-client/src/*"
       ]
     }
   }

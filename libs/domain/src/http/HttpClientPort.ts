@@ -10,4 +10,6 @@ export interface HttpOption {
 
 export interface HttpClientPort {
   get(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse>;
+
+  post(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse>;
 }

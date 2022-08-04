@@ -10,14 +10,14 @@ import { User } from '../../domain/User';
 import { AuthToken } from '../port/in/AuthToken';
 import { SignInUserCommand } from '../port/in/SignInUserCommand';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
-import { AuthQueryRepositoryPort } from '../port/out/AuthQueryRepositoryPort';
+import { AuthProviderPort } from '../port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../port/out/TokenGeneratorPort';
 import { UserQueryRepositoryPort } from '../port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../port/out/UserRepositoryPort';
 
 export class UserCommandService extends UserCommandUseCase {
   constructor(
-    private readonly authQueryRepositoryPort: AuthQueryRepositoryPort,
+    private readonly authQueryRepositoryPort: AuthProviderPort,
     private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
     private readonly userRepositoryPort: UserRepositoryPort,
     private readonly tokenGeneratorPort: TokenGeneratorPort,

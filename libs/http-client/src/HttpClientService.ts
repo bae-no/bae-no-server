@@ -46,7 +46,7 @@ export class HttpClientService extends HttpClientPort {
     return this.send(this.instance.patch, url, option);
   }
 
-  delete(
+  override delete(
     url: string,
     option?: HttpOption,
   ): TaskEither<HttpError, HttpResponse> {

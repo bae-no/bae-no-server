@@ -4,7 +4,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { AuthToken } from '../../../src/module/user/application/port/in/AuthToken';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/SignInUserCommand';
-import { AuthQueryRepositoryPort } from '../../../src/module/user/application/port/out/AuthQueryRepositoryPort';
+import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
@@ -15,7 +15,7 @@ import { User } from '../../../src/module/user/domain/User';
 import { assertResolvesRight } from '../../fixture';
 
 describe('UserCommandService', () => {
-  const authQueryRepository = mock<AuthQueryRepositoryPort>();
+  const authQueryRepository = mock<AuthProviderPort>();
   const userQueryRepository = mock<UserQueryRepositoryPort>();
   const userRepository = mock<UserRepositoryPort>();
   const tokenGenerator = mock<TokenGeneratorPort>();

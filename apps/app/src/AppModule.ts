@@ -4,6 +4,7 @@ import { PrismaModule } from '@app/prisma/PrismaModule';
 import { PubSubModule } from '@app/pub-sub/PubSubModule';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
@@ -23,6 +24,9 @@ import { UserModule } from './module/user/UserModule';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       introspection: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     PrismaModule,
     PubSubModule,

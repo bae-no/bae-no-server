@@ -30,6 +30,7 @@
   "dependencies": {
     "@nestjs/apollo": "^10.0.17",
     "@nestjs/common": "^9.0.3",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.3",
     "@nestjs/graphql": "^10.0.18",
     "@nestjs/platform-express": "^9.0.0",

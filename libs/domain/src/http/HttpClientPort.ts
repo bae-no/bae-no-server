@@ -6,6 +6,7 @@ export interface HttpOption {
   headers?: Record<string, string>;
   query?: Record<string, string>;
   body?: Record<string, any>;
+  form?: Record<string, any>;
 }
 
 export abstract class HttpClientPort {

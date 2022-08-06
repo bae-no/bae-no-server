@@ -65,6 +65,7 @@ export class HttpClientService extends HttpClientPort {
             searchParams: option?.query,
             headers: option?.headers,
             json: option?.body,
+            form: option?.form,
             responseType: 'json',
           }),
         (e) => new HttpError(toError(e)),

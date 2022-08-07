@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "pnpm prisma:generate && rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
@@ -26,6 +26,7 @@
     "test:ci-unit": "JEST_JUNIT_OUTPUT_NAME=junit-unit.xml pnpm test:unit --ci --reporters=default --reporters=jest-junit",
     "test:ci-integration": "JEST_JUNIT_OUTPUT_NAME=junit-integration.xml pnpm test:integration --ci --reporters=default --reporters=jest-junit",
     "prisma:format": "prisma format",
+    "prisma:generate": "prisma generate",
     "prepare": "husky install"
   },
   "dependencies": {

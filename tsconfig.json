@@ -46,6 +46,12 @@
       ],
       "@app/http-client/*": [
         "libs/http-client/src/*"
+      ],
+      "@app/external": [
+        "libs/external/src"
+      ],
+      "@app/external/*": [
+        "libs/external/src/*"
       ]
     }
   }

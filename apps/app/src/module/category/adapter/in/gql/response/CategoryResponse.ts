@@ -1,6 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
-import { AuthType } from '../../../../../user/domain/AuthType';
+import { AuthType } from '../../../../../user/domain/vo/AuthType';
 import { AuthCategory } from './category/AuthCategory';
 
 @ObjectType()

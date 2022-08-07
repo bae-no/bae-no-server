@@ -5,8 +5,8 @@ import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { Auth } from '../../domain/Auth';
 import { User } from '../../domain/User';
+import { Auth } from '../../domain/vo/Auth';
 import { AuthToken } from '../port/in/AuthToken';
 import { SignInUserCommand } from '../port/in/SignInUserCommand';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
@@ -17,7 +17,7 @@ import { UserRepositoryPort } from '../port/out/UserRepositoryPort';
 
 export class UserCommandService extends UserCommandUseCase {
   constructor(
-    private readonly authQueryRepositoryPort: AuthProviderPort,
+    private readonly authProviderPort: AuthProviderPort,
     private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
     private readonly userRepositoryPort: UserRepositoryPort,
     private readonly tokenGeneratorPort: TokenGeneratorPort,
@@ -29,7 +29,7 @@ export class UserCommandService extends UserCommandUseCase {
     command: SignInUserCommand,
   ): TaskEither<DBError | AuthError, AuthToken> {
     return pipe(
-      this.authQueryRepositoryPort.findOne(command.code, command.type),
+      this.authProviderPort.findOne(command.code, command.type),
       TE.bindTo('auth'),
       TE.bindW('user', ({ auth }) =>
         this.userQueryRepositoryPort.findByAuth(auth),
@@ -46,7 +46,7 @@ export class UserCommandService extends UserCommandUseCase {
     return pipe(
       user,
       O.fold(
-        () => this.userRepositoryPort.save(new User({ auth })),
+        () => this.userRepositoryPort.save(User.byAuth(auth)),
         (s) => TE.right(s),
       ),
     );

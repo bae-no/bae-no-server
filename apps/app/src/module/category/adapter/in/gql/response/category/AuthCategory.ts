@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { AuthType } from '../../../../../../user/domain/AuthType';
+import { AuthType } from '../../../../../../user/domain/vo/AuthType';
 
 @ObjectType()
 export class AuthCategory {

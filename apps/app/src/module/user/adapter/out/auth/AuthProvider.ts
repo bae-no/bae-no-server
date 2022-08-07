@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort';
-import { Auth } from '../../../domain/Auth';
-import { AuthType } from '../../../domain/AuthType';
+import { Auth } from '../../../domain/vo/Auth';
+import { AuthType } from '../../../domain/vo/AuthType';
 import { AuthStrategy } from './strategy/AuthStrategy';
 import { KakaoAuthStrategy } from './strategy/KakaoStrategy';
 

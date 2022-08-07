@@ -9,9 +9,9 @@ import { TokenGeneratorPort } from '../../../src/module/user/application/port/ou
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
-import { Auth } from '../../../src/module/user/domain/Auth';
-import { AuthType } from '../../../src/module/user/domain/AuthType';
 import { User } from '../../../src/module/user/domain/User';
+import { Auth } from '../../../src/module/user/domain/vo/Auth';
+import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { assertResolvesRight } from '../../fixture';
 
 describe('UserCommandService', () => {
@@ -40,7 +40,7 @@ describe('UserCommandService', () => {
     const auth = new Auth('socialId', AuthType.APPLE);
     authQueryRepository.findOne.mockReturnValue(right(auth));
     userQueryRepository.findByAuth.mockReturnValue(right(none));
-    userRepository.save.mockReturnValue(right(new User({ auth })));
+    userRepository.save.mockReturnValue(right(User.byAuth(auth)));
     tokenGenerator.generateByUser.mockReturnValue(new AuthToken());
 
     // when
@@ -58,7 +58,7 @@ describe('UserCommandService', () => {
 
     const auth = new Auth('socialId', AuthType.GOOGLE);
     authQueryRepository.findOne.mockReturnValue(right(auth));
-    const user = new User({ auth });
+    const user = User.byAuth(auth);
     userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
     tokenGenerator.generateByUser.mockReturnValue(new AuthToken());
 

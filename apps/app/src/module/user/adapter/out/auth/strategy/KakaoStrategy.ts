@@ -8,8 +8,8 @@ import { ConfigService } from '@nestjs/config';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { Auth } from '../../../../domain/Auth';
-import { AuthType } from '../../../../domain/AuthType';
+import { Auth } from '../../../../domain/vo/Auth';
+import { AuthType } from '../../../../domain/vo/AuthType';
 import { KakaoAuthResponse } from '../response/KakaoAuthResponse';
 import { KakaoProfileResponse } from '../response/KakaoProfileResponse';
 import { AuthStrategy } from './AuthStrategy';

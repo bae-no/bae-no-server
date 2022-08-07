@@ -7,7 +7,7 @@ import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignI
 import { UserMutationResolver } from '../../../src/module/user/adapter/in/gql/UserMutationResolver';
 import { AuthToken } from '../../../src/module/user/application/port/in/AuthToken';
 import { UserCommandUseCase } from '../../../src/module/user/application/port/in/UserCommandUseCase';
-import { AuthType } from '../../../src/module/user/domain/AuthType';
+import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
 
 describe('UserMutationResolver', () => {

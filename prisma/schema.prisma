@@ -17,3 +17,43 @@ model Sample {
   email     String   @unique
   name      String
 }
+
+model User {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  nickname    String
+  phoneNumber String
+  auth        Auth
+  agreement   Agreement
+  profile     Profile
+  address     Address
+}
+
+type Auth {
+  type     String
+  socialId String
+}
+
+type Agreement {
+  information Boolean
+  service     Boolean
+}
+
+type Profile {
+  uri       String
+  introduce String
+}
+
+type Address {
+  alias      String
+  road       String
+  detail     String
+  type       String
+  coordinate Coordinate
+}
+
+type Coordinate {
+  latitude  Float
+  longitude Float
+}

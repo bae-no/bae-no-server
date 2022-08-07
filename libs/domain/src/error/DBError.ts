@@ -3,9 +3,10 @@ import { Lazy, pipe } from 'fp-ts/function';
 import { TaskEither, tryCatch } from 'fp-ts/TaskEither';
 
 export class DBError extends Error {
-  constructor(message: Error) {
-    super(message.message);
+  constructor(error: Error) {
+    super(error.message);
     Error.captureStackTrace(this, this.constructor);
+    (this.stack as any) += error.stack;
   }
 }
 

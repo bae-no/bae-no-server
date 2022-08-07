@@ -16,8 +16,8 @@
     "start:prod": "node dist/apps/app/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "pnpm test:unit && pnpm test:integration",
-    "test:unit": "jest --testPathIgnorePatterns '/out/persistence/.*.spec.ts'",
-    "test:integration": "jest '/out/persistence/.*.spec.ts' --runInBand",
+    "test:unit": "jest --testPathIgnorePatterns '/integration/.*.spec.ts'",
+    "test:integration": "jest --runInBand '/integration/.*.spec.ts'",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -25,20 +25,28 @@
     "test:ci": "pnpm test:ci-unit && pnpm test:ci-integration",
     "test:ci-unit": "JEST_JUNIT_OUTPUT_NAME=junit-unit.xml pnpm test:unit --ci --reporters=default --reporters=jest-junit",
     "test:ci-integration": "JEST_JUNIT_OUTPUT_NAME=junit-integration.xml pnpm test:integration --ci --reporters=default --reporters=jest-junit",
+    "prisma:format": "prisma format",
     "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.17",
     "@nestjs/common": "^9.0.3",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.3",
     "@nestjs/graphql": "^10.0.18",
+    "@nestjs/jwt": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.0.0",
     "apollo-server-core": "^3.10.0",
     "apollo-server-express": "^3.10.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "date-fns": "^2.29.1",
     "fp-ts": "^2.12.1",
+    "got": "^11.8.5",
     "graphql": "^16.5.0",
     "graphql-subscriptions": "^2.0.0",
+    "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.6"
@@ -51,6 +59,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "28.1.6",
     "@types/node": "^16.11.45",
+    "@types/passport-jwt": "^3.0.6",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
@@ -100,7 +109,9 @@
     "moduleNameMapper": {
       "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
       "^@app/domain(|/.*)$": "<rootDir>/libs/domain/src/$1",
-      "^@app/pub-sub(|/.*)$": "<rootDir>/libs/pub-sub/src/$1"
+      "^@app/pub-sub(|/.*)$": "<rootDir>/libs/pub-sub/src/$1",
+      "^@app/http-client(|/.*)$": "<rootDir>/libs/http-client/src/$1",
+      "^@app/external(|/.*)$": "<rootDir>/libs/external/src/$1"
     }
   }
 }

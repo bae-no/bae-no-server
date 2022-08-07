@@ -116,7 +116,8 @@
       "^@app/domain(|/.*)$": "<rootDir>/libs/domain/src/$1",
       "^@app/pub-sub(|/.*)$": "<rootDir>/libs/pub-sub/src/$1",
       "^@app/http-client(|/.*)$": "<rootDir>/libs/http-client/src/$1",
-      "^@app/external(|/.*)$": "<rootDir>/libs/external/src/$1"
+      "^@app/external(|/.*)$": "<rootDir>/libs/external/src/$1",
+      "^@app/sms(|/.*)$": "<rootDir>/libs/sms/src/$1"
     }
   }
 }

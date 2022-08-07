@@ -4,7 +4,6 @@ import { HttpClientPort, HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
 import { GotResponse } from '@app/http-client/GotResponse';
 import { Injectable } from '@nestjs/common';
-import { toError } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 import got, { GotRequestFunction } from 'got';
@@ -68,7 +67,7 @@ export class HttpClientService extends HttpClientPort {
             form: option?.form,
             responseType: 'json',
           }),
-        (e) => new HttpError(toError(e)),
+        (e) => new HttpError(e as Error),
       ),
       TE.map((response) => new GotResponse(response)),
     );

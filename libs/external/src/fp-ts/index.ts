@@ -18,7 +18,9 @@ export const toResponse =
       map(transformFn),
       getOrElse((err) => {
         if (err instanceof AuthError) {
-          throw new AuthenticationError(err.message);
+          const error = new AuthenticationError(err.message, err);
+          error.stack = err.stack;
+          throw error;
         }
 
         throw err;

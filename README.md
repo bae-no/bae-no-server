@@ -43,3 +43,13 @@ cp .env.sample .env
 ```shell
 pnpm start
 ```
+
+## Enum 등록
+
+TypeScript Enum 을 GraphQL Enum 으로 등록하기 위해 다음 파일을 수정해야 한다.
+
+- apps/app/src/module/category/adapter/in/gql/registerEnum.ts
+
+```typescript
+registerEnumType(MyEnum, { name: 'MyEnum', description: 'Eunm 설명' });
+```

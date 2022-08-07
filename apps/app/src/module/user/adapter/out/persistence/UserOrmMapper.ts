@@ -27,7 +27,7 @@ export class UserOrmMapper {
         orm.address.road,
         orm.address.detail,
         AddressType[orm.address.type as keyof typeof AddressType],
-        orm.address.coordinate?.latitude,
+        orm.address.coordinate.latitude,
         orm.address.coordinate.longitude,
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);

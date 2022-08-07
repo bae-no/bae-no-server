@@ -43,9 +43,10 @@ describe('UserMutationResolver', () => {
         }
       }`;
 
-      const authToken = new AuthToken();
-      authToken.accessToken = 'accessToken';
-      authToken.expiredAt = new Date('2022-08-01 11:22:33');
+      const authToken = new AuthToken(
+        'accessToken',
+        new Date('2022-08-01 11:22:33'),
+      );
       userCommandUseCase.signIn.mockReturnValue(right(authToken));
 
       // when

@@ -68,3 +68,11 @@ export async function assertResolvesLeft<L, A>(
 ): Promise<void> {
   assertLeft(await e(), onLeft);
 }
+
+export function expectNonNullable<A>(
+  value: A | null | undefined,
+): asserts value is NonNullable<A> {
+  if (value === null || value === undefined) {
+    throw new Error(`Expected non-nullable, got null`);
+  }
+}

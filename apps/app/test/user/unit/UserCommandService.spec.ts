@@ -41,7 +41,9 @@ describe('UserCommandService', () => {
     authQueryRepository.findOne.mockReturnValue(right(auth));
     userQueryRepository.findByAuth.mockReturnValue(right(none));
     userRepository.save.mockReturnValue(right(User.byAuth(auth)));
-    tokenGenerator.generateByUser.mockReturnValue(new AuthToken());
+    tokenGenerator.generateByUser.mockReturnValue(
+      new AuthToken('token', new Date()),
+    );
 
     // when
     const result = userCommandService.signIn(command);
@@ -60,7 +62,9 @@ describe('UserCommandService', () => {
     authQueryRepository.findOne.mockReturnValue(right(auth));
     const user = User.byAuth(auth);
     userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
-    tokenGenerator.generateByUser.mockReturnValue(new AuthToken());
+    tokenGenerator.generateByUser.mockReturnValue(
+      new AuthToken('token', new Date()),
+    );
 
     // when
     const result = userCommandService.signIn(command);

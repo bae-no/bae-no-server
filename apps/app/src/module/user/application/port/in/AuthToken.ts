@@ -1,4 +1,3 @@
 export class AuthToken {
-  accessToken: string;
-  expiredAt: Date;
+  constructor(readonly accessToken: string, readonly expiredAt: Date) {}
 }

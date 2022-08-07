@@ -1,5 +1,5 @@
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
-import { TE, O } from '@app/domain/fp-ts';
+import { TE, O } from '@app/external/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';

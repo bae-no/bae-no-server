@@ -1,6 +1,6 @@
 import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TE } from '@app/domain/fp-ts';
+import { TE } from '@app/external/fp-ts';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';

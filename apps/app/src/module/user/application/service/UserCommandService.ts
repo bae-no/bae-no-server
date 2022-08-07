@@ -1,6 +1,7 @@
 import { AuthError } from '@app/domain/error/AuthError';
 import { DBError } from '@app/domain/error/DBError';
-import { O, TE } from '@app/domain/fp-ts';
+import { O, TE } from '@app/external/fp-ts';
+import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -15,6 +16,7 @@ import { TokenGeneratorPort } from '../port/out/TokenGeneratorPort';
 import { UserQueryRepositoryPort } from '../port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../port/out/UserRepositoryPort';
 
+@Injectable()
 export class UserCommandService extends UserCommandUseCase {
   constructor(
     private readonly authProviderPort: AuthProviderPort,

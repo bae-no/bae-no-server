@@ -1,6 +1,5 @@
 import { AuthError } from '@app/domain/error/AuthError';
-import { HttpClientPort } from '@app/domain/http/HttpClientPort';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort';
@@ -9,11 +8,9 @@ import { AuthType } from '../../../domain/AuthType';
 import { AuthStrategy } from './strategy/AuthStrategy';
 import { KakaoAuthStrategy } from './strategy/KakaoStrategy';
 
+@Injectable()
 export class AuthProvider extends AuthProviderPort {
-  constructor(
-    private readonly httpClientPort: HttpClientPort,
-    private readonly config: ConfigService,
-  ) {
+  constructor(private readonly kakaoStrategy: KakaoAuthStrategy) {
     super();
   }
 
@@ -21,12 +18,12 @@ export class AuthProvider extends AuthProviderPort {
     return this.requestClientFactory(type).request(code);
   }
 
-  private requestClientFactory(type: AuthType): AuthStrategy<unknown, unknown> {
+  private requestClientFactory(type: AuthType): AuthStrategy {
     switch (type) {
       case AuthType.KAKAO:
-        return new KakaoAuthStrategy(this.httpClientPort, this.config);
+        return this.kakaoStrategy;
       default:
-        return new KakaoAuthStrategy(this.httpClientPort, this.config); // 임시
+        return this.kakaoStrategy;
     }
   }
 }

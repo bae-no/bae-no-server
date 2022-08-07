@@ -5,6 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "prebuild": "pnpm prisma:generate && rimraf dist",
     "build": "nest build",

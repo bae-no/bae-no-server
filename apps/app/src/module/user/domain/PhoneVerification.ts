@@ -2,7 +2,11 @@ import { IllegalStateException } from '@app/domain/exception/IllegalStateExcepti
 import { isAfter } from 'date-fns';
 
 export class PhoneVerification {
-  constructor(readonly code: string, readonly expiredAt: Date) {}
+  constructor(
+    readonly phoneNumber: string,
+    readonly code: string,
+    readonly expiredAt: Date,
+  ) {}
 
   verify(code: string, now = new Date()) {
     if (this.code !== code) {

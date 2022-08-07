@@ -6,7 +6,7 @@ export class GotResponse implements HttpResponse {
   constructor(public readonly response: Response) {}
 
   isOk(): boolean {
-    return this.response.ok;
+    return 200 <= this.response.statusCode && this.response.statusCode < 300;
   }
 
   statusCode(): number {

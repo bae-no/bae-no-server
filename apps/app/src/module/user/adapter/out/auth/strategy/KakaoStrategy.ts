@@ -44,7 +44,7 @@ export class KakaoAuthStrategy implements AuthStrategy {
   private requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
     return this.httpClientPort.post(KakaoAuthStrategy.TOKEN_URL, {
       form: {
-        grant_type: 'code',
+        grant_type: 'authorization_code',
         client_id: this.CLIENT_ID,
         redirect_uri: this.REDIRECT_URL,
         code,

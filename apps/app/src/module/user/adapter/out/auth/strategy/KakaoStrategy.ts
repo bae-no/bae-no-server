@@ -1,7 +1,11 @@
+import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
+import { TE } from '@app/domain/fp-ts';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { Auth } from '../../../../domain/Auth';
@@ -10,29 +14,37 @@ import { KakaoAuthResponse } from '../response/KakaoAuthResponse';
 import { KakaoProfileResponse } from '../response/KakaoProfileResponse';
 import { AuthStrategy } from './AuthStrategy';
 
-export class KakaoAuthStrategy extends AuthStrategy<
-  KakaoAuthResponse,
-  KakaoProfileResponse
-> {
+@Injectable()
+export class KakaoAuthStrategy implements AuthStrategy {
   private static readonly TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
   private static readonly USER_PROFILE_URL =
     'https://kapi.kakao.com/v2/user/me';
 
-  private readonly GRANT_TOKEN: string;
   private readonly CLIENT_ID: string;
   private readonly REDIRECT_URL: string;
 
-  constructor(httpClientPort: HttpClientPort, config: ConfigService) {
-    super(httpClientPort, config);
-    this.GRANT_TOKEN = this.config.get<string>('KAKAO_GRANT_TOKEN') ?? '';
-    this.CLIENT_ID = this.config.get<string>('KAKAO_CLIENT_ID') ?? '';
-    this.REDIRECT_URL = this.config.get<string>('KAKAO_REDIRECT_URL') ?? '';
+  constructor(
+    private readonly httpClientPort: HttpClientPort,
+    private readonly config: ConfigService,
+  ) {
+    this.CLIENT_ID = this.config.get('KAKAO_CLIENT_ID', '');
+    this.REDIRECT_URL = this.config.get('KAKAO_REDIRECT_URL', '');
   }
 
-  override requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
+  request(code: string): TaskEither<AuthError, Auth> {
+    return pipe(
+      this.requestSocialId(code),
+      TE.map(this.toSocialResponse),
+      TE.chain((res) => this.requestProfile(res)),
+      TE.map(this.toProfileResponse),
+      TE.bimap((error) => new AuthError(error), this.toAuth),
+    );
+  }
+
+  private requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
     return this.httpClientPort.post(KakaoAuthStrategy.TOKEN_URL, {
       form: {
-        grant_type: this.GRANT_TOKEN,
+        grant_type: 'code',
         client_id: this.CLIENT_ID,
         redirect_uri: this.REDIRECT_URL,
         code,
@@ -40,11 +52,11 @@ export class KakaoAuthStrategy extends AuthStrategy<
     });
   }
 
-  override toSocialResponse(response: HttpResponse): KakaoAuthResponse {
+  private toSocialResponse(response: HttpResponse): KakaoAuthResponse {
     return response.toEntity(KakaoAuthResponse);
   }
 
-  override requestProfile(
+  private requestProfile(
     authResponse: KakaoAuthResponse,
   ): TaskEither<HttpError, HttpResponse> {
     return this.httpClientPort.get(KakaoAuthStrategy.USER_PROFILE_URL, {
@@ -54,11 +66,11 @@ export class KakaoAuthStrategy extends AuthStrategy<
     });
   }
 
-  override toProfileResponse(response: HttpResponse): KakaoProfileResponse {
+  private toProfileResponse(response: HttpResponse): KakaoProfileResponse {
     return response.toEntity(KakaoProfileResponse);
   }
 
-  override toAuth(response: KakaoProfileResponse): Auth {
+  private toAuth(response: KakaoProfileResponse): Auth {
     return new Auth(`${response.id}`, AuthType.KAKAO);
   }
 }

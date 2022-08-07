@@ -57,3 +57,12 @@ type Coordinate {
   latitude  Float
   longitude Float
 }
+
+model PhoneVerification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  phoneNumber String
+  code        String
+  expiredAt   DateTime
+  userId      String
+}

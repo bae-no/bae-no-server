@@ -43,7 +43,9 @@ export class SmsToastService extends SmsPort {
       ),
       TE.map((res) => new SmsResponse(res.body())),
       TE.chainW((res) =>
-        res.isSuccessful ? TE.right(undefined) : TE.left(new Error(res.body)),
+        res.isSuccessful
+          ? TE.right(undefined)
+          : TE.left(new Error(`SMS 발송이 실패했습니다: body=${res.body}`)),
       ),
       TE.mapLeft((err) => new NotificationError(err)),
     );

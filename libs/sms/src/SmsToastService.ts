@@ -2,9 +2,10 @@ import { NotificationError } from '@app/domain/error/NotificationError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { TE } from '@app/external/fp-ts';
+import { SmsResponse } from '@app/sms/SmsResponse';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { constUndefined, pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 @Injectable()
@@ -40,8 +41,11 @@ export class SmsToastService extends SmsPort {
           },
         },
       ),
-      TE.map((res) => res.toEntity(Object)),
-      TE.bimap((err) => new NotificationError(err), constUndefined),
+      TE.map((res) => new SmsResponse(res.body())),
+      TE.chainW((res) =>
+        res.isSuccessful ? TE.right(undefined) : TE.left(new Error(res.body)),
+      ),
+      TE.mapLeft((err) => new NotificationError(err)),
     );
   }
 }

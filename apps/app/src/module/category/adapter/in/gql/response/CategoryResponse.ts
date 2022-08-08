@@ -1,6 +1,5 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
-import { AuthType } from '../../../../../user/domain/vo/AuthType';
 import { AuthCategory } from './category/AuthCategory';
 
 @ObjectType()
@@ -14,5 +13,3 @@ export class CategoryResponse {
 
   static readonly VALUES = new CategoryResponse(AuthCategory.VALUES);
 }
-
-registerEnumType(AuthType, { name: 'AuthType', description: '로그인 유형' });

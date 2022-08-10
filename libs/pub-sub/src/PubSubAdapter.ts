@@ -7,7 +7,7 @@ export class PubSubAdapter extends PubSubPort {
   private readonly pubSub = new PubSub();
   private readonly logger = new Logger(PubSubAdapter.name);
 
-  publish(trigger: string, data: unknown): void {
+  override publish(trigger: string, data: unknown): void {
     this.pubSub
       .publish(trigger, data)
       .catch((error) =>
@@ -18,7 +18,7 @@ export class PubSubAdapter extends PubSubPort {
       );
   }
 
-  subscribe<T>(trigger: string): AsyncIterator<T, any, undefined> {
+  override subscribe<T>(trigger: string): AsyncIterator<T, any, undefined> {
     return this.pubSub.asyncIterator(trigger);
   }
 }

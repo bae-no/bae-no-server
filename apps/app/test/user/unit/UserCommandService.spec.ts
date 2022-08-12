@@ -33,45 +33,47 @@ describe('UserCommandService', () => {
     mockReset(tokenGenerator);
   });
 
-  it('새로운 유저를 생성하고 토큰을 발급한다', async () => {
-    // given
-    const command = new SignInUserCommand('code', AuthType.APPLE);
+  describe('signIn', () => {
+    it('새로운 유저를 생성하고 토큰을 발급한다', async () => {
+      // given
+      const command = new SignInUserCommand('code', AuthType.APPLE);
 
-    const auth = new Auth('socialId', AuthType.APPLE);
-    authQueryRepository.findOne.mockReturnValue(right(auth));
-    userQueryRepository.findByAuth.mockReturnValue(right(none));
-    userRepository.save.mockReturnValue(right(User.byAuth(auth)));
-    tokenGenerator.generateByUser.mockReturnValue(
-      new AuthToken('token', new Date()),
-    );
+      const auth = new Auth('socialId', AuthType.APPLE);
+      authQueryRepository.findOne.mockReturnValue(right(auth));
+      userQueryRepository.findByAuth.mockReturnValue(right(none));
+      userRepository.save.mockReturnValue(right(User.byAuth(auth)));
+      tokenGenerator.generateByUser.mockReturnValue(
+        new AuthToken('token', new Date()),
+      );
 
-    // when
-    const result = userCommandService.signIn(command);
+      // when
+      const result = userCommandService.signIn(command);
 
-    // then
-    await assertResolvesRight(result, (token) => {
-      expect(token).toBeInstanceOf(AuthToken);
+      // then
+      await assertResolvesRight(result, (token) => {
+        expect(token).toBeInstanceOf(AuthToken);
+      });
     });
-  });
 
-  it('이미 존재하는 유저를 통해 토큰을 발급한다', async () => {
-    // given
-    const command = new SignInUserCommand('code', AuthType.GOOGLE);
+    it('이미 존재하는 유저를 통해 토큰을 발급한다', async () => {
+      // given
+      const command = new SignInUserCommand('code', AuthType.GOOGLE);
 
-    const auth = new Auth('socialId', AuthType.GOOGLE);
-    authQueryRepository.findOne.mockReturnValue(right(auth));
-    const user = User.byAuth(auth);
-    userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
-    tokenGenerator.generateByUser.mockReturnValue(
-      new AuthToken('token', new Date()),
-    );
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      authQueryRepository.findOne.mockReturnValue(right(auth));
+      const user = User.byAuth(auth);
+      userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
+      tokenGenerator.generateByUser.mockReturnValue(
+        new AuthToken('token', new Date()),
+      );
 
-    // when
-    const result = userCommandService.signIn(command);
+      // when
+      const result = userCommandService.signIn(command);
 
-    // then
-    await assertResolvesRight(result, (token) => {
-      expect(token).toBeInstanceOf(AuthToken);
+      // then
+      await assertResolvesRight(result, (token) => {
+        expect(token).toBeInstanceOf(AuthToken);
+      });
     });
   });
 });

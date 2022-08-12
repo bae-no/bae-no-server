@@ -51,6 +51,7 @@
     "got": "^11.8.5",
     "graphql": "^16.5.0",
     "graphql-subscriptions": "^2.0.0",
+    "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

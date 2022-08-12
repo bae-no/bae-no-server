@@ -100,7 +100,14 @@
     "testTimeout": 30000,
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "@swc-node/jest"
+      "^.+\\.(t|j)s$": [
+        "@swc-node/jest",
+        {
+          "swc": {
+            "sourceMaps": "inline"
+          }
+        }
+      ]
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

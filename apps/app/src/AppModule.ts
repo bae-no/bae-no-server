@@ -26,6 +26,7 @@ import { UserModule } from './module/user/UserModule';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       introspection: true,
+      cache: 'bounded',
     }),
     ConfigModule.forRoot({
       isGlobal: true,

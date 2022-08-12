@@ -30,9 +30,8 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
           },
         }),
       ),
-      TE.map(
-        (data) =>
-          new PhoneVerification(data.phoneNumber, data.code, data.expiredAt),
+      TE.map((data) =>
+        PhoneVerification.of(data.phoneNumber, data.code, data.expiredAt),
       ),
     );
   }
@@ -48,13 +47,12 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
       TE.map((data) =>
         pipe(
           O.fromNullable(data),
-          O.map(
-            (phone) =>
-              new PhoneVerification(
-                phone.phoneNumber,
-                phone.code,
-                phone.expiredAt,
-              ),
+          O.map((phone) =>
+            PhoneVerification.of(
+              phone.phoneNumber,
+              phone.code,
+              phone.expiredAt,
+            ),
           ),
         ),
       ),

@@ -1,12 +1,22 @@
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { isAfter } from 'date-fns';
+import { addMinutes, isAfter } from 'date-fns';
 
 export class PhoneVerification {
-  constructor(
+  static readonly EXPIRATION_MINUTES = 3;
+
+  private constructor(
     readonly phoneNumber: string,
     readonly code: string,
     readonly expiredAt: Date,
   ) {}
+
+  static of(phoneNumber: string, code?: string, expiredAt?: Date) {
+    return new PhoneVerification(
+      phoneNumber,
+      code ?? Math.floor(Math.random() * 10000).toString(),
+      expiredAt ?? addMinutes(new Date(), PhoneVerification.EXPIRATION_MINUTES),
+    );
+  }
 
   verify(code: string, now = new Date()) {
     if (this.code !== code) {

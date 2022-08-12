@@ -6,7 +6,7 @@ import { PhoneVerificationUseCase } from '../../../application/port/in/PhoneVeri
 import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
 import { Session } from './auth/Session';
-import { SendCodeInput } from './input/SendCodeInput';
+import { SendPhoneVerificationCodeInput } from './input/SendPhoneVerificationCodeInput';
 
 @Resolver()
 export class PhoneVerificationResolver {
@@ -17,7 +17,7 @@ export class PhoneVerificationResolver {
   @Public()
   @Mutation(() => Boolean, { description: '전화번호 인증번호 발송하기' })
   async sendCode(
-    @Args('input') input: SendCodeInput,
+    @Args('input') input: SendPhoneVerificationCodeInput,
     @CurrentSession() session: Session,
   ): Promise<boolean> {
     return pipe(

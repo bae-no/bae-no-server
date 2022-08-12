@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { mock } from 'jest-mock-extended';
 import * as request from 'supertest';
 
-import { SendCodeInput } from '../../../src/module/user/adapter/in/gql/input/SendCodeInput';
+import { SendPhoneVerificationCodeInput } from '../../../src/module/user/adapter/in/gql/input/SendPhoneVerificationCodeInput';
 import { PhoneVerificationResolver } from '../../../src/module/user/adapter/in/gql/PhoneVerificationResolver';
 import { PhoneVerificationUseCase } from '../../../src/module/user/application/port/in/PhoneVerificationUseCase';
 import {
@@ -33,7 +33,7 @@ describe('PhoneVerificationResolver ', () => {
   describe('signIn', () => {
     it('인증번호 발급요청에 성공한다', async () => {
       // given
-      const input = new SendCodeInput();
+      const input = new SendPhoneVerificationCodeInput();
       input.phoneNumber = '01011112222';
 
       // language=GraphQL

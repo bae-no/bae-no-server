@@ -52,6 +52,12 @@
       ],
       "@app/external/*": [
         "libs/external/src/*"
+      ],
+      "@app/sms": [
+        "libs/sms/src"
+      ],
+      "@app/sms/*": [
+        "libs/sms/src/*"
       ]
     }
   }

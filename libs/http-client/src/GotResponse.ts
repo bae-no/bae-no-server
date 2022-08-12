@@ -16,4 +16,8 @@ export class GotResponse implements HttpResponse {
   toEntity<T>(entity: { new (...args: any[]): T }): T {
     return plainToInstance(entity, this.response.body);
   }
+
+  body(): string {
+    return this.response.rawBody.toString();
+  }
 }

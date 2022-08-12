@@ -1,3 +1,4 @@
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -6,7 +7,12 @@ import { UserQueryRepositoryAdapter } from '../../../src/module/user/adapter/out
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertNone, assertResolvesRight, assertSome } from '../../fixture';
+import {
+  assertNone,
+  assertResolvesLeft,
+  assertResolvesRight,
+  assertSome,
+} from '../../fixture';
 
 describe('UserQueryRepositoryAdapter', () => {
   let userQueryRepositoryAdapter: UserQueryRepositoryAdapter;
@@ -54,6 +60,37 @@ describe('UserQueryRepositoryAdapter', () => {
         assertSome(value, (user) => {
           expect(user.auth).toStrictEqual(auth);
         });
+      });
+    });
+  });
+
+  describe('findById', () => {
+    it('id 를 가진 유저가 존재하지 않으면 에러를 반환한다', async () => {
+      // given
+      const id = '507f191e810c19729de860ea';
+
+      // when
+      const result = userQueryRepositoryAdapter.findById(id);
+
+      // then
+      await assertResolvesLeft(result, (err) => {
+        expect(err).toBeInstanceOf(NotFoundException);
+      });
+    });
+
+    it('id 를 가진 유저를 반환한다', async () => {
+      // given
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = await prisma.user.create({
+        data: UserOrmMapper.toOrm(User.byAuth(auth)),
+      });
+
+      // when
+      const result = userQueryRepositoryAdapter.findById(user.id);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value.id).toBe(user.id);
       });
     });
   });

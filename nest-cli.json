@@ -62,6 +62,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/external/tsconfig.lib.json"
       }
+    },
+    "sms": {
+      "type": "library",
+      "root": "libs/sms",
+      "entryFile": "index",
+      "sourceRoot": "libs/sms/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/sms/tsconfig.lib.json"
+      }
     }
   }
 }

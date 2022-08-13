@@ -32,10 +32,13 @@ type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """전화번호 인증번호 발송하기"""
-  sendCode(input: SendPhoneVerificationCodeInput!): Boolean!
+  sendPhoneVerificationCode(input: SendPhoneVerificationCodeInput!): Boolean!
 
   """회원 가입 & 로그인"""
   signIn(input: SignInInput!): SignInResponse!
+
+  """전화번호 인증번호 검증하기"""
+  verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
 }
 
 type Query {
@@ -66,4 +69,8 @@ type SignInResponse {
 
 type Subscription {
   sampleAdded: SampleResponse!
+}
+
+input VerifyPhoneVerificationCodeInput {
+  code: String!
 }

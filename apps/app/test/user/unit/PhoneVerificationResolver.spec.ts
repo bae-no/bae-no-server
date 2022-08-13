@@ -37,7 +37,7 @@ describe('PhoneVerificationResolver ', () => {
       input.phoneNumber = '01011112222';
 
       // language=GraphQL
-      const mutation = `mutation sendCode($input: SendCodeInput!) {
+      const mutation = `mutation sendCode($input: SendPhoneVerificationCodeInput!) {
         sendCode(input: $input)
       }`;
 

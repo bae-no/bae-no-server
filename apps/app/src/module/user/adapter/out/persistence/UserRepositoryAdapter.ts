@@ -15,7 +15,7 @@ export class UserRepositoryAdapter extends UserRepositoryPort {
     super();
   }
 
-  save(user: User): TaskEither<DBError, User> {
+  override save(user: User): TaskEither<DBError, User> {
     return pipe(
       tryCatchDB(() =>
         this.prisma.user.create({ data: UserOrmMapper.toOrm(user) }),

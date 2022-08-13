@@ -32,7 +32,7 @@ type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """전화번호 인증번호 발송하기"""
-  sendCode(input: SendCodeInput!): Boolean!
+  sendCode(input: SendPhoneVerificationCodeInput!): Boolean!
 
   """회원 가입 & 로그인"""
   signIn(input: SignInInput!): SignInResponse!
@@ -50,7 +50,7 @@ type SampleResponse {
   name: String!
 }
 
-input SendCodeInput {
+input SendPhoneVerificationCodeInput {
   phoneNumber: String!
 }
 

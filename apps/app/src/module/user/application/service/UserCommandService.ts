@@ -8,8 +8,8 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
-import { AuthToken } from '../port/in/AuthToken';
-import { SignInUserCommand } from '../port/in/SignInUserCommand';
+import { AuthToken } from '../port/in/dto/AuthToken';
+import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
 import { AuthProviderPort } from '../port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../port/out/TokenGeneratorPort';

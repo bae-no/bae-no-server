@@ -4,8 +4,8 @@ import { IllegalStateException } from '@app/domain/exception/IllegalStateExcepti
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { SendPhoneVerificationCodeCommand } from './SendPhoneVerificationCodeCommand';
-import { VerifyPhoneVerificationCodeCommand } from './VerifyPhoneVerificationCodeCommand';
+import { SendPhoneVerificationCodeCommand } from './dto/SendPhoneVerificationCodeCommand';
+import { VerifyPhoneVerificationCodeCommand } from './dto/VerifyPhoneVerificationCodeCommand';
 
 export type VerifyPhoneVerificationCodeError =
   | DBError

@@ -2,8 +2,8 @@ import { none, some } from 'fp-ts/Option';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { AuthToken } from '../../../src/module/user/application/port/in/AuthToken';
-import { SignInUserCommand } from '../../../src/module/user/application/port/in/SignInUserCommand';
+import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
+import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
 import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';

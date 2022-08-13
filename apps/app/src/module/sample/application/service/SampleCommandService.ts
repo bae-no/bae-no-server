@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { Sample } from '../../domain/Sample';
-import { CreateSampleCommand } from '../port/in/CreateSampleCommand';
+import { CreateSampleCommand } from '../port/in/dto/CreateSampleCommand';
 import { SampleCommandUseCase } from '../port/in/SampleCommandUseCase';
 import { SampleRepositoryPort } from '../port/out/SampleRepositoryPort';
 

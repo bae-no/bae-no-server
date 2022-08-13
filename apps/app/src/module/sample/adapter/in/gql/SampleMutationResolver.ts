@@ -3,7 +3,7 @@ import { TE, toResponse } from '@app/external/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
-import { CreateSampleCommand } from '../../../application/port/in/CreateSampleCommand';
+import { CreateSampleCommand } from '../../../application/port/in/dto/CreateSampleCommand';
 import { SampleCommandUseCase } from '../../../application/port/in/SampleCommandUseCase';
 import { CreateSampleInput } from './input/CreateSampleInput';
 import { SampleResponse } from './response/SampleResponse';

@@ -14,7 +14,10 @@ export class PhoneVerification {
   static of(phoneNumber: string, code?: string, expiredAt?: Date) {
     return new PhoneVerification(
       phoneNumber,
-      code ?? Math.floor(Math.random() * 10000).toString(),
+      code ??
+        Math.floor(Math.random() * 10000)
+          .toString()
+          .padStart(4, '0'),
       expiredAt ?? addMinutes(new Date(), PhoneVerification.EXPIRATION_MINUTES),
     );
   }

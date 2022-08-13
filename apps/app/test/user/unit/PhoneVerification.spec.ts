@@ -1,7 +1,7 @@
-import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { addSeconds } from 'date-fns';
 
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
+import { assertLeft, assertRight } from '../../fixture';
 
 describe('PhoneVerification', () => {
   describe('of', () => {
@@ -21,10 +21,12 @@ describe('PhoneVerification', () => {
       const verification = PhoneVerification.of('01011112222');
 
       // when
-      const verify = () => verification.verify(verification.code + '1233');
+      const result = verification.verify(verification.code + '1233');
 
       // then
-      expect(verify).toThrow(IllegalStateException);
+      assertLeft(result, (err) => {
+        expect(err.message).toContain('코드가 일치하지 않습니다');
+      });
     });
 
     it('만료되었다면 code 와 일치해도 만료된 경우 에러가 발생한다', () => {
@@ -32,14 +34,15 @@ describe('PhoneVerification', () => {
       const verification = PhoneVerification.of('01011112222');
 
       // when
-      const verify = () =>
-        verification.verify(
-          verification.code,
-          addSeconds(verification.expiredAt, 1),
-        );
+      const result = verification.verify(
+        verification.code,
+        addSeconds(verification.expiredAt, 1),
+      );
 
       // then
-      expect(verify).toThrow(IllegalStateException);
+      assertLeft(result, (err) => {
+        expect(err.message).toContain('코드가 만료되었습니다');
+      });
     });
 
     it('주어진 code 와 일치하고 만료되지 않으면 성공한다', () => {
@@ -47,10 +50,10 @@ describe('PhoneVerification', () => {
       const verification = PhoneVerification.of('01011112222');
 
       // when
-      const verify = () => verification.verify(verification.code, new Date());
+      const result = verification.verify(verification.code, new Date());
 
       // then
-      expect(verify).not.toThrow();
+      assertRight(result);
     });
   });
 });

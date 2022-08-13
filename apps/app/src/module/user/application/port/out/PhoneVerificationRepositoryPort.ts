@@ -1,5 +1,5 @@
 import { DBError } from '@app/domain/error/DBError';
-import { Option } from 'fp-ts/Option';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerification } from '../../../domain/PhoneVerification';
@@ -12,5 +12,5 @@ export abstract class PhoneVerificationRepositoryPort {
 
   abstract findLatest(
     userId: string,
-  ): TaskEither<DBError, Option<PhoneVerification>>;
+  ): TaskEither<DBError | NotFoundException, PhoneVerification>;
 }

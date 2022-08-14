@@ -73,4 +73,12 @@ export class User extends BaseEntity<UserProps> {
   get address(): Address {
     return this.props.address;
   }
+
+  get isPhoneNumberVerified(): boolean {
+    return !!this.props.phoneNumber;
+  }
+
+  get hasProfile(): boolean {
+    return !!this.props.nickname && !!this.props.address.type;
+  }
 }

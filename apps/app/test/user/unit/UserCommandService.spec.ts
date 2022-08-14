@@ -37,42 +37,43 @@ describe('UserCommandService', () => {
     it('새로운 유저를 생성하고 토큰을 발급한다', async () => {
       // given
       const command = new SignInUserCommand('code', AuthType.APPLE);
-
       const auth = new Auth('socialId', AuthType.APPLE);
+      const user = User.byAuth(auth);
+      const authToken = new AuthToken('token', new Date());
+
       authQueryRepository.findOne.mockReturnValue(right(auth));
       userQueryRepository.findByAuth.mockReturnValue(right(none));
-      userRepository.save.mockReturnValue(right(User.byAuth(auth)));
-      tokenGenerator.generateByUser.mockReturnValue(
-        new AuthToken('token', new Date()),
-      );
+      userRepository.save.mockReturnValue(right(user));
+      tokenGenerator.generateByUser.mockReturnValue(authToken);
 
       // when
       const result = userCommandService.signIn(command);
 
       // then
-      await assertResolvesRight(result, (token) => {
-        expect(token).toBeInstanceOf(AuthToken);
+      await assertResolvesRight(result, (value) => {
+        expect(value.user).toStrictEqual(user);
+        expect(value.authToken).toStrictEqual(authToken);
       });
     });
 
     it('이미 존재하는 유저를 통해 토큰을 발급한다', async () => {
       // given
       const command = new SignInUserCommand('code', AuthType.GOOGLE);
-
       const auth = new Auth('socialId', AuthType.GOOGLE);
-      authQueryRepository.findOne.mockReturnValue(right(auth));
       const user = User.byAuth(auth);
+      const authToken = new AuthToken('token', new Date());
+
+      authQueryRepository.findOne.mockReturnValue(right(auth));
       userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
-      tokenGenerator.generateByUser.mockReturnValue(
-        new AuthToken('token', new Date()),
-      );
+      tokenGenerator.generateByUser.mockReturnValue(authToken);
 
       // when
       const result = userCommandService.signIn(command);
 
       // then
-      await assertResolvesRight(result, (token) => {
-        expect(token).toBeInstanceOf(AuthToken);
+      await assertResolvesRight(result, (value) => {
+        expect(value.user).toStrictEqual(user);
+        expect(value.authToken).toStrictEqual(authToken);
       });
     });
   });

@@ -6,7 +6,10 @@ import * as request from 'supertest';
 import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignInInput';
 import { UserMutationResolver } from '../../../src/module/user/adapter/in/gql/UserMutationResolver';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
+import { SignInUserDto } from '../../../src/module/user/application/port/in/dto/SignInUserDto';
 import { UserCommandUseCase } from '../../../src/module/user/application/port/in/UserCommandUseCase';
+import { User } from '../../../src/module/user/domain/User';
+import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
 
@@ -40,6 +43,8 @@ describe('UserMutationResolver', () => {
         signIn(input: $input) {
           accessToken
           expiredAt
+          isPhoneNumberVerified
+          hasProfile
         }
       }`;
 
@@ -47,7 +52,11 @@ describe('UserMutationResolver', () => {
         'accessToken',
         new Date('2022-08-01 11:22:33'),
       );
-      userCommandUseCase.signIn.mockReturnValue(right(authToken));
+      const auth = new Auth('socialId', AuthType.APPLE);
+      const user = User.byAuth(auth);
+      userCommandUseCase.signIn.mockReturnValue(
+        right(new SignInUserDto(authToken, user)),
+      );
 
       // when
       const response = await request(app.getHttpServer())
@@ -61,6 +70,8 @@ describe('UserMutationResolver', () => {
             "signIn": Object {
               "accessToken": "accessToken",
               "expiredAt": "2022-08-01T02:22:33.000Z",
+              "hasProfile": false,
+              "isPhoneNumberVerified": false,
             },
           },
         }

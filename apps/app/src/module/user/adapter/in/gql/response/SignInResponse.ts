@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { AuthToken } from '../../../../application/port/in/dto/AuthToken';
+import { SignInUserDto } from '../../../../application/port/in/dto/SignInUserDto';
 
 @ObjectType()
 export class SignInResponse {
@@ -16,11 +16,13 @@ export class SignInResponse {
   @Field({ description: '닉네임 및 주소 입력여부' })
   hasProfile: boolean;
 
-  static of(authToken: AuthToken): SignInResponse {
+  static of(dto: SignInUserDto): SignInResponse {
     const response = new SignInResponse();
 
-    response.accessToken = authToken.accessToken;
-    response.expiredAt = authToken.expiredAt;
+    response.accessToken = dto.authToken.accessToken;
+    response.expiredAt = dto.authToken.expiredAt;
+    response.isPhoneNumberVerified = dto.user.isPhoneNumberVerified;
+    response.hasProfile = dto.user.hasProfile;
 
     return response;
   }

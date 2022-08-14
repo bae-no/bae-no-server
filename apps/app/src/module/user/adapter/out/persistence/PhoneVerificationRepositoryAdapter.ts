@@ -1,9 +1,9 @@
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
-import { O, TE } from '@app/external/fp-ts';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
+import { TE } from '@app/external/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerificationRepositoryPort } from '../../../application/port/out/PhoneVerificationRepositoryPort';
@@ -36,7 +36,9 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
     );
   }
 
-  findLatest(userId: string): TaskEither<DBError, Option<PhoneVerification>> {
+  override findLatest(
+    userId: string,
+  ): TaskEither<DBError | NotFoundException, PhoneVerification> {
     return pipe(
       tryCatchDB(() =>
         this.prisma.phoneVerification.findFirst({
@@ -44,17 +46,16 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
           orderBy: { createdAt: 'desc' },
         }),
       ),
-      TE.map((data) =>
-        pipe(
-          O.fromNullable(data),
-          O.map((phone) =>
-            PhoneVerification.of(
-              phone.phoneNumber,
-              phone.code,
-              phone.expiredAt,
+      TE.chainW((data) =>
+        data
+          ? TE.right(
+              PhoneVerification.of(data.phoneNumber, data.code, data.expiredAt),
+            )
+          : TE.left(
+              new NotFoundException(
+                `인증번호가 존재하지 않습니다: userId=${userId}`,
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

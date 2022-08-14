@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { JwtStrategy } from './adapter/in/gql/auth/JwtStrategy';
-import { PhoneVerificationResolver } from './adapter/in/gql/PhoneVerificationResolver';
+import { PhoneVerificationMutationResolver } from './adapter/in/gql/PhoneVerificationMutationResolver';
 import { UserMutationResolver } from './adapter/in/gql/UserMutationResolver';
 import { AuthProvider } from './adapter/out/auth/AuthProvider';
 import { KakaoAuthStrategy } from './adapter/out/auth/strategy/KakaoStrategy';
@@ -25,7 +25,7 @@ import { UserCommandService } from './application/service/UserCommandService';
 @Module({
   providers: [
     UserMutationResolver,
-    PhoneVerificationResolver,
+    PhoneVerificationMutationResolver,
     {
       provide: UserCommandUseCase,
       useClass: UserCommandService,

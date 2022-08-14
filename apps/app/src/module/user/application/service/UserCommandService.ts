@@ -31,8 +31,8 @@ export class UserCommandService extends UserCommandUseCase {
     command: SignInUserCommand,
   ): TaskEither<DBError | AuthError, AuthToken> {
     return pipe(
-      this.authProviderPort.findOne(command.code, command.type),
-      TE.bindTo('auth'),
+      TE.Do,
+      TE.apS('auth', this.authProviderPort.findOne(command.code, command.type)),
       TE.bindW('user', ({ auth }) =>
         this.userQueryRepositoryPort.findByAuth(auth),
       ),

@@ -1,5 +1,10 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
+import { Either } from 'fp-ts/Either';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
+import { PhoneVerification } from './PhoneVerification';
 import { Address } from './vo/Address';
 import { AddressType } from './vo/AddressType';
 import { Agreement } from './vo/Agreement';
@@ -29,6 +34,20 @@ export class User extends BaseEntity<UserProps> {
       profile: new Profile('', ''),
       address: new Address('', '', '', AddressType.ETC, 0, 0),
     });
+  }
+
+  updateByPhoneVerification(
+    phoneVerification: PhoneVerification,
+    code: string,
+  ): Either<IllegalStateException, this> {
+    return pipe(
+      phoneVerification.verify(code),
+      E.map(() => {
+        this.props.phoneNumber = phoneVerification.phoneNumber;
+
+        return this;
+      }),
+    );
   }
 
   get nickname(): string {

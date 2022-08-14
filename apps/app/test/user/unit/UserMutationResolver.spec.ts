@@ -3,6 +3,8 @@ import { right } from 'fp-ts/TaskEither';
 import { mock } from 'jest-mock-extended';
 import * as request from 'supertest';
 
+import { AddressInput } from '../../../src/module/user/adapter/in/gql/input/AddressInput';
+import { CoordinateInput } from '../../../src/module/user/adapter/in/gql/input/CoordinateInput';
 import { EnrollUserInput } from '../../../src/module/user/adapter/in/gql/input/EnrollUserInput';
 import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignInInput';
 import { UserMutationResolver } from '../../../src/module/user/adapter/in/gql/UserMutationResolver';
@@ -86,8 +88,15 @@ describe('UserMutationResolver', () => {
       // given
       const input = new EnrollUserInput();
       input.nickname = 'enrollUser';
-      input.addressType = AddressType.ETC;
-      input.detailAddress = 'address';
+      const address = new AddressInput();
+      address.type = AddressType.ETC;
+      address.road = 'road';
+      address.detail = 'address';
+      input.address = address;
+      const coordinate = new CoordinateInput();
+      coordinate.latitude = 70.1;
+      coordinate.longitude = 120.3;
+      input.coordinate = coordinate;
 
       // language=GraphQL
       const mutation = `mutation enrollUser($input: EnrollUserInput!) {
@@ -110,7 +119,7 @@ describe('UserMutationResolver', () => {
                 "response": Object {
                   "error": "Bad Request",
                   "message": Array [
-                    "addressAlias should not be empty",
+                    "address.alias should not be empty",
                   ],
                   "statusCode": 400,
                 },
@@ -126,9 +135,16 @@ describe('UserMutationResolver', () => {
       // given
       const input = new EnrollUserInput();
       input.nickname = 'enrollUser';
-      input.addressType = AddressType.ETC;
-      input.detailAddress = 'address';
-      input.addressAlias = 'alias';
+      const address = new AddressInput();
+      address.type = AddressType.ETC;
+      address.road = 'road';
+      address.detail = 'address';
+      address.alias = 'alias';
+      input.address = address;
+      const coordinate = new CoordinateInput();
+      coordinate.latitude = 70.1;
+      coordinate.longitude = 120.3;
+      input.coordinate = coordinate;
 
       // language=GraphQL
       const mutation = `mutation enrollUser($input: EnrollUserInput!) {

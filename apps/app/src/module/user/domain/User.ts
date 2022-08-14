@@ -50,6 +50,11 @@ export class User extends BaseEntity<UserProps> {
     );
   }
 
+  enroll(nickname: string, address: Address) {
+    this.props.nickname = nickname;
+    this.props.address = address;
+  }
+
   get nickname(): string {
     return this.props.nickname;
   }

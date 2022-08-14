@@ -1,31 +1,35 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, ValidateIf } from 'class-validator';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 import { EnrollUserCommand } from '../../../../application/port/in/dto/EnrollUserCommand';
-import { AddressType } from '../../../../domain/vo/AddressType';
+import { AddressInput } from './AddressInput';
+import { CoordinateInput } from './CoordinateInput';
 
 @InputType()
 export class EnrollUserInput {
   @Field()
   nickname: string;
 
-  @Field({ nullable: true })
-  @ValidateIf((o: EnrollUserInput) => o.addressType === AddressType.ETC)
-  @IsNotEmpty()
-  addressAlias?: string;
+  @Field(() => AddressInput)
+  @Type(() => AddressInput)
+  @ValidateNested()
+  address: AddressInput;
 
-  @Field()
-  detailAddress: string;
-
-  @Field(() => AddressType)
-  addressType: AddressType;
+  @Field(() => CoordinateInput)
+  @Type(() => CoordinateInput)
+  @ValidateNested()
+  coordinate: CoordinateInput;
 
   toCommand() {
     return new EnrollUserCommand(
       this.nickname,
-      this.addressType,
-      this.detailAddress,
-      this.addressAlias,
+      this.coordinate.latitude,
+      this.coordinate.longitude,
+      this.address.type,
+      this.address.road,
+      this.address.detail,
+      this.address.alias,
     );
   }
 }

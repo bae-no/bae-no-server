@@ -44,6 +44,9 @@ type Mutation {
 type Query {
   """카테고리 목록"""
   categories: CategoryResponse!
+
+  """닉네임 중복여부"""
+  hasNickname(nickname: String!): Boolean!
   sample(id: ID!): SampleResponse!
 }
 

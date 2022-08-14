@@ -1,5 +1,6 @@
 import { AuthError } from '@app/domain/error/AuthError';
 import { DBError } from '@app/domain/error/DBError';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { EnrollUserCommand } from './dto/EnrollUserCommand';
@@ -11,5 +12,7 @@ export abstract class UserCommandUseCase {
     command: SignInUserCommand,
   ): TaskEither<DBError | AuthError, SignInUserDto>;
 
-  abstract enroll(command: EnrollUserCommand): TaskEither<DBError, void>;
+  abstract enroll(
+    command: EnrollUserCommand,
+  ): TaskEither<DBError | NotFoundException, void>;
 }

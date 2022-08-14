@@ -3,7 +3,9 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 
 import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseCase';
+import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
+import { Session } from './auth/Session';
 import { EnrollUserInput } from './input/EnrollUserInput';
 import { SignInInput } from './input/SignInInput';
 import { SignInResponse } from './response/SignInResponse';
@@ -23,9 +25,12 @@ export class UserMutationResolver {
   }
 
   @Mutation(() => Boolean, { description: '초기 닉네임 & 주소 등록' })
-  async enrollUser(@Args('input') input: EnrollUserInput): Promise<boolean> {
+  async enrollUser(
+    @Args('input') input: EnrollUserInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
     return pipe(
-      input.toCommand(),
+      input.toCommand(session.id),
       (command) => this.userCommandUseCase.enroll(command),
       toResponse(constTrue),
     )();

@@ -3,6 +3,7 @@ import { AddressType } from '../../../../domain/vo/AddressType';
 
 export class EnrollUserCommand {
   constructor(
+    readonly userId: string,
     readonly nickname: string,
     readonly latitude: number,
     readonly longitude: number,

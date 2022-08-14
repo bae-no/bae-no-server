@@ -25,36 +25,6 @@ export class User extends BaseEntity<UserProps> {
     super(props);
   }
 
-  static byAuth(auth: Auth): User {
-    return new User({
-      nickname: '',
-      phoneNumber: '',
-      auth,
-      agreement: new Agreement(false, false),
-      profile: new Profile('', ''),
-      address: new Address('', '', '', AddressType.ETC, 0, 0),
-    });
-  }
-
-  updateByPhoneVerification(
-    phoneVerification: PhoneVerification,
-    code: string,
-  ): Either<IllegalStateException, this> {
-    return pipe(
-      phoneVerification.verify(code),
-      E.map(() => {
-        this.props.phoneNumber = phoneVerification.phoneNumber;
-
-        return this;
-      }),
-    );
-  }
-
-  enroll(nickname: string, address: Address) {
-    this.props.nickname = nickname;
-    this.props.address = address;
-  }
-
   get nickname(): string {
     return this.props.nickname;
   }
@@ -85,5 +55,37 @@ export class User extends BaseEntity<UserProps> {
 
   get hasProfile(): boolean {
     return !!this.props.nickname && !!this.props.address.type;
+  }
+
+  static byAuth(auth: Auth): User {
+    return new User({
+      nickname: '',
+      phoneNumber: '',
+      auth,
+      agreement: new Agreement(false, false),
+      profile: new Profile('', ''),
+      address: new Address('', '', '', AddressType.ETC, 0, 0),
+    });
+  }
+
+  updateByPhoneVerification(
+    phoneVerification: PhoneVerification,
+    code: string,
+  ): Either<IllegalStateException, this> {
+    return pipe(
+      phoneVerification.verify(code),
+      E.map(() => {
+        this.props.phoneNumber = phoneVerification.phoneNumber;
+
+        return this;
+      }),
+    );
+  }
+
+  enroll(nickname: string, address: Address): this {
+    this.props.nickname = nickname;
+    this.props.address = address;
+
+    return this;
   }
 }

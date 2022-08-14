@@ -21,8 +21,9 @@ export class EnrollUserInput {
   @ValidateNested()
   coordinate: CoordinateInput;
 
-  toCommand() {
+  toCommand(userId: string) {
     return new EnrollUserCommand(
+      userId,
       this.nickname,
       this.coordinate.latitude,
       this.coordinate.longitude,

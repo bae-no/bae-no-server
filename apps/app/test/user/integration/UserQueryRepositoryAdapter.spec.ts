@@ -94,4 +94,41 @@ describe('UserQueryRepositoryAdapter', () => {
       });
     });
   });
+
+  describe('findByNickname', () => {
+    it('닉네임을 가진 유저가 존재하지 않으면 none 을 반환한다', async () => {
+      // given
+      const nickname = 'nickname';
+
+      // when
+      const result = userQueryRepositoryAdapter.findByNickname(nickname);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        assertNone(value);
+      });
+    });
+
+    it('닉네임을 가진 유저가 존재하면 some 을 반환한다', async () => {
+      // given
+      const user = await prisma.user.create({
+        data: {
+          ...UserOrmMapper.toOrm(
+            User.byAuth(new Auth('socialId', AuthType.GOOGLE)),
+          ),
+          nickname: 'nickname',
+        },
+      });
+
+      // when
+      const result = userQueryRepositoryAdapter.findByNickname(user.nickname);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        assertSome(value, (user) => {
+          expect(user.nickname).toBe(user.nickname);
+        });
+      });
+    });
+  });
 });

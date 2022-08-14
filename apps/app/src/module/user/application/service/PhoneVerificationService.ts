@@ -7,12 +7,12 @@ import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerification } from '../../domain/PhoneVerification';
+import { SendPhoneVerificationCodeCommand } from '../port/in/dto/SendPhoneVerificationCodeCommand';
+import { VerifyPhoneVerificationCodeCommand } from '../port/in/dto/VerifyPhoneVerificationCodeCommand';
 import {
   PhoneVerificationUseCase,
   VerifyPhoneVerificationCodeError,
 } from '../port/in/PhoneVerificationUseCase';
-import { SendPhoneVerificationCodeCommand } from '../port/in/SendPhoneVerificationCodeCommand';
-import { VerifyPhoneVerificationCodeCommand } from '../port/in/VerifyPhoneVerificationCodeCommand';
 import { PhoneVerificationRepositoryPort } from '../port/out/PhoneVerificationRepositoryPort';
 import { UserQueryRepositoryPort } from '../port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../port/out/UserRepositoryPort';

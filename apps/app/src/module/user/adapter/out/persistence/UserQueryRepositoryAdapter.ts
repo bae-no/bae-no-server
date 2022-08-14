@@ -3,6 +3,7 @@ import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TE, O } from '@app/external/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
+import { User as OrmUser } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -30,12 +31,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
           },
         }),
       ),
-      TE.map((ormUser) =>
-        pipe(
-          O.fromNullable(ormUser),
-          O.map((user) => UserOrmMapper.toDomain(user)),
-        ),
-      ),
+      TE.map(this.toOptionUser),
     );
   }
 
@@ -49,6 +45,20 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
               new NotFoundException(`사용자가 존재하지 않습니다: id=${id}`),
             ),
       ),
+    );
+  }
+
+  override findByNickname(nickname: string): TaskEither<DBError, Option<User>> {
+    return pipe(
+      tryCatchDB(() => this.prisma.user.findUnique({ where: { nickname } })),
+      TE.map(this.toOptionUser),
+    );
+  }
+
+  private toOptionUser(ormUser: OrmUser | null): Option<User> {
+    return pipe(
+      O.fromNullable(ormUser),
+      O.map((user) => UserOrmMapper.toDomain(user)),
     );
   }
 }

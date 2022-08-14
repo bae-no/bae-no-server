@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 
-import { SignInUserCommand } from '../../../../application/port/in/SignInUserCommand';
+import { SignInUserCommand } from '../../../../application/port/in/dto/SignInUserCommand';
 import { AuthType } from '../../../../domain/vo/AuthType';
 
 @InputType()

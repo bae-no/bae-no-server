@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './adapter/in/gql/auth/JwtStrategy';
 import { PhoneVerificationMutationResolver } from './adapter/in/gql/PhoneVerificationMutationResolver';
 import { UserMutationResolver } from './adapter/in/gql/UserMutationResolver';
+import { UserQueryResolver } from './adapter/in/gql/UserQueryResolver';
 import { AuthProvider } from './adapter/out/auth/AuthProvider';
 import { KakaoAuthStrategy } from './adapter/out/auth/strategy/KakaoStrategy';
 import { JwtTokenGeneratorAdapter } from './adapter/out/jwt/JwtTokenGeneratorAdapter';
@@ -24,6 +25,7 @@ import { UserCommandService } from './application/service/UserCommandService';
 
 @Module({
   providers: [
+    UserQueryResolver,
     UserMutationResolver,
     PhoneVerificationMutationResolver,
     {

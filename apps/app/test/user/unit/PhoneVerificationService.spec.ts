@@ -4,8 +4,8 @@ import { SmsPort } from '@app/domain/notification/SmsPort';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { SendPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/SendPhoneVerificationCodeCommand';
-import { VerifyPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/VerifyPhoneVerificationCodeCommand';
+import { SendPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/dto/SendPhoneVerificationCodeCommand';
+import { VerifyPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/dto/VerifyPhoneVerificationCodeCommand';
 import { PhoneVerificationRepositoryPort } from '../../../src/module/user/application/port/out/PhoneVerificationRepositoryPort';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';

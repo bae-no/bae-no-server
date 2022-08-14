@@ -8,8 +8,8 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
-import { AuthToken } from '../port/in/AuthToken';
-import { SignInUserCommand } from '../port/in/SignInUserCommand';
+import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
+import { SignInUserDto } from '../port/in/dto/SignInUserDto';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
 import { AuthProviderPort } from '../port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../port/out/TokenGeneratorPort';
@@ -29,15 +29,21 @@ export class UserCommandService extends UserCommandUseCase {
 
   override signIn(
     command: SignInUserCommand,
-  ): TaskEither<DBError | AuthError, AuthToken> {
+  ): TaskEither<DBError | AuthError, SignInUserDto> {
     return pipe(
       TE.Do,
       TE.apS('auth', this.authProviderPort.findOne(command.code, command.type)),
       TE.bindW('user', ({ auth }) =>
         this.userQueryRepositoryPort.findByAuth(auth),
       ),
-      TE.chainW(({ auth, user }) => this.updateUser(user, auth)),
-      TE.map((user) => this.tokenGeneratorPort.generateByUser(user)),
+      TE.bindW('updatedUser', ({ auth, user }) => this.updateUser(user, auth)),
+      TE.map(
+        ({ updatedUser }) =>
+          new SignInUserDto(
+            this.tokenGeneratorPort.generateByUser(updatedUser),
+            updatedUser,
+          ),
+      ),
     );
   }
 

@@ -4,12 +4,12 @@ import { AuthCategory } from './category/AuthCategory';
 
 @ObjectType()
 export class CategoryResponse {
+  static readonly VALUES = new CategoryResponse(AuthCategory.VALUES);
+
   @Field(() => [AuthCategory])
   auth: AuthCategory[];
 
   constructor(auth: AuthCategory[]) {
     this.auth = auth;
   }
-
-  static readonly VALUES = new CategoryResponse(AuthCategory.VALUES);
 }

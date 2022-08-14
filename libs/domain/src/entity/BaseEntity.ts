@@ -5,22 +5,14 @@ export interface BaseEntityProps {
 }
 
 export abstract class BaseEntity<T> implements BaseEntityProps {
+  protected props: T;
+
   private readonly _id: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
-  protected props: T;
-
   protected constructor(props: T) {
     this.props = props;
-  }
-
-  setBase(id: string, createdAt: Date, updatedAt: Date) {
-    (this._id as any) = id.toString();
-    (this._createdAt as any) = createdAt;
-    this._updatedAt = updatedAt;
-
-    return this;
   }
 
   get id(): string {
@@ -33,5 +25,13 @@ export abstract class BaseEntity<T> implements BaseEntityProps {
 
   get updatedAt(): Date {
     return this._updatedAt;
+  }
+
+  setBase(id: string, createdAt: Date, updatedAt: Date) {
+    (this._id as any) = id.toString();
+    (this._createdAt as any) = createdAt;
+    this._updatedAt = updatedAt;
+
+    return this;
   }
 }

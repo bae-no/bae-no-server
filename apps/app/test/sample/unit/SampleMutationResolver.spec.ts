@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
-import { mock } from 'jest-mock-extended';
+import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { StubPubSubModule } from '../../../../../libs/pub-sub/test/StubPubSubModule';
@@ -28,6 +28,10 @@ describe('SampleMutationResolver', () => {
   });
 
   afterAll(async () => app.close());
+
+  beforeEach(() => {
+    mockReset(sampleCommandUserCase);
+  });
 
   describe('createSample', () => {
     it('주어진 샘플을 생성한다', async () => {

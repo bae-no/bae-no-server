@@ -1,8 +1,10 @@
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { none, some } from 'fp-ts/Option';
-import { right } from 'fp-ts/TaskEither';
+import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
+import { EnrollUserCommand } from '../../../src/module/user/application/port/in/dto/EnrollUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
 import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
@@ -10,9 +12,10 @@ import { UserQueryRepositoryPort } from '../../../src/module/user/application/po
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
 import { User } from '../../../src/module/user/domain/User';
+import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 
 describe('UserCommandService', () => {
   const authQueryRepository = mock<AuthProviderPort>();
@@ -75,6 +78,56 @@ describe('UserCommandService', () => {
         expect(value.user).toStrictEqual(user);
         expect(value.authToken).toStrictEqual(authToken);
       });
+    });
+  });
+
+  describe('enroll', () => {
+    it('사용자 등록에 성공한다', async () => {
+      // given
+      const command = new EnrollUserCommand(
+        'userId',
+        'nickname',
+        10.2,
+        20.3,
+        AddressType.HOME,
+        'road',
+        'detail',
+      );
+
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = User.byAuth(auth);
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.enroll(command);
+
+      // then
+      await assertResolvesRight(result);
+      expect(user.nickname).toBe(command.nickname);
+      expect(user.address).toStrictEqual(command.toAddress());
+    });
+
+    it('유저가 없으면 NotFoundException 을 반환한다', async () => {
+      // given
+      const command = new EnrollUserCommand(
+        'userId',
+        'nickname',
+        10.2,
+        20.3,
+        AddressType.HOME,
+        'road',
+        'detail',
+      );
+
+      const exception = new NotFoundException('user not found');
+      userQueryRepository.findById.mockReturnValue(left(exception));
+
+      // when
+      const result = userCommandService.enroll(command);
+
+      // then
+      await assertResolvesLeft(result, (err) => expect(err).toBe(exception));
     });
   });
 });

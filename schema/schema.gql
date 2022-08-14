@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddressInput {
+  alias: String
+  detail: String!
+  road: String!
+  type: AddressType!
+}
+
+"""주소 유형"""
+enum AddressType {
+  ETC
+  HOME
+  WORK
+}
+
 type AuthCategory {
   code: AuthType!
   name: String!
@@ -18,6 +32,11 @@ type CategoryResponse {
   auth: [AuthCategory!]!
 }
 
+input CoordinateInput {
+  latitude: Float!
+  longitude: Float!
+}
+
 input CreateSampleInput {
   email: String!
   name: String!
@@ -28,8 +47,17 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input EnrollUserInput {
+  address: AddressInput!
+  coordinate: CoordinateInput!
+  nickname: String!
+}
+
 type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
+
+  """초기 닉네임 & 주소 등록"""
+  enrollUser(input: EnrollUserInput!): Boolean!
 
   """전화번호 인증번호 발송하기"""
   sendPhoneVerificationCode(input: SendPhoneVerificationCodeInput!): Boolean!

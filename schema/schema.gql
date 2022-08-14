@@ -28,8 +28,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input EnrollUserInput {
+  alias: String
+  detailAddress: String!
+  nickname: String!
+  type: String!
+}
+
 type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
+
+  """초기 닉네임 & 주소 등록"""
+  enrollUser(input: EnrollUserInput!): Boolean!
 
   """전화번호 인증번호 발송하기"""
   sendPhoneVerificationCode(input: SendPhoneVerificationCodeInput!): Boolean!

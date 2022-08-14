@@ -8,6 +8,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
+import { EnrollUserCommand } from '../port/in/dto/EnrollUserCommand';
 import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
 import { SignInUserDto } from '../port/in/dto/SignInUserDto';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
@@ -58,5 +59,9 @@ export class UserCommandService extends UserCommandUseCase {
         (s) => TE.right(s),
       ),
     );
+  }
+
+  override enroll(_: EnrollUserCommand): TE.TaskEither<DBError, void> {
+    throw new Error('Method not implemented.');
   }
 }

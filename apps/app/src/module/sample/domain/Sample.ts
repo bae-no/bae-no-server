@@ -15,15 +15,15 @@ export class Sample extends BaseEntity<SampleProps> {
     super(props);
   }
 
-  static of(props: CreateSampleProps) {
-    return new Sample(props);
-  }
-
   get email(): string {
     return this.props.email;
   }
 
   get name(): string {
     return this.props.name;
+  }
+
+  static of(props: CreateSampleProps) {
+    return new Sample(props);
   }
 }

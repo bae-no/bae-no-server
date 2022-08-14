@@ -15,6 +15,15 @@ export class FakeHttpResponse<T> implements HttpResponse {
     private readonly _entity: T,
   ) {}
 
+  static of<T>(params: FakeHttpResponseProps<T>) {
+    return new FakeHttpResponse(
+      params.isOk ?? true,
+      params.statusCode ?? 200,
+      params.body ?? '',
+      params.entity ?? {},
+    );
+  }
+
   body(): string {
     return this._body;
   }
@@ -29,14 +38,5 @@ export class FakeHttpResponse<T> implements HttpResponse {
 
   toEntity<T>(_entity: { new (...args: any[]): T }): T {
     return this._entity as any;
-  }
-
-  static of<T>(params: FakeHttpResponseProps<T>) {
-    return new FakeHttpResponse(
-      params.isOk ?? true,
-      params.statusCode ?? 200,
-      params.body ?? '',
-      params.entity ?? {},
-    );
   }
 }

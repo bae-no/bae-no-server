@@ -24,6 +24,7 @@ module.exports = {
     '@typescript-eslint/await-thenable': 'error',
     '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/promise-function-async': 'error',
+    "@typescript-eslint/member-ordering": ["error"],
     'curly': 1,
     'no-console': 'error',
     'arrow-body-style': ['error', 'as-needed'],

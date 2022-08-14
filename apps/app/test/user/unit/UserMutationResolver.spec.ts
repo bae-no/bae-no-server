@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
-import { mock } from 'jest-mock-extended';
+import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { AddressInput } from '../../../src/module/user/adapter/in/gql/input/AddressInput';
@@ -15,7 +15,11 @@ import { User } from '../../../src/module/user/domain/User';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
+import {
+  clearMockUser,
+  graphQLTestHelper,
+  setMockUser,
+} from '../../fixture/graphqlTestHelper';
 
 describe('UserMutationResolver', () => {
   const userCommandUseCase = mock<UserCommandUseCase>();
@@ -34,6 +38,11 @@ describe('UserMutationResolver', () => {
   });
 
   afterAll(async () => app.close());
+
+  beforeEach(() => {
+    mockReset(userCommandUseCase);
+    clearMockUser();
+  });
 
   describe('signIn', () => {
     it('로그인 요청에 성공한다', async () => {
@@ -152,6 +161,7 @@ describe('UserMutationResolver', () => {
       }`;
 
       userCommandUseCase.enroll.mockReturnValue(right(undefined));
+      setMockUser();
 
       // when
       const response = await request(app.getHttpServer())

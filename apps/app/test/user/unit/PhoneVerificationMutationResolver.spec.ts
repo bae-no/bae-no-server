@@ -1,6 +1,6 @@
 import { TE } from '@app/external/fp-ts';
 import { INestApplication } from '@nestjs/common';
-import { mock } from 'jest-mock-extended';
+import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { SendPhoneVerificationCodeInput } from '../../../src/module/user/adapter/in/gql/input/SendPhoneVerificationCodeInput';
@@ -30,6 +30,10 @@ describe('PhoneVerificationMutationResolver ', () => {
   });
 
   afterAll(async () => app.close());
+
+  beforeEach(() => {
+    mockReset(phoneVerificationUseCase);
+  });
 
   describe('sendPhoneVerificationCode', () => {
     it('인증번호 발급요청에 성공한다', async () => {

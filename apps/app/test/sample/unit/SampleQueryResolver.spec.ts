@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
-import { mock } from 'jest-mock-extended';
+import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { SampleQueryResolver } from '../../../src/module/sample/adapter/in/gql/SampleQueryResolver';
@@ -25,6 +25,10 @@ describe('SampleQueryResolver', () => {
   });
 
   afterAll(async () => app.close());
+
+  beforeEach(() => {
+    mockReset(sampleQueryUseCase);
+  });
 
   describe('sample', () => {
     it('주어진 샘플을 조회한다', async () => {

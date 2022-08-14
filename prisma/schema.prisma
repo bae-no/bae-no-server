@@ -22,7 +22,7 @@ model User {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  nickname    String
+  nickname    String    @unique
   phoneNumber String
   auth        Auth
   agreement   Agreement

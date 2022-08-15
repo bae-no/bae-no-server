@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
-import { SmsToastService } from '@app/sms/SmsToastService';
+import { SmsSensService } from '@app/sms/SmsSensService';
 import { ConfigService } from '@nestjs/config';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock } from 'jest-mock-extended';
@@ -13,20 +13,20 @@ import {
 } from '../../../../apps/app/test/fixture';
 import { FakeHttpResponse } from '../../../http-client/test/fixture/FakeHttpResponse';
 
-describe('SmsToastService', () => {
+describe('SmsSensService', () => {
   const httpClientPort = mock<HttpClientPort>();
   const configService = mock<ConfigService>();
   configService.get.mockReturnValue('');
 
-  const service = new SmsToastService(httpClientPort, configService);
+  const service = new SmsSensService(httpClientPort, configService);
 
   describe('send', () => {
-    it('isSuccessful이 true인 경우 성공한다.', async () => {
+    it('상태코드 202 로 응답한 경우 성공한다.', async () => {
       // given
       const phoneNumber = '01012345678';
       const content = 'content';
       const response = FakeHttpResponse.of({
-        body: JSON.stringify({ header: { isSuccessful: true } }),
+        body: JSON.stringify({ statusCode: '202' }),
       });
 
       httpClientPort.post.mockReturnValue(right(response));
@@ -38,12 +38,12 @@ describe('SmsToastService', () => {
       await assertResolvesRight(result);
     });
 
-    it('isSuccessful이 false인 경우 실패한다.', async () => {
+    it('상태코드 202 가 아닌경우 실패한다.', async () => {
       // given
       const phoneNumber = '01012345678';
       const content = 'content';
       const response = FakeHttpResponse.of({
-        body: JSON.stringify({ header: { isSuccessful: false } }),
+        body: JSON.stringify({ statusCode: '400' }),
       });
 
       httpClientPort.post.mockReturnValue(right(response));

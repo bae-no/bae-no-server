@@ -1,14 +1,7 @@
-import { plainToInstance, Type } from 'class-transformer';
-
-class SmsHeaderResponse {
-  isSuccessful: boolean;
-  resultCode: number;
-  resultMessage: string;
-}
+import { plainToInstance } from 'class-transformer';
 
 export class SmsRootResponse {
-  @Type(() => SmsHeaderResponse)
-  header?: SmsHeaderResponse;
+  statusCode: string;
 }
 
 export class SmsResponse {
@@ -23,6 +16,6 @@ export class SmsResponse {
   }
 
   get isSuccessful(): boolean {
-    return !!this.response.header?.isSuccessful;
+    return this.response.statusCode === '202';
   }
 }

@@ -1,3 +1,5 @@
+import { createHmac } from 'crypto';
+
 import { NotificationError } from '@app/domain/error/NotificationError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsPort } from '@app/domain/notification/SmsPort';
@@ -5,7 +7,6 @@ import { TE } from '@app/external/fp-ts';
 import { SmsResponse } from '@app/sms/SmsResponse';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as CryptoJS from 'crypto-js';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -32,13 +33,13 @@ export class SmsSensService extends SmsPort {
     phoneNumber: string,
     content: string,
   ): TaskEither<NotificationError, void> {
-    const url = `${this.url}/sms/v2/services/${this.serviceId}/messages`;
+    const path = `/sms/v2/services/${this.serviceId}/messages`;
     const timestamp = Date.now().toString();
 
     return pipe(
-      this.makeSignature('POST', url, timestamp),
+      this.makeSignature('POST', path, timestamp),
       (signature) =>
-        this.httpClient.post(url, {
+        this.httpClient.post(`${this.url}${path}`, {
           headers: {
             'x-ncp-apigw-timestamp': timestamp,
             'x-ncp-iam-access-key': this.accessKey,
@@ -63,26 +64,20 @@ export class SmsSensService extends SmsPort {
 
   private makeSignature(
     method: string,
-    url: string,
+    path: string,
     timestamp: string,
   ): string {
     const space = ' ';
     const newLine = '\n';
-    const hmac = CryptoJS.algo.HMAC.create(
-      CryptoJS.algo.SHA256,
-      this.secretKey,
-    );
 
-    hmac.update(method);
-    hmac.update(space);
-    hmac.update(url);
-    hmac.update(newLine);
-    hmac.update(timestamp);
-    hmac.update(newLine);
-    hmac.update(this.accessKey);
-
-    const hash = hmac.finalize();
-
-    return hash.toString(CryptoJS.enc.Base64);
+    return createHmac('SHA256', this.secretKey)
+      .update(method)
+      .update(space)
+      .update(path)
+      .update(newLine)
+      .update(timestamp)
+      .update(newLine)
+      .update(this.accessKey)
+      .digest('base64');
   }
 }

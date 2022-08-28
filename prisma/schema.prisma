@@ -79,8 +79,8 @@ model ShareDeal {
   category        String
   minParticipants Int
   orderPrice      Int
-  owner           String
-  participates    String[]
+  ownerId         String    @db.ObjectId
+  participateIds  String[]  @db.ObjectId
   storeName       String
   zone            ShareZone
 }
@@ -94,6 +94,6 @@ model Chat {
 
 type Message {
   createdAt DateTime @default(now())
-  authorId  String
+  authorId  String   @db.ObjectId
   content   String
 }

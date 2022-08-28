@@ -66,3 +66,38 @@ model PhoneVerification {
   expiredAt   DateTime
   userId      String
 }
+
+type ShareZone {
+  road       String
+  detail     String
+  coordinate Coordinate
+}
+
+model ShareDeal {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  title           String
+  category        String
+  minParticipants Int
+  orderPrice      Int
+  status          String
+  ownerId         String    @db.ObjectId
+  participantIds  String[]  @db.ObjectId
+  storeName       String
+  zone            ShareZone
+}
+
+model Chat {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  messages    Message[]
+  shareDealId String    @unique @db.ObjectId
+}
+
+type Message {
+  createdAt DateTime @default(now())
+  authorId  String   @db.ObjectId
+  content   String
+}

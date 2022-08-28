@@ -12,10 +12,7 @@ export class UserOrmMapper {
   static toDomain(orm: OrmUser): User {
     return new User({
       nickname: orm.nickname,
-      auth: new Auth(
-        orm.auth.socialId,
-        AuthType[orm.auth.type as keyof typeof AuthType],
-      ),
+      auth: new Auth(orm.auth.socialId, AuthType[orm.auth.type as AuthType]),
       phoneNumber: orm.phoneNumber,
       agreement: new Agreement(
         orm.agreement.information,

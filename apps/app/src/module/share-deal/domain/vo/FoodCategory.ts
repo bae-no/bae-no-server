@@ -1,0 +1,16 @@
+export enum FoodCategory {
+  STREET = 'STREET',
+  KOREAN = 'KOREAN',
+  CHINESE = 'CHINESE',
+  JAPANESE = 'JAPANESE',
+  AMERICAN = 'AMERICAN',
+  BURGER = 'BURGER',
+  SALAD = 'SALAD',
+  SOUP = 'SOUP',
+  MEAT = 'MEAT',
+  DESERT = 'DESERT',
+  PIZZA = 'PIZZA',
+  ASIAN = 'ASIAN',
+  LUNCH_BOX = 'LUNCH_BOX',
+  CHICKEN = 'CHICKEN',
+}

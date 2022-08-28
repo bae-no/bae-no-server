@@ -81,6 +81,7 @@ model ShareDeal {
   category        String
   minParticipants Int
   orderPrice      Int
+  status          String
   ownerId         String    @db.ObjectId
   participantIds  String[]  @db.ObjectId
   storeName       String

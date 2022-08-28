@@ -28,7 +28,7 @@ describe('ShareDealRepositoryAdapter', () => {
     it('주어진 공유딜을 생성한다', async () => {
       // given
       const shareZone = new ShareZone('road', 'detail', 0, 0);
-      const shareDeal = ShareDeal.of({
+      const shareDeal = ShareDeal.open({
         title: 'title',
         category: FoodCategory.AMERICAN,
         minParticipants: 4,

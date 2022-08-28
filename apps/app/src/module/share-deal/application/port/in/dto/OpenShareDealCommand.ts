@@ -17,7 +17,7 @@ export class OpenShareDealCommand {
   ) {}
 
   toDomain(): ShareDeal {
-    return ShareDeal.of({
+    return ShareDeal.open({
       title: this.title,
       category: this.category,
       minParticipants: this.minParticipants,

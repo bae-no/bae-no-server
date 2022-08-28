@@ -2,6 +2,7 @@ import { ShareDeal as OrmShareDeal } from '@prisma/client';
 
 import { ShareDeal } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
+import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { ShareZone } from '../../../domain/vo/ShareZone';
 
 export class ShareDealOrmMapper {
@@ -14,6 +15,7 @@ export class ShareDealOrmMapper {
       participantIds: orm.participantIds,
       storeName: orm.storeName,
       title: orm.title,
+      status: ShareDealStatus[orm.status as ShareDealStatus],
       zone: new ShareZone(
         orm.zone.road,
         orm.zone.detail,
@@ -36,6 +38,7 @@ export class ShareDealOrmMapper {
       storeName: domain.storeName,
       title: domain.title,
       zone: domain.zone,
+      status: domain.status,
     };
   }
 }

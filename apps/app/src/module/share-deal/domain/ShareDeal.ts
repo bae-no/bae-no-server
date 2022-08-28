@@ -1,10 +1,12 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
 import { FoodCategory } from './vo/FoodCategory';
+import { ShareDealStatus } from './vo/ShareDealStatus';
 import { ShareZone } from './vo/ShareZone';
 
 export interface ShareDealProps {
   title: string;
+  status: ShareDealStatus;
   category: FoodCategory;
   minParticipants: number;
   orderPrice: number;
@@ -14,7 +16,10 @@ export interface ShareDealProps {
   zone: ShareZone;
 }
 
-export type CreateShareDealProps = Omit<ShareDealProps, 'participantIds'>;
+export type CreateShareDealProps = Omit<
+  ShareDealProps,
+  'participantIds' | 'status'
+>;
 
 export class ShareDeal extends BaseEntity<ShareDealProps> {
   constructor(props: ShareDealProps) {
@@ -53,10 +58,15 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     return this.props.zone;
   }
 
-  static of(props: CreateShareDealProps) {
+  get status(): ShareDealStatus {
+    return this.props.status;
+  }
+
+  static open(props: CreateShareDealProps) {
     return new ShareDeal({
       ...props,
       participantIds: [],
+      status: ShareDealStatus.OPEN,
     });
   }
 }

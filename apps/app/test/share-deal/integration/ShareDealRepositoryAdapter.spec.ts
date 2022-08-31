@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ShareDealRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealRepositoryAdapter';
@@ -33,7 +34,7 @@ describe('ShareDealRepositoryAdapter', () => {
         category: FoodCategory.AMERICAN,
         minParticipants: 4,
         orderPrice: 2000,
-        ownerId: '507f191e810c19729de860ea',
+        ownerId: faker.database.mongodbObjectId(),
         storeName: 'store',
         zone: shareZone,
       });

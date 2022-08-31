@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
@@ -33,9 +34,10 @@ describe('SampleQueryResolver', () => {
   describe('sample', () => {
     it('주어진 샘플을 조회한다', async () => {
       // given
+      const id = faker.database.mongodbObjectId();
       // language=GraphQL
       const query = `query {
-        sample(id: "507f191e810c19729de860ea") {
+        sample(id: "${id}") {
           name
           email
         }

@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SampleQueryRepositoryAdapter } from '../../../src/module/sample/adapter/out/persistence/SampleQueryRepositoryAdapter';
@@ -24,7 +25,7 @@ describe('SampleQueryRepositoryAdapter', () => {
   describe('findById', () => {
     it('존재하지 않는 id 로 요청하면 none 을 반환한다', async () => {
       // given
-      const id = '507f191e810c19729de860ea';
+      const id = faker.database.mongodbObjectId();
 
       // when
       const result = sampleQueryRepositoryAdapter.findById(id);

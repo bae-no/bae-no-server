@@ -30,6 +30,7 @@ enum AuthType {
 
 type CategoryResponse {
   auth: [AuthCategory!]!
+  shareDealSort: [ShareDealSortCategory!]!
 }
 
 input CoordinateInput {
@@ -123,6 +124,16 @@ type SampleResponse {
 
 input SendPhoneVerificationCodeInput {
   phoneNumber: String!
+}
+
+type ShareDealSortCategory {
+  code: ShareDealSortType!
+  name: String!
+}
+
+"""공유딜 정렬유형"""
+enum ShareDealSortType {
+  LATEST
 }
 
 input SignInInput {

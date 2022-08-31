@@ -10,6 +10,7 @@ import { FindShareDealCommand } from '../../../application/port/out/dto/FindShar
 import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDeal } from '../../../domain/ShareDeal';
+import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 
 @Injectable()
@@ -23,10 +24,15 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   ): TaskEither<DBError, ShareDeal[]> {
     const args: Prisma.ShareDealFindManyArgs = {
       take: command.size,
+      where: { status: ShareDealStatus.OPEN },
     };
 
     if (command.keyword) {
-      args.where = { title: { contains: command.keyword } };
+      args.where = { ...args.where, title: { contains: command.keyword } };
+    }
+
+    if (command.category) {
+      args.where = { ...args.where, category: command.category };
     }
 
     if (command.sortType === ShareDealSortType.LATEST) {

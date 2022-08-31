@@ -75,7 +75,7 @@ type ShareZone {
 
 model ShareDeal {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime  @default(now()) @unique
   updatedAt       DateTime  @updatedAt
   title           String
   category        String

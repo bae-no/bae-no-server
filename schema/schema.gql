@@ -87,11 +87,19 @@ enum FoodCategory {
   STREET
 }
 
+input LeaveUserInput {
+  name: String!
+  reason: String!
+}
+
 type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """초기 닉네임 & 주소 등록"""
   enrollUser(input: EnrollUserInput!): Boolean!
+
+  """회원탈퇴하기"""
+  leave(input: LeaveUserInput!): Boolean!
 
   """공유딜 생성하기"""
   openShareDeal(input: OpenShareDealInput!): Boolean!

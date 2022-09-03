@@ -74,10 +74,10 @@ describe('ShareDealQueryResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "shareDeals": Array [
-              Object {
+        {
+          "data": {
+            "shareDeals": [
+              {
                 "createdAt": "2022-01-01T00:00:00.000Z",
                 "currentParticipants": 4,
                 "distance": 0,
@@ -109,8 +109,8 @@ describe('ShareDealQueryResolver', () => {
 
       // when
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "myEndDealCount": 10,
           },
         }

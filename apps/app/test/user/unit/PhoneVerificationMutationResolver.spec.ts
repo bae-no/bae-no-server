@@ -55,8 +55,8 @@ describe('PhoneVerificationMutationResolver ', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "sendPhoneVerificationCode": true,
           },
         }
@@ -84,8 +84,8 @@ describe('PhoneVerificationMutationResolver ', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "verifyPhoneVerificationCode": true,
           },
         }

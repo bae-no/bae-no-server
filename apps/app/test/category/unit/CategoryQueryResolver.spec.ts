@@ -39,25 +39,25 @@ describe('CategoryQueryResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "categories": Object {
-              "auth": Array [
-                Object {
+        {
+          "data": {
+            "categories": {
+              "auth": [
+                {
                   "code": "KAKAO",
                   "name": "카카오",
                 },
-                Object {
+                {
                   "code": "GOOGLE",
                   "name": "구글",
                 },
-                Object {
+                {
                   "code": "APPLE",
                   "name": "애플",
                 },
               ],
-              "shareDealSort": Array [
-                Object {
+              "shareDealSort": [
+                {
                   "code": "LATEST",
                   "name": "등록순",
                 },

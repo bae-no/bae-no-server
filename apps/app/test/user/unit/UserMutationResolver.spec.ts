@@ -79,9 +79,9 @@ describe('UserMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "signIn": Object {
+        {
+          "data": {
+            "signIn": {
               "accessToken": "accessToken",
               "expiredAt": "2022-08-01T02:22:33.000Z",
               "hasProfile": false,
@@ -120,15 +120,15 @@ describe('UserMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
+        {
           "data": null,
-          "errors": Array [
-            Object {
-              "extensions": Object {
+          "errors": [
+            {
+              "extensions": {
                 "code": "BAD_USER_INPUT",
-                "response": Object {
+                "response": {
                   "error": "Bad Request",
-                  "message": Array [
+                  "message": [
                     "address.alias should not be empty",
                   ],
                   "statusCode": 400,
@@ -171,8 +171,8 @@ describe('UserMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "enrollUser": true,
           },
         }
@@ -202,8 +202,8 @@ describe('UserMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "leave": true,
           },
         }

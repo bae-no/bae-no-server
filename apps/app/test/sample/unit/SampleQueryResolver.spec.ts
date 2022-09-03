@@ -52,9 +52,9 @@ describe('SampleQueryResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "sample": Object {
+        {
+          "data": {
+            "sample": {
               "email": "email",
               "name": "name",
             },

@@ -1,4 +1,4 @@
-import { toResponse } from '@app/external/fp-ts';
+import { toResponseArray } from '@app/external/fp-ts';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
@@ -19,7 +19,7 @@ export class ShareDealQueryResolver {
     return pipe(
       input.toCommand(),
       (command) => this.shareDealQueryRepositoryPort.find(command),
-      toResponse((result) => result.map(ShareDealResponse.of)),
+      toResponseArray(ShareDealResponse.of),
     )();
   }
 }

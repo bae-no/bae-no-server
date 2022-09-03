@@ -26,3 +26,22 @@ export const toResponse =
         throw err;
       }),
     );
+
+export const toResponseArray =
+  <FROM, TO, ERROR extends Error>(
+    transformFn: (value: FROM) => TO = identity as any,
+  ) =>
+  (param: TaskEither<ERROR, FROM[]>): Task<TO[]> =>
+    pipe(
+      param,
+      map((param) => param.map(transformFn)),
+      getOrElse((err) => {
+        if (err instanceof AuthError) {
+          const error = new AuthenticationError(err.message, err);
+          error.stack = err.stack;
+          throw error;
+        }
+
+        throw err;
+      }),
+    );

@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@faker-js/faker': ^7.5.0
-  '@nestjs/apollo': 10.0.22
+  '@nestjs/apollo': 10.1.0
   '@nestjs/cli': 9.1.1
   '@nestjs/common': 9.0.11
   '@nestjs/config': 2.2.0
@@ -59,7 +59,7 @@ specifiers:
   typescript: 4.8.2
 
 dependencies:
-  '@nestjs/apollo': 10.0.22_4qisrso5mpiml2lgxz4wkqxuhq
+  '@nestjs/apollo': 10.1.0_4qisrso5mpiml2lgxz4wkqxuhq
   '@nestjs/common': 9.0.11_allg6cauirbqzgqcmexy2wdnoq
   '@nestjs/config': 2.2.0_3mdbamkp7cmelffjfexsjo7tau
   '@nestjs/core': 9.0.11_psficsz3mqirqwo2ujbfhdr2aa
@@ -138,7 +138,7 @@ packages:
         optional: true
     dependencies:
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       chokidar: 3.5.3
       jsonc-parser: 3.1.0
       rxjs: 6.6.7
@@ -155,7 +155,7 @@ packages:
         optional: true
     dependencies:
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       chokidar: 3.5.3
       jsonc-parser: 3.1.0
       rxjs: 6.6.7
@@ -1009,8 +1009,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@nestjs/apollo/10.0.22_4qisrso5mpiml2lgxz4wkqxuhq:
-    resolution: {integrity: sha512-qAvEJMRRbTPs03frhthAy9XZ7m78ckhR9Zide3/wIMN2zZ/60M6FlamRaKytKAUvVrFtRRn9C17Pj8K2w9aMRg==}
+  /@nestjs/apollo/10.1.0_4qisrso5mpiml2lgxz4wkqxuhq:
+    resolution: {integrity: sha512-yfnh049lHBaF8647JQQwL5zJnpl/vhjlnoaCUWRpZK4Tw+s9pzzKScKHmPTRBvTCFANbNTl2t/NzQM32jfqpIw==}
     peerDependencies:
       '@apollo/gateway': ^0.44.1 || ^0.46.0 || ^0.48.0 || ^0.49.0 || ^0.50.0 || ^2.0.0
       '@nestjs/common': ^8.2.3 || ^9.0.0
@@ -2281,8 +2281,10 @@ packages:
       indent-string: 4.0.0
     dev: true
 
-  /ajv-formats/2.1.1:
+  /ajv-formats/2.1.1_ajv@8.11.0:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
     peerDependenciesMeta:
       ajv:
         optional: true

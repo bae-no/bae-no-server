@@ -95,4 +95,11 @@ export class User extends BaseEntity<UserProps> {
 
     return this;
   }
+
+  leave(name: string, reason: string, now: Date): this {
+    this.props.leaveReason = new LeaveReason(now, name, reason);
+    this.props.auth = this.props.auth.clear();
+
+    return this;
+  }
 }

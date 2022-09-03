@@ -5,6 +5,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
 import { EnrollUserCommand } from '../../../src/module/user/application/port/in/dto/EnrollUserCommand';
+import { LeaveUserCommand } from '../../../src/module/user/application/port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
 import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
@@ -15,7 +16,11 @@ import { User } from '../../../src/module/user/domain/User';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import {
+  assertResolvesLeft,
+  assertResolvesRight,
+  expectNonNullable,
+} from '../../fixture';
 
 describe('UserCommandService', () => {
   const authQueryRepository = mock<AuthProviderPort>();
@@ -128,6 +133,29 @@ describe('UserCommandService', () => {
 
       // then
       await assertResolvesLeft(result, (err) => expect(err).toBe(exception));
+    });
+  });
+
+  describe('leave', () => {
+    it('회원탈퇴 처리한다', async () => {
+      // given
+      const now = new Date();
+      const command = new LeaveUserCommand('userId', 'nickname', 'reason');
+
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = User.byAuth(auth);
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.leave(command, now);
+
+      // then
+      await assertResolvesRight(result);
+      expectNonNullable(user.leaveReason);
+      expect(user.leaveReason.createdAt).toStrictEqual(now);
+      expect(user.leaveReason.name).toBe(command.name);
+      expect(user.leaveReason.reason).toBe(command.reason);
     });
   });
 });

@@ -10,6 +10,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
 import { EnrollUserCommand } from '../port/in/dto/EnrollUserCommand';
+import { LeaveUserCommand } from '../port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
 import { SignInUserDto } from '../port/in/dto/SignInUserDto';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
@@ -56,6 +57,18 @@ export class UserCommandService extends UserCommandUseCase {
       this.userQueryRepositoryPort.findById(command.userId),
       TE.map((user) => user.enroll(command.nickname, command.toAddress())),
       TE.chainW((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.map(constVoid),
+    );
+  }
+
+  override leave(
+    command: LeaveUserCommand,
+    now = new Date(),
+  ): TaskEither<DBError, void> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(command.userId),
+      TE.map((user) => user.leave(command.name, command.reason, now)),
+      TE.chain((user) => this.userRepositoryPort.save(user)),
       TE.map(constVoid),
     );
   }

@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "scripts": {
     "prebuild": "pnpm prisma:generate && rimraf dist",

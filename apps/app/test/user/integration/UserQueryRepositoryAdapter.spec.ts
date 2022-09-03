@@ -1,5 +1,6 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
@@ -67,7 +68,7 @@ describe('UserQueryRepositoryAdapter', () => {
   describe('findById', () => {
     it('id 를 가진 유저가 존재하지 않으면 에러를 반환한다', async () => {
       // given
-      const id = '507f191e810c19729de860ea';
+      const id = faker.database.mongodbObjectId();
 
       // when
       const result = userQueryRepositoryAdapter.findById(id);

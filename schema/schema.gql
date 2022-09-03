@@ -30,6 +30,7 @@ enum AuthType {
 
 type CategoryResponse {
   auth: [AuthCategory!]!
+  shareDealSort: [ShareDealSortCategory!]!
 }
 
 input CoordinateInput {
@@ -60,6 +61,14 @@ input EnrollUserInput {
   nickname: String!
 }
 
+input FindShareDealInput {
+  category: FoodCategory
+  cursor: DateTime
+  keyword: String
+  size: Float!
+  sortType: ShareDealSortType
+}
+
 """음식 유형"""
 enum FoodCategory {
   AMERICAN
@@ -78,11 +87,19 @@ enum FoodCategory {
   STREET
 }
 
+input LeaveUserInput {
+  name: String!
+  reason: String!
+}
+
 type Mutation {
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """초기 닉네임 & 주소 등록"""
   enrollUser(input: EnrollUserInput!): Boolean!
+
+  """회원탈퇴하기"""
+  leave(input: LeaveUserInput!): Boolean!
 
   """공유딜 생성하기"""
   openShareDeal(input: OpenShareDealInput!): Boolean!
@@ -112,7 +129,13 @@ type Query {
 
   """닉네임 중복여부"""
   hasNickname(nickname: String!): Boolean!
+
+  """내가 참여완료한 공유딜 개수"""
+  myEndDealCount: Float!
   sample(id: ID!): SampleResponse!
+
+  """공유딜 목록"""
+  shareDeals(input: FindShareDealInput!): [ShareDealResponse!]!
 }
 
 type SampleResponse {
@@ -123,6 +146,26 @@ type SampleResponse {
 
 input SendPhoneVerificationCodeInput {
   phoneNumber: String!
+}
+
+type ShareDealResponse {
+  createdAt: DateTime!
+  currentParticipants: Float!
+  distance: Float!
+  id: ID!
+  minParticipants: Float!
+  orderPrice: Float!
+  title: String!
+}
+
+type ShareDealSortCategory {
+  code: ShareDealSortType!
+  name: String!
+}
+
+"""공유딜 정렬유형"""
+enum ShareDealSortType {
+  LATEST
 }
 
 input SignInInput {

@@ -6,6 +6,7 @@ import { AddressType } from '../../../domain/vo/AddressType';
 import { Agreement } from '../../../domain/vo/Agreement';
 import { Auth } from '../../../domain/vo/Auth';
 import { AuthType } from '../../../domain/vo/AuthType';
+import { LeaveReason } from '../../../domain/vo/LeaveReason';
 import { Profile } from '../../../domain/vo/Profile';
 
 export class UserOrmMapper {
@@ -24,9 +25,16 @@ export class UserOrmMapper {
         orm.address.road,
         orm.address.detail,
         AddressType[orm.address.type as keyof typeof AddressType],
-        orm.address.coordinate.latitude,
-        orm.address.coordinate.longitude,
+        orm.address.coordinate.coordinates[1],
+        orm.address.coordinate.coordinates[0],
       ),
+      leaveReason: orm.leaveReason
+        ? new LeaveReason(
+            orm.leaveReason.createdAt,
+            orm.leaveReason.name,
+            orm.leaveReason.reason,
+          )
+        : null,
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
 
@@ -55,10 +63,20 @@ export class UserOrmMapper {
         detail: domain.address.detail,
         type: domain.address.type,
         coordinate: {
-          latitude: domain.address.coordinate.latitude,
-          longitude: domain.address.coordinate.longitude,
+          type: 'Point',
+          coordinates: [
+            domain.address.coordinate.longitude,
+            domain.address.coordinate.latitude,
+          ],
         },
       },
+      leaveReason: domain.leaveReason
+        ? {
+            name: domain.leaveReason.name,
+            reason: domain.leaveReason.reason,
+            createdAt: domain.leaveReason.createdAt,
+          }
+        : null,
     };
   }
 }

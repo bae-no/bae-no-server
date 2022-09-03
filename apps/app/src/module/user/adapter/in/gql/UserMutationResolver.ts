@@ -7,6 +7,7 @@ import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
 import { Session } from './auth/Session';
 import { EnrollUserInput } from './input/EnrollUserInput';
+import { LeaveUserInput } from './input/LeaveUserInput';
 import { SignInInput } from './input/SignInInput';
 import { SignInResponse } from './response/SignInResponse';
 
@@ -32,6 +33,18 @@ export class UserMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.userCommandUseCase.enroll(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '회원탈퇴하기' })
+  async leave(
+    @Args('input') input: LeaveUserInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.userCommandUseCase.leave(command),
       toResponse(constTrue),
     )();
   }

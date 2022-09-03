@@ -2,7 +2,7 @@ import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerifica
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertLeft, assertRight } from '../../fixture';
+import { assertLeft, assertRight, expectNonNullable } from '../../fixture';
 
 describe('User', () => {
   describe('updateByPhoneVerification', () => {
@@ -38,6 +38,23 @@ describe('User', () => {
       assertRight(result, (value) => {
         expect(value.phoneNumber).toBe(verification.phoneNumber);
       });
+    });
+  });
+
+  describe('leave', () => {
+    it('탈퇴처리 시 인증정보 해제하고 탈퇴사유를 기록한다', () => {
+      // given
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = User.byAuth(auth);
+
+      // when
+      user.leave('name', 'reason', new Date());
+
+      // then
+      expect(user.auth.socialId).toBe('');
+      expectNonNullable(user.leaveReason);
+      expect(user.leaveReason.name).toBe('name');
+      expect(user.leaveReason.reason).toBe('reason');
     });
   });
 });

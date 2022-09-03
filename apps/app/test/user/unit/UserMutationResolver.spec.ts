@@ -6,6 +6,7 @@ import * as request from 'supertest';
 import { AddressInput } from '../../../src/module/user/adapter/in/gql/input/AddressInput';
 import { CoordinateInput } from '../../../src/module/user/adapter/in/gql/input/CoordinateInput';
 import { EnrollUserInput } from '../../../src/module/user/adapter/in/gql/input/EnrollUserInput';
+import { LeaveUserInput } from '../../../src/module/user/adapter/in/gql/input/LeaveUserInput';
 import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignInInput';
 import { UserMutationResolver } from '../../../src/module/user/adapter/in/gql/UserMutationResolver';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
@@ -173,6 +174,37 @@ describe('UserMutationResolver', () => {
         Object {
           "data": Object {
             "enrollUser": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('leave', () => {
+    it('회원탈퇴에 성공한다', async () => {
+      // given
+      const input = new LeaveUserInput();
+      input.name = 'name';
+      input.reason = 'reason';
+
+      // language=GraphQL
+      const mutation = `mutation leave($input: LeaveUserInput!) {
+        leave(input: $input)
+      }`;
+
+      userCommandUseCase.leave.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "leave": true,
           },
         }
       `);

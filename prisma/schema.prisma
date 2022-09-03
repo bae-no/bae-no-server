@@ -19,15 +19,22 @@ model Sample {
 }
 
 model User {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  nickname    String    @unique
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  nickname    String       @unique
   phoneNumber String
   auth        Auth
   agreement   Agreement
   profile     Profile
   address     Address
+  leaveReason LeaveReason?
+}
+
+type LeaveReason {
+  createdAt DateTime @default(now())
+  name      String
+  reason    String
 }
 
 type Auth {
@@ -54,8 +61,8 @@ type Address {
 }
 
 type Coordinate {
-  latitude  Float
-  longitude Float
+  type        String
+  coordinates Float[]
 }
 
 model PhoneVerification {
@@ -75,7 +82,7 @@ type ShareZone {
 
 model ShareDeal {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime  @unique @default(now())
   updatedAt       DateTime  @updatedAt
   title           String
   category        String

@@ -6,6 +6,6 @@ import { FindShareDealCommand } from './dto/FindShareDealCommand';
 
 export abstract class ShareDealQueryRepositoryPort {
   abstract find(
-    findShareDealCommand: FindShareDealCommand,
+    command: FindShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]>;
 }

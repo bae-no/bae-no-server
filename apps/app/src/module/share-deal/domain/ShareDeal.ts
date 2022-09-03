@@ -62,6 +62,10 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     return this.props.status;
   }
 
+  get participantCount(): number {
+    return this.participantIds.length + 1;
+  }
+
   static open(props: CreateShareDealProps) {
     return new ShareDeal({
       ...props,

@@ -9,6 +9,7 @@ import { ShareDealStatus } from '../../src/module/share-deal/domain/vo/ShareDeal
 import { ShareZone } from '../../src/module/share-deal/domain/vo/ShareZone';
 
 type BaseType = {
+  id?: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -34,7 +35,7 @@ export class ShareDealFactory {
       zone: shareZone,
       ...props,
     }).setBase(
-      faker.database.mongodbObjectId(),
+      props.id ?? faker.database.mongodbObjectId(),
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );

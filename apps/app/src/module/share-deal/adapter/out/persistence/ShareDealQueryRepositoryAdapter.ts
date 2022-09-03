@@ -49,4 +49,18 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
+
+  override countByStatus(
+    userId: string,
+    status: ShareDealStatus,
+  ): TaskEither<DBError, number> {
+    return tryCatchDB(() =>
+      this.prisma.shareDeal.count({
+        where: {
+          status,
+          OR: [{ ownerId: userId }, { participantIds: { hasSome: userId } }],
+        },
+      }),
+    );
+  }
 }

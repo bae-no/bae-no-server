@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 import { addDays, compareDesc, isBefore } from 'date-fns';
 
@@ -167,6 +168,78 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       await assertResolvesRight(result, (value) => {
         expect(value).toHaveLength(1);
         expect(value[0].status).toBe(ShareDealStatus.OPEN);
+      });
+    });
+  });
+
+  describe('findByStatus', () => {
+    it('주어진 상태에 대한 공유딜이 없으면 0을 반환한다', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+
+      // when
+      const result = shareDealRepositoryAdapter.countByStatus(
+        userId,
+        ShareDealStatus.OPEN,
+      );
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(0);
+      });
+    });
+
+    it('내가 만든 완료상태인 공유딜 개수를 가져온다', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealStatus.START,
+          ShareDealStatus.CLOSE,
+          ShareDealStatus.END,
+          ShareDealStatus.END,
+        ]
+          .map((status) => ShareDealFactory.create({ status, ownerId: userId }))
+          .map(ShareDealOrmMapper.toOrm),
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.countByStatus(
+        userId,
+        ShareDealStatus.END,
+      );
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(2);
+      });
+    });
+
+    it('내가 참여한 오픈된 공유딜 개수를 가져온다 ', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealStatus.OPEN,
+          ShareDealStatus.OPEN,
+          ShareDealStatus.CLOSE,
+          ShareDealStatus.END,
+        ]
+          .map((status) =>
+            ShareDealFactory.create({ status, participantIds: [userId] }),
+          )
+          .map(ShareDealOrmMapper.toOrm),
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.countByStatus(
+        userId,
+        ShareDealStatus.OPEN,
+      );
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(2);
       });
     });
   });

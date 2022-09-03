@@ -65,8 +65,8 @@ describe('ShareDealMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
+        {
+          "data": {
             "openShareDeal": true,
           },
         }

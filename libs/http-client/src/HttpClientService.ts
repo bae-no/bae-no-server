@@ -6,16 +6,22 @@ import { GotResponse } from '@app/http-client/GotResponse';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
-import got, { GotRequestFunction } from 'got';
+import type { Got, GotRequestFunction } from 'got';
 
 @Injectable()
 export class HttpClientService extends HttpClientPort {
-  private readonly instance = got.extend({
-    timeout: {
-      connect: 5000,
-      request: 10000,
-    },
-  });
+  private readonly instance: Got;
+
+  constructor(readonly got: Got) {
+    super();
+
+    this.instance = got.extend({
+      timeout: {
+        connect: 5000,
+        request: 10000,
+      },
+    });
+  }
 
   override get(
     url: string,

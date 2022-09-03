@@ -57,9 +57,9 @@ describe('SampleMutationResolver', () => {
 
       // then
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "createSample": Object {
+        {
+          "data": {
+            "createSample": {
               "email": "email",
               "name": "name",
             },

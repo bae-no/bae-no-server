@@ -24,8 +24,8 @@ export class UserOrmMapper {
         orm.address.road,
         orm.address.detail,
         AddressType[orm.address.type as keyof typeof AddressType],
-        orm.address.coordinate.latitude,
-        orm.address.coordinate.longitude,
+        orm.address.coordinate.coordinates[1],
+        orm.address.coordinate.coordinates[0],
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
@@ -55,8 +55,11 @@ export class UserOrmMapper {
         detail: domain.address.detail,
         type: domain.address.type,
         coordinate: {
-          latitude: domain.address.coordinate.latitude,
-          longitude: domain.address.coordinate.longitude,
+          type: 'Point',
+          coordinates: [
+            domain.address.coordinate.longitude,
+            domain.address.coordinate.latitude,
+          ],
         },
       },
     };

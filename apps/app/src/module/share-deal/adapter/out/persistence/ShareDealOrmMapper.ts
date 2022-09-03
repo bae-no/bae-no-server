@@ -19,8 +19,8 @@ export class ShareDealOrmMapper {
       zone: new ShareZone(
         orm.zone.road,
         orm.zone.detail,
-        orm.zone.coordinate.latitude,
-        orm.zone.coordinate.longitude,
+        orm.zone.coordinate.coordinates[1],
+        orm.zone.coordinate.coordinates[0],
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
@@ -37,7 +37,17 @@ export class ShareDealOrmMapper {
       participantIds: domain.participantIds,
       storeName: domain.storeName,
       title: domain.title,
-      zone: domain.zone,
+      zone: {
+        road: domain.zone.road,
+        detail: domain.zone.detail,
+        coordinate: {
+          type: 'Point',
+          coordinates: [
+            domain.zone.coordinate.longitude,
+            domain.zone.coordinate.latitude,
+          ],
+        },
+      },
       status: domain.status,
     };
   }

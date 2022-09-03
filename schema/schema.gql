@@ -121,6 +121,9 @@ type Query {
 
   """닉네임 중복여부"""
   hasNickname(nickname: String!): Boolean!
+
+  """내가 참여완료한 공유딜 개수"""
+  myEndDealCount: Float!
   sample(id: ID!): SampleResponse!
 
   """공유딜 목록"""

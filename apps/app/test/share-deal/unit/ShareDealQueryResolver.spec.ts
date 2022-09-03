@@ -92,4 +92,29 @@ describe('ShareDealQueryResolver', () => {
       `);
     });
   });
+
+  describe('myEndDealCount', () => {
+    it('내가 참여완료한 공유딜 개수를 가져온다 ', async () => {
+      // given
+      // language=GraphQL
+      const query = `query myEndDealCount {
+        myEndDealCount
+      }`;
+      shareDealQueryRepositoryPort.countByStatus.mockReturnValue(right(10));
+
+      // then
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query });
+
+      // when
+      expect(response.body).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "myEndDealCount": 10,
+          },
+        }
+      `);
+    });
+  });
 });

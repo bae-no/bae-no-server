@@ -9,6 +9,7 @@ import { Address } from './vo/Address';
 import { AddressType } from './vo/AddressType';
 import { Agreement } from './vo/Agreement';
 import { Auth } from './vo/Auth';
+import { LeaveReason } from './vo/LeaveReason';
 import { Profile } from './vo/Profile';
 
 export interface UserProps {
@@ -18,6 +19,7 @@ export interface UserProps {
   agreement: Agreement;
   profile: Profile;
   address: Address;
+  leaveReason: LeaveReason | null;
 }
 
 export class User extends BaseEntity<UserProps> {
@@ -57,6 +59,10 @@ export class User extends BaseEntity<UserProps> {
     return !!this.props.nickname && !!this.props.address.type;
   }
 
+  get leaveReason(): LeaveReason | null {
+    return this.props.leaveReason;
+  }
+
   static byAuth(auth: Auth): User {
     return new User({
       nickname: '',
@@ -65,6 +71,7 @@ export class User extends BaseEntity<UserProps> {
       agreement: new Agreement(false, false),
       profile: new Profile('', ''),
       address: new Address('', '', '', AddressType.ETC, 0, 0),
+      leaveReason: null,
     });
   }
 

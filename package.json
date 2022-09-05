@@ -65,7 +65,7 @@
     "@swc-node/jest": "1.5.2",
     "@types/express": "4.17.13",
     "@types/jest": "29.0.0",
-    "@types/node": "16.11.56",
+    "@types/node": "16.11.57",
     "@types/passport-jwt": "3.0.6",
     "@types/supertest": "2.0.12",
     "@typescript-eslint/eslint-plugin": "5.36.1",

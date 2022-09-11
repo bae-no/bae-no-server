@@ -112,4 +112,10 @@ export class User extends BaseEntity<UserProps> {
       return E.left(new IllegalStateException((err as Error).message));
     }
   }
+
+  deleteAddress(key: string): this {
+    this.props.addressList = this.props.addressList.delete(key);
+
+    return this;
+  }
 }

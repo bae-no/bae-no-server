@@ -11,6 +11,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
 import { AppendAddressCommand } from '../port/in/dto/AppendAddressCommand';
+import { DeleteAddressCommand } from '../port/in/dto/DeleteAddressCommand';
 import { EnrollUserCommand } from '../port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
@@ -81,6 +82,17 @@ export class UserCommandService extends UserCommandUseCase {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
       TE.chainEitherKW((user) => user.appendAddress(command.toAddress())),
+      TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.map(constVoid),
+    );
+  }
+
+  override deleteAddress(
+    command: DeleteAddressCommand,
+  ): TaskEither<DBError, void> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(command.userId),
+      TE.map((user) => user.deleteAddress(command.key)),
       TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       TE.map(constVoid),
     );

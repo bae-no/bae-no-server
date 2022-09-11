@@ -246,4 +246,31 @@ describe('UserMutationResolver', () => {
       `);
     });
   });
+
+  describe('deleteAddress', () => {
+    it('주소 삭제 요청에 성공한다', async () => {
+      // given
+      // language=GraphQL
+      const mutation = `mutation deleteAddress {
+        deleteAddress(key: "5")
+      }`;
+
+      userCommandUseCase.deleteAddress.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "deleteAddress": true,
+          },
+        }
+      `);
+    });
+  });
 });

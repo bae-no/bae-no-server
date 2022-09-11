@@ -102,6 +102,9 @@ type Mutation {
   appendAddress(input: AddressInput!): Boolean!
   createSample(input: CreateSampleInput!): SampleResponse!
 
+  """주소 삭제"""
+  deleteAddress(key: ID!): Boolean!
+
   """초기 닉네임 & 주소 등록"""
   enrollUser(input: EnrollUserInput!): Boolean!
 

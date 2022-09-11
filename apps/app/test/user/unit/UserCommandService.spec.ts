@@ -6,6 +6,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { AppendAddressCommand } from '../../../src/module/user/application/port/in/dto/AppendAddressCommand';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
+import { DeleteAddressCommand } from '../../../src/module/user/application/port/in/dto/DeleteAddressCommand';
 import { EnrollUserCommand } from '../../../src/module/user/application/port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../../../src/module/user/application/port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
@@ -215,10 +216,35 @@ describe('UserCommandService', () => {
       const result = userCommandService.appendAddress(command);
 
       // then
-      await assertResolvesRight(result, () => {
-        expect(user.addresses).toHaveLength(1);
-        expect(user.addresses[0]).toStrictEqual(command.toAddress());
+      await assertResolvesRight(result);
+      expect(user.addresses).toHaveLength(1);
+      expect(user.addresses[0]).toStrictEqual(command.toAddress());
+    });
+  });
+
+  describe('deleteAddress', () => {
+    it('주어진 주소를 삭제한다', async () => {
+      // given
+      const command = new DeleteAddressCommand('1', 'userId');
+
+      const user = UserFactory.create({
+        addressList: UserAddressList.of([
+          new Address('alias1', 'road1', 'detail1', AddressType.HOME, 1, 2),
+          new Address('alias2', 'road2', 'detail2', AddressType.HOME, 1, 2),
+          new Address('alias3', 'road3', 'detail3', AddressType.HOME, 1, 2),
+        ]),
       });
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.deleteAddress(command);
+
+      // then
+      await assertResolvesRight(result);
+      expect(user.addresses).toHaveLength(2);
+      expect(user.addresses[0].alias).toBe('alias1');
+      expect(user.addresses[1].alias).toBe('alias3');
     });
   });
 });

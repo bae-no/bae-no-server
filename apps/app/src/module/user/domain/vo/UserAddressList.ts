@@ -22,4 +22,11 @@ export class UserAddressList {
   append(address: Address): UserAddressList {
     return UserAddressList.of([...this.addresses, address]);
   }
+
+  delete(key: string): UserAddressList {
+    const keyIndex = Number(key);
+    const filtered = this.addresses.filter((_, index) => index !== keyIndex);
+
+    return UserAddressList.of(filtered);
+  }
 }

@@ -168,6 +168,7 @@ type ShareDealResponse {
   id: ID!
   minParticipants: Float!
   orderPrice: Float!
+  status: ShareDealStatus!
   title: String!
 }
 
@@ -179,6 +180,14 @@ type ShareDealSortCategory {
 """공유딜 정렬유형"""
 enum ShareDealSortType {
   LATEST
+}
+
+"""공유딜 상태"""
+enum ShareDealStatus {
+  CLOSE
+  END
+  OPEN
+  START
 }
 
 input SignInInput {

@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { ShareDeal } from '../../../../domain/ShareDeal';
+import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
 
 @ObjectType()
 export class ShareDealResponse {
@@ -25,6 +26,9 @@ export class ShareDealResponse {
   @Field()
   currentParticipants: number;
 
+  @Field(() => ShareDealStatus)
+  status: ShareDealStatus;
+
   static of(shareDeal: ShareDeal): ShareDealResponse {
     const response = new ShareDealResponse();
 
@@ -35,6 +39,7 @@ export class ShareDealResponse {
     response.distance = 0;
     response.minParticipants = shareDeal.minParticipants;
     response.currentParticipants = shareDeal.participantCount;
+    response.status = shareDeal.status;
 
     return response;
   }

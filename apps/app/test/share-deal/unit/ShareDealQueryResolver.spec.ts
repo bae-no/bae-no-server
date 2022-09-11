@@ -53,6 +53,7 @@ describe('ShareDealQueryResolver', () => {
           orderPrice
           minParticipants
           currentParticipants
+          status
         }
       }`;
 
@@ -84,6 +85,7 @@ describe('ShareDealQueryResolver', () => {
                 "id": "12345",
                 "minParticipants": 10,
                 "orderPrice": 1000,
+                "status": "OPEN",
                 "title": "title",
               },
             ],

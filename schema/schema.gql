@@ -38,6 +38,11 @@ input CoordinateInput {
   longitude: Float!
 }
 
+type CoordinateResponse {
+  latitude: Float!
+  longitude: Float!
+}
+
 input CreateSampleInput {
   email: String!
   name: String!
@@ -124,6 +129,9 @@ input OpenShareDealInput {
 }
 
 type Query {
+  """등록한 주소목록"""
+  addresses: [UserAddressResponse!]!
+
   """카테고리 목록"""
   categories: CategoryResponse!
 
@@ -188,6 +196,15 @@ type SignInResponse {
 
 type Subscription {
   sampleAdded: SampleResponse!
+}
+
+type UserAddressResponse {
+  alias: String!
+  coordinate: CoordinateResponse!
+  detail: String!
+  key: ID!
+  road: String!
+  type: AddressType!
 }
 
 input VerifyPhoneVerificationCodeInput {

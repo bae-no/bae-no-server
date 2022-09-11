@@ -6,6 +6,11 @@ import * as request from 'supertest';
 
 import { UserQueryResolver } from '../../../src/module/user/adapter/in/gql/UserQueryResolver';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { User } from '../../../src/module/user/domain/User';
+import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
+import { Auth } from '../../../src/module/user/domain/vo/Auth';
+import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import {
   graphQLTestHelper,
   setMockUser,
@@ -61,14 +66,30 @@ describe('UserQueryResolver', () => {
   });
 
   describe('addresses', () => {
-    it('', async () => {
+    it('사용자 주소 목록을 가져온다', async () => {
       // given
       // language=GraphQL
-      const query = `query hasNickname {
-        hasNickname(nickname: "nickname")
+      const query = `query addresses {
+        addresses {
+          key
+          alias
+          road
+          detail
+          type
+          coordinate {
+            latitude
+            longitude
+          }
+        }
       }`;
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = User.byAuth(auth);
+      user.enroll(
+        'nickname',
+        new Address('alias', 'road', 'detail', AddressType.ETC, 1, 2),
+      );
 
-      userQueryRepositoryPort.findByNickname.mockReturnValue(right(none));
+      userQueryRepositoryPort.findById.mockReturnValue(right(user));
 
       // when
       const response = await request(app.getHttpServer())
@@ -79,7 +100,19 @@ describe('UserQueryResolver', () => {
       expect(response.body).toMatchInlineSnapshot(`
         {
           "data": {
-            "hasNickname": false,
+            "addresses": [
+              {
+                "alias": "alias",
+                "coordinate": {
+                  "latitude": 1,
+                  "longitude": 2,
+                },
+                "detail": "detail",
+                "key": "0",
+                "road": "road",
+                "type": "ETC",
+              },
+            ],
           },
         }
       `);

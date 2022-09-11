@@ -24,9 +24,6 @@ export class UserAddressResponse {
   @Field(() => CoordinateResponse)
   coordinate: CoordinateResponse;
 
-  @Field({ description: '닉네임 및 주소 입력여부' })
-  hasProfile: boolean;
-
   static of(addresses: Address[]): UserAddressResponse[] {
     return addresses.map((address, index) => {
       const response = new UserAddressResponse();

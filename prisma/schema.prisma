@@ -27,7 +27,7 @@ model User {
   auth        Auth
   agreement   Agreement
   profile     Profile
-  address     Address
+  addresses   Address[]
   leaveReason LeaveReason?
 }
 

@@ -110,7 +110,7 @@ describe('UserCommandService', () => {
       // then
       await assertResolvesRight(result);
       expect(user.nickname).toBe(command.nickname);
-      expect(user.address).toStrictEqual(command.toAddress());
+      expect(user.addresses[0]).toStrictEqual(command.toAddress());
     });
 
     it('유저가 없으면 NotFoundException 을 반환한다', async () => {

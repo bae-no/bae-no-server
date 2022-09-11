@@ -6,7 +6,6 @@ import { pipe } from 'fp-ts/function';
 
 import { PhoneVerification } from './PhoneVerification';
 import { Address } from './vo/Address';
-import { AddressType } from './vo/AddressType';
 import { Agreement } from './vo/Agreement';
 import { Auth } from './vo/Auth';
 import { LeaveReason } from './vo/LeaveReason';
@@ -18,7 +17,7 @@ export interface UserProps {
   auth: Auth;
   agreement: Agreement;
   profile: Profile;
-  address: Address;
+  addresses: Address[];
   leaveReason: LeaveReason | null;
 }
 
@@ -47,8 +46,8 @@ export class User extends BaseEntity<UserProps> {
     return this.props.profile;
   }
 
-  get address(): Address {
-    return this.props.address;
+  get addresses(): Address[] {
+    return this.props.addresses;
   }
 
   get isPhoneNumberVerified(): boolean {
@@ -56,7 +55,7 @@ export class User extends BaseEntity<UserProps> {
   }
 
   get hasProfile(): boolean {
-    return !!this.props.nickname && !!this.props.address.type;
+    return !!this.props.nickname && !!this.props.addresses.length;
   }
 
   get leaveReason(): LeaveReason | null {
@@ -70,7 +69,7 @@ export class User extends BaseEntity<UserProps> {
       auth,
       agreement: new Agreement(false, false),
       profile: new Profile('', ''),
-      address: new Address('', '', '', AddressType.ETC, 0, 0),
+      addresses: [],
       leaveReason: null,
     });
   }
@@ -91,7 +90,7 @@ export class User extends BaseEntity<UserProps> {
 
   enroll(nickname: string, address: Address): this {
     this.props.nickname = nickname;
-    this.props.address = address;
+    this.props.addresses = [address];
 
     return this;
   }

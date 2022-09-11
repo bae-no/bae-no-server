@@ -8,6 +8,7 @@ import { Auth } from '../../../domain/vo/Auth';
 import { AuthType } from '../../../domain/vo/AuthType';
 import { LeaveReason } from '../../../domain/vo/LeaveReason';
 import { Profile } from '../../../domain/vo/Profile';
+import { UserAddressList } from '../../../domain/vo/UserAddressList';
 
 export class UserOrmMapper {
   static toDomain(orm: OrmUser): User {
@@ -20,16 +21,18 @@ export class UserOrmMapper {
         orm.agreement.service,
       ),
       profile: new Profile(orm.profile.uri, orm.profile.introduce),
-      addresses: orm.addresses.map(
-        (address) =>
-          new Address(
-            address.alias,
-            address.road,
-            address.detail,
-            AddressType[address.type as keyof typeof AddressType],
-            address.coordinate.coordinates[1],
-            address.coordinate.coordinates[0],
-          ),
+      addressList: UserAddressList.of(
+        orm.addresses.map(
+          (address) =>
+            new Address(
+              address.alias,
+              address.road,
+              address.detail,
+              AddressType[address.type as keyof typeof AddressType],
+              address.coordinate.coordinates[1],
+              address.coordinate.coordinates[0],
+            ),
+        ),
       ),
       leaveReason: orm.leaveReason
         ? new LeaveReason(

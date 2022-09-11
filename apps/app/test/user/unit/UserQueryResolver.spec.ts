@@ -59,4 +59,30 @@ describe('UserQueryResolver', () => {
       `);
     });
   });
+
+  describe('addresses', () => {
+    it('', async () => {
+      // given
+      // language=GraphQL
+      const query = `query hasNickname {
+        hasNickname(nickname: "nickname")
+      }`;
+
+      userQueryRepositoryPort.findByNickname.mockReturnValue(right(none));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "hasNickname": false,
+          },
+        }
+      `);
+    });
+  });
 });

@@ -10,6 +10,7 @@ import { Agreement } from './vo/Agreement';
 import { Auth } from './vo/Auth';
 import { LeaveReason } from './vo/LeaveReason';
 import { Profile } from './vo/Profile';
+import { UserAddressList } from './vo/UserAddressList';
 
 export interface UserProps {
   nickname: string;
@@ -17,7 +18,7 @@ export interface UserProps {
   auth: Auth;
   agreement: Agreement;
   profile: Profile;
-  addresses: Address[];
+  addressList: UserAddressList;
   leaveReason: LeaveReason | null;
 }
 
@@ -47,7 +48,7 @@ export class User extends BaseEntity<UserProps> {
   }
 
   get addresses(): Address[] {
-    return this.props.addresses;
+    return this.props.addressList.addresses;
   }
 
   get isPhoneNumberVerified(): boolean {
@@ -55,7 +56,7 @@ export class User extends BaseEntity<UserProps> {
   }
 
   get hasProfile(): boolean {
-    return !!this.props.nickname && !!this.props.addresses.length;
+    return !!this.props.nickname && this.props.addressList.count > 0;
   }
 
   get leaveReason(): LeaveReason | null {
@@ -69,7 +70,7 @@ export class User extends BaseEntity<UserProps> {
       auth,
       agreement: new Agreement(false, false),
       profile: new Profile('', ''),
-      addresses: [],
+      addressList: UserAddressList.of(),
       leaveReason: null,
     });
   }
@@ -90,7 +91,7 @@ export class User extends BaseEntity<UserProps> {
 
   enroll(nickname: string, address: Address): this {
     this.props.nickname = nickname;
-    this.props.addresses = [address];
+    this.props.addressList = UserAddressList.of([address]);
 
     return this;
   }

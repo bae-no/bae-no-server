@@ -6,7 +6,7 @@ services:
     ports:
       - 30001:30001
     healthcheck:
-      test: test $$(echo "rs.initiate({_id:'replica-set',members:[{_id:0,host:\"mongo1:30001\"},{_id:1,host:\"mongo2:30002\"},{_id:2,host:\"mongo3:30003\"}]}).ok || rs.status().ok" | mongo --port 30001 --quiet) -eq 1
+      test: test $$(echo "rs.initiate({_id:'replica-set',members:[{_id:0,host:\"mongo1:30001\"},{_id:1,host:\"mongo2:30002\"},{_id:2,host:\"mongo3:30003\"}]}).ok || rs.status().ok" | mongosh --port 30001 --quiet) -eq 1
       interval: 10s
       start_period: 30s
 

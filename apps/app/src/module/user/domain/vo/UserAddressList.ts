@@ -20,6 +20,6 @@ export class UserAddressList {
   }
 
   append(address: Address): UserAddressList {
-    return new UserAddressList([...this.addresses, address]);
+    return UserAddressList.of([...this.addresses, address]);
   }
 }

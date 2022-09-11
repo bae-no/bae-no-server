@@ -6,6 +6,7 @@ import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseC
 import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
 import { Session } from './auth/Session';
+import { AddressInput } from './input/AddressInput';
 import { EnrollUserInput } from './input/EnrollUserInput';
 import { LeaveUserInput } from './input/LeaveUserInput';
 import { SignInInput } from './input/SignInInput';
@@ -45,6 +46,18 @@ export class UserMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.userCommandUseCase.leave(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '주소 추가' })
+  async appendAddress(
+    @Args('input') input: AddressInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.userCommandUseCase.appendAddress(command),
       toResponse(constTrue),
     )();
   }

@@ -4,6 +4,7 @@
 
 input AddressInput {
   alias: String
+  coordinate: CoordinateInput!
   detail: String!
   road: String!
   type: AddressType!
@@ -62,7 +63,6 @@ scalar DateTime
 
 input EnrollUserInput {
   address: AddressInput!
-  coordinate: CoordinateInput!
   nickname: String!
 }
 
@@ -98,6 +98,8 @@ input LeaveUserInput {
 }
 
 type Mutation {
+  """주소 추가"""
+  appendAddress(input: AddressInput!): Boolean!
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """초기 닉네임 & 주소 등록"""

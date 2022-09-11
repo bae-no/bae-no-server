@@ -102,4 +102,14 @@ export class User extends BaseEntity<UserProps> {
 
     return this;
   }
+
+  appendAddress(address: Address): Either<IllegalStateException, this> {
+    try {
+      this.props.addressList = UserAddressList.of([...this.addresses, address]);
+
+      return E.right(this);
+    } catch (err) {
+      return E.left(new IllegalStateException((err as Error).message));
+    }
+  }
 }

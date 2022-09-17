@@ -6,6 +6,7 @@ import { UserQueryRepositoryPort } from '../../../application/port/out/UserQuery
 import { CurrentSession } from './auth/CurrentSession';
 import { Session } from './auth/Session';
 import { UserAddressResponse } from './response/UserAddressResponse';
+import { UserProfileResponse } from './response/UserProfileResponse';
 
 @Resolver()
 export class UserQueryResolver {
@@ -29,6 +30,16 @@ export class UserQueryResolver {
       this.userQueryRepositoryPort.findById(session.id),
       TE.map((user) => user.addresses),
       toResponse(UserAddressResponse.of),
+    )();
+  }
+
+  @Query(() => UserProfileResponse, { description: '프로필 정보' })
+  async profile(
+    @CurrentSession() session: Session,
+  ): Promise<UserProfileResponse> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(session.id),
+      toResponse(UserProfileResponse.of),
     )();
   }
 }

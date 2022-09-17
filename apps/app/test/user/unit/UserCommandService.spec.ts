@@ -10,6 +10,7 @@ import { DeleteAddressCommand } from '../../../src/module/user/application/port/
 import { EnrollUserCommand } from '../../../src/module/user/application/port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../../../src/module/user/application/port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
+import { UpdateProfileCommand } from '../../../src/module/user/application/port/in/dto/UpdateProfileCommand';
 import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
@@ -245,6 +246,33 @@ describe('UserCommandService', () => {
       expect(user.addresses).toHaveLength(2);
       expect(user.addresses[0].alias).toBe('alias1');
       expect(user.addresses[1].alias).toBe('alias3');
+    });
+  });
+
+  describe('updateProfile', () => {
+    it('프로필 정보를 수정한다.', async () => {
+      // given
+      const command = new UpdateProfileCommand(
+        'userId',
+        'nickname',
+        'phoneNumber',
+        'imageUri',
+        'introduce',
+      );
+      const user = UserFactory.create();
+
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.updateProfile(command);
+
+      // then
+      await assertResolvesRight(result);
+      expect(user.nickname).toBe(command.nickname);
+      expect(user.phoneNumber).toBe(command.phoneNumber);
+      expect(user.profile.uri).toBe(command.imageUri);
+      expect(user.profile.introduce).toBe(command.introduce);
     });
   });
 });

@@ -120,6 +120,9 @@ type Mutation {
   """회원 가입 & 로그인"""
   signIn(input: SignInInput!): SignInResponse!
 
+  """프로필 정보 수정"""
+  updateProfile(input: UpdateProfileInput!): Boolean!
+
   """전화번호 인증번호 검증하기"""
   verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
 }
@@ -145,6 +148,9 @@ type Query {
 
   """내가 참여완료한 공유딜 개수"""
   myEndDealCount: Float!
+
+  """프로필 정보"""
+  profile: UserProfileResponse!
   sample(id: ID!): SampleResponse!
 
   """공유딜 목록"""
@@ -212,6 +218,13 @@ type Subscription {
   sampleAdded: SampleResponse!
 }
 
+input UpdateProfileInput {
+  imageUri: String!
+  introduce: String!
+  nickname: String!
+  phoneNumber: String!
+}
+
 type UserAddressResponse {
   alias: String!
   coordinate: CoordinateResponse!
@@ -219,6 +232,13 @@ type UserAddressResponse {
   key: ID!
   road: String!
   type: AddressType!
+}
+
+type UserProfileResponse {
+  imageUri: String!
+  introduce: String!
+  nickname: String!
+  phoneNumber: String!
 }
 
 input VerifyPhoneVerificationCodeInput {

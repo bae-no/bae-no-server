@@ -16,6 +16,7 @@ import { EnrollUserCommand } from '../port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
 import { SignInUserDto } from '../port/in/dto/SignInUserDto';
+import { UpdateProfileCommand } from '../port/in/dto/UpdateProfileCommand';
 import { UserCommandUseCase } from '../port/in/UserCommandUseCase';
 import { AuthProviderPort } from '../port/out/AuthProviderPort';
 import { TokenGeneratorPort } from '../port/out/TokenGeneratorPort';
@@ -82,7 +83,7 @@ export class UserCommandService extends UserCommandUseCase {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
       TE.chainEitherKW((user) => user.appendAddress(command.toAddress())),
-      TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       TE.map(constVoid),
     );
   }
@@ -93,7 +94,25 @@ export class UserCommandService extends UserCommandUseCase {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
       TE.map((user) => user.deleteAddress(command.key)),
-      TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.map(constVoid),
+    );
+  }
+
+  override updateProfile(
+    command: UpdateProfileCommand,
+  ): TE.TaskEither<DBError, void> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(command.userId),
+      TE.map((user) =>
+        user.updateProfile(
+          command.nickname,
+          command.phoneNumber,
+          command.imageUri,
+          command.introduce,
+        ),
+      ),
+      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       TE.map(constVoid),
     );
   }

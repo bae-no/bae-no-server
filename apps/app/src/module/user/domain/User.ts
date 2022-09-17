@@ -1,7 +1,7 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { Either } from 'fp-ts/Either';
 import * as E from 'fp-ts/Either';
+import { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 
 import { PhoneVerification } from './PhoneVerification';
@@ -115,6 +115,19 @@ export class User extends BaseEntity<UserProps> {
 
   deleteAddress(key: string): this {
     this.props.addressList = this.props.addressList.delete(key);
+
+    return this;
+  }
+
+  updateProfile(
+    nickname: string,
+    phoneNumber: string,
+    imageUri: string,
+    introduce: string,
+  ): this {
+    this.props.nickname = nickname;
+    this.props.phoneNumber = phoneNumber;
+    this.props.profile = new Profile(imageUri, introduce);
 
     return this;
   }

@@ -1,9 +1,12 @@
+import { HttpError } from '@app/domain/error/HttpError';
+import { Either } from 'fp-ts/Either';
+
 export interface HttpResponse {
-  isOk(): boolean;
+  get isOk(): boolean;
 
-  statusCode(): number;
+  get statusCode(): number;
 
-  toEntity<T>(entity: { new (...args: any[]): T }): T;
+  get body(): string;
 
-  body(): string;
+  toEntity<T>(entity: { new (...args: any[]): T }): Either<HttpError, T>;
 }

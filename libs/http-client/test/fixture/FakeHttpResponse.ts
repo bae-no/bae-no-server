@@ -1,4 +1,6 @@
+import { HttpError } from '@app/domain/error/HttpError';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
+import { Either, right } from 'fp-ts/Either';
 
 type FakeHttpResponseProps<T> = {
   isOk?: boolean;
@@ -15,6 +17,18 @@ export class FakeHttpResponse<T> implements HttpResponse {
     private readonly _entity: T,
   ) {}
 
+  get body(): string {
+    return this._body;
+  }
+
+  get isOk(): boolean {
+    return this._isOk;
+  }
+
+  get statusCode(): number {
+    return this._statusCode;
+  }
+
   static of<T>(params: FakeHttpResponseProps<T>) {
     return new FakeHttpResponse(
       params.isOk ?? true,
@@ -24,19 +38,7 @@ export class FakeHttpResponse<T> implements HttpResponse {
     );
   }
 
-  body(): string {
-    return this._body;
-  }
-
-  isOk(): boolean {
-    return this._isOk;
-  }
-
-  statusCode(): number {
-    return this._statusCode;
-  }
-
-  toEntity<T>(_entity: { new (...args: any[]): T }): T {
-    return this._entity as any;
+  toEntity<T>(_entity: { new (...args: any[]): T }): Either<HttpError, T> {
+    return right(this._entity as any);
   }
 }

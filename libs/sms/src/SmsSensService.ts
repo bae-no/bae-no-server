@@ -52,11 +52,18 @@ export class SmsSensService extends SmsPort {
             messages: [{ to: phoneNumber }],
           },
         }),
-      TE.map((res) => new SmsResponse(res.body())),
-      TE.chainW((res) =>
-        res.isSuccessful
+      TE.bindTo('response'),
+      TE.bind('body', ({ response }) =>
+        TE.fromEither(response.toEntity(SmsResponse)),
+      ),
+      TE.chainW(({ body, response }) =>
+        body.isSuccessful
           ? TE.right(undefined)
-          : TE.left(new Error(`SMS 발송이 실패했습니다: body=${res.body}`)),
+          : TE.left(
+              new Error(
+                `SMS 발송이 실패했습니다: statusCode=${response.statusCode} body=${response.body}`,
+              ),
+            ),
       ),
       TE.mapLeft((err) => new NotificationError(err)),
     );

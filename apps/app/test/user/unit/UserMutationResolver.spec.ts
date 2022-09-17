@@ -106,7 +106,7 @@ describe('UserMutationResolver', () => {
       const coordinate = new CoordinateInput();
       coordinate.latitude = 70.1;
       coordinate.longitude = 120.3;
-      input.coordinate = coordinate;
+      input.address.coordinate = coordinate;
 
       // language=GraphQL
       const mutation = `mutation enrollUser($input: EnrollUserInput!) {
@@ -154,7 +154,7 @@ describe('UserMutationResolver', () => {
       const coordinate = new CoordinateInput();
       coordinate.latitude = 70.1;
       coordinate.longitude = 120.3;
-      input.coordinate = coordinate;
+      input.address.coordinate = coordinate;
 
       // language=GraphQL
       const mutation = `mutation enrollUser($input: EnrollUserInput!) {
@@ -205,6 +205,69 @@ describe('UserMutationResolver', () => {
         {
           "data": {
             "leave": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('appendAddress', () => {
+    it('주소 추가 요청에 성공한다', async () => {
+      // given
+      const input = new AddressInput();
+      input.type = AddressType.HOME;
+      input.road = 'road';
+      input.detail = 'address';
+      const coordinate = new CoordinateInput();
+      coordinate.latitude = 70.1;
+      coordinate.longitude = 120.3;
+      input.coordinate = coordinate;
+
+      // language=GraphQL
+      const mutation = `mutation appendAddress($input: AddressInput!) {
+        appendAddress(input: $input)
+      }`;
+
+      userCommandUseCase.appendAddress.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "appendAddress": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('deleteAddress', () => {
+    it('주소 삭제 요청에 성공한다', async () => {
+      // given
+      // language=GraphQL
+      const mutation = `mutation deleteAddress {
+        deleteAddress(key: "5")
+      }`;
+
+      userCommandUseCase.deleteAddress.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "deleteAddress": true,
           },
         }
       `);

@@ -1,9 +1,12 @@
+import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { none, some } from 'fp-ts/Option';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
+import { AppendAddressCommand } from '../../../src/module/user/application/port/in/dto/AppendAddressCommand';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
+import { DeleteAddressCommand } from '../../../src/module/user/application/port/in/dto/DeleteAddressCommand';
 import { EnrollUserCommand } from '../../../src/module/user/application/port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../../../src/module/user/application/port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
@@ -13,14 +16,17 @@ import { UserQueryRepositoryPort } from '../../../src/module/user/application/po
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
 import { User } from '../../../src/module/user/domain/User';
+import { Address } from '../../../src/module/user/domain/vo/Address';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
+import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
 import {
   assertResolvesLeft,
   assertResolvesRight,
   expectNonNullable,
 } from '../../fixture';
+import { UserFactory } from '../../fixture/UserFactory';
 
 describe('UserCommandService', () => {
   const authQueryRepository = mock<AuthProviderPort>();
@@ -110,7 +116,7 @@ describe('UserCommandService', () => {
       // then
       await assertResolvesRight(result);
       expect(user.nickname).toBe(command.nickname);
-      expect(user.address).toStrictEqual(command.toAddress());
+      expect(user.addresses[0]).toStrictEqual(command.toAddress());
     });
 
     it('유저가 없으면 NotFoundException 을 반환한다', async () => {
@@ -156,6 +162,89 @@ describe('UserCommandService', () => {
       expect(user.leaveReason.createdAt).toStrictEqual(now);
       expect(user.leaveReason.name).toBe(command.name);
       expect(user.leaveReason.reason).toBe(command.reason);
+    });
+  });
+
+  describe('appendAddress', () => {
+    it('주소가 6개 이상이면 에러가 발생한다', async () => {
+      // given
+      const command = new AppendAddressCommand(
+        'userId',
+        10,
+        20,
+        AddressType.HOME,
+        'road',
+        'detail',
+      );
+
+      const addresses = Array.from(
+        { length: 6 },
+        () => new Address('alias', 'road', 'detail', AddressType.HOME, 1, 2),
+      );
+      const user = UserFactory.create({
+        addressList: UserAddressList.of(addresses),
+      });
+
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.appendAddress(command);
+
+      // then
+      await assertResolvesLeft(result, (error) => {
+        expect(error).toBeInstanceOf(IllegalStateException);
+      });
+    });
+
+    it('주소등록에 성공한다', async () => {
+      // given
+      const command = new AppendAddressCommand(
+        'userId',
+        10,
+        20,
+        AddressType.HOME,
+        'road',
+        'detail',
+      );
+      const user = UserFactory.create();
+
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.appendAddress(command);
+
+      // then
+      await assertResolvesRight(result);
+      expect(user.addresses).toHaveLength(1);
+      expect(user.addresses[0]).toStrictEqual(command.toAddress());
+    });
+  });
+
+  describe('deleteAddress', () => {
+    it('주어진 주소를 삭제한다', async () => {
+      // given
+      const command = new DeleteAddressCommand('1', 'userId');
+
+      const user = UserFactory.create({
+        addressList: UserAddressList.of([
+          new Address('alias1', 'road1', 'detail1', AddressType.HOME, 1, 2),
+          new Address('alias2', 'road2', 'detail2', AddressType.HOME, 1, 2),
+          new Address('alias3', 'road3', 'detail3', AddressType.HOME, 1, 2),
+        ]),
+      });
+      userQueryRepository.findById.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(right(user));
+
+      // when
+      const result = userCommandService.deleteAddress(command);
+
+      // then
+      await assertResolvesRight(result);
+      expect(user.addresses).toHaveLength(2);
+      expect(user.addresses[0].alias).toBe('alias1');
+      expect(user.addresses[1].alias).toBe('alias3');
     });
   });
 });

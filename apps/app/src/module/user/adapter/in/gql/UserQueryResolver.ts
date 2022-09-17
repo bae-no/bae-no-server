@@ -1,8 +1,11 @@
-import { O, toResponse } from '@app/external/fp-ts';
+import { O, TE, toResponse } from '@app/external/fp-ts';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
+import { CurrentSession } from './auth/CurrentSession';
+import { Session } from './auth/Session';
+import { UserAddressResponse } from './response/UserAddressResponse';
 
 @Resolver()
 export class UserQueryResolver {
@@ -15,6 +18,17 @@ export class UserQueryResolver {
     return pipe(
       this.userQueryRepositoryPort.findByNickname(nickname),
       toResponse(O.isSome),
+    )();
+  }
+
+  @Query(() => [UserAddressResponse], { description: '등록한 주소목록' })
+  async addresses(
+    @CurrentSession() session: Session,
+  ): Promise<UserAddressResponse[]> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(session.id),
+      TE.map((user) => user.addresses),
+      toResponse(UserAddressResponse.of),
     )();
   }
 }

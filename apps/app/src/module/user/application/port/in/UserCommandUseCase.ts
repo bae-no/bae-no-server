@@ -3,6 +3,8 @@ import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { AppendAddressCommand } from './dto/AppendAddressCommand';
+import { DeleteAddressCommand } from './dto/DeleteAddressCommand';
 import { EnrollUserCommand } from './dto/EnrollUserCommand';
 import { LeaveUserCommand } from './dto/LeaveUserCommand';
 import { SignInUserCommand } from './dto/SignInUserCommand';
@@ -18,4 +20,12 @@ export abstract class UserCommandUseCase {
   ): TaskEither<DBError | NotFoundException, void>;
 
   abstract leave(command: LeaveUserCommand): TaskEither<DBError, void>;
+
+  abstract appendAddress(
+    command: AppendAddressCommand,
+  ): TaskEither<DBError, void>;
+
+  abstract deleteAddress(
+    command: DeleteAddressCommand,
+  ): TaskEither<DBError, void>;
 }

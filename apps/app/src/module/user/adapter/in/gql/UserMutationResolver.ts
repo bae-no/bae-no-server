@@ -1,11 +1,13 @@
 import { toResponse } from '@app/external/fp-ts';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 
+import { DeleteAddressCommand } from '../../../application/port/in/dto/DeleteAddressCommand';
 import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseCase';
 import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
 import { Session } from './auth/Session';
+import { AddressInput } from './input/AddressInput';
 import { EnrollUserInput } from './input/EnrollUserInput';
 import { LeaveUserInput } from './input/LeaveUserInput';
 import { SignInInput } from './input/SignInInput';
@@ -45,6 +47,30 @@ export class UserMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.userCommandUseCase.leave(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '주소 추가' })
+  async appendAddress(
+    @Args('input') input: AddressInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.userCommandUseCase.appendAddress(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '주소 삭제' })
+  async deleteAddress(
+    @Args('key', { type: () => ID }) key: string,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      new DeleteAddressCommand(key, session.id),
+      (command) => this.userCommandUseCase.deleteAddress(command),
       toResponse(constTrue),
     )();
   }

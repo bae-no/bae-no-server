@@ -6,11 +6,11 @@ import { pipe } from 'fp-ts/function';
 
 import { PhoneVerification } from './PhoneVerification';
 import { Address } from './vo/Address';
-import { AddressType } from './vo/AddressType';
 import { Agreement } from './vo/Agreement';
 import { Auth } from './vo/Auth';
 import { LeaveReason } from './vo/LeaveReason';
 import { Profile } from './vo/Profile';
+import { UserAddressList } from './vo/UserAddressList';
 
 export interface UserProps {
   nickname: string;
@@ -18,7 +18,7 @@ export interface UserProps {
   auth: Auth;
   agreement: Agreement;
   profile: Profile;
-  address: Address;
+  addressList: UserAddressList;
   leaveReason: LeaveReason | null;
 }
 
@@ -47,8 +47,8 @@ export class User extends BaseEntity<UserProps> {
     return this.props.profile;
   }
 
-  get address(): Address {
-    return this.props.address;
+  get addresses(): Address[] {
+    return this.props.addressList.addresses;
   }
 
   get isPhoneNumberVerified(): boolean {
@@ -56,7 +56,7 @@ export class User extends BaseEntity<UserProps> {
   }
 
   get hasProfile(): boolean {
-    return !!this.props.nickname && !!this.props.address.type;
+    return !!this.props.nickname && this.props.addressList.count > 0;
   }
 
   get leaveReason(): LeaveReason | null {
@@ -70,7 +70,7 @@ export class User extends BaseEntity<UserProps> {
       auth,
       agreement: new Agreement(false, false),
       profile: new Profile('', ''),
-      address: new Address('', '', '', AddressType.ETC, 0, 0),
+      addressList: UserAddressList.of(),
       leaveReason: null,
     });
   }
@@ -91,7 +91,7 @@ export class User extends BaseEntity<UserProps> {
 
   enroll(nickname: string, address: Address): this {
     this.props.nickname = nickname;
-    this.props.address = address;
+    this.props.addressList = UserAddressList.of([address]);
 
     return this;
   }
@@ -99,6 +99,22 @@ export class User extends BaseEntity<UserProps> {
   leave(name: string, reason: string, now: Date): this {
     this.props.leaveReason = new LeaveReason(now, name, reason);
     this.props.auth = this.props.auth.clear();
+
+    return this;
+  }
+
+  appendAddress(address: Address): Either<IllegalStateException, this> {
+    try {
+      this.props.addressList = UserAddressList.of([...this.addresses, address]);
+
+      return E.right(this);
+    } catch (err) {
+      return E.left(new IllegalStateException((err as Error).message));
+    }
+  }
+
+  deleteAddress(key: string): this {
+    this.props.addressList = this.props.addressList.delete(key);
 
     return this;
   }

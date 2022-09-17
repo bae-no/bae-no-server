@@ -4,6 +4,7 @@
 
 input AddressInput {
   alias: String
+  coordinate: CoordinateInput!
   detail: String!
   road: String!
   type: AddressType!
@@ -38,6 +39,11 @@ input CoordinateInput {
   longitude: Float!
 }
 
+type CoordinateResponse {
+  latitude: Float!
+  longitude: Float!
+}
+
 input CreateSampleInput {
   email: String!
   name: String!
@@ -57,7 +63,6 @@ scalar DateTime
 
 input EnrollUserInput {
   address: AddressInput!
-  coordinate: CoordinateInput!
   nickname: String!
 }
 
@@ -93,7 +98,12 @@ input LeaveUserInput {
 }
 
 type Mutation {
+  """주소 추가"""
+  appendAddress(input: AddressInput!): Boolean!
   createSample(input: CreateSampleInput!): SampleResponse!
+
+  """주소 삭제"""
+  deleteAddress(key: ID!): Boolean!
 
   """초기 닉네임 & 주소 등록"""
   enrollUser(input: EnrollUserInput!): Boolean!
@@ -124,6 +134,9 @@ input OpenShareDealInput {
 }
 
 type Query {
+  """등록한 주소목록"""
+  addresses: [UserAddressResponse!]!
+
   """카테고리 목록"""
   categories: CategoryResponse!
 
@@ -155,6 +168,7 @@ type ShareDealResponse {
   id: ID!
   minParticipants: Float!
   orderPrice: Float!
+  status: ShareDealStatus!
   title: String!
 }
 
@@ -166,6 +180,14 @@ type ShareDealSortCategory {
 """공유딜 정렬유형"""
 enum ShareDealSortType {
   LATEST
+}
+
+"""공유딜 상태"""
+enum ShareDealStatus {
+  CLOSE
+  END
+  OPEN
+  START
 }
 
 input SignInInput {
@@ -188,6 +210,15 @@ type SignInResponse {
 
 type Subscription {
   sampleAdded: SampleResponse!
+}
+
+type UserAddressResponse {
+  alias: String!
+  coordinate: CoordinateResponse!
+  detail: String!
+  key: ID!
+  road: String!
+  type: AddressType!
 }
 
 input VerifyPhoneVerificationCodeInput {

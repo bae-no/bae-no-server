@@ -8,6 +8,7 @@ import { Auth } from '../../../domain/vo/Auth';
 import { AuthType } from '../../../domain/vo/AuthType';
 import { LeaveReason } from '../../../domain/vo/LeaveReason';
 import { Profile } from '../../../domain/vo/Profile';
+import { UserAddressList } from '../../../domain/vo/UserAddressList';
 
 export class UserOrmMapper {
   static toDomain(orm: OrmUser): User {
@@ -20,13 +21,18 @@ export class UserOrmMapper {
         orm.agreement.service,
       ),
       profile: new Profile(orm.profile.uri, orm.profile.introduce),
-      address: new Address(
-        orm.address.alias,
-        orm.address.road,
-        orm.address.detail,
-        AddressType[orm.address.type as keyof typeof AddressType],
-        orm.address.coordinate.coordinates[1],
-        orm.address.coordinate.coordinates[0],
+      addressList: UserAddressList.of(
+        orm.addresses.map(
+          (address) =>
+            new Address(
+              address.alias,
+              address.road,
+              address.detail,
+              AddressType[address.type as keyof typeof AddressType],
+              address.coordinate.coordinates[1],
+              address.coordinate.coordinates[0],
+            ),
+        ),
       ),
       leaveReason: orm.leaveReason
         ? new LeaveReason(
@@ -57,19 +63,19 @@ export class UserOrmMapper {
         information: domain.agreement.information,
         service: domain.agreement.service,
       },
-      address: {
-        alias: domain.address.alias,
-        road: domain.address.road,
-        detail: domain.address.detail,
-        type: domain.address.type,
+      addresses: domain.addresses.map((address) => ({
+        alias: address.alias,
+        road: address.road,
+        detail: address.detail,
+        type: address.type,
         coordinate: {
           type: 'Point',
           coordinates: [
-            domain.address.coordinate.longitude,
-            domain.address.coordinate.latitude,
+            address.coordinate.longitude,
+            address.coordinate.latitude,
           ],
         },
-      },
+      })),
       leaveReason: domain.leaveReason
         ? {
             name: domain.leaveReason.name,

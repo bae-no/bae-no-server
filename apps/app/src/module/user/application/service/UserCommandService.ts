@@ -1,5 +1,6 @@
 import { AuthError } from '@app/domain/error/AuthError';
 import { DBError } from '@app/domain/error/DBError';
+import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { O, TE } from '@app/external/fp-ts';
 import { Injectable } from '@nestjs/common';
@@ -9,6 +10,8 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { User } from '../../domain/User';
 import { Auth } from '../../domain/vo/Auth';
+import { AppendAddressCommand } from '../port/in/dto/AppendAddressCommand';
+import { DeleteAddressCommand } from '../port/in/dto/DeleteAddressCommand';
 import { EnrollUserCommand } from '../port/in/dto/EnrollUserCommand';
 import { LeaveUserCommand } from '../port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../port/in/dto/SignInUserCommand';
@@ -69,6 +72,28 @@ export class UserCommandService extends UserCommandUseCase {
       this.userQueryRepositoryPort.findById(command.userId),
       TE.map((user) => user.leave(command.name, command.reason, now)),
       TE.chain((user) => this.userRepositoryPort.save(user)),
+      TE.map(constVoid),
+    );
+  }
+
+  override appendAddress(
+    command: AppendAddressCommand,
+  ): TaskEither<DBError | IllegalStateException, void> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(command.userId),
+      TE.chainEitherKW((user) => user.appendAddress(command.toAddress())),
+      TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      TE.map(constVoid),
+    );
+  }
+
+  override deleteAddress(
+    command: DeleteAddressCommand,
+  ): TaskEither<DBError, void> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(command.userId),
+      TE.map((user) => user.deleteAddress(command.key)),
+      TE.map((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       TE.map(constVoid),
     );
   }

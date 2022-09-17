@@ -146,7 +146,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
     });
 
-    it('오픈 상태인 공유딜만 가져온다', async () => {
+    it('오픈 또는 시작 상태인 공유딜만 가져온다', async () => {
       // given
       await prisma.shareDeal.createMany({
         data: [
@@ -166,8 +166,11 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
       // then
       await assertResolvesRight(result, (value) => {
-        expect(value).toHaveLength(1);
-        expect(value[0].status).toBe(ShareDealStatus.OPEN);
+        expect(value).toHaveLength(2);
+        const result = value.every((v) =>
+          [ShareDealStatus.OPEN, ShareDealStatus.START].includes(v.status),
+        );
+        expect(result).toBe(true);
       });
     });
   });

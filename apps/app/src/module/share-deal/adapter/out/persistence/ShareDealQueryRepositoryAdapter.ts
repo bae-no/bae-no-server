@@ -24,7 +24,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   ): TaskEither<DBError, ShareDeal[]> {
     const args: Prisma.ShareDealFindManyArgs = {
       take: command.size,
-      where: { status: ShareDealStatus.OPEN },
+      where: { status: { in: [ShareDealStatus.OPEN, ShareDealStatus.START] } },
     };
 
     if (command.keyword) {

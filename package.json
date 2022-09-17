@@ -48,7 +48,6 @@
     "class-validator": "0.13.2",
     "date-fns": "2.29.3",
     "fp-ts": "2.12.3",
-    "got": "12.4.1",
     "graphql": "16.6.0",
     "graphql-subscriptions": "2.0.0",
     "passport": "0.6.0",

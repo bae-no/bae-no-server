@@ -34,9 +34,9 @@ export class KakaoAuthStrategy implements AuthStrategy {
   request(code: string): TaskEither<AuthError, Auth> {
     return pipe(
       this.requestSocialId(code),
-      TE.map(this.toSocialResponse),
+      TE.chain(this.toSocialResponse),
       TE.chain((res) => this.requestProfile(res)),
-      TE.map(this.toProfileResponse),
+      TE.chain(this.toProfileResponse),
       TE.bimap((error) => new AuthError(error), this.toAuth),
     );
   }
@@ -52,7 +52,9 @@ export class KakaoAuthStrategy implements AuthStrategy {
     });
   }
 
-  private toSocialResponse(response: HttpResponse): KakaoAuthResponse {
+  private toSocialResponse(
+    response: HttpResponse,
+  ): TaskEither<HttpError, KakaoAuthResponse> {
     return response.toEntity(KakaoAuthResponse);
   }
 
@@ -66,7 +68,9 @@ export class KakaoAuthStrategy implements AuthStrategy {
     });
   }
 
-  private toProfileResponse(response: HttpResponse): KakaoProfileResponse {
+  private toProfileResponse(
+    response: HttpResponse,
+  ): TaskEither<HttpError, KakaoProfileResponse> {
     return response.toEntity(KakaoProfileResponse);
   }
 

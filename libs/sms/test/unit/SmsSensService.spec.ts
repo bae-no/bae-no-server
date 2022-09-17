@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import { SmsResponse } from '@app/sms/SmsResponse';
 import { SmsSensService } from '@app/sms/SmsSensService';
 import { ConfigService } from '@nestjs/config';
 import { left, right } from 'fp-ts/TaskEither';
@@ -25,9 +26,9 @@ describe('SmsSensService', () => {
       // given
       const phoneNumber = '01012345678';
       const content = 'content';
-      const response = FakeHttpResponse.of({
-        body: JSON.stringify({ statusCode: '202' }),
-      });
+      const smsResponse = new SmsResponse();
+      smsResponse.statusCode = '202';
+      const response = FakeHttpResponse.of({ entity: smsResponse });
 
       httpClientPort.post.mockReturnValue(right(response));
 
@@ -42,9 +43,9 @@ describe('SmsSensService', () => {
       // given
       const phoneNumber = '01012345678';
       const content = 'content';
-      const response = FakeHttpResponse.of({
-        body: JSON.stringify({ statusCode: '400' }),
-      });
+      const smsResponse = new SmsResponse();
+      smsResponse.statusCode = '404';
+      const response = FakeHttpResponse.of({ entity: smsResponse });
 
       httpClientPort.post.mockReturnValue(right(response));
 

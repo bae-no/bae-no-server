@@ -1,4 +1,7 @@
+import { HttpError } from '@app/domain/error/HttpError';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
+import { TE } from '@app/external/fp-ts';
+import { TaskEither } from 'fp-ts/TaskEither';
 
 type FakeHttpResponseProps<T> = {
   isOk?: boolean;
@@ -24,8 +27,8 @@ export class FakeHttpResponse<T> implements HttpResponse {
     );
   }
 
-  body(): string {
-    return this._body;
+  body(): TaskEither<HttpError, string> {
+    return TE.right(this._body);
   }
 
   isOk(): boolean {
@@ -36,7 +39,7 @@ export class FakeHttpResponse<T> implements HttpResponse {
     return this._statusCode;
   }
 
-  toEntity<T>(_entity: { new (...args: any[]): T }): T {
-    return this._entity as any;
+  toEntity<T>(_entity: { new (...args: any[]): T }): TaskEither<HttpError, T> {
+    return TE.right(this._entity as any);
   }
 }

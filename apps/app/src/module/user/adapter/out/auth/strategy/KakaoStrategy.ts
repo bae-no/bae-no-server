@@ -55,7 +55,18 @@ export class KakaoAuthStrategy implements AuthStrategy {
   private toSocialResponse(
     response: HttpResponse,
   ): TaskEither<HttpError, KakaoAuthResponse> {
-    return response.toEntity(KakaoAuthResponse);
+    return pipe(
+      response.body(),
+      TE.chain((body) =>
+        response.isOk()
+          ? response.toEntity(KakaoAuthResponse)
+          : TE.left(
+              HttpError.fromMessage(
+                `카카오 토큰받기 실패: statusCode=${response.statusCode()} body=${body}`,
+              ),
+            ),
+      ),
+    );
   }
 
   private requestProfile(
@@ -71,7 +82,18 @@ export class KakaoAuthStrategy implements AuthStrategy {
   private toProfileResponse(
     response: HttpResponse,
   ): TaskEither<HttpError, KakaoProfileResponse> {
-    return response.toEntity(KakaoProfileResponse);
+    return pipe(
+      response.body(),
+      TE.chain((body) =>
+        response.isOk()
+          ? response.toEntity(KakaoProfileResponse)
+          : TE.left(
+              HttpError.fromMessage(
+                `카카오 프로필 정보 가져오기 실패: statusCode=${response.statusCode()} body=${body}`,
+              ),
+            ),
+      ),
+    );
   }
 
   private toAuth(response: KakaoProfileResponse): Auth {

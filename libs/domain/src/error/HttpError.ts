@@ -4,4 +4,8 @@ export class HttpError extends Error {
     Error.captureStackTrace(this, this.constructor);
     (this.stack as any) += error.stack;
   }
+
+  static fromMessage(message: string): HttpError {
+    return new HttpError(new Error(message));
+  }
 }

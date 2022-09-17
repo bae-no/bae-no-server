@@ -2,9 +2,10 @@ import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { TE } from '@app/external/fp-ts';
+import { TE, E } from '@app/external/fp-ts';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -34,9 +35,9 @@ export class KakaoAuthStrategy implements AuthStrategy {
   request(code: string): TaskEither<AuthError, Auth> {
     return pipe(
       this.requestSocialId(code),
-      TE.chain(this.toSocialResponse),
+      TE.chainEitherK(this.toSocialResponse),
       TE.chain((res) => this.requestProfile(res)),
-      TE.chain(this.toProfileResponse),
+      TE.chainEitherK(this.toProfileResponse),
       TE.bimap((error) => new AuthError(error), this.toAuth),
     );
   }
@@ -54,17 +55,14 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   private toSocialResponse(
     response: HttpResponse,
-  ): TaskEither<HttpError, KakaoAuthResponse> {
-    return pipe(
-      response.body(),
-      TE.chain((body) =>
-        response.isOk()
-          ? response.toEntity(KakaoAuthResponse)
-          : TE.left(
-              HttpError.fromMessage(
-                `카카오 토큰받기 실패: statusCode=${response.statusCode()} body=${body}`,
-              ),
-            ),
+  ): Either<HttpError, KakaoAuthResponse> {
+    if (response.isOk) {
+      return response.toEntity(KakaoAuthResponse);
+    }
+
+    return E.left(
+      HttpError.fromMessage(
+        `카카오 토큰받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),
     );
   }
@@ -81,17 +79,14 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   private toProfileResponse(
     response: HttpResponse,
-  ): TaskEither<HttpError, KakaoProfileResponse> {
-    return pipe(
-      response.body(),
-      TE.chain((body) =>
-        response.isOk()
-          ? response.toEntity(KakaoProfileResponse)
-          : TE.left(
-              HttpError.fromMessage(
-                `카카오 프로필 정보 가져오기 실패: statusCode=${response.statusCode()} body=${body}`,
-              ),
-            ),
+  ): Either<HttpError, KakaoProfileResponse> {
+    if (response.isOk) {
+      return response.toEntity(KakaoProfileResponse);
+    }
+
+    return E.left(
+      HttpError.fromMessage(
+        `카카오 프로필 받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),
     );
   }

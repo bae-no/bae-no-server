@@ -1,34 +1,28 @@
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { TE } from '@app/external/fp-ts';
 import { plainToInstance } from 'class-transformer';
+import { Either, tryCatch } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
 
 export class NodeFetchResponse implements HttpResponse {
-  constructor(public readonly response: Response) {}
+  constructor(private status: number, private rawBody: string) {}
 
-  isOk(): boolean {
-    return this.response.ok;
+  get isOk(): boolean {
+    return this.status >= 200 && this.status < 300;
   }
 
-  statusCode(): number {
-    return this.response.status;
+  get statusCode(): number {
+    return this.status;
   }
 
-  toEntity<T>(entity: { new (...args: any[]): T }): TaskEither<HttpError, T> {
+  get body(): string {
+    return this.rawBody;
+  }
+
+  toEntity<T>(entity: { new (...args: any[]): T }): Either<HttpError, T> {
     return pipe(
-      TE.tryCatch(
-        async () => plainToInstance(entity, await this.response.json()),
-        (error) => new HttpError(error as Error),
-      ),
-    );
-  }
-
-  body(): TaskEither<HttpError, string> {
-    return pipe(
-      TE.tryCatch(
-        async () => this.response.text(),
+      tryCatch(
+        () => plainToInstance(entity, JSON.parse(this.rawBody)),
         (error) => new HttpError(error as Error),
       ),
     );

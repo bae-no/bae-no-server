@@ -1,12 +1,12 @@
 import { HttpError } from '@app/domain/error/HttpError';
-import { TaskEither } from 'fp-ts/TaskEither';
+import { Either } from 'fp-ts/Either';
 
 export interface HttpResponse {
-  isOk(): boolean;
+  get isOk(): boolean;
 
-  statusCode(): number;
+  get statusCode(): number;
 
-  toEntity<T>(entity: { new (...args: any[]): T }): TaskEither<HttpError, T>;
+  get body(): string;
 
-  body(): TaskEither<HttpError, string>;
+  toEntity<T>(entity: { new (...args: any[]): T }): Either<HttpError, T>;
 }

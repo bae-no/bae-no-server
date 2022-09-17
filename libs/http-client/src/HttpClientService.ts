@@ -62,29 +62,33 @@ export class HttpClientService extends HttpClientPort {
       TE.tryCatch(
         async () => {
           try {
-            return fetch(url + this.makeSearchParam(option), {
+            const response = await fetch(url + this.makeSearchParam(option), {
               method,
               body: this.makeBody(option),
               headers: option?.headers,
               signal: controller.signal,
             });
+
+            return new NodeFetchResponse(
+              response.status,
+              await response.text(),
+            );
           } finally {
             clearTimeout(timeout);
           }
         },
         (e) => new HttpError(e as Error),
       ),
-      TE.map((response) => new NodeFetchResponse(response)),
     );
   }
 
-  private makeBody(option?: HttpOption): string | undefined {
+  private makeBody(option?: HttpOption): BodyInit | undefined {
     if (option?.body) {
       return JSON.stringify(option.body);
     }
 
     if (option?.form) {
-      return new URLSearchParams(option.form).toString();
+      return new URLSearchParams(option.form);
     }
 
     return undefined;
@@ -92,7 +96,7 @@ export class HttpClientService extends HttpClientPort {
 
   private makeSearchParam(option?: HttpOption): string {
     if (option?.query) {
-      return new URLSearchParams(option.query).toString();
+      return `?${new URLSearchParams(option.query).toString()}`;
     }
 
     return '';

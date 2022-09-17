@@ -53,15 +53,15 @@ export class SmsSensService extends SmsPort {
           },
         }),
       TE.bindTo('response'),
-      TE.bind('body', ({ response }) => response.toEntity(SmsResponse)),
+      TE.bind('body', ({ response }) =>
+        TE.fromEither(response.toEntity(SmsResponse)),
+      ),
       TE.chainW(({ body, response }) =>
         body.isSuccessful
           ? TE.right(undefined)
           : TE.left(
               new Error(
-                `SMS 발송이 실패했습니다: statusCode=${response.statusCode()} body=${JSON.stringify(
-                  body,
-                )}`,
+                `SMS 발송이 실패했습니다: statusCode=${response.statusCode} body=${response.body}`,
               ),
             ),
       ),

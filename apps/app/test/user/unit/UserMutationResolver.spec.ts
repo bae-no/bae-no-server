@@ -8,6 +8,7 @@ import { CoordinateInput } from '../../../src/module/user/adapter/in/gql/input/C
 import { EnrollUserInput } from '../../../src/module/user/adapter/in/gql/input/EnrollUserInput';
 import { LeaveUserInput } from '../../../src/module/user/adapter/in/gql/input/LeaveUserInput';
 import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignInInput';
+import { UpdateProfileInput } from '../../../src/module/user/adapter/in/gql/input/UpdateProfileInput';
 import { UserMutationResolver } from '../../../src/module/user/adapter/in/gql/UserMutationResolver';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';
 import { SignInUserDto } from '../../../src/module/user/application/port/in/dto/SignInUserDto';
@@ -268,6 +269,39 @@ describe('UserMutationResolver', () => {
         {
           "data": {
             "deleteAddress": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('updateProfile', () => {
+    it('프로필 정보를 수정한다.', async () => {
+      // given
+      // language=GraphQL
+      const mutation = `mutation updateProfile($input: UpdateProfileInput!) {
+        updateProfile(input: $input)
+      }`;
+
+      const input = new UpdateProfileInput();
+      input.nickname = 'nickname';
+      input.phoneNumber = 'phoneNumber';
+      input.imageUri = 'imageUri';
+      input.introduce = 'introduce';
+
+      userCommandUseCase.updateProfile.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "updateProfile": true,
           },
         }
       `);

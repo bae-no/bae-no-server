@@ -9,6 +9,7 @@ import { EnrollUserCommand } from './dto/EnrollUserCommand';
 import { LeaveUserCommand } from './dto/LeaveUserCommand';
 import { SignInUserCommand } from './dto/SignInUserCommand';
 import { SignInUserDto } from './dto/SignInUserDto';
+import { UpdateProfileCommand } from './dto/UpdateProfileCommand';
 
 export abstract class UserCommandUseCase {
   abstract signIn(
@@ -27,5 +28,9 @@ export abstract class UserCommandUseCase {
 
   abstract deleteAddress(
     command: DeleteAddressCommand,
+  ): TaskEither<DBError, void>;
+
+  abstract updateProfile(
+    command: UpdateProfileCommand,
   ): TaskEither<DBError, void>;
 }

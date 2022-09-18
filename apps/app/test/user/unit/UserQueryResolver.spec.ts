@@ -11,10 +11,12 @@ import { Address } from '../../../src/module/user/domain/vo/Address';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
+import { Profile } from '../../../src/module/user/domain/vo/Profile';
 import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { UserFactory } from '../../fixture/UserFactory';
 
 describe('UserQueryResolver', () => {
   const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
@@ -113,6 +115,48 @@ describe('UserQueryResolver', () => {
                 "type": "ETC",
               },
             ],
+          },
+        }
+      `);
+    });
+  });
+
+  describe('profile', () => {
+    it('사용자 프로필 정보를 조회한다.', async () => {
+      // given
+      // language=GraphQL
+      const query = `query profile {
+        profile {
+          nickname
+          phoneNumber
+          imageUri
+          introduce
+        }
+      }`;
+
+      const user = UserFactory.create({
+        nickname: 'nickname',
+        phoneNumber: '01011112222',
+        profile: new Profile('uri', 'introduce'),
+      });
+
+      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "profile": {
+              "imageUri": "uri",
+              "introduce": "introduce",
+              "nickname": "nickname",
+              "phoneNumber": "01011112222",
+            },
           },
         }
       `);

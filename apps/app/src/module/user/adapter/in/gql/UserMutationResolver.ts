@@ -11,6 +11,7 @@ import { AddressInput } from './input/AddressInput';
 import { EnrollUserInput } from './input/EnrollUserInput';
 import { LeaveUserInput } from './input/LeaveUserInput';
 import { SignInInput } from './input/SignInInput';
+import { UpdateProfileInput } from './input/UpdateProfileInput';
 import { SignInResponse } from './response/SignInResponse';
 
 @Resolver()
@@ -71,6 +72,18 @@ export class UserMutationResolver {
     return pipe(
       new DeleteAddressCommand(key, session.id),
       (command) => this.userCommandUseCase.deleteAddress(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '프로필 정보 수정' })
+  async updateProfile(
+    @Args('input') input: UpdateProfileInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.userCommandUseCase.updateProfile(command),
       toResponse(constTrue),
     )();
   }

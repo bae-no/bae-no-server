@@ -14,6 +14,7 @@ export class ShareDealOrmMapper {
       ownerId: orm.ownerId,
       participantIds: orm.participantIds,
       storeName: orm.storeName,
+      thumbnail: orm.thumbnail,
       title: orm.title,
       status: ShareDealStatus[orm.status as ShareDealStatus],
       zone: new ShareZone(
@@ -36,6 +37,7 @@ export class ShareDealOrmMapper {
       ownerId: domain.ownerId,
       participantIds: domain.participantIds,
       storeName: domain.storeName,
+      thumbnail: domain.thumbnail,
       title: domain.title,
       zone: {
         road: domain.zone.road,

@@ -10,6 +10,7 @@ export class OpenShareDealCommand {
     readonly minParticipants: number,
     readonly orderPrice: number,
     readonly storeName: string,
+    readonly thumbnail: string,
     readonly addressRoad: string,
     readonly addressDetail: string,
     readonly latitude: number,
@@ -24,6 +25,7 @@ export class OpenShareDealCommand {
       orderPrice: this.orderPrice,
       ownerId: this.userId,
       storeName: this.storeName,
+      thumbnail: this.thumbnail,
       zone: new ShareZone(
         this.addressRoad,
         this.addressDetail,

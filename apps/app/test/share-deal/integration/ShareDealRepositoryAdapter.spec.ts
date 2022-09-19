@@ -36,6 +36,7 @@ describe('ShareDealRepositoryAdapter', () => {
         orderPrice: 2000,
         ownerId: faker.database.mongodbObjectId(),
         storeName: 'store',
+        thumbnail: 'thumbnail',
         zone: shareZone,
       });
 

@@ -13,6 +13,7 @@ export interface ShareDealProps {
   ownerId: string;
   participantIds: string[];
   storeName: string;
+  thumbnail: string;
   zone: ShareZone;
 }
 
@@ -64,6 +65,10 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
 
   get participantCount(): number {
     return this.participantIds.length + 1;
+  }
+
+  get thumbnail(): string {
+    return this.props.thumbnail;
   }
 
   static open(props: CreateShareDealProps) {

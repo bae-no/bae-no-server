@@ -54,6 +54,7 @@ describe('ShareDealQueryResolver', () => {
           minParticipants
           currentParticipants
           status
+          thumbnail
         }
       }`;
 
@@ -64,6 +65,7 @@ describe('ShareDealQueryResolver', () => {
         title: 'title',
         participantIds: ['1', '2', '3'],
         createdAt: new Date('2022-01-01'),
+        thumbnail: 'thumbnail',
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
@@ -86,6 +88,7 @@ describe('ShareDealQueryResolver', () => {
                 "minParticipants": 10,
                 "orderPrice": 1000,
                 "status": "OPEN",
+                "thumbnail": "thumbnail",
                 "title": "title",
               },
             ],

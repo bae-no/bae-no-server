@@ -32,6 +32,7 @@ export class ShareDealFactory {
       orderPrice: faker.datatype.number(),
       ownerId: faker.database.mongodbObjectId(),
       storeName: faker.word.noun(),
+      thumbnail: faker.image.imageUrl(),
       zone: shareZone,
       ...props,
     }).setBase(

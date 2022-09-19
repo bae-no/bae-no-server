@@ -27,6 +27,7 @@ describe('ShareDealCommandService', () => {
         10,
         1000,
         'store',
+        'thumbnail',
         'road',
         'detail',
         123,

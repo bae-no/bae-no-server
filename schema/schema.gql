@@ -133,6 +133,7 @@ input OpenShareDealInput {
   orderPrice: Float!
   shareZone: CreateShareZoneInput!
   storeName: String!
+  thumbnail: String!
   title: String!
 }
 
@@ -175,6 +176,7 @@ type ShareDealResponse {
   minParticipants: Float!
   orderPrice: Float!
   status: ShareDealStatus!
+  thumbnail: String!
   title: String!
 }
 

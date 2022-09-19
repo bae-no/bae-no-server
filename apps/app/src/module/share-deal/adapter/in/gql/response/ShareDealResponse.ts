@@ -26,6 +26,9 @@ export class ShareDealResponse {
   @Field()
   currentParticipants: number;
 
+  @Field()
+  thumbnail: string;
+
   @Field(() => ShareDealStatus)
   status: ShareDealStatus;
 
@@ -40,6 +43,7 @@ export class ShareDealResponse {
     response.minParticipants = shareDeal.minParticipants;
     response.currentParticipants = shareDeal.participantCount;
     response.status = shareDeal.status;
+    response.thumbnail = shareDeal.thumbnail;
 
     return response;
   }

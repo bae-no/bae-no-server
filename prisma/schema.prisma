@@ -92,6 +92,7 @@ model ShareDeal {
   ownerId         String    @db.ObjectId
   participantIds  String[]  @db.ObjectId
   storeName       String
+  thumbnail       String
   zone            ShareZone
 }
 

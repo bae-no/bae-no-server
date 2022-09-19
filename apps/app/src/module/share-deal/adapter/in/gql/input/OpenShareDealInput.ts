@@ -25,6 +25,9 @@ export class OpenShareDealInput {
   @Field()
   storeName: string;
 
+  @Field()
+  thumbnail: string;
+
   @Field(() => CreateShareZoneInput)
   @Type(() => CreateShareZoneInput)
   @ValidateNested()
@@ -38,6 +41,7 @@ export class OpenShareDealInput {
       this.minParticipants,
       this.orderPrice,
       this.storeName,
+      this.thumbnail,
       this.shareZone.addressRoad,
       this.shareZone.addressDetail,
       this.shareZone.latitude,

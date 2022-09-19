@@ -43,6 +43,7 @@ describe('ShareDealMutationResolver', () => {
       input.minParticipants = 2;
       input.storeName = 'IPPPPPPPPPAAZ';
       input.orderPrice = 1000;
+      input.thumbnail = 'thumbnail';
 
       const shareZoneInput = new CreateShareZoneInput();
       shareZoneInput.addressDetail = 'detail';

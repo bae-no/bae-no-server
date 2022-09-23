@@ -6,11 +6,15 @@ import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort
 import { Auth } from '../../../domain/vo/Auth';
 import { AuthType } from '../../../domain/vo/AuthType';
 import { AuthStrategy } from './strategy/AuthStrategy';
-import { KakaoAuthStrategy } from './strategy/KakaoStrategy';
+import { GoogleAuthStrategy } from './strategy/GoogleAuthStrategy';
+import { KakaoAuthStrategy } from './strategy/KakaoAuthStrategy';
 
 @Injectable()
 export class AuthProvider extends AuthProviderPort {
-  constructor(private readonly kakaoStrategy: KakaoAuthStrategy) {
+  constructor(
+    private readonly kakaoStrategy: KakaoAuthStrategy,
+    private readonly googleStrategy: GoogleAuthStrategy,
+  ) {
     super();
   }
 
@@ -22,6 +26,8 @@ export class AuthProvider extends AuthProviderPort {
     switch (type) {
       case AuthType.KAKAO:
         return this.kakaoStrategy;
+      case AuthType.GOOGLE:
+        return this.googleStrategy;
       default:
         return this.kakaoStrategy;
     }

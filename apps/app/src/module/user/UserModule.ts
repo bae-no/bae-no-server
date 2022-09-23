@@ -8,7 +8,8 @@ import { PhoneVerificationMutationResolver } from './adapter/in/gql/PhoneVerific
 import { UserMutationResolver } from './adapter/in/gql/UserMutationResolver';
 import { UserQueryResolver } from './adapter/in/gql/UserQueryResolver';
 import { AuthProvider } from './adapter/out/auth/AuthProvider';
-import { KakaoAuthStrategy } from './adapter/out/auth/strategy/KakaoStrategy';
+import { GoogleAuthStrategy } from './adapter/out/auth/strategy/GoogleAuthStrategy';
+import { KakaoAuthStrategy } from './adapter/out/auth/strategy/KakaoAuthStrategy';
 import { JwtTokenGeneratorAdapter } from './adapter/out/jwt/JwtTokenGeneratorAdapter';
 import { PhoneVerificationRepositoryAdapter } from './adapter/out/persistence/PhoneVerificationRepositoryAdapter';
 import { UserQueryRepositoryAdapter } from './adapter/out/persistence/UserQueryRepositoryAdapter';
@@ -57,6 +58,7 @@ import { UserCommandService } from './application/service/UserCommandService';
       useClass: PhoneVerificationRepositoryAdapter,
     },
     KakaoAuthStrategy,
+    GoogleAuthStrategy,
     JwtStrategy,
   ],
   imports: [

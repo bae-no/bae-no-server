@@ -252,13 +252,7 @@ describe('UserCommandService', () => {
   describe('updateProfile', () => {
     it('프로필 정보를 수정한다.', async () => {
       // given
-      const command = new UpdateProfileCommand(
-        'userId',
-        'nickname',
-        'phoneNumber',
-        'imageUri',
-        'introduce',
-      );
+      const command = new UpdateProfileCommand('userId', 'introduce');
       const user = UserFactory.create();
 
       userQueryRepository.findById.mockReturnValue(right(user));
@@ -269,9 +263,6 @@ describe('UserCommandService', () => {
 
       // then
       await assertResolvesRight(result);
-      expect(user.nickname).toBe(command.nickname);
-      expect(user.phoneNumber).toBe(command.phoneNumber);
-      expect(user.profile.uri).toBe(command.imageUri);
       expect(user.profile.introduce).toBe(command.introduce);
     });
   });

@@ -104,14 +104,7 @@ export class UserCommandService extends UserCommandUseCase {
   ): TE.TaskEither<DBError, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.map((user) =>
-        user.updateProfile(
-          command.nickname,
-          command.phoneNumber,
-          command.imageUri,
-          command.introduce,
-        ),
-      ),
+      TE.map((user) => user.updateProfile(command.introduce)),
       TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       TE.map(constVoid),
     );

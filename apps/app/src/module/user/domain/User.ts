@@ -119,15 +119,8 @@ export class User extends BaseEntity<UserProps> {
     return this;
   }
 
-  updateProfile(
-    nickname: string,
-    phoneNumber: string,
-    imageUri: string,
-    introduce: string,
-  ): this {
-    this.props.nickname = nickname;
-    this.props.phoneNumber = phoneNumber;
-    this.props.profile = new Profile(imageUri, introduce);
+  updateProfile(introduce: string): this {
+    this.props.profile = new Profile('', introduce);
 
     return this;
   }

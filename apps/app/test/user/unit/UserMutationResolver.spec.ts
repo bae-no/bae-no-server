@@ -284,9 +284,6 @@ describe('UserMutationResolver', () => {
       }`;
 
       const input = new UpdateProfileInput();
-      input.nickname = 'nickname';
-      input.phoneNumber = 'phoneNumber';
-      input.imageUri = 'imageUri';
       input.introduce = 'introduce';
 
       userCommandUseCase.updateProfile.mockReturnValue(right(undefined));

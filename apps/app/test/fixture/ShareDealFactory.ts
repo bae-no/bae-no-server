@@ -5,6 +5,7 @@ import {
   ShareDealProps,
 } from '../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../src/module/share-deal/domain/vo/FoodCategory';
+import { ParticipantInfo } from '../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareZone } from '../../src/module/share-deal/domain/vo/ShareZone';
 
@@ -12,6 +13,7 @@ type BaseType = {
   id?: string;
   createdAt: Date;
   updatedAt: Date;
+  participants?: ParticipantInfo;
 };
 
 export class ShareDealFactory {
@@ -22,15 +24,17 @@ export class ShareDealFactory {
       +faker.address.latitude(undefined, 0),
       +faker.address.longitude(undefined, 0),
     );
+    const ownerId = props.ownerId ?? faker.database.mongodbObjectId();
 
     return new ShareDeal({
       title: faker.word.noun(3),
       status: faker.helpers.arrayElement(Object.values(ShareDealStatus)),
       category: faker.helpers.arrayElement(Object.values(FoodCategory)),
-      participantIds: [faker.database.mongodbObjectId()],
-      minParticipants: faker.datatype.number(),
+      participantInfo:
+        props.participantInfo ??
+        ParticipantInfo.of([ownerId], faker.datatype.number()),
       orderPrice: faker.datatype.number(),
-      ownerId: faker.database.mongodbObjectId(),
+      ownerId,
       storeName: faker.word.noun(),
       thumbnail: faker.image.imageUrl(),
       zone: shareZone,

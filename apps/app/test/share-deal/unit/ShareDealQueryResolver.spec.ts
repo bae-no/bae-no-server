@@ -7,6 +7,7 @@ import { FindShareDealInput } from '../../../src/module/share-deal/adapter/in/gq
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import {
   graphQLTestHelper,
   setMockUser,
@@ -60,12 +61,11 @@ describe('ShareDealQueryResolver', () => {
 
       const shareDeal = ShareDealFactory.createOpen({
         id: '12345',
-        minParticipants: 10,
         orderPrice: 1000,
         title: 'title',
-        participantIds: ['1', '2', '3'],
         createdAt: new Date('2022-01-01'),
         thumbnail: 'thumbnail',
+        participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
@@ -82,7 +82,7 @@ describe('ShareDealQueryResolver', () => {
             "shareDeals": [
               {
                 "createdAt": "2022-01-01T00:00:00.000Z",
-                "currentParticipants": 4,
+                "currentParticipants": 3,
                 "distance": 0,
                 "id": "12345",
                 "minParticipants": 10,

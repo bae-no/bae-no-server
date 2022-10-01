@@ -40,8 +40,8 @@ export class ShareDealResponse {
     response.title = shareDeal.title;
     response.orderPrice = shareDeal.orderPrice;
     response.distance = 0;
-    response.minParticipants = shareDeal.minParticipants;
-    response.currentParticipants = shareDeal.participantCount;
+    response.minParticipants = shareDeal.participantInfo.min;
+    response.currentParticipants = shareDeal.participantInfo.current;
     response.status = shareDeal.status;
     response.thumbnail = shareDeal.thumbnail;
 

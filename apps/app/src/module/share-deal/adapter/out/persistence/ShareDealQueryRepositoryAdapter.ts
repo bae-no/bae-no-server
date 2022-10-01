@@ -39,6 +39,14 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       args.orderBy = { createdAt: Prisma.SortOrder.desc };
     }
 
+    if (command.sortType === ShareDealSortType.POPULAR) {
+      args.orderBy = { participants: { current: Prisma.SortOrder.desc } };
+    }
+
+    if (command.sortType === ShareDealSortType.PARTICIPANTS) {
+      args.orderBy = { participants: { remaining: Prisma.SortOrder.desc } };
+    }
+
     if (command.cursor) {
       args.skip = 1;
       args.cursor = { createdAt: command.cursor };
@@ -56,10 +64,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   ): TaskEither<DBError, number> {
     return tryCatchDB(() =>
       this.prisma.shareDeal.count({
-        where: {
-          status,
-          OR: [{ ownerId: userId }, { participantIds: { hasSome: userId } }],
-        },
+        where: { status, participants: { is: { ids: { hasSome: [userId] } } } },
       }),
     );
   }

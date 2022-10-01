@@ -8,6 +8,7 @@ import { ShareDealQueryRepositoryAdapter } from '../../../src/module/share-deal/
 import { FindShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
+import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
@@ -192,7 +193,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
     });
 
-    it('내가 만든 완료상태인 공유딜 개수를 가져온다', async () => {
+    it('내가 만든 공유딜 개수를 가져온다', async () => {
       // given
       const userId = faker.database.mongodbObjectId();
       await prisma.shareDeal.createMany({
@@ -218,31 +219,27 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
     });
 
-    it('내가 참여한 오픈된 공유딜 개수를 가져온다 ', async () => {
+    it('내가 참여한 공유딜 개수를 가져온다', async () => {
       // given
       const userId = faker.database.mongodbObjectId();
-      await prisma.shareDeal.createMany({
-        data: [
-          ShareDealStatus.OPEN,
-          ShareDealStatus.OPEN,
-          ShareDealStatus.CLOSE,
-          ShareDealStatus.END,
-        ]
-          .map((status) =>
-            ShareDealFactory.create({ status, participantIds: [userId] }),
-          )
-          .map(ShareDealOrmMapper.toOrm),
+      await prisma.shareDeal.create({
+        data: ShareDealOrmMapper.toOrm(
+          ShareDealFactory.create({
+            status: ShareDealStatus.END,
+            participantInfo: ParticipantInfo.of([userId], 10),
+          }),
+        ),
       });
 
       // when
       const result = shareDealRepositoryAdapter.countByStatus(
         userId,
-        ShareDealStatus.OPEN,
+        ShareDealStatus.END,
       );
 
       // then
       await assertResolvesRight(result, (value) => {
-        expect(value).toBe(2);
+        expect(value).toBe(1);
       });
     });
   });

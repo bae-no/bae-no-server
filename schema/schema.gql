@@ -68,8 +68,8 @@ input EnrollUserInput {
 
 input FindShareDealInput {
   category: FoodCategory
-  cursor: DateTime
   keyword: String
+  page: Float!
   size: Float!
   sortType: ShareDealSortType
 }
@@ -188,6 +188,8 @@ type ShareDealSortCategory {
 """공유딜 정렬유형"""
 enum ShareDealSortType {
   LATEST
+  PARTICIPANTS
+  POPULAR
 }
 
 """공유딜 상태"""
@@ -221,10 +223,7 @@ type Subscription {
 }
 
 input UpdateProfileInput {
-  imageUri: String!
   introduce: String!
-  nickname: String!
-  phoneNumber: String!
 }
 
 type UserAddressResponse {

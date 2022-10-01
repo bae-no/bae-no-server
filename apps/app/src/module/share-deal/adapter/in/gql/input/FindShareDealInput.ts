@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsPositive } from 'class-validator';
+import { IsPositive, Min } from 'class-validator';
 
 import { FindShareDealCommand } from '../../../../application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../../application/port/out/dto/ShareDealSortType';
@@ -16,20 +16,21 @@ export class FindShareDealInput {
   @Field(() => ShareDealSortType, { nullable: true })
   sortType: ShareDealSortType;
 
+  @Field({ description: '페이지 번호, 0부터 시작' })
+  @Min(0)
+  page: number;
+
   @Field()
   @IsPositive()
   size: number;
-
-  @Field({ nullable: true })
-  cursor?: Date;
 
   toCommand(): FindShareDealCommand {
     return FindShareDealCommand.of({
       keyword: this.keyword,
       category: this.category,
       sortType: this.sortType,
+      page: this.page,
       size: this.size,
-      cursor: this.cursor,
     });
   }
 }

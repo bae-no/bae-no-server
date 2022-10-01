@@ -41,6 +41,7 @@ describe('ShareDealQueryResolver', () => {
     it('공유딜 목록을 조회한다', async () => {
       // given
       const input = new FindShareDealInput();
+      input.page = 1;
       input.size = 10;
       input.sortType = ShareDealSortType.LATEST;
 

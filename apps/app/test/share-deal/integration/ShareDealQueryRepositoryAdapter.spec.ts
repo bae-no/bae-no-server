@@ -1,7 +1,7 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
-import { addDays, compareDesc, isBefore } from 'date-fns';
+import { addDays, compareDesc } from 'date-fns';
 
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealQueryRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
@@ -31,6 +31,38 @@ describe('ShareDealQueryRepositoryAdapter', () => {
   beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
 
   describe('find', () => {
+    it('주어진 페이지에 해당하는 공유딜을 가져온다', async () => {
+      // given
+      const id = faker.database.mongodbObjectId();
+      await prisma.shareDeal.createMany({
+        data: Array.from({ length: 10 }, (_, index) =>
+          ShareDealOrmMapper.toOrm(
+            ShareDealFactory.createOpen({
+              participantInfo: ParticipantInfo.of(
+                new Array(index).fill(id),
+                10,
+              ),
+            }),
+          ),
+        ),
+      });
+      const dto = FindShareDealCommand.of({
+        sortType: ShareDealSortType.POPULAR,
+        page: 1,
+        size: 3,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.find(dto);
+
+      // then
+      await assertResolvesRight(result, (deals) => {
+        expect(deals.map((deal) => deal.participantInfo.current)).toEqual([
+          6, 5, 4,
+        ]);
+      });
+    });
+
     it('검색어를 포함하는 공유딜을 가져온다', async () => {
       // given
       const matched = ShareDealFactory.createOpen({
@@ -45,7 +77,6 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
       const dto = FindShareDealCommand.of({
         sortType: ShareDealSortType.LATEST,
-        size: 5,
         keyword: 'title',
       });
 
@@ -62,15 +93,13 @@ describe('ShareDealQueryRepositoryAdapter', () => {
     it('등록순으로 정렬한다', async () => {
       // given
       const now = new Date();
-      await Promise.all(
-        Array.from({ length: 5 }, (_, index) =>
-          prisma.shareDeal.create({
-            data: ShareDealOrmMapper.toOrm(
-              ShareDealFactory.createOpen({ createdAt: addDays(now, index) }),
-            ),
-          }),
+      await prisma.shareDeal.createMany({
+        data: Array.from({ length: 5 }, (_, index) =>
+          ShareDealOrmMapper.toOrm(
+            ShareDealFactory.createOpen({ createdAt: addDays(now, index) }),
+          ),
         ),
-      );
+      });
       const dto = FindShareDealCommand.of({
         sortType: ShareDealSortType.LATEST,
         size: 5,
@@ -87,33 +116,35 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
     });
 
-    it('cursor 이전의 항목만 가져온다', async () => {
+    it('입장가능순으로 정렬한다', async () => {
       // given
-      const now = new Date();
-      const deals = await Promise.all(
-        Array.from({ length: 5 }, (_, index) =>
-          prisma.shareDeal.create({
-            data: ShareDealOrmMapper.toOrm(
-              ShareDealFactory.createOpen({ createdAt: addDays(now, index) }),
-            ),
-          }),
+      const id = faker.database.mongodbObjectId();
+      await prisma.shareDeal.createMany({
+        data: Array.from({ length: 10 }, (_, index) =>
+          ShareDealOrmMapper.toOrm(
+            ShareDealFactory.createOpen({
+              participantInfo: ParticipantInfo.of(
+                new Array(10).fill(id),
+                10 + index,
+              ),
+            }),
+          ),
         ),
-      );
+      });
       const dto = FindShareDealCommand.of({
-        sortType: ShareDealSortType.LATEST,
-        cursor: deals[2].createdAt,
-        size: 5,
+        sortType: ShareDealSortType.PARTICIPANTS,
+        page: 2,
+        size: 2,
       });
 
       // when
       const result = shareDealRepositoryAdapter.find(dto);
 
       // then
-      await assertResolvesRight(result, (value) => {
-        expect(value).toHaveLength(2);
-        value.forEach((v) => {
-          expect(isBefore(v.createdAt, deals[2].createdAt)).toBe(true);
-        });
+      await assertResolvesRight(result, (deals) => {
+        expect(deals.map((deal) => deal.participantInfo.remaining)).toEqual([
+          5, 4,
+        ]);
       });
     });
 

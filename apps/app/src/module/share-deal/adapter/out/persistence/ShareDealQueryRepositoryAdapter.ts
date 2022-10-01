@@ -23,6 +23,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     command: FindShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]> {
     const args: Prisma.ShareDealFindManyArgs = {
+      skip: command.skip,
       take: command.size,
       where: { status: { in: [ShareDealStatus.OPEN, ShareDealStatus.START] } },
     };
@@ -45,11 +46,6 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
 
     if (command.sortType === ShareDealSortType.PARTICIPANTS) {
       args.orderBy = { participants: { remaining: Prisma.SortOrder.desc } };
-    }
-
-    if (command.cursor) {
-      args.skip = 1;
-      args.cursor = { createdAt: command.cursor };
     }
 
     return pipe(

@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
 import { ShareDeal } from '../../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
@@ -14,16 +14,16 @@ export class ShareDealResponse {
   @Field()
   title: string;
 
-  @Field()
+  @Field(() => Int)
   orderPrice: number;
 
-  @Field()
+  @Field(() => Int)
   distance: number;
 
-  @Field()
+  @Field(() => Int)
   minParticipants: number;
 
-  @Field()
+  @Field(() => Int)
   currentParticipants: number;
 
   @Field()

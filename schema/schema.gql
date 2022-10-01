@@ -69,8 +69,10 @@ input EnrollUserInput {
 input FindShareDealInput {
   category: FoodCategory
   keyword: String
-  page: Float!
-  size: Float!
+
+  """페이지 번호, 0부터 시작"""
+  page: Int!
+  size: Int!
   sortType: ShareDealSortType
 }
 
@@ -129,8 +131,8 @@ type Mutation {
 
 input OpenShareDealInput {
   category: FoodCategory!
-  minParticipants: Float!
-  orderPrice: Float!
+  minParticipants: Int!
+  orderPrice: Int!
   shareZone: CreateShareZoneInput!
   storeName: String!
   thumbnail: String!
@@ -148,7 +150,7 @@ type Query {
   hasNickname(nickname: String!): Boolean!
 
   """내가 참여완료한 공유딜 개수"""
-  myEndDealCount: Float!
+  myEndDealCount: Int!
 
   """프로필 정보"""
   profile: UserProfileResponse!
@@ -170,11 +172,11 @@ input SendPhoneVerificationCodeInput {
 
 type ShareDealResponse {
   createdAt: DateTime!
-  currentParticipants: Float!
-  distance: Float!
+  currentParticipants: Int!
+  distance: Int!
   id: ID!
-  minParticipants: Float!
-  orderPrice: Float!
+  minParticipants: Int!
+  orderPrice: Int!
   status: ShareDealStatus!
   thumbnail: String!
   title: String!

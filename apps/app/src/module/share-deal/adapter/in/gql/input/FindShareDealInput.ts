@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsPositive, Min } from 'class-validator';
 
 import { FindShareDealCommand } from '../../../../application/port/out/dto/FindShareDealCommand';
@@ -16,11 +16,11 @@ export class FindShareDealInput {
   @Field(() => ShareDealSortType, { nullable: true })
   sortType: ShareDealSortType;
 
-  @Field({ description: '페이지 번호, 0부터 시작' })
+  @Field(() => Int, { description: '페이지 번호, 0부터 시작' })
   @Min(0)
   page: number;
 
-  @Field()
+  @Field(() => Int)
   @IsPositive()
   size: number;
 

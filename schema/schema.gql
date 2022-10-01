@@ -171,6 +171,7 @@ input SendPhoneVerificationCodeInput {
 }
 
 type ShareDealResponse {
+  category: FoodCategory!
   createdAt: DateTime!
   currentParticipants: Int!
   distance: Int!

@@ -7,6 +7,7 @@ import { FindShareDealInput } from '../../../src/module/share-deal/adapter/in/gq
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import {
   graphQLTestHelper,
@@ -57,6 +58,7 @@ describe('ShareDealQueryResolver', () => {
           currentParticipants
           status
           thumbnail
+          category
         }
       }`;
 
@@ -67,6 +69,7 @@ describe('ShareDealQueryResolver', () => {
         createdAt: new Date('2022-01-01'),
         thumbnail: 'thumbnail',
         participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
+        category: FoodCategory.CHINESE,
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
@@ -82,6 +85,7 @@ describe('ShareDealQueryResolver', () => {
           "data": {
             "shareDeals": [
               {
+                "category": "CHINESE",
                 "createdAt": "2022-01-01T00:00:00.000Z",
                 "currentParticipants": 3,
                 "distance": 0,

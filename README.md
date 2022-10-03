@@ -1,5 +1,8 @@
 # 배달비노노 서버
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bae-no_bae-no-server&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bae-no_bae-no-server)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bae-no_bae-no-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bae-no_bae-no-server)
+
 ## 개발 스택
 
 - Nest.JS

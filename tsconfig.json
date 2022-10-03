@@ -47,11 +47,11 @@
       "@app/http-client/*": [
         "libs/http-client/src/*"
       ],
-      "@app/external": [
-        "libs/external/src"
+      "@app/custom": [
+        "libs/custom/src"
       ],
-      "@app/external/*": [
-        "libs/external/src/*"
+      "@app/custom/*": [
+        "libs/custom/src/*"
       ],
       "@app/sms": [
         "libs/sms/src"

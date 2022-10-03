@@ -1,6 +1,6 @@
+import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TE } from '@app/external/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';

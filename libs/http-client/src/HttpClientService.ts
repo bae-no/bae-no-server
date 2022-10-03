@@ -1,4 +1,4 @@
-import { TE } from '@app/domain/../../external/src/fp-ts';
+import { TE } from '@app/domain/../../custom/src/fp-ts';
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort, HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';

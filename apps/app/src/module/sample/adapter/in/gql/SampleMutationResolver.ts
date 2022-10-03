@@ -1,5 +1,5 @@
+import { TE, toResponse } from '@app/custom/fp-ts';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
-import { TE, toResponse } from '@app/external/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { identity, pipe } from 'fp-ts/function';
 

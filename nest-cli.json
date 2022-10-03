@@ -54,13 +54,13 @@
         "tsConfigPath": "libs/http-client/tsconfig.lib.json"
       }
     },
-    "external": {
+    "custom": {
       "type": "library",
-      "root": "libs/external",
+      "root": "libs/custom",
       "entryFile": "index",
-      "sourceRoot": "libs/external/src",
+      "sourceRoot": "libs/custom/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/external/tsconfig.lib.json"
+        "tsConfigPath": "libs/custom/tsconfig.lib.json"
       }
     },
     "sms": {

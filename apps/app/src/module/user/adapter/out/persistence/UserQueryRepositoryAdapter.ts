@@ -1,6 +1,6 @@
+import { TE, O } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TE, O } from '@app/external/fp-ts';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { User as OrmUser } from '@prisma/client';

@@ -1,4 +1,4 @@
-import { toResponse } from '@app/external/fp-ts';
+import { toResponse } from '@app/custom/fp-ts';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 

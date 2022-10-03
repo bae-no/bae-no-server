@@ -1,4 +1,4 @@
-import { O, TE, toResponse } from '@app/external/fp-ts';
+import { O, TE, toResponse } from '@app/custom/fp-ts';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 

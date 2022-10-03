@@ -147,13 +147,13 @@ Repository 와 Service 구현체 내부의 메소들은 모두 순수함수로 �
 - Option -> O
 
 ```typescript
-// libs/external/src/fp-ts/index.ts
+// libs/custom/src/fp-ts/index.ts
 export * as TE from 'fp-ts/TaskEither';
 export * as O from 'fp-ts/Option';
 export * as E from 'fp-ts/Either';
 
 // 아래와 같이 import 하여 사용
-import { TE, O, E } from '@app/external/fp-ts';
+import { TE, O, E } from '@app/custom/fp-ts';
 ```
 
 ## Test

@@ -26,8 +26,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/bae-no-server-new/test/jest-e2e.json",
     "test:ci": "pnpm test:ci-unit && pnpm test:ci-integration",
-    "test:ci-unit": "JEST_JUNIT_OUTPUT_NAME=junit-unit.xml pnpm test:unit --ci --reporters=default --reporters=jest-junit",
-    "test:ci-integration": "JEST_JUNIT_OUTPUT_NAME=junit-integration.xml pnpm test:integration --ci --reporters=default --reporters=jest-junit",
+    "test:ci-unit": "JEST_JUNIT_OUTPUT_NAME=junit-unit.xml pnpm test:unit --ci --coverage --reporters=jest-junit --coverageDirectory=coverage-unit",
+    "test:ci-integration": "JEST_JUNIT_OUTPUT_NAME=junit-integration.xml pnpm test:integration --ci --coverage --reporters=jest-junit --coverageDirectory=coverage-integration",
     "prisma:format": "prisma format",
     "prisma:generate": "prisma generate",
     "prepare": "husky install"
@@ -112,7 +112,9 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "./coverage",
+    "coverageReporters": [
+      "lcov"
+    ],
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/apps/",

@@ -1,6 +1,7 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
 import { FoodCategory } from './vo/FoodCategory';
+import { ParticipantInfo } from './vo/ParticipantInfo';
 import { ShareDealStatus } from './vo/ShareDealStatus';
 import { ShareZone } from './vo/ShareZone';
 
@@ -8,10 +9,9 @@ export interface ShareDealProps {
   title: string;
   status: ShareDealStatus;
   category: FoodCategory;
-  minParticipants: number;
   orderPrice: number;
   ownerId: string;
-  participantIds: string[];
+  participantInfo: ParticipantInfo;
   storeName: string;
   thumbnail: string;
   zone: ShareZone;
@@ -19,8 +19,10 @@ export interface ShareDealProps {
 
 export type CreateShareDealProps = Omit<
   ShareDealProps,
-  'participantIds' | 'status'
->;
+  'status' | 'participantInfo'
+> & {
+  minParticipants: number;
+};
 
 export class ShareDeal extends BaseEntity<ShareDealProps> {
   constructor(props: ShareDealProps) {
@@ -35,20 +37,12 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     return this.props.category;
   }
 
-  get minParticipants(): number {
-    return this.props.minParticipants;
-  }
-
   get orderPrice(): number {
     return this.props.orderPrice;
   }
 
   get ownerId(): string {
     return this.props.ownerId;
-  }
-
-  get participantIds(): string[] {
-    return this.props.participantIds;
   }
 
   get storeName(): string {
@@ -63,18 +57,21 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     return this.props.status;
   }
 
-  get participantCount(): number {
-    return this.participantIds.length + 1;
-  }
-
   get thumbnail(): string {
     return this.props.thumbnail;
   }
 
-  static open(props: CreateShareDealProps) {
+  get participantInfo(): ParticipantInfo {
+    return this.props.participantInfo;
+  }
+
+  static open(props: CreateShareDealProps): ShareDeal {
+    const { ownerId, minParticipants, ...otherProps } = props;
+
     return new ShareDeal({
-      ...props,
-      participantIds: [],
+      ...otherProps,
+      ownerId,
+      participantInfo: ParticipantInfo.of([ownerId], minParticipants),
       status: ShareDealStatus.OPEN,
     });
   }

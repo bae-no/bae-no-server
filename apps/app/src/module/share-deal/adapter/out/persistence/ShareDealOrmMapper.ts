@@ -2,6 +2,7 @@ import { ShareDeal as OrmShareDeal } from '@prisma/client';
 
 import { ShareDeal } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
+import { ParticipantInfo } from '../../../domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { ShareZone } from '../../../domain/vo/ShareZone';
 
@@ -9,10 +10,8 @@ export class ShareDealOrmMapper {
   static toDomain(orm: OrmShareDeal): ShareDeal {
     return new ShareDeal({
       category: FoodCategory[orm.category as FoodCategory],
-      minParticipants: orm.minParticipants,
       orderPrice: orm.orderPrice,
       ownerId: orm.ownerId,
-      participantIds: orm.participantIds,
       storeName: orm.storeName,
       thumbnail: orm.thumbnail,
       title: orm.title,
@@ -23,6 +22,10 @@ export class ShareDealOrmMapper {
         orm.zone.coordinate.coordinates[1],
         orm.zone.coordinate.coordinates[0],
       ),
+      participantInfo: ParticipantInfo.of(
+        orm.participants.ids,
+        orm.participants.min,
+      ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
 
@@ -32,10 +35,8 @@ export class ShareDealOrmMapper {
       createdAt: domain.createdAt,
       updatedAt: domain.updatedAt,
       category: domain.category,
-      minParticipants: domain.minParticipants,
       orderPrice: domain.orderPrice,
       ownerId: domain.ownerId,
-      participantIds: domain.participantIds,
       storeName: domain.storeName,
       thumbnail: domain.thumbnail,
       title: domain.title,
@@ -51,6 +52,12 @@ export class ShareDealOrmMapper {
         },
       },
       status: domain.status,
+      participants: {
+        ids: domain.participantInfo.ids,
+        min: domain.participantInfo.min,
+        current: domain.participantInfo.current,
+        remaining: domain.participantInfo.remaining,
+      },
     };
   }
 }

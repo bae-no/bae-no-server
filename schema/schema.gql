@@ -68,9 +68,11 @@ input EnrollUserInput {
 
 input FindShareDealInput {
   category: FoodCategory
-  cursor: DateTime
   keyword: String
-  size: Float!
+
+  """페이지 번호, 0부터 시작"""
+  page: Int!
+  size: Int!
   sortType: ShareDealSortType
 }
 
@@ -129,8 +131,8 @@ type Mutation {
 
 input OpenShareDealInput {
   category: FoodCategory!
-  minParticipants: Float!
-  orderPrice: Float!
+  minParticipants: Int!
+  orderPrice: Int!
   shareZone: CreateShareZoneInput!
   storeName: String!
   thumbnail: String!
@@ -148,7 +150,7 @@ type Query {
   hasNickname(nickname: String!): Boolean!
 
   """내가 참여완료한 공유딜 개수"""
-  myEndDealCount: Float!
+  myEndDealCount: Int!
 
   """프로필 정보"""
   profile: UserProfileResponse!
@@ -169,12 +171,13 @@ input SendPhoneVerificationCodeInput {
 }
 
 type ShareDealResponse {
+  category: FoodCategory!
   createdAt: DateTime!
-  currentParticipants: Float!
-  distance: Float!
+  currentParticipants: Int!
+  distance: Int!
   id: ID!
-  minParticipants: Float!
-  orderPrice: Float!
+  minParticipants: Int!
+  orderPrice: Int!
   status: ShareDealStatus!
   thumbnail: String!
   title: String!
@@ -188,6 +191,8 @@ type ShareDealSortCategory {
 """공유딜 정렬유형"""
 enum ShareDealSortType {
   LATEST
+  PARTICIPANTS
+  POPULAR
 }
 
 """공유딜 상태"""
@@ -221,10 +226,7 @@ type Subscription {
 }
 
 input UpdateProfileInput {
-  imageUri: String!
   introduce: String!
-  nickname: String!
-  phoneNumber: String!
 }
 
 type UserAddressResponse {

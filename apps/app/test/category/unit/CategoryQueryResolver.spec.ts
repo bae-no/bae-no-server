@@ -61,6 +61,14 @@ describe('CategoryQueryResolver', () => {
                   "code": "LATEST",
                   "name": "등록순",
                 },
+                {
+                  "code": "POPULAR",
+                  "name": "인원순",
+                },
+                {
+                  "code": "PARTICIPANTS",
+                  "name": "입장가능순",
+                },
               ],
             },
           },

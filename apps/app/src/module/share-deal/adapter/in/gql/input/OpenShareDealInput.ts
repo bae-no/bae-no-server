@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { IsPositive, Min, ValidateNested } from 'class-validator';
 
@@ -14,11 +14,11 @@ export class OpenShareDealInput {
   @Field(() => FoodCategory)
   category: FoodCategory;
 
-  @Field()
+  @Field(() => Int)
   @Min(2)
   minParticipants: number;
 
-  @Field()
+  @Field(() => Int)
   @IsPositive()
   orderPrice: number;
 

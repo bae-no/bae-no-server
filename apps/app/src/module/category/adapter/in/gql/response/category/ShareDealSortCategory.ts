@@ -8,6 +8,13 @@ export class ShareDealSortCategory {
     switch (key) {
       case ShareDealSortType.LATEST:
         return new ShareDealSortCategory(ShareDealSortType.LATEST, '등록순');
+      case ShareDealSortType.POPULAR:
+        return new ShareDealSortCategory(ShareDealSortType.POPULAR, '인원순');
+      case ShareDealSortType.PARTICIPANTS:
+        return new ShareDealSortCategory(
+          ShareDealSortType.PARTICIPANTS,
+          '입장가능순',
+        );
       default:
         throw new Error('unknown share deal sort type');
     }

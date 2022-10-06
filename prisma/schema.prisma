@@ -81,19 +81,25 @@ type ShareZone {
 }
 
 model ShareDeal {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt       DateTime  @unique @default(now())
-  updatedAt       DateTime  @updatedAt
-  title           String
-  category        String
-  minParticipants Int
-  orderPrice      Int
-  status          String
-  ownerId         String    @db.ObjectId
-  participantIds  String[]  @db.ObjectId
-  storeName       String
-  thumbnail       String
-  zone            ShareZone
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime        @unique @default(now())
+  updatedAt    DateTime        @updatedAt
+  title        String
+  category     String
+  orderPrice   Int
+  status       String
+  ownerId      String          @db.ObjectId
+  storeName    String
+  thumbnail    String
+  zone         ShareZone
+  participants ParticipantInfo
+}
+
+type ParticipantInfo {
+  ids       String[] @db.ObjectId
+  min       Int
+  current   Int
+  remaining Int
 }
 
 model Chat {

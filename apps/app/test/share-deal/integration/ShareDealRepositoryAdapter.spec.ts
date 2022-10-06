@@ -32,12 +32,12 @@ describe('ShareDealRepositoryAdapter', () => {
       const shareDeal = ShareDeal.open({
         title: 'title',
         category: FoodCategory.AMERICAN,
-        minParticipants: 4,
         orderPrice: 2000,
         ownerId: faker.database.mongodbObjectId(),
         storeName: 'store',
         thumbnail: 'thumbnail',
         zone: shareZone,
+        minParticipants: 2,
       });
 
       // when

@@ -39,11 +39,11 @@ jobs:
         id: cache-dependencies
         with:
           path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/schema.prisma') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --ignore-scripts && pnpm prisma:generate
 
       - name: Run tests
         run: pnpm test:ci

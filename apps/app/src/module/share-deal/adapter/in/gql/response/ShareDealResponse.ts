@@ -1,6 +1,7 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
 import { ShareDeal } from '../../../../domain/ShareDeal';
+import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
 
 @ObjectType()
@@ -14,16 +15,16 @@ export class ShareDealResponse {
   @Field()
   title: string;
 
-  @Field()
+  @Field(() => Int)
   orderPrice: number;
 
-  @Field()
+  @Field(() => Int)
   distance: number;
 
-  @Field()
+  @Field(() => Int)
   minParticipants: number;
 
-  @Field()
+  @Field(() => Int)
   currentParticipants: number;
 
   @Field()
@@ -31,6 +32,9 @@ export class ShareDealResponse {
 
   @Field(() => ShareDealStatus)
   status: ShareDealStatus;
+
+  @Field(() => FoodCategory)
+  category: FoodCategory;
 
   static of(shareDeal: ShareDeal): ShareDealResponse {
     const response = new ShareDealResponse();
@@ -40,10 +44,11 @@ export class ShareDealResponse {
     response.title = shareDeal.title;
     response.orderPrice = shareDeal.orderPrice;
     response.distance = 0;
-    response.minParticipants = shareDeal.minParticipants;
-    response.currentParticipants = shareDeal.participantCount;
+    response.minParticipants = shareDeal.participantInfo.min;
+    response.currentParticipants = shareDeal.participantInfo.current;
     response.status = shareDeal.status;
     response.thumbnail = shareDeal.thumbnail;
+    response.category = shareDeal.category;
 
     return response;
   }

@@ -60,7 +60,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   ): TaskEither<DBError, number> {
     return tryCatchDB(() =>
       this.prisma.shareDeal.count({
-        where: { status, participants: { is: { ids: { hasSome: [userId] } } } },
+        where: { status, participants: { is: { ids: { has: userId } } } },
       }),
     );
   }

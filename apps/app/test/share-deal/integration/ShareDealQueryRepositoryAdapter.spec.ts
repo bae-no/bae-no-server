@@ -207,7 +207,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
     });
   });
 
-  describe('findByStatus', () => {
+  describe('countByStatus', () => {
     it('주어진 상태에 대한 공유딜이 없으면 0을 반환한다', async () => {
       // given
       const userId = faker.database.mongodbObjectId();

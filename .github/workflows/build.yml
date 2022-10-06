@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --ignore-scripts && pnpm prisma:generate
 
       - name: Run tests
         run: pnpm test:ci

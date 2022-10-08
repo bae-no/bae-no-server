@@ -9,7 +9,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 @Injectable()
 export class HttpClientService extends HttpClientPort {
-  #timeout = 10000;
+  #timeout = 5000;
 
   constructor() {
     super();

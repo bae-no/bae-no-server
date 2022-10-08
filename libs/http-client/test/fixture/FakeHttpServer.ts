@@ -5,6 +5,6 @@ const app: Express = express();
 
 app.all('/api', (_, res) => res.send('response'));
 
-app.get('/timeout', (_, res) => setTimeout(() => res.send('response'), 15000));
+app.get('/timeout', (_, res) => setTimeout(() => res.send('response'), 10000));
 
 export default app;

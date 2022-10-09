@@ -2,7 +2,7 @@ import * as express from 'express';
 import { Express } from 'express';
 
 const app: Express = express();
-
+app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -1,5 +1,5 @@
 import { toResponse, toResponseArray } from '@app/custom/fp-ts';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { identity, pipe } from 'fp-ts/function';
 
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
@@ -26,7 +26,7 @@ export class ShareDealQueryResolver {
     )();
   }
 
-  @Query(() => Number, { description: '내가 참여완료한 공유딜 개수' })
+  @Query(() => Int, { description: '내가 참여완료한 공유딜 개수' })
   async myEndDealCount(@CurrentSession() session: Session): Promise<number> {
     return pipe(
       this.shareDealQueryRepositoryPort.countByStatus(

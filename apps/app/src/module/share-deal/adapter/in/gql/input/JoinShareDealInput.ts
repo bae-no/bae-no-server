@@ -1,6 +1,6 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 
-import { JoinChatCommand } from '../../../../application/port/in/dto/JoinChatCommand';
+import { JoinShareDealCommand } from '../../../../application/port/in/dto/JoinShareDealCommand';
 
 @InputType()
 export class JoinShareDealInput {
@@ -8,6 +8,6 @@ export class JoinShareDealInput {
   shareDealId: string;
 
   toCommand(userId: string) {
-    return new JoinChatCommand(userId, this.shareDealId);
+    return new JoinShareDealCommand(userId, this.shareDealId);
   }
 }

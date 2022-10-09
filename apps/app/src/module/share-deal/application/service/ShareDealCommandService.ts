@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { JoinChatCommand } from '../port/in/dto/JoinChatCommand';
+import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
-import { NotOpenShareDealException } from '../port/in/exception/NotOpenShareDealException';
+import { NotJoinableShareDealException } from '../port/in/exception/NotJoinableShareDealException';
 import {
   JoinChatError,
   ShareDealCommandUseCase,
@@ -30,13 +30,17 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
     );
   }
 
-  override join(command: JoinChatCommand): TaskEither<JoinChatError, void> {
+  override join(
+    command: JoinShareDealCommand,
+  ): TaskEither<JoinChatError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
       TE.filterOrElseW(
         (deal) => deal.isJoinable,
-        () => new NotOpenShareDealException('입장 가능한 공유딜이 아닙니다.'),
+        () =>
+          new NotJoinableShareDealException('입장 가능한 공유딜이 아닙니다.'),
       ),
+      TE.map((deal) => deal.join(command.userId)),
       TE.chain((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(constVoid),
     );

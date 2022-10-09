@@ -80,7 +80,9 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     });
   }
 
-  join(participantId: string) {
+  join(participantId: string): this {
     this.props.participantInfo = this.participantInfo.addId(participantId);
+
+    return this;
   }
 }

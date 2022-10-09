@@ -3,7 +3,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
-import { StubPubSubModule } from '../../../../../libs/pub-sub/test/StubPubSubModule';
+import { StubPubSubModule } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
 import { CreateSampleInput } from '../../../src/module/sample/adapter/in/gql/input/CreateSampleInput';
 import { SampleMutationResolver } from '../../../src/module/sample/adapter/in/gql/SampleMutationResolver';
 import { SampleCommandUseCase } from '../../../src/module/sample/application/port/in/SampleCommandUseCase';

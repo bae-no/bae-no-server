@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
+import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -7,6 +7,7 @@ import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/
 import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
 import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealMutationResolver';
+import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import {
@@ -77,6 +78,50 @@ describe('ShareDealMutationResolver', () => {
   });
 
   describe('joinShareDeal', () => {
+    it('공유딜 참여 실패 시 ILLEGAL_STATE를 반환한다.', async () => {
+      // given
+      const input = new JoinShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      // language=GraphQL
+      const mutation = `mutation joinChat($input: JoinShareDealInput!) {
+        joinShareDeal(input: $input)
+      }`;
+
+      sharedDealCommandUseCase.join.mockReturnValue(
+        left(new NotJoinableShareDealException('error')),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "ILLEGAL_STATE",
+              },
+              "locations": [
+                {
+                  "column": 9,
+                  "line": 2,
+                },
+              ],
+              "message": "error",
+              "path": [
+                "joinShareDeal",
+              ],
+            },
+          ],
+        }
+      `);
+    });
+
     it('공유딜에 참여한다.', async () => {
       // given
       const input = new JoinShareDealInput();

@@ -1,4 +1,5 @@
 import { DBError } from '@app/domain/error/DBError';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDeal } from '../../../domain/ShareDeal';
@@ -9,6 +10,10 @@ export abstract class ShareDealQueryRepositoryPort {
   abstract find(
     command: FindShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]>;
+
+  abstract findById(
+    id: string,
+  ): TaskEither<DBError | NotFoundException, ShareDeal>;
 
   abstract countByStatus(
     userId: string,

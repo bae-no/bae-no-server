@@ -4,6 +4,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/gql/input/CreateShareZoneInput';
+import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
 import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealMutationResolver';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
@@ -69,6 +70,35 @@ describe('ShareDealMutationResolver', () => {
         {
           "data": {
             "openShareDeal": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('joinShareDeal', () => {
+    it('공유딜에 참여한다.', async () => {
+      // given
+      const input = new JoinShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      // language=GraphQL
+      const mutation = `mutation joinChat($input: JoinShareDealInput!) {
+        joinShareDeal(input: $input)
+      }`;
+
+      sharedDealCommandUseCase.join.mockReturnValue(right(undefined));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "joinShareDeal": true,
           },
         }
       `);

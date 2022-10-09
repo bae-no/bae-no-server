@@ -3,7 +3,7 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 import { JoinChatCommand } from '../../../../application/port/in/dto/JoinChatCommand';
 
 @InputType()
-export class JoinChatInput {
+export class JoinShareDealInput {
   @Field(() => ID)
   shareDealId: string;
 

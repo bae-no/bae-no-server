@@ -65,7 +65,7 @@ export class HttpClientService extends HttpClientPort {
             const response = await fetch(url + this.makeSearchParam(option), {
               method,
               body: this.makeBody(option),
-              headers: option?.headers,
+              headers: this.makeHeader(option),
               signal: controller.signal,
             });
 
@@ -92,6 +92,17 @@ export class HttpClientService extends HttpClientPort {
     }
 
     return undefined;
+  }
+
+  private makeHeader(option?: HttpOption): HeadersInit | undefined {
+    if (option?.body) {
+      return {
+        ...option.headers,
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+    }
+
+    return option?.headers;
   }
 
   private makeSearchParam(option?: HttpOption): string {

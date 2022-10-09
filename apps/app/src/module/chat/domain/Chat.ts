@@ -2,12 +2,10 @@ import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
 import { Message } from './vo/Message';
 
-export interface CreateChatProps {
+export interface ChatProps {
+  userId: string;
   shareDealId: string;
-}
-
-export interface ChatProps extends CreateChatProps {
-  messages: Message[];
+  messages: Message;
 }
 
 export class Chat extends BaseEntity<ChatProps> {
@@ -15,7 +13,7 @@ export class Chat extends BaseEntity<ChatProps> {
     super(props);
   }
 
-  static of(props: CreateChatProps) {
-    return new Chat({ ...props, messages: [] });
+  static of(props: ChatProps) {
+    return new Chat(props);
   }
 }

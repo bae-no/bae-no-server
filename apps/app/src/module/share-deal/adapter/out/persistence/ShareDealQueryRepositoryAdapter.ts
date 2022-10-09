@@ -1,5 +1,6 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
@@ -51,6 +52,22 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     return pipe(
       tryCatchDB(() => this.prisma.shareDeal.findMany(args)),
       TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
+    );
+  }
+
+  override findById(
+    id: string,
+  ): TaskEither<DBError | NotFoundException, ShareDeal> {
+    return pipe(
+      tryCatchDB(() => this.prisma.shareDeal.findUnique({ where: { id } })),
+      TE.chainW((deal) =>
+        deal
+          ? TE.right(deal)
+          : TE.left(
+              new NotFoundException(`${id}에 해당하는 공유딜이 없습니다.`),
+            ),
+      ),
+      TE.map(ShareDealOrmMapper.toDomain),
     );
   }
 

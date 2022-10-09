@@ -5,6 +5,7 @@ import { constTrue, pipe } from 'fp-ts/function';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ShareDealCommandUseCase } from '../../../application/port/in/ShareDealCommandUseCase';
+import { JoinShareDealInput } from './input/JoinShareDealInput';
 import { OpenShareDealInput } from './input/OpenShareDealInput';
 
 @Resolver()
@@ -21,6 +22,18 @@ export class ShareDealMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.shareDealCommandUseCase.open(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '공유딜 참여하기' })
+  async joinShareDeal(
+    @Args('input') input: JoinShareDealInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.shareDealCommandUseCase.join(command),
       toResponse(constTrue),
     )();
   }

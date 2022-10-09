@@ -1,3 +1,4 @@
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -10,7 +11,7 @@ import { ShareDealSortType } from '../../../src/module/share-deal/application/po
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 
 describe('ShareDealQueryRepositoryAdapter', () => {
@@ -271,6 +272,36 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (value) => {
         expect(value).toBe(1);
+      });
+    });
+  });
+
+  describe('findById', () => {
+    it('조회한 공유딜이 없는 경우 NotFoundException을 반환한다.', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+
+      // when
+      const result = shareDealRepositoryAdapter.findById(userId);
+
+      // then
+      await assertResolvesLeft(result, (value) => {
+        expect(value).toBeInstanceOf(NotFoundException);
+      });
+    });
+
+    it('공유딜을 조회한다.', async () => {
+      // given
+      const shareDeal = await prisma.shareDeal.create({
+        data: ShareDealOrmMapper.toOrm(ShareDealFactory.create()),
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.findById(shareDeal.id);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value.id).toBe(shareDeal.id);
       });
     });
   });

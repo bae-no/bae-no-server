@@ -1,3 +1,4 @@
+import { BaseExceptionFilter } from '@app/custom/nest/filter/BaseExceptionFilter';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import {
   CanActivate,
@@ -53,6 +54,7 @@ export async function graphQLTestHelper(
   return module
     .createNestApplication()
     .useGlobalGuards(new MockGuard())
+    .useGlobalFilters(new BaseExceptionFilter())
     .useGlobalPipes(new ValidationPipe({ transform: true }))
     .init();
 }

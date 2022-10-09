@@ -65,6 +65,10 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     return this.props.participantInfo;
   }
 
+  get isJoinable() {
+    return this.status === ShareDealStatus.OPEN;
+  }
+
   static open(props: CreateShareDealProps): ShareDeal {
     const { ownerId, minParticipants, ...otherProps } = props;
 
@@ -74,5 +78,11 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
       participantInfo: ParticipantInfo.of([ownerId], minParticipants),
       status: ShareDealStatus.OPEN,
     });
+  }
+
+  join(participantId: string): this {
+    this.props.participantInfo = this.participantInfo.addId(participantId);
+
+    return this;
   }
 }

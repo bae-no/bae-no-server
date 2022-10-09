@@ -94,6 +94,10 @@ enum FoodCategory {
   STREET
 }
 
+input JoinShareDealInput {
+  shareDealId: ID!
+}
+
 input LeaveUserInput {
   name: String!
   reason: String!
@@ -109,6 +113,9 @@ type Mutation {
 
   """초기 닉네임 & 주소 등록"""
   enrollUser(input: EnrollUserInput!): Boolean!
+
+  """공유딜 참여하기"""
+  joinShareDeal(input: JoinShareDealInput!): Boolean!
 
   """회원탈퇴하기"""
   leave(input: LeaveUserInput!): Boolean!

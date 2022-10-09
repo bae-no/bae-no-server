@@ -1,5 +1,6 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { PhoneVerificationRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/PhoneVerificationRepositoryAdapter';
@@ -34,7 +35,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
 
       // when
       const result = phoneVerificationRepositoryAdapter.save(
-        '1234',
+        faker.database.mongodbObjectId(),
         phoneVerification,
       );
 
@@ -48,7 +49,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
   describe('findLatest', () => {
     it('주어진 사용자에 대한 인증번호가 없으면 에러가 발생한다', async () => {
       // given
-      const userId = '1234';
+      const userId = faker.database.mongodbObjectId();
 
       // when
       const result = phoneVerificationRepositoryAdapter.findLatest(userId);
@@ -56,14 +57,16 @@ describe('PhoneVerificationRepositoryAdapter', () => {
       // then
       await assertResolvesLeft(result, (err) => {
         expect(err).toStrictEqual(
-          new NotFoundException('인증번호가 존재하지 않습니다: userId=1234'),
+          new NotFoundException(
+            `인증번호가 존재하지 않습니다: userId=${userId}`,
+          ),
         );
       });
     });
 
     it('주어진 사용자에 대한 가장 최근 인증번호를 가져온다', async () => {
       // given
-      const userId = '1234';
+      const userId = faker.database.mongodbObjectId();
       await prisma.phoneVerification.create({
         data: {
           phoneNumber: '01011112222',

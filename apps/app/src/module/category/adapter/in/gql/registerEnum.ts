@@ -1,5 +1,6 @@
 import { registerEnumType } from '@nestjs/graphql';
 
+import { MessageType } from '../../../../chat/domain/vo/MessageType';
 import { ShareDealSortType } from '../../../../share-deal/application/port/out/dto/ShareDealSortType';
 import { FoodCategory } from '../../../../share-deal/domain/vo/FoodCategory';
 import { ShareDealStatus } from '../../../../share-deal/domain/vo/ShareDealStatus';
@@ -22,4 +23,8 @@ registerEnumType(ShareDealStatus, {
 registerEnumType(ShareDealSortType, {
   name: 'ShareDealSortType',
   description: '공유딜 정렬유형',
+});
+registerEnumType(MessageType, {
+  name: 'MessageType',
+  description: '메시지 유형',
 });

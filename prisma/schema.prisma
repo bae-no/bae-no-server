@@ -71,7 +71,7 @@ model PhoneVerification {
   phoneNumber String
   code        String
   expiredAt   DateTime
-  userId      String
+  userId      String   @db.ObjectId
 }
 
 type ShareZone {
@@ -103,15 +103,16 @@ type ParticipantInfo {
 }
 
 model Chat {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  messages    Message[]
-  shareDealId String    @unique @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.ObjectId
+  shareDealId String   @db.ObjectId
+  message     Message
 }
 
 type Message {
-  createdAt DateTime @default(now())
-  authorId  String   @db.ObjectId
-  content   String
+  authorId String @db.ObjectId
+  type     String
+  content  String
 }

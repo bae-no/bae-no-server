@@ -16,11 +16,19 @@ export class ParticipantInfo {
   }
 
   addId(id: string): ParticipantInfo {
+    if (this.hasId(id)) {
+      return this;
+    }
+
     return new ParticipantInfo(
       [...this.ids, id],
       this.min,
       this.current + 1,
       Math.max(this.remaining - 1, 0),
     );
+  }
+
+  hasId(id: string) {
+    return this.ids.includes(id);
   }
 }

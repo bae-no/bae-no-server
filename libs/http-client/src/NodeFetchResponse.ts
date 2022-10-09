@@ -8,7 +8,7 @@ export class NodeFetchResponse implements HttpResponse {
   constructor(private status: number, private rawBody: string) {}
 
   get isOk(): boolean {
-    return this.status >= 200 && this.status < 300;
+    return 200 <= this.status && this.status < 300;
   }
 
   get statusCode(): number {

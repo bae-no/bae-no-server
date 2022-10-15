@@ -1,11 +1,13 @@
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
+import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
 import { WriteChatCommand } from '../../../src/module/chat/application/port/in/dto/WriteChatCommand';
 import { ChatPermissionDeniedException } from '../../../src/module/chat/application/port/in/exception/ChatPermissionDeniedException';
 import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from '../../../src/module/chat/application/service/ChatCommandService';
 import { Chat } from '../../../src/module/chat/domain/Chat';
+import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -15,14 +17,17 @@ import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 describe('ChatCommandService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
+  const pubSubPort = new StubPubSub();
   const shareDealCommandService = new ChatCommandService(
     shareDealQueryRepositoryPort,
     chatRepositoryPort,
+    pubSubPort,
   );
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatRepositoryPort);
+    pubSubPort.clear();
   });
 
   describe('write', () => {
@@ -97,6 +102,33 @@ describe('ChatCommandService', () => {
             ],
           ]
         `);
+      });
+    });
+
+    it('채팅 작성 이벤트를 발송한다', async () => {
+      // given
+      const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
+      const participantInfo = ParticipantInfo.of(
+        ['user 1', 'user 2', 'user 3'],
+        5,
+      );
+      const shareDeal = ShareDealFactory.create({
+        id: 'shareDealId',
+        status: ShareDealStatus.START,
+        participantInfo,
+      });
+
+      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      chatRepositoryPort.create.mockImplementation((chats) => right(chats));
+
+      // when
+      const result = shareDealCommandService.write(command);
+
+      // then
+      await assertResolvesRight(result, () => {
+        expect(pubSubPort.get(`chat-written-${shareDeal.id}`)).toStrictEqual(
+          Message.normal('user 1', 'content'),
+        );
       });
     });
   });

@@ -17,11 +17,13 @@ export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {
 
   override save(shareDeal: ShareDeal): TaskEither<DBError, ShareDeal> {
     return pipe(
-      tryCatchDB(() =>
-        this.prisma.shareDeal.create({
-          data: ShareDealOrmMapper.toOrm(shareDeal),
-        }),
-      ),
+      ShareDealOrmMapper.toOrm(shareDeal),
+      ({ id, ...data }) =>
+        tryCatchDB(() =>
+          id
+            ? this.prisma.shareDeal.update({ data, where: { id } })
+            : this.prisma.shareDeal.create({ data }),
+        ),
       TE.map(ShareDealOrmMapper.toDomain),
     );
   }

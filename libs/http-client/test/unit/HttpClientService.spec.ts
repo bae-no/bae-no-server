@@ -16,7 +16,9 @@ describe('HttpClientService', () => {
     server = app.listen(8080);
   });
 
-  afterAll(() => server.close());
+  afterAll((done) => {
+    server.close(() => done());
+  });
 
   it.each([['get'], ['post'], ['put'], ['patch'], ['delete']] as const)(
     '%s 메서드 요청을 보낸다',

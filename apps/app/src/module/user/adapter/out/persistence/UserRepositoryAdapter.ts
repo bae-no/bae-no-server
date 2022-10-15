@@ -17,9 +17,13 @@ export class UserRepositoryAdapter extends UserRepositoryPort {
 
   override save(user: User): TaskEither<DBError, User> {
     return pipe(
-      tryCatchDB(() =>
-        this.prisma.user.create({ data: UserOrmMapper.toOrm(user) }),
-      ),
+      UserOrmMapper.toOrm(user),
+      ({ id, ...data }) =>
+        tryCatchDB(() =>
+          id
+            ? this.prisma.user.update({ data, where: { id } })
+            : this.prisma.user.create({ data }),
+        ),
       TE.map(UserOrmMapper.toDomain),
     );
   }

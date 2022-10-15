@@ -4,5 +4,5 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { Chat } from '../../../domain/Chat';
 
 export abstract class ChatRepositoryPort {
-  abstract create(chat: Chat[]): TaskEither<DBError, Chat[]>;
+  abstract create(chats: Chat[]): TaskEither<DBError, Chat[]>;
 }

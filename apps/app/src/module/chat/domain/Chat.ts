@@ -9,7 +9,7 @@ export interface ChatProps {
 }
 
 export class Chat extends BaseEntity<ChatProps> {
-  private constructor(props: ChatProps) {
+  constructor(props: ChatProps) {
     super(props);
   }
 

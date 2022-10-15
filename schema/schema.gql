@@ -134,6 +134,9 @@ type Mutation {
 
   """전화번호 인증번호 검증하기"""
   verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
+
+  """채팅 입력하기"""
+  writeChat(input: WriteChatInput!): Boolean!
 }
 
 input OpenShareDealInput {
@@ -254,4 +257,9 @@ type UserProfileResponse {
 
 input VerifyPhoneVerificationCodeInput {
   code: String!
+}
+
+input WriteChatInput {
+  content: String!
+  shareDealId: ID!
 }

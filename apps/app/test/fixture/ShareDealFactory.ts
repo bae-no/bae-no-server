@@ -13,7 +13,7 @@ type BaseType = {
   id?: string;
   createdAt: Date;
   updatedAt: Date;
-  participants?: ParticipantInfo;
+  participantInfo?: ParticipantInfo;
 };
 
 export class ShareDealFactory {

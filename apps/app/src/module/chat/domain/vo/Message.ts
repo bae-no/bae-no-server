@@ -21,6 +21,10 @@ export class Message {
     return new Message(authorId, type, content);
   }
 
+  static normal(authorId: string, content: string): Message {
+    return new Message(authorId, MessageType.NORMAL, content);
+  }
+
   static firstMessage(authorId: string): Message {
     return new Message(authorId, MessageType.NOTICE, Message.FIRST_MESSAGE);
   }

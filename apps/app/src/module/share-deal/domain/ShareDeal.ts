@@ -85,4 +85,12 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
 
     return this;
   }
+
+  canWriteChat(userId: string): boolean {
+    if (this.status !== ShareDealStatus.START) {
+      return false;
+    }
+
+    return this.participantInfo.hasId(userId);
+  }
 }

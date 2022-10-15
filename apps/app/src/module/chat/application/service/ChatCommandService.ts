@@ -7,7 +7,7 @@ import { WriteChatCommand } from '../port/in/dto/WriteChatCommand';
 
 @Injectable()
 export class ChatCommandService extends ChatCommandUseCase {
-  write(command: WriteChatCommand): TaskEither<DBError, void> {
+  override write(command: WriteChatCommand): TaskEither<DBError, void> {
     throw new Error(command.content);
   }
 }

@@ -34,6 +34,12 @@ type CategoryResponse {
   shareDealSort: [ShareDealSortCategory!]!
 }
 
+type ChatWrittenResponse {
+  authorId: ID!
+  content: String!
+  type: MessageType!
+}
+
 input CoordinateInput {
   latitude: Float!
   longitude: Float!
@@ -101,6 +107,12 @@ input JoinShareDealInput {
 input LeaveUserInput {
   name: String!
   reason: String!
+}
+
+"""메시지 유형"""
+enum MessageType {
+  NORMAL
+  NOTICE
 }
 
 type Mutation {
@@ -232,6 +244,7 @@ type SignInResponse {
 }
 
 type Subscription {
+  chatWritten(shareDealId: ID!): ChatWrittenResponse!
   sampleAdded: SampleResponse!
 }
 

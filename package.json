@@ -128,7 +128,8 @@
       "^@app/pub-sub(|/.*)$": "<rootDir>/libs/pub-sub/src/$1",
       "^@app/http-client(|/.*)$": "<rootDir>/libs/http-client/src/$1",
       "^@app/custom(|/.*)$": "<rootDir>/libs/custom/src/$1",
-      "^@app/sms(|/.*)$": "<rootDir>/libs/sms/src/$1"
+      "^@app/sms(|/.*)$": "<rootDir>/libs/sms/src/$1",
+      "^@app/event-emitter(|/.*)$": "<rootDir>/libs/event-emitter/src/$1"
     }
   }
 }

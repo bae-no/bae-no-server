@@ -5,6 +5,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Chat } from '../../../domain/Chat';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
 import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
+import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 
 @Injectable()
 export class ChatEventListener {
@@ -13,7 +14,7 @@ export class ChatEventListener {
   @OnEvent(ChatWrittenEvent.EVENT_NAME)
   async handleChatWrittenEvent(payload: Chat) {
     this.pubSubPort.publish(
-      `chat.${payload.shareDealId}.written`,
+      ChatWrittenTrigger(payload.shareDealId),
       ChatWrittenResponse.of(payload.message),
     );
   }

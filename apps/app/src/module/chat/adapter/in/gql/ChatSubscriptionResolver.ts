@@ -6,6 +6,7 @@ import { pipe } from 'fp-ts/function';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ChatQueryUseCase } from '../../../application/port/in/ChatQueryUseCase';
+import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
 import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 
 @Resolver()
@@ -26,7 +27,7 @@ export class ChatSubscriptionResolver {
       this.chatQueryUseCase.isParticipant(shareDealId, session.id),
       TE.map(() =>
         this.pubSubPort.subscribe<ChatWrittenResponse>(
-          `chat.${shareDealId}.written`,
+          ChatWrittenTrigger(shareDealId),
         ),
       ),
       TE.getOrElse((error) => {

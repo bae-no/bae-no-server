@@ -22,7 +22,7 @@ export class Message {
   }
 
   static normal(authorId: string, content: string): Message {
-    return new Message(authorId, MessageType.NORMAL, content);
+    return Message.of(authorId, MessageType.NORMAL, content);
   }
 
   static firstMessage(authorId: string): Message {

@@ -20,11 +20,27 @@ import { UserModule } from './module/user/UserModule';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      context: (context) => {
+        if (context?.extra?.request) {
+          return {
+            req: {
+              ...context?.extra?.request,
+              headers: {
+                ...context?.extra?.request?.headers,
+                ...context?.connectionParams,
+              },
+            },
+          };
+        }
+
+        return { req: context?.req };
+      },
       driver: ApolloDriver,
       autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
       sortSchema: true,
       subscriptions: {
         'graphql-ws': true,
+        'subscriptions-transport-ws': false,
       },
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],

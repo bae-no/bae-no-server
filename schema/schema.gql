@@ -244,6 +244,7 @@ type SignInResponse {
 }
 
 type Subscription {
+  """채팅 작성 이벤트 구독하기"""
   chatWritten(shareDealId: ID!): ChatWrittenResponse!
   sampleAdded: SampleResponse!
 }

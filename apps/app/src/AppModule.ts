@@ -1,5 +1,6 @@
 import * as path from 'path';
 
+import { EventEmitterModule } from '@app/event-emitter/EventEmitterModule';
 import { PrismaModule } from '@app/prisma/PrismaModule';
 import { PubSubModule } from '@app/pub-sub/PubSubModule';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -19,11 +20,27 @@ import { UserModule } from './module/user/UserModule';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      context: (context) => {
+        if (context?.extra?.request) {
+          return {
+            req: {
+              ...context?.extra?.request,
+              headers: {
+                ...context?.extra?.request?.headers,
+                ...context?.connectionParams,
+              },
+            },
+          };
+        }
+
+        return { req: context?.req };
+      },
       driver: ApolloDriver,
       autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
       sortSchema: true,
       subscriptions: {
         'graphql-ws': true,
+        'subscriptions-transport-ws': false,
       },
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
@@ -33,6 +50,7 @@ import { UserModule } from './module/user/UserModule';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    EventEmitterModule,
     PrismaModule,
     PubSubModule,
     CategoryModule,

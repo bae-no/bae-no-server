@@ -1,5 +1,7 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
+import { Chat } from '../../chat/domain/Chat';
+import { Message } from '../../chat/domain/vo/Message';
 import { FoodCategory } from './vo/FoodCategory';
 import { ParticipantInfo } from './vo/ParticipantInfo';
 import { ShareDealStatus } from './vo/ShareDealStatus';
@@ -84,5 +86,23 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     this.props.participantInfo = this.participantInfo.addId(participantId);
 
     return this;
+  }
+
+  canWriteChat(userId: string): boolean {
+    if (this.status !== ShareDealStatus.START) {
+      return false;
+    }
+
+    return this.participantInfo.hasId(userId);
+  }
+
+  newChat(authorId: string, content: string): Chat[] {
+    return this.participantInfo.ids.map((id) =>
+      Chat.of({
+        shareDealId: this.id,
+        userId: id,
+        message: Message.normal(authorId, content),
+      }),
+    );
   }
 }

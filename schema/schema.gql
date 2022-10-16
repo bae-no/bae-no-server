@@ -34,6 +34,12 @@ type CategoryResponse {
   shareDealSort: [ShareDealSortCategory!]!
 }
 
+type ChatWrittenResponse {
+  authorId: ID!
+  content: String!
+  type: MessageType!
+}
+
 input CoordinateInput {
   latitude: Float!
   longitude: Float!
@@ -103,6 +109,12 @@ input LeaveUserInput {
   reason: String!
 }
 
+"""메시지 유형"""
+enum MessageType {
+  NORMAL
+  NOTICE
+}
+
 type Mutation {
   """주소 추가"""
   appendAddress(input: AddressInput!): Boolean!
@@ -134,6 +146,9 @@ type Mutation {
 
   """전화번호 인증번호 검증하기"""
   verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
+
+  """채팅 입력하기"""
+  writeChat(input: WriteChatInput!): Boolean!
 }
 
 input OpenShareDealInput {
@@ -229,6 +244,8 @@ type SignInResponse {
 }
 
 type Subscription {
+  """채팅 작성 이벤트 구독하기"""
+  chatWritten(shareDealId: ID!): ChatWrittenResponse!
   sampleAdded: SampleResponse!
 }
 
@@ -254,4 +271,9 @@ type UserProfileResponse {
 
 input VerifyPhoneVerificationCodeInput {
   code: String!
+}
+
+input WriteChatInput {
+  content: String!
+  shareDealId: ID!
 }

@@ -58,6 +58,12 @@
       ],
       "@app/sms/*": [
         "libs/sms/src/*"
+      ],
+      "@app/event-emitter": [
+        "libs/event-emitter/src"
+      ],
+      "@app/event-emitter/*": [
+        "libs/event-emitter/src/*"
       ]
     }
   }

@@ -71,6 +71,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/sms/tsconfig.lib.json"
       }
+    },
+    "event-emitter": {
+      "type": "library",
+      "root": "libs/event-emitter",
+      "entryFile": "index",
+      "sourceRoot": "libs/event-emitter/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/event-emitter/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -126,8 +126,8 @@ describe('ChatCommandService', () => {
 
       // then
       await assertResolvesRight(result, () => {
-        expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME)).toHaveLength(
-          participantInfo.current,
+        expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME)).toBeInstanceOf(
+          Chat,
         );
       });
     });

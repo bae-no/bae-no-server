@@ -1,5 +1,6 @@
 import * as path from 'path';
 
+import { EventEmitterModule } from '@app/event-emitter/EventEmitterModule';
 import { PrismaModule } from '@app/prisma/PrismaModule';
 import { PubSubModule } from '@app/pub-sub/PubSubModule';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -33,6 +34,7 @@ import { UserModule } from './module/user/UserModule';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    EventEmitterModule,
     PrismaModule,
     PubSubModule,
     CategoryModule,

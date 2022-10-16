@@ -1,5 +1,5 @@
 import { TE } from '@app/custom/fp-ts';
-import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
+import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -19,7 +19,7 @@ export class ChatCommandService extends ChatCommandUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
     private readonly chatRepositoryPort: ChatRepositoryPort,
-    private readonly pubSubPort: PubSubPort,
+    private readonly eventEmitterPort: EventEmitterPort,
   ) {
     super();
   }
@@ -33,10 +33,10 @@ export class ChatCommandService extends ChatCommandUseCase {
       ),
       TE.map((shareDeal) => shareDeal.newChat(command.userId, command.content)),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map(
-        (chats) => new ChatWrittenEvent(command.shareDealId, chats[0].message),
+      TE.map((chats) => new ChatWrittenEvent(chats)),
+      TE.map((event) =>
+        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, event.payload),
       ),
-      TE.map((event) => this.pubSubPort.publish(event.key, event.payload)),
       TE.map(constVoid),
     );
   }

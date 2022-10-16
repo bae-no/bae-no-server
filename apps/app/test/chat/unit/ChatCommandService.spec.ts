@@ -1,13 +1,13 @@
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
+import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { WriteChatCommand } from '../../../src/module/chat/application/port/in/dto/WriteChatCommand';
 import { ChatPermissionDeniedException } from '../../../src/module/chat/application/port/in/exception/ChatPermissionDeniedException';
 import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from '../../../src/module/chat/application/service/ChatCommandService';
 import { Chat } from '../../../src/module/chat/domain/Chat';
-import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -17,17 +17,17 @@ import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 describe('ChatCommandService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
-  const pubSubPort = new StubPubSub();
+  const eventEmitter = new StubEventEmitter();
   const shareDealCommandService = new ChatCommandService(
     shareDealQueryRepositoryPort,
     chatRepositoryPort,
-    pubSubPort,
+    eventEmitter,
   );
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatRepositoryPort);
-    pubSubPort.clear();
+    eventEmitter.clear();
   });
 
   describe('write', () => {
@@ -126,8 +126,8 @@ describe('ChatCommandService', () => {
 
       // then
       await assertResolvesRight(result, () => {
-        expect(pubSubPort.get(`chat-written-${shareDeal.id}`)).toStrictEqual(
-          Message.normal('user 1', 'content'),
+        expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME)).toHaveLength(
+          participantInfo.current,
         );
       });
     });

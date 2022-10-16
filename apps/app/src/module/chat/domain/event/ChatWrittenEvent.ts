@@ -1,16 +1,11 @@
-import { Message } from '../vo/Message';
+import { Chat } from '../Chat';
 
 export class ChatWrittenEvent {
-  constructor(
-    private readonly shareDealId: string,
-    private readonly message: Message,
-  ) {}
+  static readonly EVENT_NAME = 'chat.written';
 
-  get key(): string {
-    return `chat-written-${this.shareDealId}`;
-  }
+  constructor(private readonly chats: Chat[]) {}
 
-  get payload(): Message {
-    return this.message;
+  get payload(): Chat[] {
+    return this.chats;
   }
 }

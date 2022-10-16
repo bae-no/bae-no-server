@@ -33,7 +33,7 @@ export class ChatCommandService extends ChatCommandUseCase {
       ),
       TE.map((shareDeal) => shareDeal.newChat(command.userId, command.content)),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chats) => new ChatWrittenEvent(chats)),
+      TE.map((chats) => new ChatWrittenEvent(chats[0])),
       TE.map((event) =>
         this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, event.payload),
       ),

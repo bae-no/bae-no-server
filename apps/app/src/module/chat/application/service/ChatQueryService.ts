@@ -1,6 +1,7 @@
-import { TE } from '@app/custom/fp-ts';
+import { O, TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
-import { pipe } from 'fp-ts/function';
+import { Injectable } from '@nestjs/common';
+import { constant, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
@@ -9,6 +10,7 @@ import { FindChatCommand } from '../port/in/dto/FindChatCommand';
 import { FindChatResult } from '../port/in/dto/FindChatResult';
 import { ChatQueryRepositoryPort } from '../port/out/ChatQueryRepositoryPort';
 
+@Injectable()
 export class ChatQueryService extends ChatQueryUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
@@ -55,7 +57,11 @@ export class ChatQueryService extends ChatQueryUseCase {
             new FindChatResult(
               deal.title,
               deal.thumbnail,
-              lastChats[index]?.content || '',
+              pipe(
+                lastChats[index],
+                O.map((chat) => chat.content),
+                O.getOrElse(constant('')),
+              ),
               unreadCounts[index],
             ),
         ),

@@ -112,7 +112,8 @@ model Chat {
 }
 
 type Message {
-  authorId String @db.ObjectId
+  authorId String  @db.ObjectId
   type     String
   content  String
+  unread   Boolean
 }

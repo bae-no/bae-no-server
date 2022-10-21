@@ -25,6 +25,10 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.props.message;
   }
 
+  get content(): string {
+    return this.message.content;
+  }
+
   static of(props: ChatProps) {
     return new Chat(props);
   }

@@ -13,7 +13,7 @@ import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 export class ChatSubscriptionResolver {
   constructor(
     private readonly pubSubPort: PubSubPort,
-    private readonly chatQueryUseCase: ShareDealQueryUseCase,
+    private readonly shareDealQueryUseCase: ShareDealQueryUseCase,
   ) {}
 
   @Subscription(() => ChatWrittenResponse, {
@@ -24,7 +24,7 @@ export class ChatSubscriptionResolver {
     @CurrentSession() session: Session,
   ): Promise<AsyncIterator<ChatWrittenResponse>> {
     return pipe(
-      this.chatQueryUseCase.isParticipant(shareDealId, session.id),
+      this.shareDealQueryUseCase.isParticipant(shareDealId, session.id),
       TE.map(() =>
         this.pubSubPort.subscribe<ChatWrittenResponse>(
           ChatWrittenTrigger(shareDealId),

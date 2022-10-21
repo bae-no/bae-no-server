@@ -3,9 +3,9 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
+import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/in/ShareDealQueryUseCase';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
-import { ChatQueryUseCase } from '../../../application/port/in/ChatQueryUseCase';
 import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
 import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 
@@ -13,7 +13,7 @@ import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 export class ChatSubscriptionResolver {
   constructor(
     private readonly pubSubPort: PubSubPort,
-    private readonly chatQueryUseCase: ChatQueryUseCase,
+    private readonly chatQueryUseCase: ShareDealQueryUseCase,
   ) {}
 
   @Subscription(() => ChatWrittenResponse, {

@@ -1,7 +1,7 @@
 import { BaseException } from '@app/domain/exception/BaseException';
 import { ExceptionCode } from '@app/domain/exception/ExceptionCode';
 
-export class ChatPermissionDeniedException extends BaseException {
+export class ShareDealAccessDeniedException extends BaseException {
   override readonly code = ExceptionCode.ILLEGAL_STATE;
 
   constructor(message: string) {

@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 
 import { ShareDealQueryRepositoryAdapter } from '../share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
+import { ShareDealQueryUseCase } from '../share-deal/application/port/in/ShareDealQueryUseCase';
 import { ShareDealQueryRepositoryPort } from '../share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealQueryService } from '../share-deal/application/service/ShareDealQueryService';
 import { ChatMutationResolver } from './adapter/in/gql/ChatMutationResolver';
 import { ChatSubscriptionResolver } from './adapter/in/gql/ChatSubscriptionResolver';
 import { ChatEventListener } from './adapter/in/listener/ChatEventListener';
 import { ChatRepositoryAdapter } from './adapter/out/persistence/ChatRepositoryAdapter';
 import { ChatCommandUseCase } from './application/port/in/ChatCommandUseCase';
-import { ChatQueryUseCase } from './application/port/in/ChatQueryUseCase';
 import { ChatRepositoryPort } from './application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from './application/service/ChatCommandService';
-import { ChatQueryService } from './application/service/ChatQueryService';
 
 @Module({
   providers: [
@@ -18,8 +18,8 @@ import { ChatQueryService } from './application/service/ChatQueryService';
     ChatSubscriptionResolver,
     ChatEventListener,
     {
-      provide: ChatQueryUseCase,
-      useClass: ChatQueryService,
+      provide: ShareDealQueryUseCase,
+      useClass: ShareDealQueryService,
     },
     {
       provide: ChatCommandUseCase,

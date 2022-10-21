@@ -3,11 +3,11 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { WriteChatCommand } from '../../../src/module/chat/application/port/in/dto/WriteChatCommand';
-import { ChatPermissionDeniedException } from '../../../src/module/chat/application/port/in/exception/ChatPermissionDeniedException';
 import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from '../../../src/module/chat/application/service/ChatCommandService';
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
+import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -43,7 +43,7 @@ describe('ChatCommandService', () => {
 
       // then
       await assertResolvesLeft(result, (exception) => {
-        expect(exception).toBeInstanceOf(ChatPermissionDeniedException);
+        expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
 

@@ -1,16 +1,18 @@
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { ChatPermissionDeniedException } from '../../../src/module/chat/application/port/in/exception/ChatPermissionDeniedException';
-import { ChatQueryService } from '../../../src/module/chat/application/service/ChatQueryService';
+import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealQueryService } from '../../../src/module/share-deal/application/service/ShareDealQueryService';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 
-describe('ChatQueryService', () => {
+describe('ShareDealQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
-  const chatQueryService = new ChatQueryService(shareDealQueryRepositoryPort);
+  const chatQueryService = new ShareDealQueryService(
+    shareDealQueryRepositoryPort,
+  );
 
   beforeEach(() => mockReset(shareDealQueryRepositoryPort));
 
@@ -29,7 +31,7 @@ describe('ChatQueryService', () => {
 
       // then
       await assertResolvesLeft(result, (exception) => {
-        expect(exception).toBeInstanceOf(ChatPermissionDeniedException);
+        expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
 

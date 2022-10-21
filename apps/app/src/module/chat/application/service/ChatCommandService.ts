@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ShareDealAccessDeniedException } from '../../../share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ChatWrittenEvent } from '../../domain/event/ChatWrittenEvent';
 import {
@@ -11,7 +12,6 @@ import {
   WriteChatError,
 } from '../port/in/ChatCommandUseCase';
 import { WriteChatCommand } from '../port/in/dto/WriteChatCommand';
-import { ChatPermissionDeniedException } from '../port/in/exception/ChatPermissionDeniedException';
 import { ChatRepositoryPort } from '../port/out/ChatRepositoryPort';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class ChatCommandService extends ChatCommandUseCase {
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
       TE.filterOrElseW(
         (shareDeal) => shareDeal.canWriteChat(command.userId),
-        () => new ChatPermissionDeniedException('채팅을 작성할 수 없습니다.'),
+        () => new ShareDealAccessDeniedException('채팅을 작성할 수 없습니다.'),
       ),
       TE.map((shareDeal) => shareDeal.newChat(command.userId, command.content)),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),

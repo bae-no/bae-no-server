@@ -15,18 +15,29 @@ export class Message {
     readonly authorId: string,
     readonly type: MessageType,
     readonly content: string,
+    readonly unread: boolean,
   ) {}
 
-  static of(authorId: string, type: MessageType, content: string): Message {
-    return new Message(authorId, type, content);
+  static of(
+    authorId: string,
+    type: MessageType,
+    content: string,
+    unread: boolean,
+  ): Message {
+    return new Message(authorId, type, content, unread);
   }
 
-  static normal(authorId: string, content: string): Message {
-    return Message.of(authorId, MessageType.NORMAL, content);
+  static normal(authorId: string, content: string, unread: boolean): Message {
+    return Message.of(authorId, MessageType.NORMAL, content, unread);
   }
 
   static firstMessage(authorId: string): Message {
-    return new Message(authorId, MessageType.NOTICE, Message.FIRST_MESSAGE);
+    return new Message(
+      authorId,
+      MessageType.NOTICE,
+      Message.FIRST_MESSAGE,
+      false,
+    );
   }
 
   static startShareDealMessage(authorId: string): Message {
@@ -34,6 +45,7 @@ export class Message {
       authorId,
       MessageType.NOTICE,
       Message.START_SHARE_DEAL_MESSAGE,
+      false,
     );
   }
 }

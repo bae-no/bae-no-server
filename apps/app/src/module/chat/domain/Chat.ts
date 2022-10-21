@@ -43,7 +43,7 @@ export class Chat extends BaseEntity<ChatProps> {
       Chat.of({
         shareDealId,
         userId: id,
-        message: Message.normal(authorId, content),
+        message: Message.normal(authorId, content, authorId !== id),
       }),
     );
   }

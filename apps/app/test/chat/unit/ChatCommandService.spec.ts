@@ -1,4 +1,4 @@
-import { right } from 'fp-ts/TaskEither';
+import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
@@ -8,24 +8,21 @@ import { ChatCommandService } from '../../../src/module/chat/application/service
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
-import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
-import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
-import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
-import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 
 describe('ChatCommandService', () => {
-  const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
+  const shareDealQueryUseCase = mock<ShareDealQueryUseCase>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
   const eventEmitter = new StubEventEmitter();
   const shareDealCommandService = new ChatCommandService(
-    shareDealQueryRepositoryPort,
+    shareDealQueryUseCase,
     chatRepositoryPort,
     eventEmitter,
   );
 
   beforeEach(() => {
-    mockReset(shareDealQueryRepositoryPort);
+    mockReset(shareDealQueryUseCase);
     mockReset(chatRepositoryPort);
     eventEmitter.clear();
   });
@@ -34,9 +31,10 @@ describe('ChatCommandService', () => {
     it('공유딜 권한이 없으면 에러가 발생한다', async () => {
       // given
       const command = new WriteChatCommand('userId', 'shareDealId', 'content');
-      const shareDeal = ShareDealFactory.create();
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryUseCase.participantIds.mockReturnValue(
+        left(new ShareDealAccessDeniedException('error')),
+      );
 
       // when
       const result = shareDealCommandService.write(command);
@@ -50,17 +48,11 @@ describe('ChatCommandService', () => {
     it('참여자에게 모두 채팅을 추가한다', async () => {
       // given
       const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
-      const participantInfo = ParticipantInfo.of(
-        ['user 1', 'user 2', 'user 3'],
-        5,
-      );
-      const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.START,
-        participantInfo,
-      });
       let db: Chat[] = [];
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryUseCase.participantIds.mockReturnValue(
+        right(['user 1', 'user 2', 'user 3']),
+      );
       chatRepositoryPort.create.mockImplementation((chats) => {
         db = chats;
 
@@ -108,17 +100,10 @@ describe('ChatCommandService', () => {
     it('채팅 작성 이벤트를 발송한다', async () => {
       // given
       const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
-      const participantInfo = ParticipantInfo.of(
-        ['user 1', 'user 2', 'user 3'],
-        5,
-      );
-      const shareDeal = ShareDealFactory.create({
-        id: 'shareDealId',
-        status: ShareDealStatus.START,
-        participantInfo,
-      });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryUseCase.participantIds.mockReturnValue(
+        right(['user 1', 'user 2', 'user 3']),
+      );
       chatRepositoryPort.create.mockImplementation((chats) => right(chats));
 
       // when

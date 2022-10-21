@@ -74,6 +74,7 @@ describe('ChatCommandService', () => {
                 "authorId": "user 1",
                 "content": "content",
                 "type": "NORMAL",
+                "unread": false,
               },
             ],
             [
@@ -82,6 +83,7 @@ describe('ChatCommandService', () => {
                 "authorId": "user 1",
                 "content": "content",
                 "type": "NORMAL",
+                "unread": true,
               },
             ],
             [
@@ -90,6 +92,7 @@ describe('ChatCommandService', () => {
                 "authorId": "user 1",
                 "content": "content",
                 "type": "NORMAL",
+                "unread": true,
               },
             ],
           ]

@@ -1,3 +1,4 @@
+import { some } from 'fp-ts/Option';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
@@ -39,13 +40,13 @@ describe('ChatQueryService', () => {
         Chat.of({
           shareDealId: deal.id,
           userId: 'userId',
-          message: Message.normal('123', 'content'),
+          message: Message.normal('123', 'content', true),
         }),
       );
 
       chatQueryRepositoryPort.last
-        .mockReturnValueOnce(right(chats[0]))
-        .mockReturnValueOnce(right(chats[1]));
+        .mockReturnValueOnce(right(some(chats[0])))
+        .mockReturnValueOnce(right(some(chats[1])));
       chatQueryRepositoryPort.unreadCount
         .mockReturnValueOnce(right(unreadCounts[1]))
         .mockReturnValueOnce(right(unreadCounts[0]));

@@ -1,5 +1,6 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
+import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -27,6 +28,26 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
         () => new ShareDealAccessDeniedException('채팅에 참여할 수 없습니다.'),
       ),
       TE.map(constVoid),
+    );
+  }
+
+  override participantIds(
+    shareDealId: string,
+    userId: string,
+  ): TaskEither<
+    DBError | NotFoundException | ShareDealAccessDeniedException,
+    string[]
+  > {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(shareDealId),
+      TE.filterOrElseW(
+        (shareDeal) => shareDeal.canWriteChat(userId),
+        () =>
+          new ShareDealAccessDeniedException(
+            '채팅방에 참여할 권한이 없습니다.',
+          ),
+      ),
+      TE.map((shareDeal) => shareDeal.participantInfo.ids),
     );
   }
 }

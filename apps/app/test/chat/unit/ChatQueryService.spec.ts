@@ -69,12 +69,14 @@ describe('ChatQueryService', () => {
         expect(value).toMatchInlineSnapshot(`
           [
             FindChatResult {
+              "id": "1",
               "lastContent": "content",
               "thumbnail": "https://baeno1.com",
               "title": "shareDeal1",
               "unreadCount": 20,
             },
             FindChatResult {
+              "id": "2",
               "lastContent": "content",
               "thumbnail": "https://baeno2.com",
               "title": "shareDeal2",

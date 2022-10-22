@@ -34,6 +34,14 @@ type CategoryResponse {
   shareDealSort: [ShareDealSortCategory!]!
 }
 
+type ChatResponse {
+  id: ID!
+  lastContent: String!
+  thumbnail: String!
+  title: String!
+  unreadCount: Int!
+}
+
 type ChatWrittenResponse {
   authorId: ID!
   content: String!
@@ -70,6 +78,13 @@ scalar DateTime
 input EnrollUserInput {
   address: AddressInput!
   nickname: String!
+}
+
+input FindChatInput {
+  """페이지 번호, 0부터 시작"""
+  page: Int!
+  size: Int!
+  status: ShareDealStatus!
 }
 
 input FindShareDealInput {
@@ -118,6 +133,9 @@ enum MessageType {
 type Mutation {
   """주소 추가"""
   appendAddress(input: AddressInput!): Boolean!
+
+  """채팅방 목록"""
+  chats(input: FindChatInput!): [ChatResponse!]!
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """주소 삭제"""
@@ -212,8 +230,13 @@ type ShareDealSortCategory {
 
 """공유딜 정렬유형"""
 enum ShareDealSortType {
+  """최신순"""
   LATEST
+
+  """입장가능순"""
   PARTICIPANTS
+
+  """인원순"""
   POPULAR
 }
 

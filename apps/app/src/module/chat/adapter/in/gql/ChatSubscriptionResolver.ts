@@ -3,9 +3,9 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
+import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/in/ShareDealQueryUseCase';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
-import { ChatQueryUseCase } from '../../../application/port/in/ChatQueryUseCase';
 import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
 import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 
@@ -13,7 +13,7 @@ import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 export class ChatSubscriptionResolver {
   constructor(
     private readonly pubSubPort: PubSubPort,
-    private readonly chatQueryUseCase: ChatQueryUseCase,
+    private readonly shareDealQueryUseCase: ShareDealQueryUseCase,
   ) {}
 
   @Subscription(() => ChatWrittenResponse, {
@@ -24,7 +24,7 @@ export class ChatSubscriptionResolver {
     @CurrentSession() session: Session,
   ): Promise<AsyncIterator<ChatWrittenResponse>> {
     return pipe(
-      this.chatQueryUseCase.isParticipant(shareDealId, session.id),
+      this.shareDealQueryUseCase.isParticipant(shareDealId, session.id),
       TE.map(() =>
         this.pubSubPort.subscribe<ChatWrittenResponse>(
           ChatWrittenTrigger(shareDealId),

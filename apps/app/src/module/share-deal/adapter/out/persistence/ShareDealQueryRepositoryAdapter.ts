@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
 import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
@@ -79,6 +80,25 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       this.prisma.shareDeal.count({
         where: { status, participants: { is: { ids: { has: userId } } } },
       }),
+    );
+  }
+
+  override findByUser(
+    command: FindByUserShareDealCommand,
+  ): TaskEither<DBError, ShareDeal[]> {
+    return pipe(
+      tryCatchDB(() =>
+        this.prisma.shareDeal.findMany({
+          where: {
+            status: command.status,
+            participants: { is: { ids: { has: command.userId } } },
+          },
+          orderBy: { createdAt: 'desc' },
+          skip: command.skip,
+          take: command.size,
+        }),
+      ),
+      TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
 }

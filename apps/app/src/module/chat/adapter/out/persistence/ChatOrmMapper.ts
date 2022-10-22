@@ -13,6 +13,7 @@ export class ChatOrmMapper {
         orm.message.authorId,
         orm.message.type as MessageType,
         orm.message.content,
+        orm.message.unread,
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
@@ -28,6 +29,7 @@ export class ChatOrmMapper {
         authorId: domain.message.authorId,
         type: domain.message.type,
         content: domain.message.content,
+        unread: domain.message.unread,
       },
     };
   }

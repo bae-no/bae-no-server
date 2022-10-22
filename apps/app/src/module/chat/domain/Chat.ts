@@ -25,7 +25,26 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.props.message;
   }
 
+  get content(): string {
+    return this.message.content;
+  }
+
   static of(props: ChatProps) {
     return new Chat(props);
+  }
+
+  static create(
+    shareDealId: string,
+    participantIds: string[],
+    authorId: string,
+    content: string,
+  ): Chat[] {
+    return participantIds.map((id) =>
+      Chat.of({
+        shareDealId,
+        userId: id,
+        message: Message.normal(authorId, content, authorId !== id),
+      }),
+    );
   }
 }

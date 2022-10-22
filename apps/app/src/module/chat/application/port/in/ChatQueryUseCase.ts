@@ -1,11 +1,11 @@
 import { DBError } from '@app/domain/error/DBError';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { ChatPermissionDeniedException } from './exception/ChatPermissionDeniedException';
+import { FindChatCommand } from './dto/FindChatCommand';
+import { FindChatResult } from './dto/FindChatResult';
 
 export abstract class ChatQueryUseCase {
-  abstract isParticipant(
-    shareDealId: string,
-    userId: string,
-  ): TaskEither<DBError | ChatPermissionDeniedException, void>;
+  abstract find(
+    command: FindChatCommand,
+  ): TaskEither<DBError, FindChatResult[]>;
 }

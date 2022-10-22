@@ -6,6 +6,7 @@ import { addDays, compareDesc } from 'date-fns';
 
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealQueryRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
+import { FindByUserShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindByUserShareDealCommand';
 import { FindShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
@@ -302,6 +303,82 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (value) => {
         expect(value.id).toBe(shareDeal.id);
+      });
+    });
+  });
+
+  describe('findByUser', () => {
+    it('참여하지 않은 공유딜은 조회되지 않는다.', async () => {
+      // given
+      await prisma.shareDeal.create({
+        data: ShareDealOrmMapper.toOrm(
+          ShareDealFactory.create({ status: ShareDealStatus.OPEN }),
+        ),
+      });
+
+      const command = new FindByUserShareDealCommand(
+        faker.database.mongodbObjectId(),
+        ShareDealStatus.OPEN,
+      );
+
+      // when
+      const result = shareDealRepositoryAdapter.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(0);
+      });
+    });
+
+    it('지정된 상태가 아닌 공유딜의 경우 참여 여부와 상관없이 조회되지 않는다.', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+      await prisma.shareDeal.create({
+        data: ShareDealOrmMapper.toOrm(
+          ShareDealFactory.create({
+            status: ShareDealStatus.START,
+            participantInfo: ParticipantInfo.of([userId], 3),
+          }),
+        ),
+      });
+
+      const command = new FindByUserShareDealCommand(
+        userId,
+        ShareDealStatus.OPEN,
+      );
+
+      // when
+      const result = shareDealRepositoryAdapter.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(0);
+      });
+    });
+
+    it('참여중인 공유딜 중에서 지정된 상태의 공유딜 목록을 조회한다.', async () => {
+      // given
+      const userId = faker.database.mongodbObjectId();
+      await prisma.shareDeal.create({
+        data: ShareDealOrmMapper.toOrm(
+          ShareDealFactory.create({
+            status: ShareDealStatus.START,
+            participantInfo: ParticipantInfo.of([userId], 3),
+          }),
+        ),
+      });
+
+      const command = new FindByUserShareDealCommand(
+        userId,
+        ShareDealStatus.START,
+      );
+
+      // when
+      const result = shareDealRepositoryAdapter.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(1);
       });
     });
   });

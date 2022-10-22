@@ -230,8 +230,13 @@ type ShareDealSortCategory {
 
 """공유딜 정렬유형"""
 enum ShareDealSortType {
+  """최신순"""
   LATEST
+
+  """입장가능순"""
   PARTICIPANTS
+
+  """인원순"""
   POPULAR
 }
 

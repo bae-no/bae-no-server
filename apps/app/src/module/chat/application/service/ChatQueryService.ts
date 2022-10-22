@@ -55,6 +55,7 @@ export class ChatQueryService extends ChatQueryUseCase {
         shareDeals.map(
           (deal, index) =>
             new FindChatResult(
+              deal.id,
               deal.title,
               deal.thumbnail,
               pipe(

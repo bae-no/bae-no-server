@@ -23,6 +23,11 @@ registerEnumType(ShareDealStatus, {
 registerEnumType(ShareDealSortType, {
   name: 'ShareDealSortType',
   description: '공유딜 정렬유형',
+  valuesMap: {
+    [ShareDealSortType.LATEST]: { description: '최신순' },
+    [ShareDealSortType.POPULAR]: { description: '인원순' },
+    [ShareDealSortType.PARTICIPANTS]: { description: '입장가능순' },
+  },
 });
 registerEnumType(MessageType, {
   name: 'MessageType',

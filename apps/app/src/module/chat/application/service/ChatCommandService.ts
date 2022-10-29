@@ -41,7 +41,10 @@ export class ChatCommandService extends ChatCommandUseCase {
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
       TE.map((chats) => new ChatWrittenEvent(chats[0])),
       TE.map((event) =>
-        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, event.payload),
+        this.eventEmitterPort.emitAsync(
+          ChatWrittenEvent.EVENT_NAME,
+          event.payload,
+        ),
       ),
       TE.map(constVoid),
     );

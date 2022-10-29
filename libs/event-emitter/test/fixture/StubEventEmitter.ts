@@ -1,17 +1,21 @@
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 
 export class StubEventEmitter extends EventEmitterPort {
-  private queue = new Map<string, any>();
+  #queue = new Map<string, any>();
 
   clear() {
-    this.queue.clear();
+    this.#queue.clear();
   }
 
   get(event: string): unknown {
-    return this.queue.get(event);
+    return this.#queue.get(event);
   }
 
   override emit(event: string, data: unknown) {
-    this.queue.set(event, data);
+    this.#queue.set(event, data);
+  }
+
+  emitAsync(event: string, data: unknown): void {
+    this.#queue.set(event, data);
   }
 }

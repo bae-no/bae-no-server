@@ -1,3 +1,5 @@
+import { randomInt } from 'crypto';
+
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { addMinutes, isAfter } from 'date-fns';
 import { Either, left, right } from 'fp-ts/Either';
@@ -14,10 +16,7 @@ export class PhoneVerification {
   static of(phoneNumber: string, code?: string, expiredAt?: Date) {
     return new PhoneVerification(
       phoneNumber,
-      code ??
-        Math.floor(Math.random() * 10000)
-          .toString()
-          .padStart(4, '0'),
+      code ?? randomInt(9999).toString().padStart(4, '0'),
       expiredAt ?? addMinutes(new Date(), PhoneVerification.EXPIRATION_MINUTES),
     );
   }

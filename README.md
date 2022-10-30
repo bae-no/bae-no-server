@@ -182,3 +182,15 @@ TypeScript Enum 을 GraphQL Enum 으로 등록하기 위해 다음 파일을 수
 registerEnumType(MyEnum, { name: 'MyEnum', description: 'Eunm 설명' });
 ```
 
+### schema.gql 업데이트
+
+본 프로젝트는 Nest.js code first 방식으로 GraphQL 스키마를 관리하고 있습니다.  
+`pnpm start`를 통해 서버를 실행하면 `schema.gql`파일이 자동으로 업데이트됩니다.  
+하지만 db를 실행해야 하는 번거로움이 있으므로 아래 명령어를 통해 쉽게 업데이트 할 수 있습니다.
+
+해당 명령어는 `AppModule.spec.ts`테스트 파일을 실행하며 서버를 디비없이 실행하게 됩니다.  
+이 테스트는 각 의존성을 제대로 주입했는지 확인하는 용도로도 사용할 수 있습니다.
+
+```shell
+pnpm graphql:schema
+```

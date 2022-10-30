@@ -8,6 +8,7 @@ describe('AppModule', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    process.env.JWT_SECRET = 'secret';
     const module = await Test.createTestingModule({
       imports: [AppModule],
     })

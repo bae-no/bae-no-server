@@ -30,6 +30,7 @@
     "test:ci-integration": "JEST_JUNIT_OUTPUT_NAME=junit-integration.xml pnpm test:integration --ci --coverage --reporters=default --reporters=jest-junit --coverageDirectory=coverage-integration",
     "prisma:format": "prisma format",
     "prisma:generate": "prisma generate",
+    "graphql:schema": "jest AppModule.spec.ts",
     "prepare": "husky install"
   },
   "dependencies": {

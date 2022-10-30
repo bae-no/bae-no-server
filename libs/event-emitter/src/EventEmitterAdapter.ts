@@ -4,10 +4,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class EventEmitterAdapter extends EventEmitterPort {
-  constructor(
-    private readonly eventEmitter: EventEmitter2,
-    private readonly logger: Logger,
-  ) {
+  private readonly logger = new Logger(EventEmitterAdapter.name);
+
+  constructor(private readonly eventEmitter: EventEmitter2) {
     super();
   }
 

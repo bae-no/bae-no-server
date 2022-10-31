@@ -6,6 +6,10 @@ export class ParticipantInfo {
     readonly remaining: number,
   ) {}
 
+  get canStart() {
+    return this.remaining <= this.current;
+  }
+
   static of(ids: string[], min: number): ParticipantInfo {
     return new ParticipantInfo(
       ids,

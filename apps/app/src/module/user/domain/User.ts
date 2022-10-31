@@ -4,6 +4,8 @@ import * as E from 'fp-ts/Either';
 import { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 
+import { ExpiredCodeException } from './exception/ExpiredCodeException';
+import { MismatchedCodeException } from './exception/MismatchedCodeException';
 import { PhoneVerification } from './PhoneVerification';
 import { Address } from './vo/Address';
 import { Agreement } from './vo/Agreement';
@@ -78,7 +80,7 @@ export class User extends BaseEntity<UserProps> {
   updateByPhoneVerification(
     phoneVerification: PhoneVerification,
     code: string,
-  ): Either<IllegalStateException, this> {
+  ): Either<ExpiredCodeException | MismatchedCodeException, this> {
     return pipe(
       phoneVerification.verify(code),
       E.map(() => {

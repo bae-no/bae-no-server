@@ -1,5 +1,7 @@
 import { addSeconds } from 'date-fns';
 
+import { ExpiredCodeException } from '../../../src/module/user/domain/exception/ExpiredCodeException';
+import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
 import { assertLeft, assertRight } from '../../fixture';
 
@@ -25,6 +27,7 @@ describe('PhoneVerification', () => {
 
       // then
       assertLeft(result, (err) => {
+        expect(err).toBeInstanceOf(MismatchedCodeException);
         expect(err.message).toContain('코드가 일치하지 않습니다');
       });
     });
@@ -41,6 +44,7 @@ describe('PhoneVerification', () => {
 
       // then
       assertLeft(result, (err) => {
+        expect(err).toBeInstanceOf(ExpiredCodeException);
         expect(err.message).toContain('코드가 만료되었습니다');
       });
     });

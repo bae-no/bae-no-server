@@ -1,4 +1,3 @@
-import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { left, right } from 'fp-ts/TaskEither';
@@ -10,6 +9,7 @@ import { PhoneVerificationRepositoryPort } from '../../../src/module/user/applic
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { PhoneVerificationService } from '../../../src/module/user/application/service/PhoneVerificationService';
+import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
@@ -86,7 +86,7 @@ describe('PhoneVerificationService', () => {
 
       // then
       await assertResolvesLeft(result, (err) => {
-        expect(err).toBeInstanceOf(IllegalStateException);
+        expect(err).toBeInstanceOf(MismatchedCodeException);
       });
     });
 

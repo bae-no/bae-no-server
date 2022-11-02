@@ -1,3 +1,4 @@
+import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { INestApplication } from '@nestjs/common';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
@@ -6,6 +7,7 @@ import * as request from 'supertest';
 import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/gql/input/CreateShareZoneInput';
 import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
+import { StartShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/StartShareDealInput';
 import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealMutationResolver';
 import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
@@ -84,7 +86,7 @@ describe('ShareDealMutationResolver', () => {
       input.shareDealId = 'abcd1234';
 
       // language=GraphQL
-      const mutation = `mutation joinChat($input: JoinShareDealInput!) {
+      const mutation = `mutation joinShareDeal($input: JoinShareDealInput!) {
         joinShareDeal(input: $input)
       }`;
 
@@ -128,7 +130,7 @@ describe('ShareDealMutationResolver', () => {
       input.shareDealId = 'abcd1234';
 
       // language=GraphQL
-      const mutation = `mutation joinChat($input: JoinShareDealInput!) {
+      const mutation = `mutation joinShareDeal($input: JoinShareDealInput!) {
         joinShareDeal(input: $input)
       }`;
 
@@ -145,6 +147,79 @@ describe('ShareDealMutationResolver', () => {
           "data": {
             "joinShareDeal": true,
           },
+        }
+      `);
+    });
+  });
+
+  describe('startShareDeal', () => {
+    it('공유딜을 시작한다.', async () => {
+      // given
+      const input = new StartShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      // language=GraphQL
+      const mutation = `mutation startShareDeal($input: StartShareDealInput!) {
+        startShareDeal(input: $input)
+      }`;
+
+      sharedDealCommandUseCase.start.mockReturnValue(right(undefined));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "startShareDeal": true,
+          },
+        }
+      `);
+    });
+
+    it('유효하지 않은 상태의 공유딜을 시작할 경우 예외를 반환한다.', async () => {
+      // given
+      const input = new StartShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      // language=GraphQL
+      const mutation = `mutation startShareDeal($input: StartShareDealInput!) {
+        startShareDeal(input: $input)
+      }`;
+
+      sharedDealCommandUseCase.start.mockReturnValue(
+        left(new IllegalStateException('error')),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "ILLEGAL_STATE",
+              },
+              "locations": [
+                {
+                  "column": 9,
+                  "line": 2,
+                },
+              ],
+              "message": "error",
+              "path": [
+                "startShareDeal",
+              ],
+            },
+          ],
         }
       `);
     });

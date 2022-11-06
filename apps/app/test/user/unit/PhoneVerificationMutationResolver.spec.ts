@@ -7,6 +7,8 @@ import { SendPhoneVerificationCodeInput } from '../../../src/module/user/adapter
 import { VerifyPhoneVerificationCodeInput } from '../../../src/module/user/adapter/in/gql/input/VerifyPhoneVerificationCodeInput';
 import { PhoneVerificationMutationResolver } from '../../../src/module/user/adapter/in/gql/PhoneVerificationMutationResolver';
 import { PhoneVerificationUseCase } from '../../../src/module/user/application/port/in/PhoneVerificationUseCase';
+import { ExpiredCodeException } from '../../../src/module/user/domain/exception/ExpiredCodeException';
+import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';
 import {
   graphQLTestHelper,
   setMockUser,
@@ -88,6 +90,94 @@ describe('PhoneVerificationMutationResolver ', () => {
           "data": {
             "verifyPhoneVerificationCode": true,
           },
+        }
+      `);
+    });
+
+    it('인증번호 검증에 실패한다', async () => {
+      // given
+      const input = new VerifyPhoneVerificationCodeInput();
+      input.code = '01011112222';
+
+      // language=GraphQL
+      const mutation = `mutation verify($input: VerifyPhoneVerificationCodeInput!) {
+        verifyPhoneVerificationCode(input: $input)
+      }`;
+
+      phoneVerificationUseCase.verify.mockReturnValue(
+        TE.left(new MismatchedCodeException('mismatch')),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "MISMATCHED_CODE",
+              },
+              "locations": [
+                {
+                  "column": 9,
+                  "line": 2,
+                },
+              ],
+              "message": "mismatch",
+              "path": [
+                "verifyPhoneVerificationCode",
+              ],
+            },
+          ],
+        }
+      `);
+    });
+
+    it('만료된 인증코드인 경우 예외가 발생한다.', async () => {
+      // given
+      const input = new VerifyPhoneVerificationCodeInput();
+      input.code = '01011112222';
+
+      // language=GraphQL
+      const mutation = `mutation verify($input: VerifyPhoneVerificationCodeInput!) {
+        verifyPhoneVerificationCode(input: $input)
+      }`;
+
+      phoneVerificationUseCase.verify.mockReturnValue(
+        TE.left(new ExpiredCodeException('expired')),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "EXPIRED_CODE",
+              },
+              "locations": [
+                {
+                  "column": 9,
+                  "line": 2,
+                },
+              ],
+              "message": "expired",
+              "path": [
+                "verifyPhoneVerificationCode",
+              ],
+            },
+          ],
         }
       `);
     });

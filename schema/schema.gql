@@ -159,6 +159,9 @@ type Mutation {
   """회원 가입 & 로그인"""
   signIn(input: SignInInput!): SignInResponse!
 
+  """공유딜 시작하기"""
+  startShareDeal(input: StartShareDealInput!): Boolean!
+
   """프로필 정보 수정"""
   updateProfile(input: UpdateProfileInput!): Boolean!
 
@@ -264,6 +267,10 @@ type SignInResponse {
 
   """전화번호 인증여부"""
   isPhoneNumberVerified: Boolean!
+}
+
+input StartShareDealInput {
+  shareDealId: ID!
 }
 
 type Subscription {

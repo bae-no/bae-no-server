@@ -80,10 +80,12 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     });
   }
 
-  join(participantId: string): this {
-    this.props.participantInfo = this.participantInfo.addId(participantId);
-
-    return this;
+  canStart(userId: string): boolean {
+    return (
+      this.status === ShareDealStatus.OPEN &&
+      userId === this.ownerId &&
+      this.participantInfo.canStart
+    );
   }
 
   canWriteChat(userId: string): boolean {
@@ -92,5 +94,17 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     }
 
     return this.participantInfo.hasId(userId);
+  }
+
+  join(participantId: string): this {
+    this.props.participantInfo = this.participantInfo.addId(participantId);
+
+    return this;
+  }
+
+  start(): this {
+    this.props.status = ShareDealStatus.START;
+
+    return this;
   }
 }

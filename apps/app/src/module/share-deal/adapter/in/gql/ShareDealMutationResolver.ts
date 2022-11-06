@@ -7,6 +7,7 @@ import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ShareDealCommandUseCase } from '../../../application/port/in/ShareDealCommandUseCase';
 import { JoinShareDealInput } from './input/JoinShareDealInput';
 import { OpenShareDealInput } from './input/OpenShareDealInput';
+import { StartShareDealInput } from './input/StartShareDealInput';
 
 @Resolver()
 export class ShareDealMutationResolver {
@@ -34,6 +35,18 @@ export class ShareDealMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.shareDealCommandUseCase.join(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '공유딜 시작하기' })
+  async startShareDeal(
+    @Args('input') input: StartShareDealInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.shareDealCommandUseCase.start(command),
       toResponse(constTrue),
     )();
   }

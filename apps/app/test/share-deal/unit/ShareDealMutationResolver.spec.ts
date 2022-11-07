@@ -113,8 +113,8 @@ describe('ShareDealMutationResolver', () => {
               },
               "locations": [
                 {
-                  "column": 9,
-                  "line": 2,
+                  "column": 11,
+                  "line": 3,
                 },
               ],
               "message": "error",
@@ -216,8 +216,8 @@ describe('ShareDealMutationResolver', () => {
               },
               "locations": [
                 {
-                  "column": 9,
-                  "line": 2,
+                  "column": 11,
+                  "line": 3,
                 },
               ],
               "message": "error",

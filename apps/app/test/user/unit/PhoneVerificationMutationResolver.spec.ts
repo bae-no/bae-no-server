@@ -128,8 +128,8 @@ describe('PhoneVerificationMutationResolver ', () => {
               },
               "locations": [
                 {
-                  "column": 9,
-                  "line": 2,
+                  "column": 11,
+                  "line": 3,
                 },
               ],
               "message": "mismatch",
@@ -173,8 +173,8 @@ describe('PhoneVerificationMutationResolver ', () => {
               },
               "locations": [
                 {
-                  "column": 9,
-                  "line": 2,
+                  "column": 11,
+                  "line": 3,
                 },
               ],
               "message": "expired",

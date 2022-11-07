@@ -11,6 +11,7 @@ import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('ChatMutationResolver', () => {
   const chatCommandUseCase = mock<ChatCommandUseCase>();
@@ -40,10 +41,11 @@ describe('ChatMutationResolver', () => {
       input.shareDealId = faker.database.mongodbObjectId();
       input.content = 'test';
 
-      // language=GraphQL
-      const mutation = `mutation writeChat($input: WriteChatInput!) {
-        writeChat(input: $input)
-      }`;
+      const mutation = gql`
+        mutation writeChat($input: WriteChatInput!) {
+          writeChat(input: $input)
+        }
+      `;
 
       chatCommandUseCase.write.mockReturnValue(right(undefined));
 

@@ -5,7 +5,7 @@ import { HttpClientService } from '@app/http-client/HttpClientService';
 import {
   assertResolvesLeft,
   assertResolvesRight,
-} from '../../../../apps/app/test/fixture';
+} from '../../../../apps/app/test/fixture/utils';
 import app from '../fixture/FakeHttpServer';
 
 describe('HttpClientService', () => {

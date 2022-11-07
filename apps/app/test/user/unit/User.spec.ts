@@ -2,7 +2,11 @@ import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerifica
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertLeft, assertRight, expectNonNullable } from '../../fixture';
+import {
+  assertLeft,
+  assertRight,
+  expectNonNullable,
+} from '../../fixture/utils';
 
 describe('User', () => {
   describe('updateByPhoneVerification', () => {

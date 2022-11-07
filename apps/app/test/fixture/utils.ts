@@ -76,3 +76,7 @@ export function expectNonNullable<A>(
     throw new Error(`Expected non-nullable, got null`);
   }
 }
+
+export function gql(strings: TemplateStringsArray, ..._: string[]): string {
+  return strings.join('');
+}

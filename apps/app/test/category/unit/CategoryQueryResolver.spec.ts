@@ -3,6 +3,7 @@ import * as request from 'supertest';
 
 import { CategoryQueryResolver } from '../../../src/module/category/adapter/in/gql/CategoryQueryResolver';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('CategoryQueryResolver', () => {
   let app: INestApplication;
@@ -18,19 +19,20 @@ describe('CategoryQueryResolver', () => {
   describe('categories', () => {
     it('모든 카테고리를 조회한다', async () => {
       // given
-      // language=GraphQL
-      const query = `query categories {
-        categories {
-          auth {
-            code
-            name
-          }
-          shareDealSort {
-            code
-            name
+      const query = gql`
+        query categories {
+          categories {
+            auth {
+              code
+              name
+            }
+            shareDealSort {
+              code
+              name
+            }
           }
         }
-      }`;
+      `;
 
       // when
       const response = await request(app.getHttpServer())

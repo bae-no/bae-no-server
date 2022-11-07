@@ -7,7 +7,7 @@ import { ShareDealRepositoryAdapter } from '../../../src/module/share-deal/adapt
 import { ShareDeal } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealRepositoryAdapter', () => {
   let shareDealRepositoryAdapter: ShareDealRepositoryAdapter;

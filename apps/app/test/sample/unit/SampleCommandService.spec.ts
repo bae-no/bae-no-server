@@ -7,7 +7,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 import { SampleQueryRepositoryPort } from '../../../src/module/sample/application/port/out/SampleQueryRepositoryPort';
 import { SampleQueryService } from '../../../src/module/sample/application/service/SampleQueryService';
 import { Sample } from '../../../src/module/sample/domain/Sample';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('SampleQueryService', () => {
   const sampleQueryRepositoryPort = mock<SampleQueryRepositoryPort>();

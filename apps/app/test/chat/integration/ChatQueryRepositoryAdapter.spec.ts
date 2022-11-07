@@ -4,7 +4,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { ChatQueryRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatQueryRepositoryAdapter';
 import { MessageType } from '../../../src/module/chat/domain/vo/MessageType';
-import { assertNone, assertResolvesRight, assertSome } from '../../fixture';
+import {
+  assertNone,
+  assertResolvesRight,
+  assertSome,
+} from '../../fixture/utils';
 
 describe('ChatQueryRepositoryAdapter', () => {
   let chatQueryRepositoryAdapter: ChatQueryRepositoryAdapter;

@@ -22,12 +22,12 @@ import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
+import { UserFactory } from '../../fixture/UserFactory';
 import {
   assertResolvesLeft,
   assertResolvesRight,
   expectNonNullable,
-} from '../../fixture';
-import { UserFactory } from '../../fixture/UserFactory';
+} from '../../fixture/utils';
 
 describe('UserCommandService', () => {
   const authQueryRepository = mock<AuthProviderPort>();

@@ -9,6 +9,7 @@ import { SampleMutationResolver } from '../../../src/module/sample/adapter/in/gq
 import { SampleCommandUseCase } from '../../../src/module/sample/application/port/in/SampleCommandUseCase';
 import { Sample } from '../../../src/module/sample/domain/Sample';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('SampleMutationResolver', () => {
   const sampleCommandUserCase = mock<SampleCommandUseCase>();
@@ -40,13 +41,14 @@ describe('SampleMutationResolver', () => {
       input.name = 'name';
       input.email = 'email';
 
-      // language=GraphQL
-      const mutation = `mutation create($input: CreateSampleInput!) {
-        createSample(input: $input) {
-          name
-          email
+      const mutation = gql`
+        mutation create($input: CreateSampleInput!) {
+          createSample(input: $input) {
+            name
+            email
+          }
         }
-      }`;
+      `;
       const sample = Sample.of({ name: 'name', email: 'email' });
       sampleCommandUserCase.create.mockReturnValue(right(sample));
 

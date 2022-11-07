@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { PhoneVerificationRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/PhoneVerificationRepositoryAdapter';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('PhoneVerificationRepositoryAdapter', () => {
   let phoneVerificationRepositoryAdapter: PhoneVerificationRepositoryAdapter;

@@ -3,7 +3,11 @@ import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SampleQueryRepositoryAdapter } from '../../../src/module/sample/adapter/out/persistence/SampleQueryRepositoryAdapter';
-import { assertNone, assertResolvesRight, assertSome } from '../../fixture';
+import {
+  assertNone,
+  assertResolvesRight,
+  assertSome,
+} from '../../fixture/utils';
 
 describe('SampleQueryRepositoryAdapter', () => {
   let sampleQueryRepositoryAdapter: SampleQueryRepositoryAdapter;

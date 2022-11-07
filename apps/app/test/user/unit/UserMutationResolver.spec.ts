@@ -22,6 +22,7 @@ import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('UserMutationResolver', () => {
   const userCommandUseCase = mock<UserCommandUseCase>();
@@ -53,15 +54,16 @@ describe('UserMutationResolver', () => {
       input.code = 'code';
       input.type = AuthType.APPLE;
 
-      // language=GraphQL
-      const mutation = `mutation signIn($input: SignInInput!) {
-        signIn(input: $input) {
-          accessToken
-          expiredAt
-          isPhoneNumberVerified
-          hasProfile
+      const mutation = gql`
+        mutation signIn($input: SignInInput!) {
+          signIn(input: $input) {
+            accessToken
+            expiredAt
+            isPhoneNumberVerified
+            hasProfile
+          }
         }
-      }`;
+      `;
 
       const authToken = new AuthToken(
         'accessToken',
@@ -109,10 +111,11 @@ describe('UserMutationResolver', () => {
       coordinate.longitude = 120.3;
       input.address.coordinate = coordinate;
 
-      // language=GraphQL
-      const mutation = `mutation enrollUser($input: EnrollUserInput!) {
-        enrollUser(input: $input)
-      }`;
+      const mutation = gql`
+        mutation enrollUser($input: EnrollUserInput!) {
+          enrollUser(input: $input)
+        }
+      `;
 
       // when
       const response = await request(app.getHttpServer())
@@ -157,10 +160,11 @@ describe('UserMutationResolver', () => {
       coordinate.longitude = 120.3;
       input.address.coordinate = coordinate;
 
-      // language=GraphQL
-      const mutation = `mutation enrollUser($input: EnrollUserInput!) {
-        enrollUser(input: $input)
-      }`;
+      const mutation = gql`
+        mutation enrollUser($input: EnrollUserInput!) {
+          enrollUser(input: $input)
+        }
+      `;
 
       userCommandUseCase.enroll.mockReturnValue(right(undefined));
       setMockUser();
@@ -188,10 +192,11 @@ describe('UserMutationResolver', () => {
       input.name = 'name';
       input.reason = 'reason';
 
-      // language=GraphQL
-      const mutation = `mutation leave($input: LeaveUserInput!) {
-        leave(input: $input)
-      }`;
+      const mutation = gql`
+        mutation leave($input: LeaveUserInput!) {
+          leave(input: $input)
+        }
+      `;
 
       userCommandUseCase.leave.mockReturnValue(right(undefined));
       setMockUser();
@@ -224,10 +229,11 @@ describe('UserMutationResolver', () => {
       coordinate.longitude = 120.3;
       input.coordinate = coordinate;
 
-      // language=GraphQL
-      const mutation = `mutation appendAddress($input: AddressInput!) {
-        appendAddress(input: $input)
-      }`;
+      const mutation = gql`
+        mutation appendAddress($input: AddressInput!) {
+          appendAddress(input: $input)
+        }
+      `;
 
       userCommandUseCase.appendAddress.mockReturnValue(right(undefined));
       setMockUser();
@@ -251,10 +257,11 @@ describe('UserMutationResolver', () => {
   describe('deleteAddress', () => {
     it('주소 삭제 요청에 성공한다', async () => {
       // given
-      // language=GraphQL
-      const mutation = `mutation deleteAddress {
-        deleteAddress(key: "5")
-      }`;
+      const mutation = gql`
+        mutation deleteAddress {
+          deleteAddress(key: "5")
+        }
+      `;
 
       userCommandUseCase.deleteAddress.mockReturnValue(right(undefined));
       setMockUser();
@@ -278,10 +285,11 @@ describe('UserMutationResolver', () => {
   describe('updateProfile', () => {
     it('프로필 정보를 수정한다.', async () => {
       // given
-      // language=GraphQL
-      const mutation = `mutation updateProfile($input: UpdateProfileInput!) {
-        updateProfile(input: $input)
-      }`;
+      const mutation = gql`
+        mutation updateProfile($input: UpdateProfileInput!) {
+          updateProfile(input: $input)
+        }
+      `;
 
       const input = new UpdateProfileInput();
       input.introduce = 'introduce';

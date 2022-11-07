@@ -11,7 +11,7 @@ import { mock } from 'jest-mock-extended';
 import {
   assertResolvesLeft,
   assertResolvesRight,
-} from '../../../../apps/app/test/fixture';
+} from '../../../../apps/app/test/fixture/utils';
 import { FakeHttpResponse } from '../../../http-client/test/fixture/FakeHttpResponse';
 
 describe('SmsSensService', () => {

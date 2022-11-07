@@ -8,6 +8,7 @@ import { SampleQueryResolver } from '../../../src/module/sample/adapter/in/gql/S
 import { SampleQueryUseCase } from '../../../src/module/sample/application/port/in/SampleQueryUseCase';
 import { Sample } from '../../../src/module/sample/domain/Sample';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('SampleQueryResolver', () => {
   let app: INestApplication;
@@ -35,8 +36,7 @@ describe('SampleQueryResolver', () => {
     it('주어진 샘플을 조회한다', async () => {
       // given
       const id = faker.database.mongodbObjectId();
-      // language=GraphQL
-      const query = `query {
+      const query = gql`query {
         sample(id: "${id}") {
           name
           email

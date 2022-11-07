@@ -6,7 +6,7 @@ import { UserRepositoryAdapter } from '../../../src/module/user/adapter/out/pers
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesRight } from '../../fixture/utils';
 
 describe('UserRepositoryAdapter', () => {
   let userRepositoryAdapter: UserRepositoryAdapter;

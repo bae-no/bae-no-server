@@ -12,6 +12,7 @@ import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('ChatQueryResolver', () => {
   const chatQueryUseCase = mock<ChatQueryUseCase>();
@@ -42,16 +43,17 @@ describe('ChatQueryResolver', () => {
       input.page = 1;
       input.size = 10;
 
-      // language=GraphQL
-      const query = `mutation chats($input: FindChatInput!) {
-        chats(input: $input) {
-          id
-          title
-          thumbnail
-          lastContent
-          unreadCount
+      const query = gql`
+        mutation chats($input: FindChatInput!) {
+          chats(input: $input) {
+            id
+            title
+            thumbnail
+            lastContent
+            unreadCount
+          }
         }
-      }`;
+      `;
       const chatResult = new FindChatResult(
         'id',
         'title',

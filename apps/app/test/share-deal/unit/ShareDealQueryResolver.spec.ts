@@ -14,6 +14,7 @@ import {
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { gql } from '../../fixture/utils';
 
 describe('ShareDealQueryResolver', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
@@ -46,21 +47,22 @@ describe('ShareDealQueryResolver', () => {
       input.size = 10;
       input.sortType = ShareDealSortType.LATEST;
 
-      // language=GraphQL
-      const query = `query shareDeals($input: FindShareDealInput!) {
-        shareDeals(input: $input) {
-          id
-          createdAt
-          title
-          distance
-          orderPrice
-          minParticipants
-          currentParticipants
-          status
-          thumbnail
-          category
+      const query = gql`
+        query shareDeals($input: FindShareDealInput!) {
+          shareDeals(input: $input) {
+            id
+            createdAt
+            title
+            distance
+            orderPrice
+            minParticipants
+            currentParticipants
+            status
+            thumbnail
+            category
+          }
         }
-      }`;
+      `;
 
       const shareDeal = ShareDealFactory.createOpen({
         id: '12345',
@@ -106,10 +108,11 @@ describe('ShareDealQueryResolver', () => {
   describe('myEndDealCount', () => {
     it('내가 참여완료한 공유딜 개수를 가져온다 ', async () => {
       // given
-      // language=GraphQL
-      const query = `query myEndDealCount {
-        myEndDealCount
-      }`;
+      const query = gql`
+        query myEndDealCount {
+          myEndDealCount
+        }
+      `;
       shareDealQueryRepositoryPort.countByStatus.mockReturnValue(right(10));
 
       // then

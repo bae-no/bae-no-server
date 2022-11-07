@@ -6,7 +6,7 @@ import { KakaoAuthResponse } from '../../../src/module/user/adapter/out/auth/res
 import { KakaoProfileResponse } from '../../../src/module/user/adapter/out/auth/response/KakaoProfileResponse';
 import { KakaoAuthStrategy } from '../../../src/module/user/adapter/out/auth/strategy/KakaoAuthStrategy';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('KakaoAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();

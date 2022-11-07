@@ -9,7 +9,7 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatCommandService', () => {
   const shareDealQueryUseCase = mock<ShareDealQueryUseCase>();

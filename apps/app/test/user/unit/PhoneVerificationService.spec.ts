@@ -14,7 +14,7 @@ import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerifica
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('PhoneVerificationService', () => {
   const phoneVerificationRepository = mock<PhoneVerificationRepositoryPort>();

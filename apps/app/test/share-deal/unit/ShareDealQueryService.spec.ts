@@ -6,8 +6,8 @@ import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/app
 import { ShareDealQueryService } from '../../../src/module/share-deal/application/service/ShareDealQueryService';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();

@@ -6,7 +6,7 @@ import { GoogleAuthResponse } from '../../../src/module/user/adapter/out/auth/re
 import { GoogleProfileResponse } from '../../../src/module/user/adapter/out/auth/response/GoogleProfileResponse';
 import { GoogleAuthStrategy } from '../../../src/module/user/adapter/out/auth/strategy/GoogleAuthStrategy';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('GoogleAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();

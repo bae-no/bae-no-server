@@ -12,8 +12,8 @@ import { ShareDealSortType } from '../../../src/module/share-deal/application/po
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealQueryRepositoryAdapter', () => {
   let shareDealRepositoryAdapter: ShareDealQueryRepositoryAdapter;

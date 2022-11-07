@@ -16,6 +16,7 @@ import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('ShareDealMutationResolver', () => {
   const sharedDealCommandUseCase = mock<ShareDealCommandUseCase>();
@@ -56,10 +57,11 @@ describe('ShareDealMutationResolver', () => {
       shareZoneInput.latitude = 50;
       input.shareZone = shareZoneInput;
 
-      // language=GraphQL
-      const mutation = `mutation openShareDeal($input: OpenShareDealInput!) {
-        openShareDeal(input: $input)
-      }`;
+      const mutation = gql`
+        mutation openShareDeal($input: OpenShareDealInput!) {
+          openShareDeal(input: $input)
+        }
+      `;
 
       sharedDealCommandUseCase.open.mockReturnValue(right(undefined));
 
@@ -85,10 +87,11 @@ describe('ShareDealMutationResolver', () => {
       const input = new JoinShareDealInput();
       input.shareDealId = 'abcd1234';
 
-      // language=GraphQL
-      const mutation = `mutation joinShareDeal($input: JoinShareDealInput!) {
-        joinShareDeal(input: $input)
-      }`;
+      const mutation = gql`
+        mutation joinShareDeal($input: JoinShareDealInput!) {
+          joinShareDeal(input: $input)
+        }
+      `;
 
       sharedDealCommandUseCase.join.mockReturnValue(
         left(new NotJoinableShareDealException('error')),
@@ -129,10 +132,11 @@ describe('ShareDealMutationResolver', () => {
       const input = new JoinShareDealInput();
       input.shareDealId = 'abcd1234';
 
-      // language=GraphQL
-      const mutation = `mutation joinShareDeal($input: JoinShareDealInput!) {
-        joinShareDeal(input: $input)
-      }`;
+      const mutation = gql`
+        mutation joinShareDeal($input: JoinShareDealInput!) {
+          joinShareDeal(input: $input)
+        }
+      `;
 
       sharedDealCommandUseCase.join.mockReturnValue(right(undefined));
 
@@ -158,10 +162,11 @@ describe('ShareDealMutationResolver', () => {
       const input = new StartShareDealInput();
       input.shareDealId = 'abcd1234';
 
-      // language=GraphQL
-      const mutation = `mutation startShareDeal($input: StartShareDealInput!) {
-        startShareDeal(input: $input)
-      }`;
+      const mutation = gql`
+        mutation startShareDeal($input: StartShareDealInput!) {
+          startShareDeal(input: $input)
+        }
+      `;
 
       sharedDealCommandUseCase.start.mockReturnValue(right(undefined));
 
@@ -185,10 +190,11 @@ describe('ShareDealMutationResolver', () => {
       const input = new StartShareDealInput();
       input.shareDealId = 'abcd1234';
 
-      // language=GraphQL
-      const mutation = `mutation startShareDeal($input: StartShareDealInput!) {
-        startShareDeal(input: $input)
-      }`;
+      const mutation = gql`
+        mutation startShareDeal($input: StartShareDealInput!) {
+          startShareDeal(input: $input)
+        }
+      `;
 
       sharedDealCommandUseCase.start.mockReturnValue(
         left(new IllegalStateException('error')),

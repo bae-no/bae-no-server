@@ -5,7 +5,7 @@ import { CreateSampleCommand } from '../../../src/module/sample/application/port
 import { SampleRepositoryPort } from '../../../src/module/sample/application/port/out/SampleRepositoryPort';
 import { SampleCommandService } from '../../../src/module/sample/application/service/SampleCommandService';
 import { Sample } from '../../../src/module/sample/domain/Sample';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesRight } from '../../fixture/utils';
 
 describe('SampleCommandService', () => {
   const sampleRepositoryPort = mock<SampleRepositoryPort>();

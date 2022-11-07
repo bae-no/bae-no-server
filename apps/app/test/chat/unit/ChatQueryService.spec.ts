@@ -9,8 +9,8 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
-import { assertResolvesRight } from '../../fixture';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();

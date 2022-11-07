@@ -13,7 +13,7 @@ import {
   assertResolvesLeft,
   assertResolvesRight,
   assertSome,
-} from '../../fixture';
+} from '../../fixture/utils';
 
 describe('UserQueryRepositoryAdapter', () => {
   let userQueryRepositoryAdapter: UserQueryRepositoryAdapter;

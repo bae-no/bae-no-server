@@ -3,7 +3,7 @@ import { addSeconds } from 'date-fns';
 import { ExpiredCodeException } from '../../../src/module/user/domain/exception/ExpiredCodeException';
 import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
-import { assertLeft, assertRight } from '../../fixture';
+import { assertLeft, assertRight } from '../../fixture/utils';
 
 describe('PhoneVerification', () => {
   describe('of', () => {

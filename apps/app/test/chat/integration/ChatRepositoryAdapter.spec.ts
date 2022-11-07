@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
-import { assertResolvesRight } from '../../fixture';
+import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatRepositoryAdapter', () => {
   let chatRepositoryAdapter: ChatRepositoryAdapter;

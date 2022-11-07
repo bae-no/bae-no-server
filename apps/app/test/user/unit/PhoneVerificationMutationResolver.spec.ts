@@ -13,6 +13,7 @@ import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { gql } from '../../fixture/utils';
 
 describe('PhoneVerificationMutationResolver ', () => {
   const phoneVerificationUseCase = mock<PhoneVerificationUseCase>();
@@ -43,10 +44,11 @@ describe('PhoneVerificationMutationResolver ', () => {
       const input = new SendPhoneVerificationCodeInput();
       input.phoneNumber = '01011112222';
 
-      // language=GraphQL
-      const mutation = `mutation sendCode($input: SendPhoneVerificationCodeInput!) {
-        sendPhoneVerificationCode(input: $input)
-      }`;
+      const mutation = gql`
+        mutation sendCode($input: SendPhoneVerificationCodeInput!) {
+          sendPhoneVerificationCode(input: $input)
+        }
+      `;
 
       phoneVerificationUseCase.sendCode.mockReturnValue(TE.right(undefined));
 
@@ -72,10 +74,11 @@ describe('PhoneVerificationMutationResolver ', () => {
       const input = new VerifyPhoneVerificationCodeInput();
       input.code = '01011112222';
 
-      // language=GraphQL
-      const mutation = `mutation verify($input: VerifyPhoneVerificationCodeInput!) {
-        verifyPhoneVerificationCode(input: $input)
-      }`;
+      const mutation = gql`
+        mutation verify($input: VerifyPhoneVerificationCodeInput!) {
+          verifyPhoneVerificationCode(input: $input)
+        }
+      `;
 
       phoneVerificationUseCase.verify.mockReturnValue(TE.right(undefined));
 
@@ -99,10 +102,11 @@ describe('PhoneVerificationMutationResolver ', () => {
       const input = new VerifyPhoneVerificationCodeInput();
       input.code = '01011112222';
 
-      // language=GraphQL
-      const mutation = `mutation verify($input: VerifyPhoneVerificationCodeInput!) {
-        verifyPhoneVerificationCode(input: $input)
-      }`;
+      const mutation = gql`
+        mutation verify($input: VerifyPhoneVerificationCodeInput!) {
+          verifyPhoneVerificationCode(input: $input)
+        }
+      `;
 
       phoneVerificationUseCase.verify.mockReturnValue(
         TE.left(new MismatchedCodeException('mismatch')),
@@ -143,10 +147,11 @@ describe('PhoneVerificationMutationResolver ', () => {
       const input = new VerifyPhoneVerificationCodeInput();
       input.code = '01011112222';
 
-      // language=GraphQL
-      const mutation = `mutation verify($input: VerifyPhoneVerificationCodeInput!) {
-        verifyPhoneVerificationCode(input: $input)
-      }`;
+      const mutation = gql`
+        mutation verify($input: VerifyPhoneVerificationCodeInput!) {
+          verifyPhoneVerificationCode(input: $input)
+        }
+      `;
 
       phoneVerificationUseCase.verify.mockReturnValue(
         TE.left(new ExpiredCodeException('expired')),

@@ -17,6 +17,7 @@ import {
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
 import { UserFactory } from '../../fixture/UserFactory';
+import { gql } from '../../fixture/utils';
 
 describe('UserQueryResolver', () => {
   const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
@@ -44,10 +45,11 @@ describe('UserQueryResolver', () => {
   describe('hasNickname', () => {
     it('닉네임 중복여부 확인에 성공한다', async () => {
       // given
-      // language=GraphQL
-      const query = `query hasNickname {
-        hasNickname(nickname: "nickname")
-      }`;
+      const query = gql`
+        query hasNickname {
+          hasNickname(nickname: "nickname")
+        }
+      `;
 
       userQueryRepositoryPort.findByNickname.mockReturnValue(right(none));
 
@@ -70,20 +72,21 @@ describe('UserQueryResolver', () => {
   describe('addresses', () => {
     it('사용자 주소 목록을 가져온다', async () => {
       // given
-      // language=GraphQL
-      const query = `query addresses {
-        addresses {
-          key
-          alias
-          road
-          detail
-          type
-          coordinate {
-            latitude
-            longitude
+      const query = gql`
+        query addresses {
+          addresses {
+            key
+            alias
+            road
+            detail
+            type
+            coordinate {
+              latitude
+              longitude
+            }
           }
         }
-      }`;
+      `;
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
       user.enroll(
@@ -124,15 +127,16 @@ describe('UserQueryResolver', () => {
   describe('profile', () => {
     it('사용자 프로필 정보를 조회한다.', async () => {
       // given
-      // language=GraphQL
-      const query = `query profile {
-        profile {
-          nickname
-          phoneNumber
-          imageUri
-          introduce
+      const query = gql`
+        query profile {
+          profile {
+            nickname
+            phoneNumber
+            imageUri
+            introduce
+          }
         }
-      }`;
+      `;
 
       const user = UserFactory.create({
         nickname: 'nickname',

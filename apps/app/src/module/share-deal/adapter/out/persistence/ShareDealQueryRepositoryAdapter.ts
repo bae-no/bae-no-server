@@ -8,6 +8,7 @@ import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
+import { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
@@ -54,6 +55,12 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       tryCatchDB(() => this.prisma.shareDeal.findMany(args)),
       TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
+  }
+
+  override findByNearest(
+    command: FindShareDealByNearestCommand,
+  ): TaskEither<DBError, ShareDeal[]> {
+    throw new Error(command.addressKey.toString());
   }
 
   override findById(

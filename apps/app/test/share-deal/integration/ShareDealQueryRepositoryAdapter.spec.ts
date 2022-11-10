@@ -7,6 +7,7 @@ import { addDays, compareDesc } from 'date-fns';
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealQueryRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
 import { FindByUserShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindByUserShareDealCommand';
+import { FindShareDealByNearestCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
@@ -197,6 +198,66 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
       // when
       const result = shareDealRepositoryAdapter.find(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(2);
+        const result = value.every((v) =>
+          [ShareDealStatus.OPEN, ShareDealStatus.START].includes(v.status),
+        );
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('findByNearest', () => {
+    it('오픈 또는 시작 상태인 공유딜만 가져온다', async () => {
+      // given
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealFactory.createOpen(),
+          ShareDealFactory.create({ status: ShareDealStatus.START }),
+          ShareDealFactory.create({ status: ShareDealStatus.CLOSE }),
+          ShareDealFactory.create({ status: ShareDealStatus.END }),
+        ].map(ShareDealOrmMapper.toOrm),
+      });
+      const dto = FindShareDealByNearestCommand.of({
+        latitude: 45,
+        longitude: 123,
+        size: 5,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.findByNearest(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(2);
+        const result = value.every((v) =>
+          [ShareDealStatus.OPEN, ShareDealStatus.START].includes(v.status),
+        );
+        expect(result).toBe(true);
+      });
+    });
+
+    it('오픈 또는 시작 상태인 공유딜만 가져온다', async () => {
+      // given
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealFactory.createOpen(),
+          ShareDealFactory.create({ status: ShareDealStatus.START }),
+          ShareDealFactory.create({ status: ShareDealStatus.CLOSE }),
+          ShareDealFactory.create({ status: ShareDealStatus.END }),
+        ].map(ShareDealOrmMapper.toOrm),
+      });
+      const dto = FindShareDealByNearestCommand.of({
+        latitude: 45,
+        longitude: 123,
+        size: 5,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.findByNearest(dto);
 
       // then
       await assertResolvesRight(result, (value) => {

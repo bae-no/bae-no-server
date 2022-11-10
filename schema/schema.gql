@@ -88,6 +88,16 @@ input FindChatInput {
   status: ShareDealStatus!
 }
 
+input FindShareDealByNearestInput {
+  addressKey: Int!
+  category: FoodCategory
+  keyword: String
+
+  """페이지 번호, 0부터 시작"""
+  page: Int!
+  size: Int!
+}
+
 input FindShareDealInput {
   category: FoodCategory
   keyword: String
@@ -207,6 +217,9 @@ type Query {
 
   """공유딜 목록"""
   shareDeals(input: FindShareDealInput!): [ShareDealResponse!]!
+
+  """공유딜 목록 (가까운 순)"""
+  shareDealsByNearest(input: FindShareDealByNearestInput!): [ShareDealResponse!]!
 }
 
 type SampleResponse {

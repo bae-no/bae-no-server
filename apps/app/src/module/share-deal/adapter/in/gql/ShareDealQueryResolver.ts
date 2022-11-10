@@ -6,6 +6,7 @@ import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSess
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
+import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
 import { ShareDealResponse } from './response/ShareDealResponse';
 
@@ -22,6 +23,17 @@ export class ShareDealQueryResolver {
     return pipe(
       input.toCommand(),
       (command) => this.shareDealQueryRepositoryPort.find(command),
+      toResponseArray(ShareDealResponse.of),
+    )();
+  }
+
+  @Query(() => [ShareDealResponse], { description: '공유딜 목록 (가까운 순)' })
+  async shareDealsByNearest(
+    @Args('input') input: FindShareDealByNearestInput,
+  ): Promise<ShareDealResponse[]> {
+    return pipe(
+      input.toCommand(),
+      (command) => this.shareDealQueryRepositoryPort.findByNearest(command),
       toResponseArray(ShareDealResponse.of),
     )();
   }

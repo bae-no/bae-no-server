@@ -4,7 +4,7 @@ import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { pipe } from 'fp-ts/function';
+import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
@@ -60,7 +60,29 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   override findByNearest(
     command: FindShareDealByNearestCommand,
   ): TaskEither<DBError, ShareDeal[]> {
-    throw new Error(command.addressKey.toString());
+    const args: Prisma.ShareDealFindRawArgs = {
+      filter: {
+        status: { $in: [ShareDealStatus.OPEN, ShareDealStatus.START] },
+        ...(command.keyword ? { title: { $regex: command.keyword } } : {}),
+        ...(command.category ? { category: command.category } : {}),
+      },
+      options: {
+        skip: command.skip,
+        take: command.size,
+        projection: { _id: true },
+      },
+    };
+
+    return pipe(
+      tryCatchDB(() => this.prisma.shareDeal.findRaw(args)),
+      TE.map((row) => unsafeCoerce<any, { _id: { $oid: string } }[]>(row)),
+      TE.map((rows) =>
+        rows.map(
+          ({ _id: { $oid: id } }) => id,
+        ),
+      ),
+    );
+    TE.map(() => [])
   }
 
   override findById(

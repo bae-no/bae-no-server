@@ -1,6 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsPositive, Min } from 'class-validator';
 
+import { Coordinate } from '../../../../../user/domain/vo/Coordinate';
 import { FindShareDealByNearestCommand } from '../../../../application/port/out/dto/FindShareDealByNearestCommand';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
@@ -24,11 +25,12 @@ export class FindShareDealByNearestInput {
   @Min(0)
   addressKey: number;
 
-  toCommand(): FindShareDealByNearestCommand {
+  toCommand(coordinate: Coordinate): FindShareDealByNearestCommand {
     return FindShareDealByNearestCommand.of({
       keyword: this.keyword,
       category: this.category,
-      addressKey: this.addressKey,
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
       page: this.page,
       size: this.size,
     });

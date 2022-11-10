@@ -126,4 +126,8 @@ export class User extends BaseEntity<UserProps> {
 
     return this;
   }
+
+  findAddress(key: number): Address | undefined {
+    return this.props.addressList.find(key);
+  }
 }

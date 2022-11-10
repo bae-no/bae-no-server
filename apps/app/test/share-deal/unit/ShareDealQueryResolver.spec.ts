@@ -3,6 +3,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
+import { FindShareDealByNearestInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealByNearestInput';
 import { FindShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealInput';
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
@@ -86,6 +87,74 @@ describe('ShareDealQueryResolver', () => {
         {
           "data": {
             "shareDeals": [
+              {
+                "category": "CHINESE",
+                "createdAt": "2022-01-01T00:00:00.000Z",
+                "currentParticipants": 3,
+                "distance": 0,
+                "id": "12345",
+                "minParticipants": 10,
+                "orderPrice": 1000,
+                "status": "OPEN",
+                "thumbnail": "thumbnail",
+                "title": "title",
+              },
+            ],
+          },
+        }
+      `);
+    });
+  });
+
+  describe('shareDealsByNearest', () => {
+    it('공유딜 목록을 조회한다', async () => {
+      // given
+      const input = new FindShareDealByNearestInput();
+      input.page = 1;
+      input.size = 10;
+      input.addressKey = 1;
+
+      const query = gql`
+        query shareDealsByNearest($input: FindShareDealByNearestInput!) {
+          shareDealsByNearest(input: $input) {
+            id
+            createdAt
+            title
+            distance
+            orderPrice
+            minParticipants
+            currentParticipants
+            status
+            thumbnail
+            category
+          }
+        }
+      `;
+
+      const shareDeal = ShareDealFactory.createOpen({
+        id: '12345',
+        orderPrice: 1000,
+        title: 'title',
+        createdAt: new Date('2022-01-01'),
+        thumbnail: 'thumbnail',
+        participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
+        category: FoodCategory.CHINESE,
+      });
+
+      shareDealQueryRepositoryPort.findByNearest.mockReturnValue(
+        right([shareDeal]),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "shareDealsByNearest": [
               {
                 "category": "CHINESE",
                 "createdAt": "2022-01-01T00:00:00.000Z",

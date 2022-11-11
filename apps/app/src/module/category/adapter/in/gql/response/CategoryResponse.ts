@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { AuthCategory } from './category/AuthCategory';
+import { FoodCatalog } from './category/FoodCatalog';
 import { ShareDealSortCategory } from './category/ShareDealSortCategory';
 
 @ObjectType()
@@ -8,6 +9,7 @@ export class CategoryResponse {
   static readonly VALUES = new CategoryResponse(
     AuthCategory.VALUES,
     ShareDealSortCategory.VALUES,
+    FoodCatalog.VALUES,
   );
 
   @Field(() => [AuthCategory])
@@ -16,8 +18,16 @@ export class CategoryResponse {
   @Field(() => [ShareDealSortCategory])
   shareDealSort: ShareDealSortCategory[];
 
-  constructor(auth: AuthCategory[], shareDealSort: ShareDealSortCategory[]) {
+  @Field(() => [FoodCatalog])
+  foodCatalog: FoodCatalog[];
+
+  constructor(
+    auth: AuthCategory[],
+    shareDealSort: ShareDealSortCategory[],
+    foodCatalog: FoodCatalog[],
+  ) {
     this.auth = auth;
     this.shareDealSort = shareDealSort;
+    this.foodCatalog = foodCatalog;
   }
 }

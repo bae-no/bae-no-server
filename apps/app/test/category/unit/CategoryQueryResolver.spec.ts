@@ -30,6 +30,10 @@ describe('CategoryQueryResolver', () => {
               code
               name
             }
+            foodCatalog {
+              code
+              name
+            }
           }
         }
       `;
@@ -56,6 +60,64 @@ describe('CategoryQueryResolver', () => {
                 {
                   "code": "APPLE",
                   "name": "애플",
+                },
+              ],
+              "foodCatalog": [
+                {
+                  "code": "KOREAN",
+                  "name": "한식",
+                },
+                {
+                  "code": "CHINESE",
+                  "name": "중식",
+                },
+                {
+                  "code": "JAPANESE",
+                  "name": "일식",
+                },
+                {
+                  "code": "AMERICAN",
+                  "name": "양식",
+                },
+                {
+                  "code": "STREET",
+                  "name": "분식",
+                },
+                {
+                  "code": "CHICKEN",
+                  "name": "치킨",
+                },
+                {
+                  "code": "PIZZA",
+                  "name": "피자",
+                },
+                {
+                  "code": "BURGER",
+                  "name": "버거",
+                },
+                {
+                  "code": "SOUP",
+                  "name": "찜/탕",
+                },
+                {
+                  "code": "MEAT",
+                  "name": "고기/구이",
+                },
+                {
+                  "code": "ASIAN",
+                  "name": "아시아",
+                },
+                {
+                  "code": "DESERT",
+                  "name": "디저트",
+                },
+                {
+                  "code": "SALAD",
+                  "name": "샐러드",
+                },
+                {
+                  "code": "LUNCH_BOX",
+                  "name": "도시락",
                 },
               ],
               "shareDealSort": [

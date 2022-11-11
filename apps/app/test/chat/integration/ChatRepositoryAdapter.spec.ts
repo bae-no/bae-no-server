@@ -22,7 +22,7 @@ describe('ChatRepositoryAdapter', () => {
 
   afterAll(async () => prisma.$disconnect());
 
-  beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
+  beforeEach(async () => prisma.$transaction([prisma.chat.deleteMany()]));
 
   describe('create', () => {
     it('주어진 채팅을 생성한다', async () => {

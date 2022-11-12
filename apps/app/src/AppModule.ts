@@ -3,6 +3,7 @@ import * as path from 'path';
 import { EventEmitterModule } from '@app/event-emitter/EventEmitterModule';
 import { PrismaModule } from '@app/prisma/PrismaModule';
 import { PubSubModule } from '@app/pub-sub/PubSubModule';
+import { PushMessageModule } from '@app/push-message/PushMessageModule';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -53,6 +54,7 @@ import { UserModule } from './module/user/UserModule';
     EventEmitterModule,
     PrismaModule,
     PubSubModule,
+    PushMessageModule,
     CategoryModule,
     SampleModule,
     UserModule,

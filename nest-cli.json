@@ -80,6 +80,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/event-emitter/tsconfig.lib.json"
       }
+    },
+    "push-message": {
+      "type": "library",
+      "root": "libs/push-message",
+      "entryFile": "index",
+      "sourceRoot": "libs/push-message/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/push-message/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { PushMessageAdapter } from '@app/push-message/PushMessageAdapter';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
@@ -13,6 +14,8 @@ describe('AppModule', () => {
       imports: [AppModule],
     })
       .overrideProvider(PrismaService)
+      .useValue({})
+      .overrideProvider(PushMessageAdapter)
       .useValue({})
       .compile();
 

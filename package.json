@@ -49,6 +49,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",
     "date-fns": "2.29.3",
+    "firebase-admin": "11.2.1",
     "fp-ts": "2.13.1",
     "graphql": "16.6.0",
     "graphql-subscriptions": "2.0.0",
@@ -131,7 +132,8 @@
       "^@app/http-client(|/.*)$": "<rootDir>/libs/http-client/src/$1",
       "^@app/custom(|/.*)$": "<rootDir>/libs/custom/src/$1",
       "^@app/sms(|/.*)$": "<rootDir>/libs/sms/src/$1",
-      "^@app/event-emitter(|/.*)$": "<rootDir>/libs/event-emitter/src/$1"
+      "^@app/event-emitter(|/.*)$": "<rootDir>/libs/event-emitter/src/$1",
+      "^@app/push-message(|/.*)$": "<rootDir>/libs/push-message/src/$1"
     }
   }
 }

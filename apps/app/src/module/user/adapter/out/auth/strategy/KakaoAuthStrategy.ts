@@ -26,10 +26,10 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   constructor(
     private readonly httpClientPort: HttpClientPort,
-    private readonly config: ConfigService,
+    configService: ConfigService,
   ) {
-    this.CLIENT_ID = this.config.get('KAKAO_CLIENT_ID', '');
-    this.REDIRECT_URL = this.config.get('KAKAO_REDIRECT_URL', '');
+    this.CLIENT_ID = configService.get('KAKAO_CLIENT_ID', '');
+    this.REDIRECT_URL = configService.get('KAKAO_REDIRECT_URL', '');
   }
 
   request(code: string): TaskEither<AuthError, Auth> {

@@ -64,6 +64,12 @@
       ],
       "@app/event-emitter/*": [
         "libs/event-emitter/src/*"
+      ],
+      "@app/push-message": [
+        "libs/push-message/src"
+      ],
+      "@app/push-message/*": [
+        "libs/push-message/src/*"
       ]
     }
   }

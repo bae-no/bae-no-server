@@ -3,21 +3,28 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
+import { FindShareDealByNearestInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealByNearestInput';
 import { FindShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealInput';
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
+import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
 import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { UserFactory } from '../../fixture/UserFactory';
 import { gql } from '../../fixture/utils';
 
 describe('ShareDealQueryResolver', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
+  const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -28,6 +35,10 @@ describe('ShareDealQueryResolver', () => {
           provide: ShareDealQueryRepositoryPort,
           useValue: shareDealQueryRepositoryPort,
         },
+        {
+          provide: UserQueryRepositoryPort,
+          useValue: userQueryRepositoryPort,
+        },
       ],
     });
     setMockUser();
@@ -37,6 +48,7 @@ describe('ShareDealQueryResolver', () => {
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
+    mockReset(userQueryRepositoryPort);
   });
 
   describe('shareDeals', () => {
@@ -86,6 +98,80 @@ describe('ShareDealQueryResolver', () => {
         {
           "data": {
             "shareDeals": [
+              {
+                "category": "CHINESE",
+                "createdAt": "2022-01-01T00:00:00.000Z",
+                "currentParticipants": 3,
+                "distance": 0,
+                "id": "12345",
+                "minParticipants": 10,
+                "orderPrice": 1000,
+                "status": "OPEN",
+                "thumbnail": "thumbnail",
+                "title": "title",
+              },
+            ],
+          },
+        }
+      `);
+    });
+  });
+
+  describe('shareDealsByNearest', () => {
+    it('공유딜 목록을 조회한다', async () => {
+      // given
+      const input = new FindShareDealByNearestInput();
+      input.page = 1;
+      input.size = 10;
+      input.addressKey = 0;
+
+      const query = gql`
+        query shareDealsByNearest($input: FindShareDealByNearestInput!) {
+          shareDealsByNearest(input: $input) {
+            id
+            createdAt
+            title
+            distance
+            orderPrice
+            minParticipants
+            currentParticipants
+            status
+            thumbnail
+            category
+          }
+        }
+      `;
+
+      const user = UserFactory.create({
+        addressList: UserAddressList.of([
+          new Address('a', 'b', 'c', AddressType.ETC, 1, 1),
+        ]),
+      });
+      const shareDeal = ShareDealFactory.createOpen({
+        id: '12345',
+        orderPrice: 1000,
+        title: 'title',
+        createdAt: new Date('2022-01-01'),
+        thumbnail: 'thumbnail',
+        participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
+        category: FoodCategory.CHINESE,
+      });
+
+      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+      shareDealQueryRepositoryPort.findByNearest.mockReturnValue(
+        right([shareDeal]),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "shareDealsByNearest": [
               {
                 "category": "CHINESE",
                 "createdAt": "2022-01-01T00:00:00.000Z",

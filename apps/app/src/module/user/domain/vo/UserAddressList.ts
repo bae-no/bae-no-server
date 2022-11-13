@@ -29,4 +29,8 @@ export class UserAddressList {
 
     return UserAddressList.of(filtered);
   }
+
+  find(key: number): Address | undefined {
+    return this.addresses[key];
+  }
 }

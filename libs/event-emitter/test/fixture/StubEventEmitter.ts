@@ -14,8 +14,4 @@ export class StubEventEmitter extends EventEmitterPort {
   override emit(event: string, data: unknown) {
     this.#queue.set(event, data);
   }
-
-  emitAsync(event: string, data: unknown): void {
-    this.#queue.set(event, data);
-  }
 }

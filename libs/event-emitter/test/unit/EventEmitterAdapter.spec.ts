@@ -31,7 +31,7 @@ describe('EventEmitterAdapter', () => {
     });
 
     // when
-    eventEmitterAdapter.emitAsync(event, 'data');
+    eventEmitterAdapter.emit(event, 'data');
 
     // then
     expect(actual).toBe('data');

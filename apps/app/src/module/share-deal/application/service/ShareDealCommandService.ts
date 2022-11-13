@@ -64,7 +64,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       TE.map((deal) => deal.start()),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(() =>
-        this.eventEmitterPort.emitAsync(
+        this.eventEmitterPort.emit(
           ShareDealStartedEvent.EVENT_NAME,
           command.shareDealId,
         ),

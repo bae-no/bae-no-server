@@ -1,8 +1,9 @@
-import { TE } from '@app/custom/fp-ts';
+import { TE, RNEA, O } from '@app/custom/fp-ts';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
+import { head, ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray';
 
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStartedEvent } from '../../../../share-deal/domain/event/ShareDealStartedEvent';
@@ -21,10 +22,12 @@ export class ChatEventListener {
   ) {}
 
   @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
-  async handleChatWrittenEvent(payload: Chat) {
-    this.pubSubPort.publish(
-      ChatWrittenTrigger(payload.shareDealId),
-      ChatWrittenResponse.of(payload.message),
+  handleChatWrittenEvent(payload: ReadonlyNonEmptyArray<Chat>) {
+    pipe(head(payload), (chat) =>
+      this.pubSubPort.publish(
+        ChatWrittenTrigger(chat.shareDealId),
+        ChatWrittenResponse.of(chat.message),
+      ),
     );
   }
 
@@ -38,11 +41,12 @@ export class ChatEventListener {
           shareDeal.participantInfo.ids,
         ),
       ),
-      TE.chain((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chat) =>
-        this.pubSubPort.publish(
-          ChatWrittenTrigger(shareDealId),
-          ChatWrittenResponse.of(chat[0].message),
+      TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
+      TE.map((chats) =>
+        pipe(
+          chats,
+          RNEA.fromArray,
+          O.map((nonEmptyChats) => this.handleChatWrittenEvent(nonEmptyChats)),
         ),
       ),
     )();

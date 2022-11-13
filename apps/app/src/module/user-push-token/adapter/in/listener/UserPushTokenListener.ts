@@ -1,11 +1,9 @@
-import { TE, RNEA } from '@app/custom/fp-ts';
+import { RNEA, TE } from '@app/custom/fp-ts';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
-import { head, ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray';
 
-import { Chat } from '../../../../chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
 
@@ -17,18 +15,18 @@ export class UserPushTokenListener {
   ) {}
 
   @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
-  async handleChatWrittenEvent(payload: ReadonlyNonEmptyArray<Chat>) {
+  async handleChatWrittenEvent(event: ChatWrittenEvent) {
     await pipe(
-      this.userPushTokenQueryRepositoryAdapter.findByUserIds(
-        pipe(
-          payload,
-          RNEA.map((p) => p.userId),
-        ),
+      RNEA.fromArray(event.chats),
+      TE.fromOption(() => undefined),
+      TE.map(RNEA.map((chat) => chat.id)),
+      TE.chainW((ids) =>
+        this.userPushTokenQueryRepositoryAdapter.findByUserIds(ids),
       ),
       TE.chainW((tokens) =>
         TE.sequenceArray(
           tokens.map((token) =>
-            this.pushMessagePort.send(token.token, head(payload).content),
+            this.pushMessagePort.send(token.token, event.chats[0].content),
           ),
         ),
       ),

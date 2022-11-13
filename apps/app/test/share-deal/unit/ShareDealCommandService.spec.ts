@@ -117,9 +117,9 @@ describe('ShareDealCommandService', () => {
 
       // then
       await assertResolvesRight(result, () => {
-        expect(eventEmitter.get(ShareDealStartedEvent.EVENT_NAME)).toBe(
-          command.shareDealId,
-        );
+        expect(
+          eventEmitter.get(ShareDealStartedEvent.EVENT_NAME),
+        ).toStrictEqual(new ShareDealStartedEvent(command.shareDealId));
         expect(shareDeal.status).toBe(ShareDealStatus.START);
       });
     });

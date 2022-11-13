@@ -1,8 +1,7 @@
-import { TE, RNEA, O } from '@app/custom/fp-ts';
+import { TE } from '@app/custom/fp-ts';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { Injectable } from '@nestjs/common';
-import { constVoid, pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
+import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryUseCase } from '../../../share-deal/application/port/in/ShareDealQueryUseCase';
@@ -40,17 +39,11 @@ export class ChatCommandService extends ChatCommandUseCase {
         ),
       ),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chats) => this.emitChatWrittenEvent(chats)),
-      TE.map(constVoid),
-    );
-  }
-
-  private emitChatWrittenEvent(chats: Chat[]): Option<void> {
-    return pipe(
-      RNEA.fromArray(chats),
-      O.map((chats) => new ChatWrittenEvent(chats)),
-      O.map((event) =>
-        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, event.payload),
+      TE.map((chats) =>
+        this.eventEmitterPort.emit(
+          ChatWrittenEvent.EVENT_NAME,
+          new ChatWrittenEvent(chats),
+        ),
       ),
     );
   }

@@ -73,16 +73,12 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       },
     };
 
+    // TODO: findByNearest
     return pipe(
       tryCatchDB(() => this.prisma.shareDeal.findRaw(args)),
       TE.map((row) => unsafeCoerce<any, { _id: { $oid: string } }[]>(row)),
-      TE.map((rows) =>
-        rows.map(
-          ({ _id: { $oid: id } }) => id,
-        ),
-      ),
+      TE.map(() => []),
     );
-    TE.map(() => [])
   }
 
   override findById(

@@ -10,15 +10,21 @@ import { ShareDealSortType } from '../../../src/module/share-deal/application/po
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
+import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
 import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { UserFactory } from '../../fixture/UserFactory';
 import { gql } from '../../fixture/utils';
 
 describe('ShareDealQueryResolver', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
+  const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -29,6 +35,10 @@ describe('ShareDealQueryResolver', () => {
           provide: ShareDealQueryRepositoryPort,
           useValue: shareDealQueryRepositoryPort,
         },
+        {
+          provide: UserQueryRepositoryPort,
+          useValue: userQueryRepositoryPort,
+        },
       ],
     });
     setMockUser();
@@ -38,6 +48,7 @@ describe('ShareDealQueryResolver', () => {
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
+    mockReset(userQueryRepositoryPort);
   });
 
   describe('shareDeals', () => {
@@ -112,7 +123,7 @@ describe('ShareDealQueryResolver', () => {
       const input = new FindShareDealByNearestInput();
       input.page = 1;
       input.size = 10;
-      input.addressKey = 1;
+      input.addressKey = 0;
 
       const query = gql`
         query shareDealsByNearest($input: FindShareDealByNearestInput!) {
@@ -131,6 +142,11 @@ describe('ShareDealQueryResolver', () => {
         }
       `;
 
+      const user = UserFactory.create({
+        addressList: UserAddressList.of([
+          new Address('a', 'b', 'c', AddressType.ETC, 1, 1),
+        ]),
+      });
       const shareDeal = ShareDealFactory.createOpen({
         id: '12345',
         orderPrice: 1000,
@@ -141,6 +157,7 @@ describe('ShareDealQueryResolver', () => {
         category: FoodCategory.CHINESE,
       });
 
+      userQueryRepositoryPort.findById.mockReturnValue(right(user));
       shareDealQueryRepositoryPort.findByNearest.mockReturnValue(
         right([shareDeal]),
       );

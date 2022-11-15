@@ -24,6 +24,24 @@ describe('UserPushTokenEventListener', () => {
   });
 
   describe('handleChatWrittenEvent', () => {
+    it('본인이 작성한 채팅은 알림을 보내지 않는다', async () => {
+      // given
+      const chats = new ChatWrittenEvent([
+        Chat.of({
+          shareDealId: 'shareDealId',
+          userId: 'authorId',
+          message: Message.normal('authorId', 'content', false),
+        }),
+      ]);
+
+      // when
+      await shareDealCommandService.handleChatWrittenEvent(chats);
+
+      // then
+      expect(pushMessage.pushToken).toBe('');
+      expect(pushMessage.content).toBe('');
+    });
+
     it('채팅 푸시 메시지를 전송한다', async () => {
       // given
       const chats = new ChatWrittenEvent([

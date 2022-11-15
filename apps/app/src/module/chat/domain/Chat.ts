@@ -29,6 +29,10 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.message.content;
   }
 
+  get isAuthor(): boolean {
+    return this.message.authorId === this.userId;
+  }
+
   static of(props: ChatProps) {
     return new Chat(props);
   }

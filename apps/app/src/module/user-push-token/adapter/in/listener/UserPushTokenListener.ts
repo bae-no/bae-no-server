@@ -17,7 +17,7 @@ export class UserPushTokenListener {
   @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
     await pipe(
-      RNEA.fromArray(event.chats),
+      RNEA.fromArray(event.chatsWithoutAuthor),
       TE.fromOption(() => undefined),
       TE.map(RNEA.map((chat) => chat.id)),
       TE.chainW((ids) =>

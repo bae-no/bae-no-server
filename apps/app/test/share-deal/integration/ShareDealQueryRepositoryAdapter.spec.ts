@@ -13,6 +13,7 @@ import { ShareDealSortType } from '../../../src/module/share-deal/application/po
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
@@ -211,7 +212,51 @@ describe('ShareDealQueryRepositoryAdapter', () => {
   });
 
   describe('findByNearest', () => {
-    it.skip('오픈 또는 시작 상태인 공유딜만 가져온다', async () => {
+    beforeAll(async () => {
+      await prisma.$runCommandRaw({
+        createIndexes: 'ShareDeal',
+        indexes: [
+          {
+            key: { 'zone.coordinate': '2dsphere' },
+            name: 'zoneIndex',
+          },
+        ],
+      });
+    });
+
+    it('주어진 거리와 가까운 순으로 정렬한다', async () => {
+      // given
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealFactory.createOpen({
+            zone: new ShareZone('yohan', 'detail', 37.566998, 127.066402),
+          }),
+          ShareDealFactory.createOpen({
+            zone: new ShareZone('int', 'detail', 37.3418754, 126.9744649),
+          }),
+          ShareDealFactory.createOpen({
+            zone: new ShareZone('haru', 'detail', 37.366278237, 127.1118002),
+          }),
+        ].map(ShareDealOrmMapper.toOrm),
+      });
+      const dto = FindShareDealByNearestCommand.of({
+        latitude: 37.4003408,
+        longitude: 127.1067104,
+        size: 5,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.findByNearest(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        const roads = value.map((v) => v.zone.road);
+        const nearRoads = ['haru', 'int', 'yohan'];
+        expect(roads).toStrictEqual(nearRoads);
+      });
+    });
+
+    it('오픈 또는 시작 상태인 공유딜만 가져온다', async () => {
       // given
       await prisma.shareDeal.createMany({
         data: [

@@ -3,9 +3,9 @@ import { Chat } from '../Chat';
 export class ChatWrittenEvent {
   static readonly EVENT_NAME = 'chat.written';
 
-  constructor(private readonly chat: Chat) {}
+  constructor(readonly chats: Chat[]) {}
 
-  get payload(): Chat {
-    return this.chat;
+  get chatsWithoutAuthor(): Chat[] {
+    return this.chats.filter((chat) => !chat.isAuthor);
   }
 }

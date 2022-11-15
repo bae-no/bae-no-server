@@ -29,6 +29,10 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.message.content;
   }
 
+  get isAuthor(): boolean {
+    return this.message.authorId === this.userId;
+  }
+
   static of(props: ChatProps) {
     return new Chat(props);
   }
@@ -51,12 +55,13 @@ export class Chat extends BaseEntity<ChatProps> {
   static createByStartShareDeal(
     shareDealId: string,
     participantIds: string[],
+    authorId: string,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
         userId: id,
-        message: Message.startShareDealMessage(''),
+        message: Message.startShareDealMessage(authorId),
       }),
     );
   }

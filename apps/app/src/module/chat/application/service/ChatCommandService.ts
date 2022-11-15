@@ -1,7 +1,7 @@
 import { TE } from '@app/custom/fp-ts';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { Injectable } from '@nestjs/common';
-import { constVoid, pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryUseCase } from '../../../share-deal/application/port/in/ShareDealQueryUseCase';
@@ -39,11 +39,12 @@ export class ChatCommandService extends ChatCommandUseCase {
         ),
       ),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chats) => new ChatWrittenEvent(chats[0])),
-      TE.map((event) =>
-        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, event.payload),
+      TE.map((chats) =>
+        this.eventEmitterPort.emit(
+          ChatWrittenEvent.EVENT_NAME,
+          new ChatWrittenEvent(chats),
+        ),
       ),
-      TE.map(constVoid),
     );
   }
 }

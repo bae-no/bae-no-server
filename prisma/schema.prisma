@@ -31,6 +31,14 @@ model User {
   leaveReason LeaveReason?
 }
 
+model UserPushToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  token     String
+  userId    String   @unique @db.ObjectId
+}
+
 type LeaveReason {
   createdAt DateTime @default(now())
   name      String

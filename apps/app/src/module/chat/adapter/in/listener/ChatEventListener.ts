@@ -1,4 +1,5 @@
-import { TE } from '@app/custom/fp-ts';
+import { O, RNEA, TE } from '@app/custom/fp-ts';
+import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -18,32 +19,37 @@ export class ChatEventListener {
     private readonly pubSubPort: PubSubPort,
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
     private readonly chatRepositoryPort: ChatRepositoryPort,
+    private readonly eventEmitterPort: EventEmitterPort,
   ) {}
 
   @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
-  async handleChatWrittenEvent(payload: Chat) {
-    this.pubSubPort.publish(
-      ChatWrittenTrigger(payload.shareDealId),
-      ChatWrittenResponse.of(payload.message),
+  handleChatWrittenEvent(event: ChatWrittenEvent) {
+    pipe(
+      RNEA.fromArray(event.chats),
+      O.map(RNEA.head),
+      O.map((chat) =>
+        this.pubSubPort.publish(
+          ChatWrittenTrigger(chat.shareDealId),
+          ChatWrittenResponse.of(chat.message),
+        ),
+      ),
     );
   }
 
   @OnEvent(ShareDealStartedEvent.EVENT_NAME, { async: true })
-  async handleShareDealStartedEvent(shareDealId: string) {
+  async handleShareDealStartedEvent(event: ShareDealStartedEvent) {
     await pipe(
-      this.shareDealQueryRepositoryPort.findById(shareDealId),
+      this.shareDealQueryRepositoryPort.findById(event.shareDealId),
       TE.map((shareDeal) =>
         Chat.createByStartShareDeal(
           shareDeal.id,
           shareDeal.participantInfo.ids,
+          shareDeal.ownerId,
         ),
       ),
-      TE.chain((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chat) =>
-        this.pubSubPort.publish(
-          ChatWrittenTrigger(shareDealId),
-          ChatWrittenResponse.of(chat[0].message),
-        ),
+      TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
+      TE.map((chats) =>
+        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, chats),
       ),
     )();
   }

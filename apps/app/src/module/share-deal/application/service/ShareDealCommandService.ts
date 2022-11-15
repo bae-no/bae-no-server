@@ -66,7 +66,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       TE.map(() =>
         this.eventEmitterPort.emit(
           ShareDealStartedEvent.EVENT_NAME,
-          command.shareDealId,
+          new ShareDealStartedEvent(command.shareDealId),
         ),
       ),
       TE.map(constVoid),

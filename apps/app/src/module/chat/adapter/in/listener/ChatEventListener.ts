@@ -44,6 +44,7 @@ export class ChatEventListener {
         Chat.createByStartShareDeal(
           shareDeal.id,
           shareDeal.participantInfo.ids,
+          shareDeal.ownerId,
         ),
       ),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),

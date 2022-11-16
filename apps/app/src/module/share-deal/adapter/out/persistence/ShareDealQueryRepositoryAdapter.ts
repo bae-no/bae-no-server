@@ -3,7 +3,7 @@ import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, ShareDeal as OrmShareDeal } from '@prisma/client';
 import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -63,21 +63,40 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     const args: Prisma.ShareDealFindRawArgs = {
       filter: {
         status: { $in: [ShareDealStatus.OPEN, ShareDealStatus.START] },
+        'zone.coordinate': {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [command.longitude, command.latitude],
+            },
+          },
+        },
         ...(command.keyword ? { title: { $regex: command.keyword } } : {}),
         ...(command.category ? { category: command.category } : {}),
       },
       options: {
         skip: command.skip,
         take: command.size,
-        projection: { _id: true },
+        projection: { id: true },
       },
     };
 
-    // TODO: findByNearest
     return pipe(
       tryCatchDB(() => this.prisma.shareDeal.findRaw(args)),
       TE.map((row) => unsafeCoerce<any, { _id: { $oid: string } }[]>(row)),
-      TE.map(() => []),
+      TE.map((rows) => rows.map((row) => row._id.$oid)),
+      TE.bindTo('ids'),
+      TE.bind('shareDeals', ({ ids }) =>
+        tryCatchDB(() =>
+          this.prisma.shareDeal.findMany({ where: { id: { in: ids } } }),
+        ),
+      ),
+      TE.map(({ ids, shareDeals }) =>
+        ids.map(
+          (id) => shareDeals.find((deal) => deal.id === id) as OrmShareDeal,
+        ),
+      ),
+      TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
 

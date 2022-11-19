@@ -5,7 +5,11 @@ import { constant, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { UserQueryRepositoryPort } from '../../../user/application/port/out/UserQueryRepositoryPort';
+import { User } from '../../../user/domain/User';
 import { ChatQueryUseCase } from '../port/in/ChatQueryUseCase';
+import { FindByUserDto } from '../port/in/dto/FindByUserDto';
+import { FindChatByUserCommand } from '../port/in/dto/FindChatByUserCommand';
 import { FindChatCommand } from '../port/in/dto/FindChatCommand';
 import { FindChatResult } from '../port/in/dto/FindChatResult';
 import { ChatQueryRepositoryPort } from '../port/out/ChatQueryRepositoryPort';
@@ -15,6 +19,7 @@ export class ChatQueryService extends ChatQueryUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
     private readonly chatQueryRepository: ChatQueryRepositoryPort,
+    private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
   ) {
     super();
   }
@@ -64,6 +69,31 @@ export class ChatQueryService extends ChatQueryUseCase {
                 O.getOrElse(constant('')),
               ),
               unreadCounts[index],
+            ),
+        ),
+      ),
+    );
+  }
+
+  override findByUser(
+    command: FindChatByUserCommand,
+  ): TaskEither<DBError, FindByUserDto[]> {
+    return pipe(
+      TE.Do,
+      TE.apS('chats', this.chatQueryRepository.findByUser(command)),
+      TE.bind('authors', ({ chats }) =>
+        this.userQueryRepositoryPort.findByIds(
+          chats.map((chat) => chat.message.authorId),
+        ),
+      ),
+      TE.map(({ chats, authors }) =>
+        chats.map(
+          (chat) =>
+            new FindByUserDto(
+              chat,
+              authors.find(
+                (author) => author.id === chat.message.authorId,
+              ) as User,
             ),
         ),
       ),

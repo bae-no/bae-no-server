@@ -132,4 +132,36 @@ describe('UserQueryRepositoryAdapter', () => {
       });
     });
   });
+
+  describe('findByIds', () => {
+    it('빈배열 id를 제공하면 빈배열을 반환한다', async () => {
+      // given
+      const ids: string[] = [];
+
+      // when
+      const result = userQueryRepositoryAdapter.findByIds(ids);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(0);
+      });
+    });
+
+    it('id 를 가진 유저를 반환한다', async () => {
+      // given
+      const auth = new Auth('socialId', AuthType.GOOGLE);
+      const user = await prisma.user.create({
+        data: UserOrmMapper.toOrm(User.byAuth(auth)),
+      });
+
+      // when
+      const result = userQueryRepositoryAdapter.findByIds([user.id]);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(1);
+        expect(value[0].id).toBe(user.id);
+      });
+    });
+  });
 });

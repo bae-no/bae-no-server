@@ -2,8 +2,11 @@ import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/ChatOrmMapper';
 import { ChatQueryRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatQueryRepositoryAdapter';
+import { FindChatByUserCommand } from '../../../src/module/chat/application/port/in/dto/FindChatByUserCommand';
 import { MessageType } from '../../../src/module/chat/domain/vo/MessageType';
+import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   assertNone,
   assertResolvesRight,
@@ -130,6 +133,38 @@ describe('ChatQueryRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (count) => {
         expect(count).toBe(3);
+      });
+    });
+  });
+
+  describe('findByUser', () => {
+    it('주어진 사용자의 채팅목록을 가져온다', async () => {
+      // given
+      const shareDealId = faker.database.mongodbObjectId();
+      const userId = faker.database.mongodbObjectId();
+      const chats = [
+        ChatFactory.create({
+          createdAt: new Date('2022-10-05'),
+          shareDealId,
+          userId,
+        }),
+        ChatFactory.create({
+          createdAt: new Date('2022-10-10'),
+          shareDealId,
+          userId,
+        }),
+      ];
+      await prisma.chat.createMany({ data: chats.map(ChatOrmMapper.toOrm) });
+      const command = new FindChatByUserCommand(shareDealId, userId);
+
+      // when
+      const result = chatQueryRepositoryAdapter.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, (result) => {
+        expect(result.length).toBe(2);
+        expect(result[0].createdAt).toStrictEqual(chats[1].createdAt);
+        expect(result[1].createdAt).toStrictEqual(chats[0].createdAt);
       });
     });
   });

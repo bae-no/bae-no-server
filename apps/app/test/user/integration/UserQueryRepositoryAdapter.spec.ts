@@ -1,7 +1,6 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
 import { UserQueryRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/UserQueryRepositoryAdapter';
@@ -16,19 +15,8 @@ import {
 } from '../../fixture/utils';
 
 describe('UserQueryRepositoryAdapter', () => {
-  let userQueryRepositoryAdapter: UserQueryRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserQueryRepositoryAdapter, PrismaService],
-    }).compile();
-
-    userQueryRepositoryAdapter = module.get(UserQueryRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const userQueryRepositoryAdapter = new UserQueryRepositoryAdapter(prisma);
 
   beforeEach(async () => prisma.$transaction([prisma.user.deleteMany()]));
 

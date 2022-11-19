@@ -1,6 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
 import { Chat } from '../../../src/module/chat/domain/Chat';
@@ -8,19 +7,8 @@ import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatRepositoryAdapter', () => {
-  let chatRepositoryAdapter: ChatRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ChatRepositoryAdapter, PrismaService],
-    }).compile();
-
-    chatRepositoryAdapter = module.get(ChatRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const chatRepositoryAdapter = new ChatRepositoryAdapter(prisma);
 
   beforeEach(async () => prisma.$transaction([prisma.chat.deleteMany()]));
 

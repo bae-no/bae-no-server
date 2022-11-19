@@ -1,25 +1,15 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserPushTokenRepositoryAdapter } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenRepositoryAdapter';
 import { UserPushToken } from '../../../src/module/user-push-token/domain/UserPushToken';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('UserPushTokenRepositoryAdapter', () => {
-  let userPushTokenRepositoryAdapter: UserPushTokenRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserPushTokenRepositoryAdapter, PrismaService],
-    }).compile();
-
-    userPushTokenRepositoryAdapter = module.get(UserPushTokenRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const userPushTokenRepositoryAdapter = new UserPushTokenRepositoryAdapter(
+    prisma,
+  );
 
   beforeEach(async () =>
     prisma.$transaction([prisma.userPushToken.deleteMany()]),

@@ -1,6 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealRepositoryAdapter';
@@ -10,19 +9,8 @@ import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealRepositoryAdapter', () => {
-  let shareDealRepositoryAdapter: ShareDealRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ShareDealRepositoryAdapter, PrismaService],
-    }).compile();
-
-    shareDealRepositoryAdapter = module.get(ShareDealRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const shareDealRepositoryAdapter = new ShareDealRepositoryAdapter(prisma);
 
   beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
 

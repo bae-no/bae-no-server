@@ -1,6 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/ChatOrmMapper';
 import { ChatQueryRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatQueryRepositoryAdapter';
@@ -14,17 +13,10 @@ import {
 } from '../../fixture/utils';
 
 describe('ChatQueryRepositoryAdapter', () => {
-  let chatQueryRepositoryAdapter: ChatQueryRepositoryAdapter;
-  let prisma: PrismaService;
+  const prisma = new PrismaService();
+  const chatQueryRepositoryAdapter = new ChatQueryRepositoryAdapter(prisma);
 
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ChatQueryRepositoryAdapter, PrismaService],
-    }).compile();
-
-    chatQueryRepositoryAdapter = module.get(ChatQueryRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
+  beforeAll(async () => prisma.$connect());
 
   afterAll(async () => prisma.$disconnect());
 

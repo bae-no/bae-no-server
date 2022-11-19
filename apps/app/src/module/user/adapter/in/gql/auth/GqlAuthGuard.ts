@@ -1,11 +1,10 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 
 import { IS_PUBLIC_KEY } from './Public';
 
-@Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();

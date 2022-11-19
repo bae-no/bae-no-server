@@ -3,11 +3,9 @@ import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort, HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
 import { NodeFetchResponse } from '@app/http-client/NodeFetchResponse';
-import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-@Injectable()
 export class HttpClientService extends HttpClientPort {
   #timeout = 5000;
 

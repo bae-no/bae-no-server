@@ -1,5 +1,4 @@
 import { HttpStatus } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { StubHttpClientService } from '../../../../../libs/http-client/test/fixture/StubHttpClientService';
 import { KakaoAuthResponse } from '../../../src/module/user/adapter/out/auth/response/KakaoAuthResponse';
@@ -10,8 +9,11 @@ import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('KakaoAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();
-  const configService = new ConfigService({});
-  const strategy = new KakaoAuthStrategy(stubHttpClient, configService);
+  const strategy = new KakaoAuthStrategy(
+    stubHttpClient,
+    'clientId',
+    'redirectUrl',
+  );
 
   beforeEach(() => stubHttpClient.clear());
 

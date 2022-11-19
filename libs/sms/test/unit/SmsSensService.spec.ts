@@ -1,25 +1,25 @@
-import 'reflect-metadata';
-
-import { HttpError } from '@app/domain/error/HttpError';
-import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsResponse } from '@app/sms/SmsResponse';
 import { SmsSensService } from '@app/sms/SmsSensService';
-import { ConfigService } from '@nestjs/config';
-import { left, right } from 'fp-ts/TaskEither';
-import { mock } from 'jest-mock-extended';
+import { HttpStatus } from '@nestjs/common';
 
 import {
   assertResolvesLeft,
   assertResolvesRight,
 } from '../../../../apps/app/test/fixture/utils';
-import { FakeHttpResponse } from '../../../http-client/test/fixture/FakeHttpResponse';
+import { StubHttpClientService } from '../../../http-client/test/fixture/StubHttpClientService';
 
 describe('SmsSensService', () => {
-  const httpClientPort = mock<HttpClientPort>();
-  const configService = mock<ConfigService>();
-  configService.get.mockReturnValue('');
+  const stubHttpClientService = new StubHttpClientService();
 
-  const service = new SmsSensService(httpClientPort, configService);
+  const service = new SmsSensService(
+    stubHttpClientService,
+    'serviceId',
+    'accessKey',
+    'secretKey',
+    'sendNumber',
+  );
+
+  beforeEach(() => stubHttpClientService.clear());
 
   describe('send', () => {
     it('상태코드 202 로 응답한 경우 성공한다.', async () => {
@@ -28,9 +28,8 @@ describe('SmsSensService', () => {
       const content = 'content';
       const smsResponse = new SmsResponse();
       smsResponse.statusCode = '202';
-      const response = FakeHttpResponse.of({ entity: smsResponse });
 
-      httpClientPort.post.mockReturnValue(right(response));
+      stubHttpClientService.addResponse(HttpStatus.OK, smsResponse);
 
       // when
       const result = service.send(phoneNumber, content);
@@ -45,9 +44,8 @@ describe('SmsSensService', () => {
       const content = 'content';
       const smsResponse = new SmsResponse();
       smsResponse.statusCode = '404';
-      const response = FakeHttpResponse.of({ entity: smsResponse });
 
-      httpClientPort.post.mockReturnValue(right(response));
+      stubHttpClientService.addResponse(HttpStatus.OK, smsResponse);
 
       // when
       const result = service.send(phoneNumber, content);
@@ -63,9 +61,7 @@ describe('SmsSensService', () => {
       const phoneNumber = '01012345678';
       const content = 'content';
 
-      httpClientPort.post.mockReturnValue(
-        left(new HttpError(new Error('http error'))),
-      );
+      stubHttpClientService.addError(new Error('http error'));
 
       // when
       const result = service.send(phoneNumber, content);

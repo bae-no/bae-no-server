@@ -1,5 +1,4 @@
 import { HttpStatus } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { StubHttpClientService } from '../../../../../libs/http-client/test/fixture/StubHttpClientService';
 import { GoogleAuthResponse } from '../../../src/module/user/adapter/out/auth/response/GoogleAuthResponse';
@@ -10,8 +9,12 @@ import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('GoogleAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();
-  const configService = new ConfigService({});
-  const strategy = new GoogleAuthStrategy(stubHttpClient, configService);
+  const strategy = new GoogleAuthStrategy(
+    stubHttpClient,
+    'clientId',
+    'redirectUrl',
+    'clientSecret',
+  );
 
   beforeEach(() => stubHttpClient.clear());
 

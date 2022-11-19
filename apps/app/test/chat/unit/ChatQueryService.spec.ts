@@ -2,6 +2,7 @@ import { some } from 'fp-ts/Option';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
+import { FindChatByUserCommand } from '../../../src/module/chat/application/port/in/dto/FindChatByUserCommand';
 import { FindChatCommand } from '../../../src/module/chat/application/port/in/dto/FindChatCommand';
 import { ChatQueryRepositoryPort } from '../../../src/module/chat/application/port/out/ChatQueryRepositoryPort';
 import { ChatQueryService } from '../../../src/module/chat/application/service/ChatQueryService';
@@ -9,20 +10,26 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { UserFactory } from '../../fixture/UserFactory';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatQueryRepositoryPort = mock<ChatQueryRepositoryPort>();
+  const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
   const shareDealCommandService = new ChatQueryService(
     shareDealQueryRepositoryPort,
     chatQueryRepositoryPort,
+    userQueryRepositoryPort,
   );
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatQueryRepositoryPort);
+    mockReset(userQueryRepositoryPort);
   });
 
   describe('find', () => {
@@ -84,6 +91,30 @@ describe('ChatQueryService', () => {
             },
           ]
         `);
+      });
+    });
+  });
+
+  describe('findByUser', () => {
+    it('채팅방 상세정보를 가져온다', async () => {
+      // given
+      const user = UserFactory.create();
+      const chat = ChatFactory.create({
+        message: Message.normal(user.id, 'content', true),
+      });
+      chatQueryRepositoryPort.findByUser.mockReturnValue(right([chat]));
+      userQueryRepositoryPort.findByIds.mockReturnValue(right([user]));
+
+      const command = new FindChatByUserCommand('shareDealId', 'userId');
+
+      // when
+      const result = shareDealCommandService.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toHaveLength(1);
+        expect(value[0].chat).toBe(chat);
+        expect(value[0].author).toBe(user);
       });
     });
   });

@@ -35,6 +35,16 @@ type CategoryResponse {
   shareDealSort: [ShareDealSortCategory!]!
 }
 
+type ChatDetailResponse {
+  authorName: String!
+  content: String!
+  id: ID!
+  type: MessageType!
+
+  """내가 쓴 글인지 여부"""
+  writtenByMe: Boolean!
+}
+
 type ChatResponse {
   id: ID!
   lastContent: String!
@@ -79,6 +89,13 @@ scalar DateTime
 input EnrollUserInput {
   address: AddressInput!
   nickname: String!
+}
+
+input FindChatDetailInput {
+  """페이지 번호, 0부터 시작"""
+  page: Int!
+  shareDealId: ID!
+  size: Int!
 }
 
 input FindChatInput {
@@ -149,9 +166,6 @@ enum MessageType {
 type Mutation {
   """주소 추가"""
   appendAddress(input: AddressInput!): Boolean!
-
-  """채팅방 목록"""
-  chats(input: FindChatInput!): [ChatResponse!]!
   createSample(input: CreateSampleInput!): SampleResponse!
 
   """주소 삭제"""
@@ -204,6 +218,12 @@ type Query {
 
   """카테고리 목록"""
   categories: CategoryResponse!
+
+  """채팅방 상세"""
+  chatDetail(input: FindChatDetailInput!): [ChatDetailResponse!]!
+
+  """채팅방 목록"""
+  chats(input: FindChatInput!): [ChatResponse!]!
 
   """닉네임 중복여부"""
   hasNickname(nickname: String!): Boolean!

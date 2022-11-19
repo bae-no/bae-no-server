@@ -4,6 +4,8 @@ import { ShareDealQueryRepositoryAdapter } from '../share-deal/adapter/out/persi
 import { ShareDealQueryUseCase } from '../share-deal/application/port/in/ShareDealQueryUseCase';
 import { ShareDealQueryRepositoryPort } from '../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealQueryService } from '../share-deal/application/service/ShareDealQueryService';
+import { UserQueryRepositoryAdapter } from '../user/adapter/out/persistence/UserQueryRepositoryAdapter';
+import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryRepositoryPort';
 import { ChatMutationResolver } from './adapter/in/gql/ChatMutationResolver';
 import { ChatQueryResolver } from './adapter/in/gql/ChatQueryResolver';
 import { ChatSubscriptionResolver } from './adapter/in/gql/ChatSubscriptionResolver';
@@ -46,6 +48,10 @@ import { ChatQueryService } from './application/service/ChatQueryService';
     {
       provide: ChatRepositoryPort,
       useClass: ChatRepositoryAdapter,
+    },
+    {
+      provide: UserQueryRepositoryPort,
+      useClass: UserQueryRepositoryAdapter,
     },
   ],
 })

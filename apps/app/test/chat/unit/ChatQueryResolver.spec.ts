@@ -4,14 +4,19 @@ import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { ChatQueryResolver } from '../../../src/module/chat/adapter/in/gql/ChatQueryResolver';
+import { FindChatDetailInput } from '../../../src/module/chat/adapter/in/gql/input/FindChatDetailInput';
 import { FindChatInput } from '../../../src/module/chat/adapter/in/gql/input/FindChatInput';
 import { ChatQueryUseCase } from '../../../src/module/chat/application/port/in/ChatQueryUseCase';
+import { FindByUserDto } from '../../../src/module/chat/application/port/in/dto/FindByUserDto';
 import { FindChatResult } from '../../../src/module/chat/application/port/in/dto/FindChatResult';
+import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   graphQLTestHelper,
   setMockUser,
 } from '../../fixture/graphqlTestHelper';
+import { UserFactory } from '../../fixture/UserFactory';
 import { gql } from '../../fixture/utils';
 
 describe('ChatQueryResolver', () => {
@@ -44,7 +49,7 @@ describe('ChatQueryResolver', () => {
       input.size = 10;
 
       const query = gql`
-        mutation chats($input: FindChatInput!) {
+        query chats($input: FindChatInput!) {
           chats(input: $input) {
             id
             title
@@ -80,6 +85,59 @@ describe('ChatQueryResolver', () => {
                 "thumbnail": "thumbnail",
                 "title": "title",
                 "unreadCount": 1,
+              },
+            ],
+          },
+        }
+      `);
+    });
+  });
+
+  describe('chatDetail', () => {
+    it('채팅방 상세정보를 가져온다', async () => {
+      // given
+      const query = gql`
+        query chatDetail($input: FindChatDetailInput!) {
+          chatDetail(input: $input) {
+            id
+            authorName
+            content
+            type
+            writtenByMe
+          }
+        }
+      `;
+      const chatByUserDto = new FindByUserDto(
+        ChatFactory.create({
+          id: 'id',
+          message: Message.normal('id', 'content', true),
+        }),
+        UserFactory.create({ id: 'id', nickname: 'nickname' }),
+      );
+
+      chatQueryUseCase.findByUser.mockReturnValue(right([chatByUserDto]));
+
+      const input = new FindChatDetailInput();
+      input.shareDealId = 'shareDealId';
+      input.page = 1;
+      input.size = 10;
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "chatDetail": [
+              {
+                "authorName": "nickname",
+                "content": "content",
+                "id": "id",
+                "type": "NORMAL",
+                "writtenByMe": false,
               },
             ],
           },

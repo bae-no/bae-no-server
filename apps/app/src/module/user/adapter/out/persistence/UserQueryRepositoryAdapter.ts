@@ -55,6 +55,15 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
     );
   }
 
+  override findByIds(ids: string[]): TaskEither<DBError, User[]> {
+    return pipe(
+      tryCatchDB(() =>
+        this.prisma.user.findMany({ where: { id: { in: ids } } }),
+      ),
+      TE.map((ormUsers) => ormUsers.map(UserOrmMapper.toDomain)),
+    );
+  }
+
   private toOptionUser(ormUser: OrmUser | null): Option<User> {
     return pipe(
       O.fromNullable(ormUser),

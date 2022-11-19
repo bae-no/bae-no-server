@@ -11,5 +11,7 @@ export abstract class UserQueryRepositoryPort {
 
   abstract findById(id: string): TaskEither<DBError | NotFoundException, User>;
 
+  abstract findByIds(ids: string[]): TaskEither<DBError, User[]>;
+
   abstract findByNickname(nickname: string): TaskEither<DBError, Option<User>>;
 }

@@ -1,3 +1,4 @@
+import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { PushMessageAdapter } from '@app/push-message/PushMessageAdapter';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -7,7 +8,7 @@ import * as app from 'firebase-admin';
 @Module({
   providers: [
     {
-      provide: PushMessageAdapter,
+      provide: PushMessagePort,
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const messaging = app
@@ -24,6 +25,6 @@ import * as app from 'firebase-admin';
       },
     },
   ],
-  exports: [PushMessageAdapter],
+  exports: [PushMessagePort],
 })
 export class PushMessageModule {}

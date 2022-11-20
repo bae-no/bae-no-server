@@ -2,6 +2,7 @@ import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
+import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -18,6 +19,7 @@ import {
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../port/out/ShareDealRepositoryPort';
 
+@Injectable()
 export class ShareDealCommandService extends ShareDealCommandUseCase {
   constructor(
     private readonly shareDealRepositoryPort: ShareDealRepositoryPort,

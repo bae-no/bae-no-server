@@ -1,6 +1,7 @@
 import { O, TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -10,6 +11,7 @@ import { ChatQueryRepositoryPort } from '../../../application/port/out/ChatQuery
 import { Chat } from '../../../domain/Chat';
 import { ChatOrmMapper } from './ChatOrmMapper';
 
+@Injectable()
 export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

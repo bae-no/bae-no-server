@@ -2,6 +2,7 @@ import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { Injectable } from '@nestjs/common';
 import { Prisma, ShareDeal as OrmShareDeal } from '@prisma/client';
 import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -15,6 +16,7 @@ import { ShareDeal } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 
+@Injectable()
 export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

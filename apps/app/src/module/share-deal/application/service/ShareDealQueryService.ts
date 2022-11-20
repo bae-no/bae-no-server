@@ -1,6 +1,7 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
+import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -8,6 +9,7 @@ import { ShareDealAccessDeniedException } from '../port/in/exception/ShareDealAc
 import { ShareDealQueryUseCase } from '../port/in/ShareDealQueryUseCase';
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';
 
+@Injectable()
 export class ShareDealQueryService extends ShareDealQueryUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,

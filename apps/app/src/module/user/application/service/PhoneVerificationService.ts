@@ -2,6 +2,7 @@ import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
 import { NotificationError } from '@app/domain/error/NotificationError';
 import { SmsPort } from '@app/domain/notification/SmsPort';
+import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -16,6 +17,7 @@ import { PhoneVerificationRepositoryPort } from '../port/out/PhoneVerificationRe
 import { UserQueryRepositoryPort } from '../port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../port/out/UserRepositoryPort';
 
+@Injectable()
 export class PhoneVerificationService extends PhoneVerificationUseCase {
   constructor(
     private readonly phoneVerificationRepositoryPort: PhoneVerificationRepositoryPort,

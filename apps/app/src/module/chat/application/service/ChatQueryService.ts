@@ -1,6 +1,5 @@
 import { O, TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
-import { Injectable } from '@nestjs/common';
 import { constant, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
@@ -14,7 +13,6 @@ import { FindChatCommand } from '../port/in/dto/FindChatCommand';
 import { FindChatResult } from '../port/in/dto/FindChatResult';
 import { ChatQueryRepositoryPort } from '../port/out/ChatQueryRepositoryPort';
 
-@Injectable()
 export class ChatQueryService extends ChatQueryUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,

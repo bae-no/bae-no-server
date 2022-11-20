@@ -1,7 +1,6 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 import { addDays, compareDesc } from 'date-fns';
 
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
@@ -18,19 +17,10 @@ import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealQueryRepositoryAdapter', () => {
-  let shareDealRepositoryAdapter: ShareDealQueryRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ShareDealQueryRepositoryAdapter, PrismaService],
-    }).compile();
-
-    shareDealRepositoryAdapter = module.get(ShareDealQueryRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const shareDealRepositoryAdapter = new ShareDealQueryRepositoryAdapter(
+    prisma,
+  );
 
   beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
 

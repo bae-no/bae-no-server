@@ -1,5 +1,4 @@
 import { AuthError } from '@app/domain/error/AuthError';
-import { Injectable } from '@nestjs/common';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort';
@@ -9,7 +8,6 @@ import { AuthStrategy } from './strategy/AuthStrategy';
 import { GoogleAuthStrategy } from './strategy/GoogleAuthStrategy';
 import { KakaoAuthStrategy } from './strategy/KakaoAuthStrategy';
 
-@Injectable()
 export class AuthProvider extends AuthProviderPort {
   constructor(
     private readonly kakaoStrategy: KakaoAuthStrategy,

@@ -1,5 +1,3 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { addDays } from 'date-fns';
 import { pipe } from 'fp-ts/function';
@@ -8,16 +6,12 @@ import { AuthToken } from '../../../application/port/in/dto/AuthToken';
 import { TokenGeneratorPort } from '../../../application/port/out/TokenGeneratorPort';
 import { User } from '../../../domain/User';
 
-@Injectable()
 export class JwtTokenGeneratorAdapter extends TokenGeneratorPort {
-  private readonly expireDays: number;
-
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly expireDays: number,
   ) {
     super();
-    this.expireDays = Number(this.configService.get('JWT_EXPIRE_DAYS', '1'));
   }
 
   generateByUser(user: User, now: Date = new Date()): AuthToken {

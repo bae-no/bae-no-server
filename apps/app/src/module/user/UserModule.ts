@@ -1,7 +1,9 @@
+import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { HttpClientModule } from '@app/http-client/HttpClientModule';
 import { SmsModule } from '@app/sms/SmsModule';
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 import { JwtStrategy } from './adapter/in/gql/auth/JwtStrategy';
 import { PhoneVerificationMutationResolver } from './adapter/in/gql/PhoneVerificationMutationResolver';
@@ -47,7 +49,12 @@ import { UserCommandService } from './application/service/UserCommandService';
     },
     {
       provide: TokenGeneratorPort,
-      useClass: JwtTokenGeneratorAdapter,
+      inject: [JwtService, ConfigService],
+      useFactory: (jwtService: JwtService, configService: ConfigService) =>
+        new JwtTokenGeneratorAdapter(
+          jwtService,
+          Number(configService.get('JWT_EXPIRE_DAYS', '1')),
+        ),
     },
     {
       provide: PhoneVerificationUseCase,
@@ -57,9 +64,39 @@ import { UserCommandService } from './application/service/UserCommandService';
       provide: PhoneVerificationRepositoryPort,
       useClass: PhoneVerificationRepositoryAdapter,
     },
-    KakaoAuthStrategy,
-    GoogleAuthStrategy,
-    JwtStrategy,
+    {
+      provide: KakaoAuthStrategy,
+      inject: [HttpClientPort, ConfigService],
+      useFactory: (
+        httpClientPort: HttpClientPort,
+        configService: ConfigService,
+      ) =>
+        new KakaoAuthStrategy(
+          httpClientPort,
+          configService.get('KAKAO_CLIENT_ID', ''),
+          configService.get('KAKAO_REDIRECT_URL', ''),
+        ),
+    },
+    {
+      provide: GoogleAuthStrategy,
+      inject: [HttpClientPort, ConfigService],
+      useFactory: (
+        httpClientPort: HttpClientPort,
+        configService: ConfigService,
+      ) =>
+        new GoogleAuthStrategy(
+          httpClientPort,
+          configService.get('GOOGLE_CLIENT_ID', ''),
+          configService.get('GOOGLE_CLIENT_SECRET', ''),
+          configService.get('GOOGLE_REDIRECT_URL', ''),
+        ),
+    },
+    {
+      provide: JwtStrategy,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        new JwtStrategy(configService.get('JWT_SECRET', '')),
+    },
   ],
   imports: [
     HttpClientModule,

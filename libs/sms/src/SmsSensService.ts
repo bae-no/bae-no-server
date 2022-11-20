@@ -5,28 +5,19 @@ import { NotificationError } from '@app/domain/error/NotificationError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { SmsResponse } from '@app/sms/SmsResponse';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-@Injectable()
 export class SmsSensService extends SmsPort {
-  private readonly serviceId: string;
-  private readonly accessKey: string;
-  private readonly secretKey: string;
-  private readonly sendNumber: string;
-  private readonly url = 'https://sens.apigw.ntruss.com';
-
   constructor(
     private readonly httpClient: HttpClientPort,
-    private readonly configService: ConfigService,
+    private readonly serviceId: string,
+    private readonly accessKey: string,
+    private readonly secretKey: string,
+    private readonly sendNumber: string,
+    private readonly url = 'https://sens.apigw.ntruss.com',
   ) {
     super();
-    this.serviceId = this.configService.get('SMS_SERVICE_ID', '');
-    this.accessKey = this.configService.get('SMS_ACCESS_KEY', '');
-    this.secretKey = this.configService.get('SMS_SECRET_KEY', '');
-    this.sendNumber = this.configService.get('SMS_SEND_NUMBER', '');
   }
 
   override send(

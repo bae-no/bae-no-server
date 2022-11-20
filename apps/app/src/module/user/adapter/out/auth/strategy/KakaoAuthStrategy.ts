@@ -3,8 +3,6 @@ import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -15,22 +13,14 @@ import { KakaoAuthResponse } from '../response/KakaoAuthResponse';
 import { KakaoProfileResponse } from '../response/KakaoProfileResponse';
 import { AuthStrategy } from './AuthStrategy';
 
-@Injectable()
 export class KakaoAuthStrategy implements AuthStrategy {
-  private static readonly TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
-  private static readonly USER_PROFILE_URL =
-    'https://kapi.kakao.com/v2/user/me';
-
-  private readonly CLIENT_ID: string;
-  private readonly REDIRECT_URL: string;
-
   constructor(
     private readonly httpClientPort: HttpClientPort,
-    configService: ConfigService,
-  ) {
-    this.CLIENT_ID = configService.get('KAKAO_CLIENT_ID', '');
-    this.REDIRECT_URL = configService.get('KAKAO_REDIRECT_URL', '');
-  }
+    private readonly clientId: string,
+    private readonly redirectUrl: string,
+    private readonly tokenUrl = 'https://kauth.kakao.com/oauth/token',
+    private readonly userProfileUrl = 'https://kapi.kakao.com/v2/user/me',
+  ) {}
 
   request(code: string): TaskEither<AuthError, Auth> {
     return pipe(
@@ -43,11 +33,11 @@ export class KakaoAuthStrategy implements AuthStrategy {
   }
 
   private requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
-    return this.httpClientPort.post(KakaoAuthStrategy.TOKEN_URL, {
+    return this.httpClientPort.post(this.tokenUrl, {
       form: {
         grant_type: 'authorization_code',
-        client_id: this.CLIENT_ID,
-        redirect_uri: this.REDIRECT_URL,
+        client_id: this.clientId,
+        redirect_uri: this.redirectUrl,
         code,
       },
     });
@@ -70,7 +60,7 @@ export class KakaoAuthStrategy implements AuthStrategy {
   private requestProfile(
     authResponse: KakaoAuthResponse,
   ): TaskEither<HttpError, HttpResponse> {
-    return this.httpClientPort.get(KakaoAuthStrategy.USER_PROFILE_URL, {
+    return this.httpClientPort.get(this.userProfileUrl, {
       headers: {
         Authorization: `Bearer ${authResponse.accessToken}`,
       },

@@ -4,7 +4,6 @@ import {
   CanActivate,
   ExecutionContext,
   INestApplication,
-  Injectable,
   ModuleMetadata,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,7 +23,6 @@ export function clearMockUser() {
   userId = undefined;
 }
 
-@Injectable()
 export class MockGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     if (userId) {

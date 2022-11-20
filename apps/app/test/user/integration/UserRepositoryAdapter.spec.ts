@@ -1,5 +1,4 @@
 import { PrismaService } from '@app/prisma/PrismaService';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
 import { UserRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/UserRepositoryAdapter';
@@ -9,19 +8,8 @@ import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('UserRepositoryAdapter', () => {
-  let userRepositoryAdapter: UserRepositoryAdapter;
-  let prisma: PrismaService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserRepositoryAdapter, PrismaService],
-    }).compile();
-
-    userRepositoryAdapter = module.get(UserRepositoryAdapter);
-    prisma = module.get(PrismaService);
-  });
-
-  afterAll(async () => prisma.$disconnect());
+  const prisma = new PrismaService();
+  const userRepositoryAdapter = new UserRepositoryAdapter(prisma);
 
   beforeEach(async () => prisma.$transaction([prisma.user.deleteMany()]));
 

@@ -2,6 +2,7 @@ import { TE, O } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { Injectable } from '@nestjs/common';
 import { User as OrmUser } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
@@ -12,6 +13,7 @@ import { User } from '../../../domain/User';
 import { Auth } from '../../../domain/vo/Auth';
 import { UserOrmMapper } from './UserOrmMapper';
 
+@Injectable()
 export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

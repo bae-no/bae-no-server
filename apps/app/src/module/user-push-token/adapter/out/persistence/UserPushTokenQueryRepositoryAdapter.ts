@@ -1,6 +1,7 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
+import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -9,6 +10,7 @@ import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/
 import { UserPushToken } from '../../../domain/UserPushToken';
 import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 
+@Injectable()
 export class UserPushTokenQueryRepositoryAdapter extends UserPushTokenQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

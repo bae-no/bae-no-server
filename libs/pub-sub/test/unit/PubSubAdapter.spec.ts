@@ -1,9 +1,12 @@
 import { PubSubAdapter } from '@app/pub-sub/PubSubAdapter';
 
-describe('PubSubAdapter', () => {
-  const pubSubAdapter = new PubSubAdapter();
+import { StubPubSubEngine } from '../fixture/StubPubSubEngine';
 
-  xit('정상적으로 publish, subscribe 한다', async () => {
+describe('PubSubAdapter', () => {
+  const pubSub = new StubPubSubEngine();
+  const pubSubAdapter = new PubSubAdapter(pubSub);
+
+  it('정상적으로 publish, subscribe 한다', async () => {
     // given
     pubSubAdapter.publish('trigger', { foo: 'bar' });
 
@@ -11,7 +14,7 @@ describe('PubSubAdapter', () => {
     const result = pubSubAdapter.subscribe('trigger');
 
     // then
-    const value = await result.next();
-    expect(value).toStrictEqual({ value: { foo: 'bar' } });
+    const nextResult = await result.next();
+    expect(nextResult.value).toStrictEqual({ foo: 'bar' });
   });
 });

@@ -5,6 +5,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
 import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/gql/input/CreateShareZoneInput';
+import { EndShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/EndShareDealInput';
 import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
 import { StartShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/StartShareDealInput';
@@ -223,6 +224,81 @@ describe('ShareDealMutationResolver', () => {
               "message": "error",
               "path": [
                 "startShareDeal",
+              ],
+            },
+          ],
+        }
+      `);
+    });
+  });
+
+  describe('endShareDeal', () => {
+    it('공유딜을 종료한다.', async () => {
+      // given
+      const input = new EndShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      const mutation = gql`
+        mutation endShareDeal($input: EndShareDealInput!) {
+          endShareDeal(input: $input)
+        }
+      `;
+
+      sharedDealCommandUseCase.end.mockReturnValue(right(undefined));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "endShareDeal": true,
+          },
+        }
+      `);
+    });
+
+    it('유효하지 않은 상태의 공유딜을 종료할 경우 예외를 반환한다.', async () => {
+      // given
+      const input = new EndShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      const mutation = gql`
+        mutation endShareDeal($input: EndShareDealInput!) {
+          endShareDeal(input: $input)
+        }
+      `;
+
+      sharedDealCommandUseCase.end.mockReturnValue(
+        left(new IllegalStateException('error')),
+      );
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "ILLEGAL_STATE",
+              },
+              "locations": [
+                {
+                  "column": 11,
+                  "line": 3,
+                },
+              ],
+              "message": "error",
+              "path": [
+                "endShareDeal",
               ],
             },
           ],

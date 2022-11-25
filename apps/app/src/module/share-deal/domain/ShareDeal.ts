@@ -1,4 +1,6 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
+import { Either, left, right } from 'fp-ts/Either';
 
 import { FoodCategory } from './vo/FoodCategory';
 import { ParticipantInfo } from './vo/ParticipantInfo';
@@ -88,6 +90,10 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     );
   }
 
+  canEnd(userId: string): boolean {
+    return this.status === ShareDealStatus.START && userId === this.ownerId;
+  }
+
   canWriteChat(userId: string): boolean {
     if (this.status !== ShareDealStatus.START) {
       return false;
@@ -106,5 +112,15 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     this.props.status = ShareDealStatus.START;
 
     return this;
+  }
+
+  end(userId: string): Either<IllegalStateException, this> {
+    if (!this.canEnd(userId)) {
+      return left(new IllegalStateException('종료할 수 없습니다.'));
+    }
+
+    this.props.status = ShareDealStatus.END;
+
+    return right(this);
   }
 }

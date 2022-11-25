@@ -3,6 +3,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
+import { EndShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/EndShareDealCommand';
 import { JoinShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/StartShareDealCommand';
@@ -10,6 +11,7 @@ import { NotJoinableShareDealException } from '../../../src/module/share-deal/ap
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealRepositoryPort';
 import { ShareDealCommandService } from '../../../src/module/share-deal/application/service/ShareDealCommandService';
+import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
@@ -135,6 +137,50 @@ describe('ShareDealCommandService', () => {
 
       // when
       const result = shareDealCommandService.start(command);
+
+      // then
+      await assertResolvesLeft(result, (error) => {
+        expect(error).toBeInstanceOf(IllegalStateException);
+      });
+    });
+  });
+
+  describe('end', () => {
+    it('방장은 공유딜을 종료할 수 있다', async () => {
+      // given
+      const command = new StartShareDealCommand('userId', 'shareDealId');
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.START,
+        ownerId: command.userId,
+        participantInfo: ParticipantInfo.of(['1'], 2),
+      });
+
+      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+
+      // when
+      const result = shareDealCommandService.end(command);
+
+      // then
+      await assertResolvesRight(result, () => {
+        expect(eventEmitter.get(ShareDealEndedEvent.EVENT_NAME)).toStrictEqual(
+          new ShareDealEndedEvent(command.shareDealId),
+        );
+        expect(shareDeal.status).toBe(ShareDealStatus.END);
+      });
+    });
+
+    it('START 상태가 아닌 경우 종료할 수 없다', async () => {
+      // given
+      const command = new EndShareDealCommand('userId', 'shareDealId');
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.END,
+      });
+
+      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+
+      // when
+      const result = shareDealCommandService.end(command);
 
       // then
       await assertResolvesLeft(result, (error) => {

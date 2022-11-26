@@ -48,6 +48,11 @@ cp .env.sample .env
 ```dotenv
 JWT_EXPIRE_DAYS="30" # jwt 만료일자
 JWT_SECRET="random secret" # jwt 시크릿
+
+# FIREBASE 정보
+FIREBASE_PROJECT_ID=
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=
 ```
 
 다음 명령어를 실행해 prisma schema 를 생성합니다.
@@ -150,13 +155,14 @@ Repository 와 Service 구현체 내부의 메소들은 모두 순수함수로 �
 - Option -> O
 
 ```typescript
-// libs/custom/src/fp-ts/utils.ts
+// libs/custom/src/fp-ts/index.ts
 export * as TE from 'fp-ts/TaskEither';
 export * as O from 'fp-ts/Option';
 export * as E from 'fp-ts/Either';
+export * as RNEA from 'fp-ts/ReadonlyNonEmptyArray';
 
 // 아래와 같이 import 하여 사용
-import { TE, O, E } from '@app/custom/fp-ts';
+import { TE, O, E, RNEA } from '@app/custom/fp-ts';
 ```
 
 ## Test

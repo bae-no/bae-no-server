@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ShareDealEndedEvent } from '../../domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../domain/event/ShareDealStartedEvent';
 import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
@@ -67,6 +68,23 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
         this.eventEmitterPort.emit(
           ShareDealStartedEvent.EVENT_NAME,
           new ShareDealStartedEvent(command.shareDealId),
+        ),
+      ),
+      TE.map(constVoid),
+    );
+  }
+
+  override end(
+    command: StartShareDealCommand,
+  ): TaskEither<StartShareDealError, void> {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(command.shareDealId),
+      TE.chainEitherKW((deal) => deal.end(command.userId)),
+      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
+      TE.map(() =>
+        this.eventEmitterPort.emit(
+          ShareDealEndedEvent.EVENT_NAME,
+          new ShareDealEndedEvent(command.shareDealId),
         ),
       ),
       TE.map(constVoid),

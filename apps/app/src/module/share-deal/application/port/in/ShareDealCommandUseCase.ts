@@ -3,6 +3,7 @@ import { IllegalStateException } from '@app/domain/exception/IllegalStateExcepti
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { EndShareDealCommand } from './dto/EndShareDealCommand';
 import { JoinShareDealCommand } from './dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from './dto/OpenShareDealCommand';
 import { StartShareDealCommand } from './dto/StartShareDealCommand';
@@ -18,6 +19,11 @@ export type StartShareDealError =
   | NotFoundException
   | IllegalStateException;
 
+export type EndShareDealError =
+  | DBError
+  | NotFoundException
+  | IllegalStateException;
+
 export abstract class ShareDealCommandUseCase {
   abstract open(command: OpenShareDealCommand): TaskEither<DBError, void>;
 
@@ -26,4 +32,8 @@ export abstract class ShareDealCommandUseCase {
   abstract start(
     command: StartShareDealCommand,
   ): TaskEither<StartShareDealError, void>;
+
+  abstract end(
+    command: EndShareDealCommand,
+  ): TaskEither<EndShareDealError, void>;
 }

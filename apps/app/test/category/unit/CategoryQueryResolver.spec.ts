@@ -133,6 +133,10 @@ describe('CategoryQueryResolver', () => {
                   "code": "PARTICIPANTS",
                   "name": "입장가능순",
                 },
+                {
+                  "code": "DISTANCE",
+                  "name": "거리순",
+                },
               ],
             },
           },

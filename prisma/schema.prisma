@@ -117,6 +117,7 @@ model Chat {
   updatedAt   DateTime @updatedAt
   userId      String   @db.ObjectId
   shareDealId String   @db.ObjectId
+  timestamp   Int
   message     Message
 }
 

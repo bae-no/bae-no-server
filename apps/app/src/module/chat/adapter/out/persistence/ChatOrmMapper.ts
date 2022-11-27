@@ -9,6 +9,7 @@ export class ChatOrmMapper {
     return new Chat({
       userId: orm.userId,
       shareDealId: orm.shareDealId,
+      timestamp: orm.timestamp,
       message: Message.of(
         orm.message.authorId,
         orm.message.type as MessageType,
@@ -25,6 +26,7 @@ export class ChatOrmMapper {
       updatedAt: domain.updatedAt,
       userId: domain.userId,
       shareDealId: domain.shareDealId,
+      timestamp: domain.timestamp,
       message: {
         authorId: domain.message.authorId,
         type: domain.message.type,

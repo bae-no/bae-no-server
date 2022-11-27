@@ -105,6 +105,7 @@ describe('ShareDealCommandService', () => {
     it('방장은 공유딜을 시작할 수 있다', async () => {
       // given
       const command = new StartShareDealCommand('userId', 'shareDealId');
+      const now = new Date('2021-01-01');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
         ownerId: command.userId,
@@ -115,13 +116,13 @@ describe('ShareDealCommandService', () => {
       shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
 
       // when
-      const result = shareDealCommandService.start(command);
+      const result = shareDealCommandService.start(command, now);
 
       // then
       await assertResolvesRight(result, () => {
         expect(
           eventEmitter.get(ShareDealStartedEvent.EVENT_NAME),
-        ).toStrictEqual(new ShareDealStartedEvent(command.shareDealId));
+        ).toStrictEqual(new ShareDealStartedEvent(command.shareDealId, now));
         expect(shareDeal.status).toBe(ShareDealStatus.START);
       });
     });
@@ -149,6 +150,7 @@ describe('ShareDealCommandService', () => {
     it('방장은 공유딜을 종료할 수 있다', async () => {
       // given
       const command = new StartShareDealCommand('userId', 'shareDealId');
+      const now = new Date('2021-01-01');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
         ownerId: command.userId,
@@ -159,12 +161,12 @@ describe('ShareDealCommandService', () => {
       shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
 
       // when
-      const result = shareDealCommandService.end(command);
+      const result = shareDealCommandService.end(command, now);
 
       // then
       await assertResolvesRight(result, () => {
         expect(eventEmitter.get(ShareDealEndedEvent.EVENT_NAME)).toStrictEqual(
-          new ShareDealEndedEvent(command.shareDealId),
+          new ShareDealEndedEvent(command.shareDealId, now),
         );
         expect(shareDeal.status).toBe(ShareDealStatus.END);
       });

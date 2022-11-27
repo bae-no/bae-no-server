@@ -6,6 +6,7 @@ export interface ChatProps {
   userId: string;
   shareDealId: string;
   message: Message;
+  timestamp: number;
 }
 
 export class Chat extends BaseEntity<ChatProps> {
@@ -19,6 +20,10 @@ export class Chat extends BaseEntity<ChatProps> {
 
   get shareDealId(): string {
     return this.props.shareDealId;
+  }
+
+  get timestamp(): number {
+    return this.props.timestamp;
   }
 
   get message(): Message {
@@ -42,10 +47,12 @@ export class Chat extends BaseEntity<ChatProps> {
     participantIds: string[],
     authorId: string,
     content: string,
+    timestamp: number,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
+        timestamp,
         userId: id,
         message: Message.normal(authorId, content, authorId !== id),
       }),
@@ -56,10 +63,12 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
+    timestamp: number,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
+        timestamp,
         userId: id,
         message: Message.startShareDealMessage(authorId),
       }),
@@ -70,10 +79,12 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
+    timestamp: number,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
+        timestamp,
         userId: id,
         message: Message.endShareDealMessage(authorId),
       }),

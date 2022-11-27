@@ -69,6 +69,7 @@ export class ChatEventListener {
         shareDeal.id,
         shareDeal.participantInfo.ids,
         shareDeal.ownerId,
+        event.eventTime.getTime(),
       );
     }
 
@@ -76,6 +77,7 @@ export class ChatEventListener {
       shareDeal.id,
       shareDeal.participantInfo.ids,
       shareDeal.ownerId,
+      event.eventTime.getTime(),
     );
   }
 }

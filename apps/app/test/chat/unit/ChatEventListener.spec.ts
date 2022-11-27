@@ -3,12 +3,15 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
+import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/response/ChatWrittenResponse';
 import { ChatEventListener } from '../../../src/module/chat/adapter/in/listener/ChatEventListener';
+import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
 import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 
 describe('ChatEventListener', () => {
@@ -16,7 +19,7 @@ describe('ChatEventListener', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
   const eventEmitter = new StubEventEmitter();
-  const shareDealCommandService = new ChatEventListener(
+  const chatEventListener = new ChatEventListener(
     pubSubPort,
     shareDealQueryRepositoryPort,
     chatRepositoryPort,
@@ -27,6 +30,22 @@ describe('ChatEventListener', () => {
     pubSubPort.clear();
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatRepositoryPort);
+  });
+
+  describe('handle', () => {
+    it('채팅 작성 메시지를 전송한다', () => {
+      // given
+      const chat = ChatFactory.create();
+      const event = new ChatWrittenEvent([chat]);
+
+      // when
+      chatEventListener.handleChatWrittenEvent(event);
+
+      // then
+      expect(
+        pubSubPort.get(ChatWrittenTrigger(chat.shareDealId)),
+      ).toStrictEqual(ChatWrittenResponse.of(chat.message));
+    });
   });
 
   describe('handleShareDealStartedEvent', () => {
@@ -45,7 +64,7 @@ describe('ChatEventListener', () => {
       const event = new ShareDealStartedEvent(shareDealId);
 
       // when
-      await shareDealCommandService.handleShareDealStartedEvent(event);
+      await chatEventListener.handleShareDealStartedEvent(event);
 
       // then
       expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME))

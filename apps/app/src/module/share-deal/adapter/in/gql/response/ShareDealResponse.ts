@@ -1,3 +1,4 @@
+import { CoordinateResponse } from '@app/custom/nest/response/CoordinateResponse';
 import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
 import { ShareDeal } from '../../../../domain/ShareDeal';
@@ -19,9 +20,6 @@ export class ShareDealResponse {
   orderPrice: number;
 
   @Field(() => Int)
-  distance: number;
-
-  @Field(() => Int)
   minParticipants: number;
 
   @Field(() => Int)
@@ -36,6 +34,9 @@ export class ShareDealResponse {
   @Field(() => FoodCategory)
   category: FoodCategory;
 
+  @Field(() => CoordinateResponse)
+  coordinate: CoordinateResponse;
+
   static of(shareDeal: ShareDeal): ShareDealResponse {
     const response = new ShareDealResponse();
 
@@ -43,12 +44,12 @@ export class ShareDealResponse {
     response.createdAt = shareDeal.createdAt;
     response.title = shareDeal.title;
     response.orderPrice = shareDeal.orderPrice;
-    response.distance = 0;
     response.minParticipants = shareDeal.participantInfo.min;
     response.currentParticipants = shareDeal.participantInfo.current;
     response.status = shareDeal.status;
     response.thumbnail = shareDeal.thumbnail;
     response.category = shareDeal.category;
+    response.coordinate = shareDeal.zone.coordinate;
 
     return response;
   }

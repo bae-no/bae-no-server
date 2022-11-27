@@ -268,9 +268,9 @@ input SendPhoneVerificationCodeInput {
 
 type ShareDealResponse {
   category: FoodCategory!
+  coordinate: CoordinateResponse!
   createdAt: DateTime!
   currentParticipants: Int!
-  distance: Int!
   id: ID!
   minParticipants: Int!
   orderPrice: Int!
@@ -286,6 +286,8 @@ type ShareDealSortCategory {
 
 """공유딜 정렬유형"""
 enum ShareDealSortType {
+  DISTANCE
+
   """최신순"""
   LATEST
 

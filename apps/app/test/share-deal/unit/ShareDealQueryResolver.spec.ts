@@ -10,6 +10,7 @@ import { ShareDealSortType } from '../../../src/module/share-deal/application/po
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { Address } from '../../../src/module/user/domain/vo/Address';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
@@ -66,13 +67,16 @@ describe('ShareDealQueryResolver', () => {
             id
             createdAt
             title
-            distance
             orderPrice
             minParticipants
             currentParticipants
             status
             thumbnail
             category
+            coordinate {
+              latitude
+              longitude
+            }
           }
         }
       `;
@@ -85,6 +89,7 @@ describe('ShareDealQueryResolver', () => {
         thumbnail: 'thumbnail',
         participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
         category: FoodCategory.CHINESE,
+        zone: new ShareZone('road', 'detail', 123.5, 45.6),
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
@@ -101,9 +106,12 @@ describe('ShareDealQueryResolver', () => {
             "shareDeals": [
               {
                 "category": "CHINESE",
+                "coordinate": {
+                  "latitude": 123.5,
+                  "longitude": 45.6,
+                },
                 "createdAt": "2022-01-01T00:00:00.000Z",
                 "currentParticipants": 3,
-                "distance": 0,
                 "id": "12345",
                 "minParticipants": 10,
                 "orderPrice": 1000,
@@ -132,13 +140,16 @@ describe('ShareDealQueryResolver', () => {
             id
             createdAt
             title
-            distance
             orderPrice
             minParticipants
             currentParticipants
             status
             thumbnail
             category
+            coordinate {
+              latitude
+              longitude
+            }
           }
         }
       `;
@@ -164,6 +175,7 @@ describe('ShareDealQueryResolver', () => {
         thumbnail: 'thumbnail',
         participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
         category: FoodCategory.CHINESE,
+        zone: new ShareZone('road', 'detail', 123.5, 45.6),
       });
 
       userQueryRepositoryPort.findById.mockReturnValue(right(user));
@@ -183,9 +195,12 @@ describe('ShareDealQueryResolver', () => {
             "shareDealsByNearest": [
               {
                 "category": "CHINESE",
+                "coordinate": {
+                  "latitude": 123.5,
+                  "longitude": 45.6,
+                },
                 "createdAt": "2022-01-01T00:00:00.000Z",
                 "currentParticipants": 3,
-                "distance": 0,
                 "id": "12345",
                 "minParticipants": 10,
                 "orderPrice": 1000,

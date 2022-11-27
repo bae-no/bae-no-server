@@ -1,5 +1,6 @@
 import { O, TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
+import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { Injectable } from '@nestjs/common';
 import { constant, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -7,6 +8,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { UserQueryRepositoryPort } from '../../../user/application/port/out/UserQueryRepositoryPort';
 import { User } from '../../../user/domain/User';
+import { ChatReadEvent } from '../../domain/event/ChatReadEvent';
 import { ChatQueryUseCase } from '../port/in/ChatQueryUseCase';
 import { FindByUserDto } from '../port/in/dto/FindByUserDto';
 import { FindChatByUserCommand } from '../port/in/dto/FindChatByUserCommand';
@@ -20,6 +22,7 @@ export class ChatQueryService extends ChatQueryUseCase {
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
     private readonly chatQueryRepository: ChatQueryRepositoryPort,
     private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
+    private readonly eventEmitterPort: EventEmitterPort,
   ) {
     super();
   }
@@ -86,6 +89,14 @@ export class ChatQueryService extends ChatQueryUseCase {
           chats.map((chat) => chat.message.authorId),
         ),
       ),
+      TE.map((result) => {
+        this.eventEmitterPort.emit(
+          ChatReadEvent.EVENT_NAME,
+          new ChatReadEvent(command.userId, command.shareDealId),
+        );
+
+        return result;
+      }),
       TE.map(({ chats, authors }) =>
         chats.map(
           (chat) =>

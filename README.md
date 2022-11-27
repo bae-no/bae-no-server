@@ -2,6 +2,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bae-no_bae-no-server&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bae-no_bae-no-server)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bae-no_bae-no-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bae-no_bae-no-server)
+[![Wallaby.js](https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github)](https://wallabyjs.com/oss/)
 
 ## 개발 스택
 

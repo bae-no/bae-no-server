@@ -2,7 +2,7 @@ import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
-import { pipe } from 'fp-ts/function';
+import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
@@ -25,6 +25,21 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
           ),
         ),
       TE.map((chats) => chats.map(ChatOrmMapper.toDomain)),
+    );
+  }
+
+  override updateRead(
+    shareDealId: string,
+    userId: string,
+  ): TaskEither<DBError, void> {
+    return pipe(
+      tryCatchDB(async () =>
+        this.prisma.chat.updateMany({
+          where: { shareDealId, userId },
+          data: { message: { update: { unread: false } } },
+        }),
+      ),
+      TE.map(constVoid),
     );
   }
 }

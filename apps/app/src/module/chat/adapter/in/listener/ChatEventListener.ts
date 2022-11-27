@@ -11,6 +11,7 @@ import { ShareDealStartedEvent } from '../../../../share-deal/domain/event/Share
 import { ShareDeal } from '../../../../share-deal/domain/ShareDeal';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import { Chat } from '../../../domain/Chat';
+import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
 import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
@@ -23,6 +24,11 @@ export class ChatEventListener {
     private readonly chatRepositoryPort: ChatRepositoryPort,
     private readonly eventEmitterPort: EventEmitterPort,
   ) {}
+
+  @OnEvent(ChatReadEvent.EVENT_NAME, { async: true })
+  async handleChatReadEvent(event: ChatReadEvent) {
+    await this.chatRepositoryPort.updateRead(event.shareDealId, event.userId)();
+  }
 
   @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
   handleChatWrittenEvent(event: ChatWrittenEvent) {

@@ -65,4 +65,18 @@ export class Chat extends BaseEntity<ChatProps> {
       }),
     );
   }
+
+  static createByEndShareDeal(
+    shareDealId: string,
+    participantIds: string[],
+    authorId: string,
+  ): Chat[] {
+    return participantIds.map((id) =>
+      Chat.of({
+        shareDealId,
+        userId: id,
+        message: Message.endShareDealMessage(authorId),
+      }),
+    );
+  }
 }

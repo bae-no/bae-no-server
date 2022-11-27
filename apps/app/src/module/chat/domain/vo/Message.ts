@@ -11,6 +11,9 @@ export class Message {
     '맛있는 공유딜이 되길 바라요!',
   ].join('\n');
 
+  static END_SHARE_DEAL_MESSAGE =
+    '공유딜이 종료되었습니다.\n더이상의 채팅은 불가합니다.';
+
   private constructor(
     readonly authorId: string,
     readonly type: MessageType,
@@ -45,6 +48,15 @@ export class Message {
       authorId,
       MessageType.NOTICE,
       Message.START_SHARE_DEAL_MESSAGE,
+      false,
+    );
+  }
+
+  static endShareDealMessage(authorId: string): Message {
+    return new Message(
+      authorId,
+      MessageType.NOTICE,
+      Message.END_SHARE_DEAL_MESSAGE,
       false,
     );
   }

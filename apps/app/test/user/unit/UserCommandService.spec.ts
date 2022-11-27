@@ -18,6 +18,7 @@ import { UserRepositoryPort } from '../../../src/module/user/application/port/ou
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
 import { User } from '../../../src/module/user/domain/User';
 import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
@@ -102,6 +103,7 @@ describe('UserCommandService', () => {
         10.2,
         20.3,
         AddressType.HOME,
+        AddressSystem.ROAD,
         'road',
         'detail',
       );
@@ -128,6 +130,7 @@ describe('UserCommandService', () => {
         10.2,
         20.3,
         AddressType.HOME,
+        AddressSystem.JIBUN,
         'road',
         'detail',
       );
@@ -174,13 +177,23 @@ describe('UserCommandService', () => {
         10,
         20,
         AddressType.HOME,
+        AddressSystem.ROAD,
         'road',
         'detail',
       );
 
       const addresses = Array.from(
         { length: 6 },
-        () => new Address('alias', 'road', 'detail', AddressType.HOME, 1, 2),
+        () =>
+          new Address(
+            'alias',
+            AddressSystem.ROAD,
+            'road',
+            'detail',
+            AddressType.HOME,
+            1,
+            2,
+          ),
       );
       const user = UserFactory.create({
         addressList: UserAddressList.of(addresses),
@@ -205,6 +218,7 @@ describe('UserCommandService', () => {
         10,
         20,
         AddressType.HOME,
+        AddressSystem.ROAD,
         'road',
         'detail',
       );
@@ -230,9 +244,33 @@ describe('UserCommandService', () => {
 
       const user = UserFactory.create({
         addressList: UserAddressList.of([
-          new Address('alias1', 'road1', 'detail1', AddressType.HOME, 1, 2),
-          new Address('alias2', 'road2', 'detail2', AddressType.HOME, 1, 2),
-          new Address('alias3', 'road3', 'detail3', AddressType.HOME, 1, 2),
+          new Address(
+            'alias1',
+            AddressSystem.ROAD,
+            'road1',
+            'detail1',
+            AddressType.HOME,
+            1,
+            2,
+          ),
+          new Address(
+            'alias2',
+            AddressSystem.ROAD,
+            'road2',
+            'detail2',
+            AddressType.HOME,
+            1,
+            2,
+          ),
+          new Address(
+            'alias3',
+            AddressSystem.ROAD,
+            'road3',
+            'detail3',
+            AddressType.HOME,
+            1,
+            2,
+          ),
         ]),
       });
       userQueryRepository.findById.mockReturnValue(right(user));

@@ -5,4 +5,9 @@ import { Chat } from '../../../domain/Chat';
 
 export abstract class ChatRepositoryPort {
   abstract create(chats: Chat[]): TaskEither<DBError, Chat[]>;
+
+  abstract updateRead(
+    shareDealId: string,
+    userId: string,
+  ): TaskEither<DBError, void>;
 }

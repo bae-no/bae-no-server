@@ -55,6 +55,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
 
   override start(
     command: StartShareDealCommand,
+    now = new Date(),
   ): TaskEither<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
@@ -67,7 +68,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       TE.map(() =>
         this.eventEmitterPort.emit(
           ShareDealStartedEvent.EVENT_NAME,
-          new ShareDealStartedEvent(command.shareDealId),
+          new ShareDealStartedEvent(command.shareDealId, now),
         ),
       ),
       TE.map(constVoid),
@@ -76,6 +77,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
 
   override end(
     command: StartShareDealCommand,
+    now = new Date(),
   ): TaskEither<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
@@ -84,7 +86,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       TE.map(() =>
         this.eventEmitterPort.emit(
           ShareDealEndedEvent.EVENT_NAME,
-          new ShareDealEndedEvent(command.shareDealId),
+          new ShareDealEndedEvent(command.shareDealId, now),
         ),
       ),
       TE.map(constVoid),

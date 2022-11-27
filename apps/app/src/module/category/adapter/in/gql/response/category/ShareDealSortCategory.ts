@@ -15,6 +15,8 @@ export class ShareDealSortCategory {
           ShareDealSortType.PARTICIPANTS,
           '입장가능순',
         );
+      case ShareDealSortType.DISTANCE:
+        return new ShareDealSortCategory(ShareDealSortType.DISTANCE, '거리순');
       default:
         throw new Error('unknown share deal sort type');
     }

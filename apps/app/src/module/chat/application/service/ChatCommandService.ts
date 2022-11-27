@@ -24,7 +24,10 @@ export class ChatCommandService extends ChatCommandUseCase {
     super();
   }
 
-  override write(command: WriteChatCommand): TaskEither<WriteChatError, void> {
+  override write(
+    command: WriteChatCommand,
+    now = new Date(),
+  ): TaskEither<WriteChatError, void> {
     return pipe(
       this.shareDealQueryUseCase.participantIds(
         command.shareDealId,
@@ -36,6 +39,7 @@ export class ChatCommandService extends ChatCommandUseCase {
           participantIds,
           command.userId,
           command.content,
+          now.getTime(),
         ),
       ),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),

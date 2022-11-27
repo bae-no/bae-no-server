@@ -6,8 +6,15 @@ input AddressInput {
   alias: String
   coordinate: CoordinateInput!
   detail: String!
-  road: String!
+  path: String!
+  system: AddressSystem!
   type: AddressType!
+}
+
+"""주소 체계"""
+enum AddressSystem {
+  JIBUN
+  ROAD
 }
 
 """주소 유형"""
@@ -261,9 +268,9 @@ input SendPhoneVerificationCodeInput {
 
 type ShareDealResponse {
   category: FoodCategory!
+  coordinate: CoordinateResponse!
   createdAt: DateTime!
   currentParticipants: Int!
-  distance: Int!
   id: ID!
   minParticipants: Int!
   orderPrice: Int!
@@ -279,6 +286,8 @@ type ShareDealSortCategory {
 
 """공유딜 정렬유형"""
 enum ShareDealSortType {
+  DISTANCE
+
   """최신순"""
   LATEST
 
@@ -334,7 +343,8 @@ type UserAddressResponse {
   coordinate: CoordinateResponse!
   detail: String!
   key: ID!
-  road: String!
+  path: String!
+  system: AddressSystem!
   type: AddressType!
 }
 

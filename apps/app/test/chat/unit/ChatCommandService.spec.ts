@@ -103,6 +103,7 @@ describe('ChatCommandService', () => {
     it('채팅 작성 이벤트를 발송한다', async () => {
       // given
       const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
+      const now = new Date('2021-01-01T00:00:00.000Z');
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
         right(['user 1', 'user 2', 'user 3']),
@@ -110,7 +111,7 @@ describe('ChatCommandService', () => {
       chatRepositoryPort.create.mockImplementation((chats) => right(chats));
 
       // when
-      const result = shareDealCommandService.write(command);
+      const result = shareDealCommandService.write(command, now);
 
       // then
       await assertResolvesRight(result, () => {
@@ -127,6 +128,7 @@ describe('ChatCommandService', () => {
                     "unread": false,
                   },
                   "shareDealId": "shareDealId",
+                  "timestamp": 1609459200000,
                   "userId": "user 1",
                 },
               },
@@ -139,6 +141,7 @@ describe('ChatCommandService', () => {
                     "unread": true,
                   },
                   "shareDealId": "shareDealId",
+                  "timestamp": 1609459200000,
                   "userId": "user 2",
                 },
               },
@@ -151,6 +154,7 @@ describe('ChatCommandService', () => {
                     "unread": true,
                   },
                   "shareDealId": "shareDealId",
+                  "timestamp": 1609459200000,
                   "userId": "user 3",
                 },
               },

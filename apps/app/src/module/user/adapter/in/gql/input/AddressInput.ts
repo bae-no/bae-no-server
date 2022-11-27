@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
 import { AppendAddressCommand } from '../../../../application/port/in/dto/AppendAddressCommand';
+import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
 import { CoordinateInput } from './CoordinateInput';
 
@@ -14,13 +15,16 @@ export class AddressInput {
   alias?: string;
 
   @Field()
-  road: string;
+  path: string;
 
   @Field()
   detail: string;
 
   @Field(() => AddressType)
   type: AddressType;
+
+  @Field(() => AddressSystem)
+  system: AddressSystem;
 
   @Field(() => CoordinateInput)
   @Type(() => CoordinateInput)
@@ -33,7 +37,8 @@ export class AddressInput {
       this.coordinate.latitude,
       this.coordinate.longitude,
       this.type,
-      this.road,
+      this.system,
+      this.path,
       this.detail,
       this.alias,
     );

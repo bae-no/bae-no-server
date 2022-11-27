@@ -2,6 +2,7 @@ import { User as OrmUser } from '@prisma/client';
 
 import { User } from '../../../domain/User';
 import { Address } from '../../../domain/vo/Address';
+import { AddressSystem } from '../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../domain/vo/AddressType';
 import { Agreement } from '../../../domain/vo/Agreement';
 import { Auth } from '../../../domain/vo/Auth';
@@ -26,7 +27,8 @@ export class UserOrmMapper {
           (address) =>
             new Address(
               address.alias,
-              address.road,
+              AddressSystem[address.system as keyof typeof AddressSystem],
+              address.path,
               address.detail,
               AddressType[address.type as keyof typeof AddressType],
               address.coordinate.coordinates[1],
@@ -65,7 +67,8 @@ export class UserOrmMapper {
       },
       addresses: domain.addresses.map((address) => ({
         alias: address.alias,
-        road: address.road,
+        system: address.system,
+        path: address.path,
         detail: address.detail,
         type: address.type,
         coordinate: {

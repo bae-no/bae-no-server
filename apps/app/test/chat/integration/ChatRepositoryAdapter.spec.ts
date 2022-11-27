@@ -1,6 +1,7 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 
+import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/ChatOrmMapper';
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
@@ -19,11 +20,13 @@ describe('ChatRepositoryAdapter', () => {
         Chat.of({
           shareDealId: faker.database.mongodbObjectId(),
           userId: faker.database.mongodbObjectId(),
+          timestamp: faker.datatype.number(),
           message: Message.firstMessage(faker.database.mongodbObjectId()),
         }),
         Chat.of({
           shareDealId: faker.database.mongodbObjectId(),
           userId: faker.database.mongodbObjectId(),
+          timestamp: faker.datatype.number(),
           message: Message.startShareDealMessage(
             faker.database.mongodbObjectId(),
           ),
@@ -42,6 +45,50 @@ describe('ChatRepositoryAdapter', () => {
           expect(v.message.type).toBe(chats[i].message.type);
           expect(v.message.authorId).toBe(chats[i].message.authorId);
         });
+      });
+    });
+  });
+
+  describe('updateRead', () => {
+    it('주어진 채팅을 모두 읽음처리한다', async () => {
+      // given
+      const shareDealId = faker.database.mongodbObjectId();
+      const userId = faker.database.mongodbObjectId();
+      const chats = [
+        Chat.of({
+          shareDealId,
+          userId,
+          timestamp: 1000,
+          message: Message.normal(
+            faker.database.mongodbObjectId(),
+            'content 1',
+            true,
+          ),
+        }),
+        Chat.of({
+          shareDealId,
+          userId,
+          timestamp: 1000,
+          message: Message.normal(
+            faker.database.mongodbObjectId(),
+            'content 2',
+            true,
+          ),
+        }),
+      ];
+      await prisma.chat.createMany({ data: chats.map(ChatOrmMapper.toOrm) });
+
+      // when
+      const result = chatRepositoryAdapter.updateRead(shareDealId, userId);
+
+      // then
+      await assertResolvesRight(result);
+      const updated = await prisma.chat.findMany({
+        where: { shareDealId, userId },
+      });
+      expect(updated).toHaveLength(2);
+      updated.forEach((v) => {
+        expect(v.message.unread).toBe(false);
       });
     });
   });

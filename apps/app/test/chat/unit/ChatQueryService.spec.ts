@@ -2,11 +2,13 @@ import { some } from 'fp-ts/Option';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
+import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { FindChatByUserCommand } from '../../../src/module/chat/application/port/in/dto/FindChatByUserCommand';
 import { FindChatCommand } from '../../../src/module/chat/application/port/in/dto/FindChatCommand';
 import { ChatQueryRepositoryPort } from '../../../src/module/chat/application/port/out/ChatQueryRepositoryPort';
 import { ChatQueryService } from '../../../src/module/chat/application/service/ChatQueryService';
 import { Chat } from '../../../src/module/chat/domain/Chat';
+import { ChatReadEvent } from '../../../src/module/chat/domain/event/ChatReadEvent';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -20,16 +22,19 @@ describe('ChatQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatQueryRepositoryPort = mock<ChatQueryRepositoryPort>();
   const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
+  const eventEmitter = new StubEventEmitter();
   const shareDealCommandService = new ChatQueryService(
     shareDealQueryRepositoryPort,
     chatQueryRepositoryPort,
     userQueryRepositoryPort,
+    eventEmitter,
   );
 
   beforeEach(() => {
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatQueryRepositoryPort);
     mockReset(userQueryRepositoryPort);
+    eventEmitter.clear();
   });
 
   describe('find', () => {
@@ -47,6 +52,7 @@ describe('ChatQueryService', () => {
         Chat.of({
           shareDealId: deal.id,
           userId: 'userId',
+          timestamp: 0,
           message: Message.normal('123', 'content', true),
         }),
       );
@@ -96,6 +102,24 @@ describe('ChatQueryService', () => {
   });
 
   describe('findByUser', () => {
+    it('채팅방 조회 이벤트를 발송한다', async () => {
+      // given
+      chatQueryRepositoryPort.findByUser.mockReturnValue(right([]));
+      userQueryRepositoryPort.findByIds.mockReturnValue(right([]));
+
+      const command = new FindChatByUserCommand('shareDealId', 'userId');
+
+      // when
+      const result = shareDealCommandService.findByUser(command);
+
+      // then
+      await assertResolvesRight(result, () => {
+        expect(eventEmitter.get(ChatReadEvent.EVENT_NAME)).toStrictEqual(
+          new ChatReadEvent('userId', 'shareDealId'),
+        );
+      });
+    });
+
     it('채팅방 상세정보를 가져온다', async () => {
       // given
       const user = UserFactory.create();

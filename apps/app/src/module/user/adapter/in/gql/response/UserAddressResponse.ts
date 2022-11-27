@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { Address } from '../../../../domain/vo/Address';
+import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
 import { CoordinateResponse } from './CoordinateResponse';
 
@@ -13,13 +14,16 @@ export class UserAddressResponse {
   alias: string;
 
   @Field()
-  road: string;
+  path: string;
 
   @Field()
   detail: string;
 
   @Field(() => AddressType)
   type: AddressType;
+
+  @Field(() => AddressSystem)
+  system: AddressSystem;
 
   @Field(() => CoordinateResponse)
   coordinate: CoordinateResponse;
@@ -30,7 +34,8 @@ export class UserAddressResponse {
 
       response.key = `${index}`;
       response.alias = address.alias;
-      response.road = address.road;
+      response.system = address.system;
+      response.path = address.path;
       response.detail = address.detail;
       response.type = address.type;
       response.coordinate = address.coordinate;

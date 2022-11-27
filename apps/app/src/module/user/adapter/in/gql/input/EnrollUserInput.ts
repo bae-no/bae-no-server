@@ -22,7 +22,8 @@ export class EnrollUserInput {
       this.address.coordinate.latitude,
       this.address.coordinate.longitude,
       this.address.type,
-      this.address.road,
+      this.address.system,
+      this.address.path,
       this.address.detail,
       this.address.alias,
     );

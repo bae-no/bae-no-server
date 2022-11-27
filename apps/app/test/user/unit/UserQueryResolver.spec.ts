@@ -8,6 +8,7 @@ import { UserQueryResolver } from '../../../src/module/user/adapter/in/gql/UserQ
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { User } from '../../../src/module/user/domain/User';
 import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
@@ -77,7 +78,8 @@ describe('UserQueryResolver', () => {
           addresses {
             key
             alias
-            road
+            system
+            path
             detail
             type
             coordinate {
@@ -91,7 +93,15 @@ describe('UserQueryResolver', () => {
       const user = User.byAuth(auth);
       user.enroll(
         'nickname',
-        new Address('alias', 'road', 'detail', AddressType.ETC, 1, 2),
+        new Address(
+          'alias',
+          AddressSystem.ROAD,
+          'path',
+          'detail',
+          AddressType.ETC,
+          1,
+          2,
+        ),
       );
 
       userQueryRepositoryPort.findById.mockReturnValue(right(user));
@@ -114,7 +124,8 @@ describe('UserQueryResolver', () => {
                 },
                 "detail": "detail",
                 "key": "0",
-                "road": "road",
+                "path": "path",
+                "system": "ROAD",
                 "type": "ETC",
               },
             ],

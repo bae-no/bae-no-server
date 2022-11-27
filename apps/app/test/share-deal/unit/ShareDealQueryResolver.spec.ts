@@ -12,6 +12,7 @@ import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCateg
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { Address } from '../../../src/module/user/domain/vo/Address';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
 import {
@@ -144,7 +145,15 @@ describe('ShareDealQueryResolver', () => {
 
       const user = UserFactory.create({
         addressList: UserAddressList.of([
-          new Address('a', 'b', 'c', AddressType.ETC, 1, 1),
+          new Address(
+            'a',
+            AddressSystem.JIBUN,
+            'b',
+            'c',
+            AddressType.ETC,
+            1,
+            1,
+          ),
         ]),
       });
       const shareDeal = ShareDealFactory.createOpen({

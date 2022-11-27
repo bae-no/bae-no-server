@@ -62,7 +62,8 @@ type Profile {
 
 type Address {
   alias      String
-  road       String
+  system     String
+  path       String
   detail     String
   type       String
   coordinate Coordinate

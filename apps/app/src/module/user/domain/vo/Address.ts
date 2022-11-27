@@ -1,3 +1,4 @@
+import { AddressSystem } from './AddressSystem';
 import { AddressType } from './AddressType';
 import { Coordinate } from './Coordinate';
 
@@ -6,7 +7,8 @@ export class Address {
 
   constructor(
     readonly alias: string,
-    readonly road: string,
+    readonly system: AddressSystem,
+    readonly path: string,
     readonly detail: string,
     readonly type: AddressType,
     latitude: number,

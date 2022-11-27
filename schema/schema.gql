@@ -6,8 +6,15 @@ input AddressInput {
   alias: String
   coordinate: CoordinateInput!
   detail: String!
-  road: String!
+  path: String!
+  system: AddressSystem!
   type: AddressType!
+}
+
+"""주소 체계"""
+enum AddressSystem {
+  JIBUN
+  ROAD
 }
 
 """주소 유형"""
@@ -334,7 +341,8 @@ type UserAddressResponse {
   coordinate: CoordinateResponse!
   detail: String!
   key: ID!
-  road: String!
+  path: String!
+  system: AddressSystem!
   type: AddressType!
 }
 

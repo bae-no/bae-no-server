@@ -14,6 +14,7 @@ import { AuthToken } from '../../../src/module/user/application/port/in/dto/Auth
 import { SignInUserDto } from '../../../src/module/user/application/port/in/dto/SignInUserDto';
 import { UserCommandUseCase } from '../../../src/module/user/application/port/in/UserCommandUseCase';
 import { User } from '../../../src/module/user/domain/User';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
@@ -103,7 +104,8 @@ describe('UserMutationResolver', () => {
       input.nickname = 'enrollUser';
       const address = new AddressInput();
       address.type = AddressType.ETC;
-      address.road = 'road';
+      address.system = AddressSystem.ROAD;
+      address.path = 'road';
       address.detail = 'address';
       input.address = address;
       const coordinate = new CoordinateInput();
@@ -151,7 +153,8 @@ describe('UserMutationResolver', () => {
       input.nickname = 'enrollUser';
       const address = new AddressInput();
       address.type = AddressType.ETC;
-      address.road = 'road';
+      address.system = AddressSystem.ROAD;
+      address.path = 'road';
       address.detail = 'address';
       address.alias = 'alias';
       input.address = address;
@@ -222,7 +225,8 @@ describe('UserMutationResolver', () => {
       // given
       const input = new AddressInput();
       input.type = AddressType.HOME;
-      input.road = 'road';
+      input.system = AddressSystem.ROAD;
+      input.path = 'road';
       input.detail = 'address';
       const coordinate = new CoordinateInput();
       coordinate.latitude = 70.1;

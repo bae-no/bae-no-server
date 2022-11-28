@@ -29,10 +29,10 @@ export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {
             : this.prisma.shareDeal.create({ data }),
         ),
       TE.map(ShareDealOrmMapper.toDomain),
-      TE.map((shareDeal) => {
+      TE.map((newShareDeal) => {
         shareDeal.publishDomainEvents(this.eventEmitterPort);
 
-        return shareDeal;
+        return newShareDeal;
       }),
     );
   }

@@ -4,9 +4,11 @@ import { faker } from '@faker-js/faker';
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealRepositoryAdapter';
+import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { ShareDeal } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
+import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealRepositoryAdapter', () => {
@@ -66,6 +68,22 @@ describe('ShareDealRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (value) => {
         expect(value.participantInfo.current).toBe(2);
+      });
+    });
+
+    it('도메인 이벤트를 발송한다', async () => {
+      // given
+      const shareDeal = await prisma.shareDeal
+        .create({ data: ShareDealOrmMapper.toOrm(ShareDealFactory.create()) })
+        .then(ShareDealOrmMapper.toDomain);
+      shareDeal.addDomainEvent(new ShareDealStartedEvent(shareDeal.id));
+
+      // when
+      const result = shareDealRepositoryAdapter.save(shareDeal);
+
+      // then
+      await assertResolvesRight(result, () => {
+        expect(eventEmitter.get(ShareDealStartedEvent.name)).toBeTruthy();
       });
     });
   });

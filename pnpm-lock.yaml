@@ -46,6 +46,7 @@ specifiers:
   jest-junit: 15.0.0
   jest-mock-extended: 3.0.1
   lint-staged: 13.0.4
+  nanoid: ^4.0.0
   passport: 0.6.0
   passport-jwt: 4.0.0
   prettier: 2.8.0
@@ -80,6 +81,7 @@ dependencies:
   fp-ts: 2.13.1
   graphql: 16.6.0
   graphql-subscriptions: 2.0.0_graphql@16.6.0
+  nanoid: 4.0.0
   passport: 0.6.0
   passport-jwt: 4.0.0
   reflect-metadata: 0.1.13
@@ -5991,6 +5993,12 @@ packages:
   /mute-stream/0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
+
+  /nanoid/4.0.0:
+    resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /natural-compare-lite/1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}

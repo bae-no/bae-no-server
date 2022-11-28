@@ -1,5 +1,7 @@
-export class ShareDealEndedEvent {
-  static readonly EVENT_NAME = 'shareDeal.ended';
+import { DomainEvent } from '@app/domain/event/DomainEvent';
 
-  constructor(readonly shareDealId: string, readonly eventTime: Date) {}
+export class ShareDealEndedEvent extends DomainEvent {
+  constructor(readonly shareDealId: string) {
+    super();
+  }
 }

@@ -1,13 +1,10 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
-import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { ShareDealEndedEvent } from '../../domain/event/ShareDealEndedEvent';
-import { ShareDealStartedEvent } from '../../domain/event/ShareDealStartedEvent';
 import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
@@ -25,7 +22,6 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
   constructor(
     private readonly shareDealRepositoryPort: ShareDealRepositoryPort,
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
-    private readonly eventEmitterPort: EventEmitterPort,
   ) {
     super();
   }
@@ -55,7 +51,6 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
 
   override start(
     command: StartShareDealCommand,
-    now = new Date(),
   ): TaskEither<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
@@ -65,30 +60,17 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       ),
       TE.map((deal) => deal.start()),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(() =>
-        this.eventEmitterPort.emit(
-          ShareDealStartedEvent.EVENT_NAME,
-          new ShareDealStartedEvent(command.shareDealId, now),
-        ),
-      ),
       TE.map(constVoid),
     );
   }
 
   override end(
     command: StartShareDealCommand,
-    now = new Date(),
   ): TaskEither<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
       TE.chainEitherKW((deal) => deal.end(command.userId)),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(() =>
-        this.eventEmitterPort.emit(
-          ShareDealEndedEvent.EVENT_NAME,
-          new ShareDealEndedEvent(command.shareDealId, now),
-        ),
-      ),
       TE.map(constVoid),
     );
   }

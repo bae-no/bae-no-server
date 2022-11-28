@@ -1,6 +1,7 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 
+import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealRepositoryAdapter';
 import { ShareDeal } from '../../../src/module/share-deal/domain/ShareDeal';
@@ -10,7 +11,11 @@ import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ShareDealRepositoryAdapter', () => {
   const prisma = new PrismaService();
-  const shareDealRepositoryAdapter = new ShareDealRepositoryAdapter(prisma);
+  const eventEmitter = new StubEventEmitter();
+  const shareDealRepositoryAdapter = new ShareDealRepositoryAdapter(
+    prisma,
+    eventEmitter,
+  );
 
   beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
 

@@ -53,7 +53,6 @@ describe('ChatEventListener', () => {
     it('공유딜 시작 이벤트를 처리한다', async () => {
       // given
       const shareDealId = '1234';
-      const now = new Date('2021-01-01');
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
         ownerId: 'ownerId',
@@ -63,7 +62,7 @@ describe('ChatEventListener', () => {
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
       chatRepositoryPort.create.mockImplementation((value) => right(value));
 
-      const event = new ShareDealStartedEvent(shareDealId, now);
+      const event = new ShareDealStartedEvent(shareDealId);
 
       // when
       await chatEventListener.handleShareDealUpdatedEvent(event);
@@ -95,7 +94,6 @@ describe('ChatEventListener', () => {
     it('공유딜 종료 이벤트를 처리한다', async () => {
       // given
       const shareDealId = '1234';
-      const now = new Date('2022-10-10');
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
         ownerId: 'ownerId',
@@ -105,7 +103,7 @@ describe('ChatEventListener', () => {
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
       chatRepositoryPort.create.mockImplementation((value) => right(value));
 
-      const event = new ShareDealEndedEvent(shareDealId, now);
+      const event = new ShareDealEndedEvent(shareDealId);
 
       // when
       await chatEventListener.handleShareDealUpdatedEvent(event);

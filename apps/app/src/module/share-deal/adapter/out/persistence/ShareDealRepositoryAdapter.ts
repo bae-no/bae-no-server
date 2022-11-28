@@ -1,5 +1,6 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
@@ -11,7 +12,10 @@ import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 
 @Injectable()
 export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventEmitterPort: EventEmitterPort,
+  ) {
     super();
   }
 
@@ -25,6 +29,11 @@ export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {
             : this.prisma.shareDeal.create({ data }),
         ),
       TE.map(ShareDealOrmMapper.toDomain),
+      TE.map((shareDeal) => {
+        shareDeal.publishDomainEvents(this.eventEmitterPort);
+
+        return shareDeal;
+      }),
     );
   }
 }

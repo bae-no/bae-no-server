@@ -115,52 +115,10 @@ describe('ChatCommandService', () => {
 
       // then
       await assertResolvesRight(result, () => {
-        expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME))
-          .toMatchInlineSnapshot(`
-          ChatWrittenEvent {
-            "chats": [
-              Chat {
-                "props": {
-                  "message": Message {
-                    "authorId": "user 1",
-                    "content": "content",
-                    "type": "NORMAL",
-                    "unread": false,
-                  },
-                  "shareDealId": "shareDealId",
-                  "timestamp": 1609459200000,
-                  "userId": "user 1",
-                },
-              },
-              Chat {
-                "props": {
-                  "message": Message {
-                    "authorId": "user 1",
-                    "content": "content",
-                    "type": "NORMAL",
-                    "unread": true,
-                  },
-                  "shareDealId": "shareDealId",
-                  "timestamp": 1609459200000,
-                  "userId": "user 2",
-                },
-              },
-              Chat {
-                "props": {
-                  "message": Message {
-                    "authorId": "user 1",
-                    "content": "content",
-                    "type": "NORMAL",
-                    "unread": true,
-                  },
-                  "shareDealId": "shareDealId",
-                  "timestamp": 1609459200000,
-                  "userId": "user 3",
-                },
-              },
-            ],
-          }
-        `);
+        const event = eventEmitter.get(
+          ChatWrittenEvent.name,
+        ) as ChatWrittenEvent;
+        expect(event.chats).toHaveLength(3);
       });
     });
   });

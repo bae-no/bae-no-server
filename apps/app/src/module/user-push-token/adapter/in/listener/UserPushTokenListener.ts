@@ -14,7 +14,7 @@ export class UserPushTokenListener {
     private readonly pushMessagePort: PushMessagePort,
   ) {}
 
-  @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
+  @OnEvent(ChatWrittenEvent.name, { async: true })
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
     await pipe(
       RNEA.fromArray(event.chatsWithoutAuthor),

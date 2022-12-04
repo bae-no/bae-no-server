@@ -19,7 +19,7 @@ export abstract class AggregateRoot<T> extends BaseEntity<T> {
 
   publishDomainEvents(eventEmitterPort: EventEmitterPort): void {
     this.#domainEvents.forEach((domainEvent) => {
-      eventEmitterPort.emit(domainEvent.constructor.name, domainEvent);
+      eventEmitterPort.emit(domainEvent);
     });
     this.clearDomainEvents();
   }

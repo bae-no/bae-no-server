@@ -1,3 +1,5 @@
+import { DomainEvent } from '@app/domain/event/DomainEvent';
+
 export abstract class EventEmitterPort {
-  abstract emit(event: string, data: unknown): void;
+  abstract emit(event: DomainEvent): void;
 }

@@ -68,27 +68,10 @@ describe('ChatEventListener', () => {
       await chatEventListener.handleShareDealUpdatedEvent(event);
 
       // then
-      expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME))
-        .toMatchInlineSnapshot(`
-        [
-          Chat {
-            "props": {
-              "message": Message {
-                "authorId": "ownerId",
-                "content": "공유딜이 시작되었습니다.
-        공유딜 종료 전까지 나가기가 불가합니다.
-        배달비 송금, 배달 음식 주문 및 공유까지 마무리된 후 공유딜을 종료해주세요:)
-        맛있는 공유딜이 되길 바라요!",
-                "type": "NOTICE",
-                "unread": false,
-              },
-              "shareDealId": "1234",
-              "timestamp": 1609459200000,
-              "userId": "participantId",
-            },
-          },
-        ]
-      `);
+      const result = eventEmitter.get(
+        ChatWrittenEvent.name,
+      ) as ChatWrittenEvent;
+      expect(result.chats).toHaveLength(1);
     });
 
     it('공유딜 종료 이벤트를 처리한다', async () => {
@@ -109,25 +92,10 @@ describe('ChatEventListener', () => {
       await chatEventListener.handleShareDealUpdatedEvent(event);
 
       // then
-      expect(eventEmitter.get(ChatWrittenEvent.EVENT_NAME))
-        .toMatchInlineSnapshot(`
-        [
-          Chat {
-            "props": {
-              "message": Message {
-                "authorId": "ownerId",
-                "content": "공유딜이 종료되었습니다.
-        더이상의 채팅은 불가합니다.",
-                "type": "NOTICE",
-                "unread": false,
-              },
-              "shareDealId": "1234",
-              "timestamp": 1665360000000,
-              "userId": "participantId",
-            },
-          },
-        ]
-      `);
+      const actual = eventEmitter.get(
+        ChatWrittenEvent.name,
+      ) as ChatWrittenEvent;
+      expect(actual.chats).toHaveLength(1);
     });
   });
 });

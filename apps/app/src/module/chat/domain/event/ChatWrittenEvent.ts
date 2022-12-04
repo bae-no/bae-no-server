@@ -1,9 +1,11 @@
+import { DomainEvent } from '@app/domain/event/DomainEvent';
+
 import { Chat } from '../Chat';
 
-export class ChatWrittenEvent {
-  static readonly EVENT_NAME = 'chat.written';
-
-  constructor(readonly chats: Chat[]) {}
+export class ChatWrittenEvent extends DomainEvent {
+  constructor(readonly chats: Chat[]) {
+    super();
+  }
 
   get chatsWithoutAuthor(): Chat[] {
     return this.chats.filter((chat) => !chat.isAuthor);

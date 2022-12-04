@@ -1,5 +1,7 @@
-export class ChatReadEvent {
-  static readonly EVENT_NAME = 'chat.read';
+import { DomainEvent } from '@app/domain/event/DomainEvent';
 
-  constructor(readonly userId: string, readonly shareDealId: string) {}
+export class ChatReadEvent extends DomainEvent {
+  constructor(readonly userId: string, readonly shareDealId: string) {
+    super();
+  }
 }

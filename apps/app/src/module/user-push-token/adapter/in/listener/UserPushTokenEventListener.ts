@@ -8,7 +8,7 @@ import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
 
 @Injectable()
-export class UserPushTokenListener {
+export class UserPushTokenEventListener {
   constructor(
     private readonly userPushTokenQueryRepositoryAdapter: UserPushTokenQueryRepositoryPort,
     private readonly pushMessagePort: PushMessagePort,

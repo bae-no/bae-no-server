@@ -6,7 +6,7 @@ export interface ChatProps {
   userId: string;
   shareDealId: string;
   message: Message;
-  timestamp: number;
+  timestamp: bigint;
 }
 
 export class Chat extends BaseEntity<ChatProps> {
@@ -22,7 +22,7 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.props.shareDealId;
   }
 
-  get timestamp(): number {
+  get timestamp(): bigint {
     return this.props.timestamp;
   }
 
@@ -47,7 +47,7 @@ export class Chat extends BaseEntity<ChatProps> {
     participantIds: string[],
     authorId: string,
     content: string,
-    timestamp: number,
+    timestamp: bigint,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
@@ -63,7 +63,7 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
-    timestamp: number,
+    timestamp: bigint,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
@@ -79,7 +79,7 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
-    timestamp: number,
+    timestamp: bigint,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({

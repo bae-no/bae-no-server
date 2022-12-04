@@ -30,7 +30,7 @@ describe('UserPushTokenEventListener', () => {
         Chat.of({
           shareDealId: 'shareDealId',
           userId: 'authorId',
-          timestamp: 1000,
+          timestamp: 1000n,
           message: Message.normal('authorId', 'content', false),
         }),
       ]);
@@ -49,7 +49,7 @@ describe('UserPushTokenEventListener', () => {
         Chat.of({
           shareDealId: 'shareDealId',
           userId: 'userId',
-          timestamp: new Date().getTime(),
+          timestamp: 1000n,
           message: Message.normal('authorId', 'content', false),
         }),
       ]);

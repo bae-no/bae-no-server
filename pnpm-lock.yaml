@@ -46,6 +46,7 @@ specifiers:
   jest-junit: 15.0.0
   jest-mock-extended: 3.0.1
   lint-staged: 13.0.4
+  nodejs-snowflake: ^2.0.1
   passport: 0.6.0
   passport-jwt: 4.0.0
   prettier: 2.8.0
@@ -80,6 +81,7 @@ dependencies:
   fp-ts: 2.13.1
   graphql: 16.6.0
   graphql-subscriptions: 2.0.0_graphql@16.6.0
+  nodejs-snowflake: 2.0.1
   passport: 0.6.0
   passport-jwt: 4.0.0
   reflect-metadata: 0.1.13
@@ -6040,6 +6042,10 @@ packages:
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
+
+  /nodejs-snowflake/2.0.1:
+    resolution: {integrity: sha512-zMfDorNNsJm1OWWx/OUUGVT0bQ3TwC2ti4URD8UjnpffVLtLpy3eBDIaV5TnLs91YrRhwBD6L0StqU6YtnZt9A==}
+    dev: false
 
   /normalize-path/3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}

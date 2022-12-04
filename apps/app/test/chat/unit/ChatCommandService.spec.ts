@@ -1,3 +1,4 @@
+import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
@@ -15,15 +16,18 @@ describe('ChatCommandService', () => {
   const shareDealQueryUseCase = mock<ShareDealQueryUseCase>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
   const eventEmitter = new StubEventEmitter();
+  const ticketGeneratorPort = mock<TicketGeneratorPort>();
   const shareDealCommandService = new ChatCommandService(
     shareDealQueryUseCase,
     chatRepositoryPort,
     eventEmitter,
+    ticketGeneratorPort,
   );
 
   beforeEach(() => {
     mockReset(shareDealQueryUseCase);
     mockReset(chatRepositoryPort);
+    mockReset(ticketGeneratorPort);
     eventEmitter.clear();
   });
 
@@ -103,7 +107,6 @@ describe('ChatCommandService', () => {
     it('채팅 작성 이벤트를 발송한다', async () => {
       // given
       const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
-      const now = new Date('2021-01-01T00:00:00.000Z');
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
         right(['user 1', 'user 2', 'user 3']),
@@ -111,7 +114,7 @@ describe('ChatCommandService', () => {
       chatRepositoryPort.create.mockImplementation((chats) => right(chats));
 
       // when
-      const result = shareDealCommandService.write(command, now);
+      const result = shareDealCommandService.write(command);
 
       // then
       await assertResolvesRight(result, () => {

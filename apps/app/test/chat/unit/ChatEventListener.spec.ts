@@ -1,3 +1,4 @@
+import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
@@ -19,18 +20,21 @@ describe('ChatEventListener', () => {
   const pubSubPort = new StubPubSub();
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
+  const ticketGeneratorPort = mock<TicketGeneratorPort>();
   const eventEmitter = new StubEventEmitter();
   const chatEventListener = new ChatEventListener(
     pubSubPort,
     shareDealQueryRepositoryPort,
     chatRepositoryPort,
     eventEmitter,
+    ticketGeneratorPort,
   );
 
   beforeEach(() => {
     pubSubPort.clear();
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatRepositoryPort);
+    mockReset(ticketGeneratorPort);
   });
 
   describe('handle', () => {

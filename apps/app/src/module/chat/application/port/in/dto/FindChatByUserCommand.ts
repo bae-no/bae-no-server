@@ -1,12 +1,12 @@
-import { PageCommand } from '@app/domain/command/PageCommand';
+import { CursorCommand } from '@app/domain/command/CursorCommand';
 
-export class FindChatByUserCommand extends PageCommand {
+export class FindChatByUserCommand extends CursorCommand<number> {
   constructor(
     readonly shareDealId: string,
     readonly userId: string,
-    page?: number,
+    readonly timestamp?: number,
     size?: number,
   ) {
-    super(page, size);
+    super(timestamp, size);
   }
 }

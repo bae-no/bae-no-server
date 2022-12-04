@@ -8,7 +8,12 @@ import { Snowflake } from 'nodejs-snowflake';
     {
       provide: TicketGeneratorPort,
       useFactory: () =>
-        new TicketGeneratorAdapter(new Snowflake({ instance_id: 100 })),
+        new TicketGeneratorAdapter(
+          new Snowflake({
+            custom_epoch: 1_000_000_000_000,
+            instance_id: 100,
+          }),
+        ),
     },
   ],
   exports: [TicketGeneratorPort],

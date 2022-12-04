@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "esnext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -70,6 +70,12 @@
       ],
       "@app/push-message/*": [
         "libs/push-message/src/*"
+      ],
+      "@app/ticket-generator": [
+        "libs/ticket-generator/src"
+      ],
+      "@app/ticket-generator/*": [
+        "libs/ticket-generator/src/*"
       ]
     }
   }

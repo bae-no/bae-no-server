@@ -89,6 +89,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/push-message/tsconfig.lib.json"
       }
+    },
+    "ticket-generator": {
+      "type": "library",
+      "root": "libs/ticket-generator",
+      "entryFile": "index",
+      "sourceRoot": "libs/ticket-generator/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ticket-generator/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -8,9 +8,12 @@ export class FindChatDetailInput {
   @Field(() => ID)
   shareDealId: string;
 
-  @Field(() => Int, { description: '페이지 번호, 0부터 시작' })
+  @Field(() => Int, {
+    description: '커서 페이지네이션 용 타임스탬프',
+    nullable: true,
+  })
   @Min(0)
-  page: number;
+  timestamp?: number;
 
   @Field(() => Int)
   @IsPositive()
@@ -20,7 +23,7 @@ export class FindChatDetailInput {
     return new FindChatByUserCommand(
       this.shareDealId,
       userId,
-      this.page,
+      this.timestamp,
       this.size,
     );
   }

@@ -1,3 +1,5 @@
+import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
+import { TicketGeneratorAdapter } from '@app/ticket-generator/TicketGeneratorAdapter';
 import { Module } from '@nestjs/common';
 
 import { ShareDealQueryRepositoryAdapter } from '../share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
@@ -52,6 +54,10 @@ import { ChatQueryService } from './application/service/ChatQueryService';
     {
       provide: UserQueryRepositoryPort,
       useClass: UserQueryRepositoryAdapter,
+    },
+    {
+      provide: TicketGeneratorPort,
+      useClass: TicketGeneratorAdapter,
     },
   ],
 })

@@ -1,5 +1,6 @@
 import { O, RNEA, TE } from '@app/custom/fp-ts';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -23,6 +24,7 @@ export class ChatEventListener {
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,
     private readonly chatRepositoryPort: ChatRepositoryPort,
     private readonly eventEmitterPort: EventEmitterPort,
+    private readonly ticketGeneratorPort: TicketGeneratorPort,
   ) {}
 
   @OnEvent(ChatReadEvent.name, { async: true })
@@ -69,7 +71,7 @@ export class ChatEventListener {
         shareDeal.id,
         shareDeal.participantInfo.ids,
         shareDeal.ownerId,
-        event.timestamp,
+        this.ticketGeneratorPort.generateId(),
       );
     }
 
@@ -77,7 +79,7 @@ export class ChatEventListener {
       shareDeal.id,
       shareDeal.participantInfo.ids,
       shareDeal.ownerId,
-      event.timestamp,
+      this.ticketGeneratorPort.generateId(),
     );
   }
 }

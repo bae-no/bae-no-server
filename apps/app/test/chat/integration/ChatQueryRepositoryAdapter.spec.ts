@@ -141,12 +141,14 @@ describe('ChatQueryRepositoryAdapter', () => {
         ChatFactory.create({
           createdAt: new Date('2022-10-05'),
           shareDealId,
+          timestamp: 100000n,
           userId,
         }),
         ChatFactory.create({
           createdAt: new Date('2022-10-10'),
           shareDealId,
           userId,
+          timestamp: 200000n,
         }),
       ];
       await prisma.chat.createMany({ data: chats.map(ChatOrmMapper.toOrm) });
@@ -158,8 +160,8 @@ describe('ChatQueryRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (result) => {
         expect(result.length).toBe(2);
-        expect(result[0].createdAt).toStrictEqual(chats[1].createdAt);
-        expect(result[1].createdAt).toStrictEqual(chats[0].createdAt);
+        expect(result[0].timestamp).toBe(chats[1].timestamp);
+        expect(result[1].timestamp).toBe(chats[0].timestamp);
       });
     });
   });

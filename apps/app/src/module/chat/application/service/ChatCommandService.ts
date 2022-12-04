@@ -1,5 +1,6 @@
 import { TE } from '@app/custom/fp-ts';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -20,14 +21,12 @@ export class ChatCommandService extends ChatCommandUseCase {
     private readonly shareDealQueryUseCase: ShareDealQueryUseCase,
     private readonly chatRepositoryPort: ChatRepositoryPort,
     private readonly eventEmitterPort: EventEmitterPort,
+    private readonly ticketGeneratorPort: TicketGeneratorPort,
   ) {
     super();
   }
 
-  override write(
-    command: WriteChatCommand,
-    now = new Date(),
-  ): TaskEither<WriteChatError, void> {
+  override write(command: WriteChatCommand): TaskEither<WriteChatError, void> {
     return pipe(
       this.shareDealQueryUseCase.participantIds(
         command.shareDealId,
@@ -39,7 +38,7 @@ export class ChatCommandService extends ChatCommandUseCase {
           participantIds,
           command.userId,
           command.content,
-          now.getTime(),
+          this.ticketGeneratorPort.generateId(),
         ),
       ),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),

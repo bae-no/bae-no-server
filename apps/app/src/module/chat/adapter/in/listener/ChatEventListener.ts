@@ -25,12 +25,12 @@ export class ChatEventListener {
     private readonly eventEmitterPort: EventEmitterPort,
   ) {}
 
-  @OnEvent(ChatReadEvent.EVENT_NAME, { async: true })
+  @OnEvent(ChatReadEvent.name, { async: true })
   async handleChatReadEvent(event: ChatReadEvent) {
     await this.chatRepositoryPort.updateRead(event.shareDealId, event.userId)();
   }
 
-  @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
+  @OnEvent(ChatWrittenEvent.name, { async: true })
   handleChatWrittenEvent(event: ChatWrittenEvent) {
     pipe(
       RNEA.fromArray(event.chats),
@@ -44,7 +44,7 @@ export class ChatEventListener {
     );
   }
 
-  @OnEvent([ShareDealStartedEvent.EVENT_NAME, ShareDealEndedEvent.EVENT_NAME], {
+  @OnEvent([ShareDealStartedEvent.name, ShareDealEndedEvent.name], {
     async: true,
   })
   async handleShareDealUpdatedEvent(
@@ -55,7 +55,7 @@ export class ChatEventListener {
       TE.map((shareDeal) => this.createChats(shareDeal, event)),
       TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
       TE.map((chats) =>
-        this.eventEmitterPort.emit(ChatWrittenEvent.EVENT_NAME, chats),
+        this.eventEmitterPort.emit(new ChatWrittenEvent(chats)),
       ),
     )();
   }
@@ -69,7 +69,7 @@ export class ChatEventListener {
         shareDeal.id,
         shareDeal.participantInfo.ids,
         shareDeal.ownerId,
-        event.eventTime.getTime(),
+        event.timestamp,
       );
     }
 
@@ -77,7 +77,7 @@ export class ChatEventListener {
       shareDeal.id,
       shareDeal.participantInfo.ids,
       shareDeal.ownerId,
-      event.eventTime.getTime(),
+      event.timestamp,
     );
   }
 }

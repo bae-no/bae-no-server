@@ -8,13 +8,13 @@ import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
 
 @Injectable()
-export class UserPushTokenListener {
+export class UserPushTokenEventListener {
   constructor(
     private readonly userPushTokenQueryRepositoryAdapter: UserPushTokenQueryRepositoryPort,
     private readonly pushMessagePort: PushMessagePort,
   ) {}
 
-  @OnEvent(ChatWrittenEvent.EVENT_NAME, { async: true })
+  @OnEvent(ChatWrittenEvent.name, { async: true })
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
     await pipe(
       RNEA.fromArray(event.chatsWithoutAuthor),

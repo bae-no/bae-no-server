@@ -5,7 +5,7 @@ import { StubPushMessage } from '../../../../../libs/push-message/test/fixture/S
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
-import { UserPushTokenListener } from '../../../src/module/user-push-token/adapter/in/listener/UserPushTokenListener';
+import { UserPushTokenEventListener } from '../../../src/module/user-push-token/adapter/in/listener/UserPushTokenEventListener';
 import { UserPushTokenQueryRepositoryPort } from '../../../src/module/user-push-token/application/port/out/UserPushTokenQueryRepositoryPort';
 import { UserPushToken } from '../../../src/module/user-push-token/domain/UserPushToken';
 
@@ -13,7 +13,7 @@ describe('UserPushTokenEventListener', () => {
   const pushMessage = new StubPushMessage();
   const userPushTokenQueryRepositoryPort =
     mock<UserPushTokenQueryRepositoryPort>();
-  const shareDealCommandService = new UserPushTokenListener(
+  const shareDealCommandService = new UserPushTokenEventListener(
     userPushTokenQueryRepositoryPort,
     pushMessage,
   );

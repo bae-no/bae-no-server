@@ -91,7 +91,6 @@ export class ChatQueryService extends ChatQueryUseCase {
       ),
       TE.map((result) => {
         this.eventEmitterPort.emit(
-          ChatReadEvent.EVENT_NAME,
           new ChatReadEvent(command.userId, command.shareDealId),
         );
 

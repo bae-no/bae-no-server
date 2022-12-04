@@ -11,8 +11,6 @@ import { NotJoinableShareDealException } from '../../../src/module/share-deal/ap
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealRepositoryPort';
 import { ShareDealCommandService } from '../../../src/module/share-deal/application/service/ShareDealCommandService';
-import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event/ShareDealEndedEvent';
-import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -26,7 +24,6 @@ describe('ShareDealCommandService', () => {
   const shareDealCommandService = new ShareDealCommandService(
     shareDealRepositoryPort,
     shareDealQueryRepositoryPort,
-    eventEmitter,
   );
 
   beforeEach(() => {
@@ -105,7 +102,6 @@ describe('ShareDealCommandService', () => {
     it('방장은 공유딜을 시작할 수 있다', async () => {
       // given
       const command = new StartShareDealCommand('userId', 'shareDealId');
-      const now = new Date('2021-01-01');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
         ownerId: command.userId,
@@ -116,13 +112,10 @@ describe('ShareDealCommandService', () => {
       shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
 
       // when
-      const result = shareDealCommandService.start(command, now);
+      const result = shareDealCommandService.start(command);
 
       // then
       await assertResolvesRight(result, () => {
-        expect(
-          eventEmitter.get(ShareDealStartedEvent.EVENT_NAME),
-        ).toStrictEqual(new ShareDealStartedEvent(command.shareDealId, now));
         expect(shareDeal.status).toBe(ShareDealStatus.START);
       });
     });
@@ -150,7 +143,6 @@ describe('ShareDealCommandService', () => {
     it('방장은 공유딜을 종료할 수 있다', async () => {
       // given
       const command = new StartShareDealCommand('userId', 'shareDealId');
-      const now = new Date('2021-01-01');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
         ownerId: command.userId,
@@ -161,13 +153,10 @@ describe('ShareDealCommandService', () => {
       shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
 
       // when
-      const result = shareDealCommandService.end(command, now);
+      const result = shareDealCommandService.end(command);
 
       // then
       await assertResolvesRight(result, () => {
-        expect(eventEmitter.get(ShareDealEndedEvent.EVENT_NAME)).toStrictEqual(
-          new ShareDealEndedEvent(command.shareDealId, now),
-        );
         expect(shareDeal.status).toBe(ShareDealStatus.END);
       });
     });

@@ -1,7 +1,8 @@
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import { DomainEvent } from '@app/domain/event/DomainEvent';
 
 export class StubEventEmitter extends EventEmitterPort {
-  #queue = new Map<string, any>();
+  #queue = new Map<string, DomainEvent>();
 
   clear() {
     this.#queue.clear();
@@ -11,7 +12,7 @@ export class StubEventEmitter extends EventEmitterPort {
     return this.#queue.get(event);
   }
 
-  override emit(event: string, data: unknown) {
-    this.#queue.set(event, data);
+  override emit(event: DomainEvent) {
+    this.#queue.set(event.constructor.name, event);
   }
 }

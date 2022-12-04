@@ -114,9 +114,9 @@ describe('ChatQueryService', () => {
 
       // then
       await assertResolvesRight(result, () => {
-        expect(eventEmitter.get(ChatReadEvent.EVENT_NAME)).toStrictEqual(
-          new ChatReadEvent('userId', 'shareDealId'),
-        );
+        const event = eventEmitter.get(ChatReadEvent.name) as ChatReadEvent;
+        expect(event.shareDealId).toBe('shareDealId');
+        expect(event.userId).toBe('userId');
       });
     });
 

@@ -1,39 +1,31 @@
+import { DomainEvent } from '@app/domain/event/DomainEvent';
 import { EventEmitterAdapter } from '@app/event-emitter/EventEmitterAdapter';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
+import { expectNonNullable } from '../../../../apps/app/test/fixture/utils';
 
 describe('EventEmitterAdapter', () => {
   const eventEmitter = new EventEmitter2();
   const eventEmitterAdapter = new EventEmitterAdapter(eventEmitter);
 
-  it('동기 이벤트를 발행한다', () => {
+  it('이벤트를 발행한다', () => {
     // given
-    const event = 'event';
+    class TestEvent extends DomainEvent {
+      data = 'data';
+    }
 
-    let actual = '';
-    eventEmitter.addListener(event, (data) => {
+    const event = new TestEvent();
+
+    let actual: TestEvent | undefined;
+    eventEmitter.addListener(TestEvent.name, (data) => {
       actual = data;
     });
 
     // when
-    eventEmitterAdapter.emit(event, 'data');
+    eventEmitterAdapter.emit(event);
 
     // then
-    expect(actual).toBe('data');
-  });
-
-  it('비동기 이벤트를 발행한다', () => {
-    // given
-    const event = 'event';
-
-    let actual = '';
-    eventEmitter.addListener(event, (data) => {
-      actual = data;
-    });
-
-    // when
-    eventEmitterAdapter.emit(event, 'data');
-
-    // then
-    expect(actual).toBe('data');
+    expectNonNullable(actual);
+    expect(actual.data).toBe('data');
   });
 });

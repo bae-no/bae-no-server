@@ -1,7 +1,9 @@
-import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Either, left, right } from 'fp-ts/Either';
 
+import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
+import { ShareDealStartedEvent } from './event/ShareDealStartedEvent';
 import { FoodCategory } from './vo/FoodCategory';
 import { ParticipantInfo } from './vo/ParticipantInfo';
 import { ShareDealStatus } from './vo/ShareDealStatus';
@@ -26,7 +28,7 @@ export type CreateShareDealProps = Omit<
   minParticipants: number;
 };
 
-export class ShareDeal extends BaseEntity<ShareDealProps> {
+export class ShareDeal extends AggregateRoot<ShareDealProps> {
   constructor(props: ShareDealProps) {
     super(props);
   }
@@ -110,6 +112,7 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
 
   start(): this {
     this.props.status = ShareDealStatus.START;
+    this.addDomainEvent(new ShareDealStartedEvent(this.id));
 
     return this;
   }
@@ -120,6 +123,7 @@ export class ShareDeal extends BaseEntity<ShareDealProps> {
     }
 
     this.props.status = ShareDealStatus.END;
+    this.addDomainEvent(new ShareDealEndedEvent(this.id));
 
     return right(this);
   }

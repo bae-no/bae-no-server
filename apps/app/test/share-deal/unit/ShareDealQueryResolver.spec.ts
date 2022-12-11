@@ -64,19 +64,22 @@ describe('ShareDealQueryResolver', () => {
       const query = gql`
         query shareDeals($input: FindShareDealInput!) {
           shareDeals(input: $input) {
-            id
-            createdAt
-            title
-            orderPrice
-            minParticipants
-            currentParticipants
-            status
-            thumbnail
-            category
-            coordinate {
-              latitude
-              longitude
+            items {
+              id
+              createdAt
+              title
+              orderPrice
+              minParticipants
+              currentParticipants
+              status
+              thumbnail
+              category
+              coordinate {
+                latitude
+                longitude
+              }
             }
+            total
           }
         }
       `;
@@ -93,6 +96,7 @@ describe('ShareDealQueryResolver', () => {
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
+      shareDealQueryRepositoryPort.count.mockReturnValue(right(10));
 
       // when
       const response = await request(app.getHttpServer())
@@ -103,23 +107,26 @@ describe('ShareDealQueryResolver', () => {
       expect(response.body).toMatchInlineSnapshot(`
         {
           "data": {
-            "shareDeals": [
-              {
-                "category": "CHINESE",
-                "coordinate": {
-                  "latitude": 123.5,
-                  "longitude": 45.6,
+            "shareDeals": {
+              "items": [
+                {
+                  "category": "CHINESE",
+                  "coordinate": {
+                    "latitude": 123.5,
+                    "longitude": 45.6,
+                  },
+                  "createdAt": "2022-01-01T00:00:00.000Z",
+                  "currentParticipants": 3,
+                  "id": "12345",
+                  "minParticipants": 10,
+                  "orderPrice": 1000,
+                  "status": "OPEN",
+                  "thumbnail": "thumbnail",
+                  "title": "title",
                 },
-                "createdAt": "2022-01-01T00:00:00.000Z",
-                "currentParticipants": 3,
-                "id": "12345",
-                "minParticipants": 10,
-                "orderPrice": 1000,
-                "status": "OPEN",
-                "thumbnail": "thumbnail",
-                "title": "title",
-              },
-            ],
+              ],
+              "total": 10,
+            },
           },
         }
       `);

@@ -13,6 +13,8 @@ export abstract class ShareDealQueryRepositoryPort {
     command: FindShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]>;
 
+  abstract count(command: FindShareDealCommand): TaskEither<DBError, number>;
+
   abstract findByNearest(
     command: FindShareDealByNearestCommand,
   ): TaskEither<DBError, ShareDeal[]>;

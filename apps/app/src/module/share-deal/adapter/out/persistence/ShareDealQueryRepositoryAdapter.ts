@@ -57,6 +57,22 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     );
   }
 
+  override count(command: FindShareDealCommand): TaskEither<DBError, number> {
+    const args: Prisma.ShareDealCountArgs = {
+      where: { status: { in: [ShareDealStatus.OPEN, ShareDealStatus.START] } },
+    };
+
+    if (command.keyword) {
+      args.where = { ...args.where, title: { contains: command.keyword } };
+    }
+
+    if (command.category) {
+      args.where = { ...args.where, category: command.category };
+    }
+
+    return tryCatchDB(() => this.prisma.shareDeal.count(args));
+  }
+
   override findByNearest(
     command: FindShareDealByNearestCommand,
   ): TaskEither<DBError, ShareDeal[]> {

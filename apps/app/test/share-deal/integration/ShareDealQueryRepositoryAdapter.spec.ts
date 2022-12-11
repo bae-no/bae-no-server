@@ -201,6 +201,85 @@ describe('ShareDealQueryRepositoryAdapter', () => {
     });
   });
 
+  describe('count', () => {
+    it('검색어를 포함하는 공유딜 개수를 가져온다', async () => {
+      // given
+      const matched = ShareDealFactory.createOpen({
+        title: 'sample title deal',
+      });
+      const notMatched = ShareDealFactory.createOpen({ title: 'not matched' });
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealOrmMapper.toOrm(matched),
+          ShareDealOrmMapper.toOrm(notMatched),
+        ],
+      });
+      const dto = FindShareDealCommand.of({
+        sortType: ShareDealSortType.LATEST,
+        keyword: 'title',
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.count(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(1);
+      });
+    });
+
+    it('주어진 카테고리에 해당하는 공유딜 개수를 가져온다', async () => {
+      // given
+      const matched = ShareDealFactory.createOpen({
+        category: FoodCategory.KOREAN,
+      });
+      const notMatched = ShareDealFactory.createOpen({
+        category: FoodCategory.AMERICAN,
+      });
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealOrmMapper.toOrm(matched),
+          ShareDealOrmMapper.toOrm(notMatched),
+        ],
+      });
+      const dto = FindShareDealCommand.of({
+        sortType: ShareDealSortType.LATEST,
+        category: FoodCategory.KOREAN,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.count(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(1);
+      });
+    });
+
+    it('오픈 또는 시작 상태인 공유딜 개수만 가져온다', async () => {
+      // given
+      await prisma.shareDeal.createMany({
+        data: [
+          ShareDealFactory.createOpen(),
+          ShareDealFactory.create({ status: ShareDealStatus.START }),
+          ShareDealFactory.create({ status: ShareDealStatus.CLOSE }),
+          ShareDealFactory.create({ status: ShareDealStatus.END }),
+        ].map(ShareDealOrmMapper.toOrm),
+      });
+      const dto = FindShareDealCommand.of({
+        sortType: ShareDealSortType.LATEST,
+      });
+
+      // when
+      const result = shareDealRepositoryAdapter.count(dto);
+
+      // then
+      await assertResolvesRight(result, (value) => {
+        expect(value).toBe(2);
+      });
+    });
+  });
+
   describe('findByNearest', () => {
     beforeAll(async () => {
       await prisma.$runCommandRaw({

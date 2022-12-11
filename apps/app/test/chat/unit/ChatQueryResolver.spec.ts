@@ -119,7 +119,7 @@ describe('ChatQueryResolver', () => {
 
       const input = new FindChatDetailInput();
       input.shareDealId = 'shareDealId';
-      input.timestamp = 1;
+      input.cursor = '123';
       input.size = 10;
 
       // when

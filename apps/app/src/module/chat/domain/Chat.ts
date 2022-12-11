@@ -6,7 +6,7 @@ export interface ChatProps {
   userId: string;
   shareDealId: string;
   message: Message;
-  timestamp: bigint;
+  orderedKey: string;
 }
 
 export class Chat extends BaseEntity<ChatProps> {
@@ -22,8 +22,8 @@ export class Chat extends BaseEntity<ChatProps> {
     return this.props.shareDealId;
   }
 
-  get timestamp(): bigint {
-    return this.props.timestamp;
+  get orderedKey(): string {
+    return this.props.orderedKey;
   }
 
   get message(): Message {
@@ -47,12 +47,12 @@ export class Chat extends BaseEntity<ChatProps> {
     participantIds: string[],
     authorId: string,
     content: string,
-    timestamp: bigint,
+    orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
-        timestamp,
+        orderedKey,
         userId: id,
         message: Message.normal(authorId, content, authorId !== id),
       }),
@@ -63,12 +63,12 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
-    timestamp: bigint,
+    orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
-        timestamp,
+        orderedKey,
         userId: id,
         message: Message.startShareDealMessage(authorId),
       }),
@@ -79,12 +79,12 @@ export class Chat extends BaseEntity<ChatProps> {
     shareDealId: string,
     participantIds: string[],
     authorId: string,
-    timestamp: bigint,
+    orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>
       Chat.of({
         shareDealId,
-        timestamp,
+        orderedKey,
         userId: id,
         message: Message.endShareDealMessage(authorId),
       }),

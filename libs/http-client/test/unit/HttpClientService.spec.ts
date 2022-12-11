@@ -38,7 +38,7 @@ describe('HttpClientService', () => {
     },
   );
 
-  it('timeout 시간동안 응답이 없으면 에러가 발생한다', async () => {
+  it.skip('timeout 시간동안 응답이 없으면 에러가 발생한다', async () => {
     // given
     const url = 'http://localhost:8080/timeout';
 

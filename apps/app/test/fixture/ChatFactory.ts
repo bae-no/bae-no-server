@@ -22,7 +22,7 @@ export class ChatFactory {
     return new Chat({
       shareDealId: faker.database.mongodbObjectId(),
       userId: faker.database.mongodbObjectId(),
-      timestamp: faker.datatype.bigInt(),
+      orderedKey: faker.random.numeric(),
       message,
       ...props,
     }).setBase(

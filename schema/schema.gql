@@ -103,11 +103,9 @@ input EnrollUserInput {
 }
 
 input FindChatDetailInput {
+  cursor: String
   shareDealId: ID!
   size: Int!
-
-  """커서 페이지네이션 용 타임스탬프"""
-  timestamp: Int
 }
 
 input FindChatInput {

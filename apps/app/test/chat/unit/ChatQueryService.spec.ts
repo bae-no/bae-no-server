@@ -52,7 +52,7 @@ describe('ChatQueryService', () => {
         Chat.of({
           shareDealId: deal.id,
           userId: 'userId',
-          timestamp: 0n,
+          orderedKey: 'orderedKey',
           message: Message.normal('123', 'content', true),
         }),
       );

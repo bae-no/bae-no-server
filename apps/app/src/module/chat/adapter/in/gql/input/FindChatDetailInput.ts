@@ -1,5 +1,5 @@
 import { Field, ID, InputType, Int } from '@nestjs/graphql';
-import { IsPositive, Min } from 'class-validator';
+import { IsPositive } from 'class-validator';
 
 import { FindChatByUserCommand } from '../../../../application/port/in/dto/FindChatByUserCommand';
 
@@ -8,12 +8,8 @@ export class FindChatDetailInput {
   @Field(() => ID)
   shareDealId: string;
 
-  @Field(() => Int, {
-    description: '커서 페이지네이션 용 타임스탬프',
-    nullable: true,
-  })
-  @Min(0)
-  timestamp?: number;
+  @Field({ nullable: true })
+  cursor?: string;
 
   @Field(() => Int)
   @IsPositive()
@@ -23,7 +19,7 @@ export class FindChatDetailInput {
     return new FindChatByUserCommand(
       this.shareDealId,
       userId,
-      this.timestamp,
+      this.cursor,
       this.size,
     );
   }

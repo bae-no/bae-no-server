@@ -1,12 +1,12 @@
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { Snowflake } from 'nodejs-snowflake';
+import * as cuid from 'cuid';
 
 export class TicketGeneratorAdapter extends TicketGeneratorPort {
-  constructor(private generator: Snowflake) {
+  constructor() {
     super();
   }
 
-  override generateId(): bigint {
-    return this.generator.getUniqueID().valueOf();
+  override generateId(): string {
+    return cuid();
   }
 }

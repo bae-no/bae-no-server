@@ -103,11 +103,9 @@ input EnrollUserInput {
 }
 
 input FindChatDetailInput {
+  cursor: String
   shareDealId: ID!
   size: Int!
-
-  """커서 페이지네이션 용 타임스탬프"""
-  timestamp: Int
 }
 
 input FindChatInput {
@@ -251,10 +249,10 @@ type Query {
   sample(id: ID!): SampleResponse!
 
   """공유딜 목록"""
-  shareDeals(input: FindShareDealInput!): [ShareDealResponse!]!
+  shareDeals(input: FindShareDealInput!): ShareDealResponse!
 
   """공유딜 목록 (가까운 순)"""
-  shareDealsByNearest(input: FindShareDealByNearestInput!): [ShareDealResponse!]!
+  shareDealsByNearest(input: FindShareDealByNearestInput!): [ShareDealItemResponse!]!
 }
 
 type SampleResponse {
@@ -267,7 +265,7 @@ input SendPhoneVerificationCodeInput {
   phoneNumber: String!
 }
 
-type ShareDealResponse {
+type ShareDealItemResponse {
   category: FoodCategory!
   coordinate: CoordinateResponse!
   createdAt: DateTime!
@@ -278,6 +276,11 @@ type ShareDealResponse {
   status: ShareDealStatus!
   thumbnail: String!
   title: String!
+}
+
+type ShareDealResponse {
+  items: [ShareDealItemResponse!]!
+  total: Int!
 }
 
 type ShareDealSortCategory {

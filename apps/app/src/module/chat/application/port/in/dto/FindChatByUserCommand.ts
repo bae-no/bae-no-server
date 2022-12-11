@@ -1,12 +1,12 @@
 import { CursorCommand } from '@app/domain/command/CursorCommand';
 
-export class FindChatByUserCommand extends CursorCommand<number> {
+export class FindChatByUserCommand extends CursorCommand<string> {
   constructor(
     readonly shareDealId: string,
     readonly userId: string,
-    readonly timestamp?: number,
+    cursor?: string,
     size?: number,
   ) {
-    super(timestamp, size);
+    super(cursor, size);
   }
 }

@@ -1,3 +1,3 @@
 export abstract class TicketGeneratorPort {
-  abstract generateId(): bigint;
+  abstract generateId(): string;
 }

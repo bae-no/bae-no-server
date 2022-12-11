@@ -10,6 +10,7 @@ import { ShareDealQueryRepositoryPort } from '../../../application/port/out/Shar
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
+import { ShareDealItemResponse } from './response/ShareDealItemResponse';
 import { ShareDealResponse } from './response/ShareDealResponse';
 
 @Resolver()
@@ -19,22 +20,27 @@ export class ShareDealQueryResolver {
     private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
   ) {}
 
-  @Query(() => [ShareDealResponse], { description: '공유딜 목록' })
+  @Query(() => ShareDealResponse, { description: '공유딜 목록' })
   async shareDeals(
     @Args('input') input: FindShareDealInput,
-  ): Promise<ShareDealResponse[]> {
+  ): Promise<ShareDealResponse> {
+    const command = input.toCommand();
+
     return pipe(
-      input.toCommand(),
-      (command) => this.shareDealQueryRepositoryPort.find(command),
-      toResponseArray(ShareDealResponse.of),
+      TE.Do,
+      TE.apS('items', this.shareDealQueryRepositoryPort.find(command)),
+      TE.apS('total', this.shareDealQueryRepositoryPort.count(command)),
+      toResponse(({ items, total }) => ShareDealResponse.of(items, total)),
     )();
   }
 
-  @Query(() => [ShareDealResponse], { description: '공유딜 목록 (가까운 순)' })
+  @Query(() => [ShareDealItemResponse], {
+    description: '공유딜 목록 (가까운 순)',
+  })
   async shareDealsByNearest(
     @Args('input') input: FindShareDealByNearestInput,
     @CurrentSession() session: Session,
-  ): Promise<ShareDealResponse[]> {
+  ): Promise<ShareDealItemResponse[]> {
     return pipe(
       this.userQueryRepositoryPort.findById(session.id),
       TE.map((user) => user.findAddress(input.addressKey)),
@@ -47,7 +53,7 @@ export class ShareDealQueryResolver {
       TE.chainW((command) =>
         this.shareDealQueryRepositoryPort.findByNearest(command),
       ),
-      toResponseArray(ShareDealResponse.of),
+      toResponseArray(ShareDealItemResponse.of),
     )();
   }
 

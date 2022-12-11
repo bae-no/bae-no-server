@@ -47,7 +47,7 @@ describe('ChatQueryRepositoryAdapter', () => {
             createdAt: new Date('2022-10-05'),
             userId,
             shareDealId,
-            timestamp: faker.datatype.number(),
+            orderedKey: faker.random.numeric(),
             message: {
               type: MessageType.NORMAL,
               content: 'last',
@@ -59,7 +59,7 @@ describe('ChatQueryRepositoryAdapter', () => {
             createdAt: new Date('2022-10-01'),
             userId,
             shareDealId,
-            timestamp: faker.datatype.number(),
+            orderedKey: faker.random.numeric(),
             message: {
               type: MessageType.NORMAL,
               content: 'first',
@@ -109,7 +109,7 @@ describe('ChatQueryRepositoryAdapter', () => {
         data: [true, true, false, true].map((unread) => ({
           userId,
           shareDealId,
-          timestamp: 1000,
+          orderedKey: faker.random.numeric(),
           message: {
             type: MessageType.NORMAL,
             content: 'message',
@@ -139,16 +139,14 @@ describe('ChatQueryRepositoryAdapter', () => {
       const userId = faker.database.mongodbObjectId();
       const chats = [
         ChatFactory.create({
-          createdAt: new Date('2022-10-05'),
           shareDealId,
-          timestamp: 100000n,
+          orderedKey: '100',
           userId,
         }),
         ChatFactory.create({
-          createdAt: new Date('2022-10-10'),
           shareDealId,
           userId,
-          timestamp: 200000n,
+          orderedKey: '200',
         }),
       ];
       await prisma.chat.createMany({ data: chats.map(ChatOrmMapper.toOrm) });
@@ -160,8 +158,8 @@ describe('ChatQueryRepositoryAdapter', () => {
       // then
       await assertResolvesRight(result, (result) => {
         expect(result.length).toBe(2);
-        expect(result[0].timestamp).toBe(chats[1].timestamp);
-        expect(result[1].timestamp).toBe(chats[0].timestamp);
+        expect(result[0].orderedKey).toBe(chats[1].orderedKey);
+        expect(result[1].orderedKey).toBe(chats[0].orderedKey);
       });
     });
   });

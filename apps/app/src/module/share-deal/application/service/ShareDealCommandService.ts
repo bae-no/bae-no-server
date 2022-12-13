@@ -1,6 +1,5 @@
 import { TE } from '@app/custom/fp-ts';
 import { DBError } from '@app/domain/error/DBError';
-import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
@@ -54,11 +53,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
   ): TaskEither<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.filterOrElseW(
-        (deal) => deal.canStart(command.userId),
-        () => new IllegalStateException('입장 가능한 공유딜이 아닙니다.'),
-      ),
-      TE.map((deal) => deal.start()),
+      TE.chainEitherKW((deal) => deal.start(command.userId)),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(constVoid),
     );

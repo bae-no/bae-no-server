@@ -110,11 +110,15 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return this;
   }
 
-  start(): this {
+  start(userId: string): Either<IllegalStateException, this> {
+    if (!this.canStart(userId)) {
+      return left(new IllegalStateException('시작할 수 없습니다.'));
+    }
+
     this.props.status = ShareDealStatus.START;
     this.addDomainEvent(new ShareDealStartedEvent(this.id));
 
-    return this;
+    return right(this);
   }
 
   end(userId: string): Either<IllegalStateException, this> {

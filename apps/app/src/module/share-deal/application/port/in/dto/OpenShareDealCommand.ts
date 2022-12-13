@@ -7,7 +7,7 @@ export class OpenShareDealCommand {
     readonly userId: string,
     readonly title: string,
     readonly category: FoodCategory,
-    readonly minParticipants: number,
+    readonly maxParticipants: number,
     readonly orderPrice: number,
     readonly storeName: string,
     readonly thumbnail: string,
@@ -21,7 +21,7 @@ export class OpenShareDealCommand {
     return ShareDeal.open({
       title: this.title,
       category: this.category,
-      minParticipants: this.minParticipants,
+      maxParticipants: this.maxParticipants,
       orderPrice: this.orderPrice,
       ownerId: this.userId,
       storeName: this.storeName,

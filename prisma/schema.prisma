@@ -107,7 +107,7 @@ model ShareDeal {
 
 type ParticipantInfo {
   ids       String[] @db.ObjectId
-  min       Int
+  max       Int
   current   Int
   remaining Int
 }

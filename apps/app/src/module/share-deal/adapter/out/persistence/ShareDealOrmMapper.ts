@@ -24,7 +24,7 @@ export class ShareDealOrmMapper {
       ),
       participantInfo: ParticipantInfo.of(
         orm.participants.ids,
-        orm.participants.min,
+        orm.participants.max,
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
@@ -54,7 +54,7 @@ export class ShareDealOrmMapper {
       status: domain.status,
       participants: {
         ids: domain.participantInfo.ids,
-        min: domain.participantInfo.min,
+        max: domain.participantInfo.max,
         current: domain.participantInfo.current,
         remaining: domain.participantInfo.remaining,
       },

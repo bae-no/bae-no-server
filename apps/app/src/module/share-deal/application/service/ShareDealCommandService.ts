@@ -7,7 +7,6 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
-import { NotJoinableShareDealException } from '../port/in/exception/NotJoinableShareDealException';
 import {
   JoinChatError,
   ShareDealCommandUseCase,
@@ -37,12 +36,7 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
   ): TaskEither<JoinChatError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.filterOrElseW(
-        (deal) => deal.isJoinable,
-        () =>
-          new NotJoinableShareDealException('입장 가능한 공유딜이 아닙니다.'),
-      ),
-      TE.map((deal) => deal.join(command.userId)),
+      TE.chainEitherKW((deal) => deal.join(command.userId)),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(constVoid),
     );

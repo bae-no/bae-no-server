@@ -221,7 +221,7 @@ type Mutation {
 
 input OpenShareDealInput {
   category: FoodCategory!
-  minParticipants: Int!
+  maxParticipant: Int!
   orderPrice: Int!
   shareZone: CreateShareZoneInput!
   storeName: String!
@@ -278,7 +278,7 @@ type ShareDealItemResponse {
   createdAt: DateTime!
   currentParticipants: Int!
   id: ID!
-  minParticipants: Int!
+  maxParticipants: Int!
   orderPrice: Int!
   status: ShareDealStatus!
   thumbnail: String!

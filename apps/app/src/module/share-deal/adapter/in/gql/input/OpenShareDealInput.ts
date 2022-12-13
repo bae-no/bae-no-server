@@ -16,7 +16,7 @@ export class OpenShareDealInput {
 
   @Field(() => Int)
   @Min(2)
-  minParticipants: number;
+  maxParticipant: number;
 
   @Field(() => Int)
   @IsPositive()
@@ -38,7 +38,7 @@ export class OpenShareDealInput {
       userId,
       this.title,
       this.category,
-      this.minParticipants,
+      this.maxParticipant,
       this.orderPrice,
       this.storeName,
       this.thumbnail,

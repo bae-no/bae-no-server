@@ -70,7 +70,7 @@ describe('ShareDealQueryResolver', () => {
               createdAt
               title
               orderPrice
-              minParticipants
+              maxParticipants
               currentParticipants
               status
               thumbnail
@@ -119,7 +119,7 @@ describe('ShareDealQueryResolver', () => {
                   "createdAt": "2022-01-01T00:00:00.000Z",
                   "currentParticipants": 3,
                   "id": "12345",
-                  "minParticipants": 10,
+                  "maxParticipants": 10,
                   "orderPrice": 1000,
                   "status": "OPEN",
                   "thumbnail": "thumbnail",
@@ -149,7 +149,7 @@ describe('ShareDealQueryResolver', () => {
             createdAt
             title
             orderPrice
-            minParticipants
+            maxParticipants
             currentParticipants
             status
             thumbnail
@@ -210,7 +210,7 @@ describe('ShareDealQueryResolver', () => {
                 "createdAt": "2022-01-01T00:00:00.000Z",
                 "currentParticipants": 3,
                 "id": "12345",
-                "minParticipants": 10,
+                "maxParticipants": 10,
                 "orderPrice": 1000,
                 "status": "OPEN",
                 "thumbnail": "thumbnail",

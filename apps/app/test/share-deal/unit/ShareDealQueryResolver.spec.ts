@@ -5,6 +5,7 @@ import * as request from 'supertest';
 
 import { FindShareDealByNearestInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealByNearestInput';
 import { FindShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealInput';
+import { FindShareDealStatusInput } from '../../../src/module/share-deal/adapter/in/gql/input/FindShareDealStatusInput';
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
@@ -242,6 +243,82 @@ describe('ShareDealQueryResolver', () => {
         {
           "data": {
             "myEndDealCount": 10,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('shareDealStatus', () => {
+    it('내가 참여하는 공유딜 상태를 가져온다 ', async () => {
+      // given
+      const input = new FindShareDealStatusInput();
+      input.shareDealId = '12345';
+
+      const query = gql`
+        query shareDealStatus($input: FindShareDealStatusInput!) {
+          shareDealStatus(input: $input) {
+            canStart
+            canEnd
+            isOwner
+            participants {
+              id
+              nickname
+              isOwner
+              isMe
+            }
+          }
+        }
+      `;
+
+      const owner = UserFactory.create({
+        id: 'ownerId',
+        nickname: 'owner name',
+      });
+      const participant = UserFactory.create({
+        id: 'participantId',
+        nickname: 'participant name',
+      });
+      setMockUser(owner.id);
+
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: owner.id,
+        participantInfo: ParticipantInfo.of([owner.id, participant.id], 2),
+      });
+
+      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      userQueryRepositoryPort.findByIds.mockReturnValue(
+        right([owner, participant]),
+      );
+
+      // then
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { input } });
+
+      // when
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "shareDealStatus": {
+              "canEnd": false,
+              "canStart": true,
+              "isOwner": true,
+              "participants": [
+                {
+                  "id": "ownerId",
+                  "isMe": true,
+                  "isOwner": true,
+                  "nickname": "owner name",
+                },
+                {
+                  "id": "participantId",
+                  "isMe": false,
+                  "isOwner": false,
+                  "nickname": "participant name",
+                },
+              ],
+            },
           },
         }
       `);

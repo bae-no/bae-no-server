@@ -1,7 +1,6 @@
 import { DBError } from '@app/domain/error/DBError';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { PermissionDeniedException } from '@app/domain/exception/PermissionDeniedException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { EndShareDealCommand } from './dto/EndShareDealCommand';
@@ -29,8 +28,7 @@ export type EndShareDealError =
 export type UpdateShareDealError =
   | DBError
   | NotFoundException
-  | IllegalStateException
-  | PermissionDeniedException;
+  | IllegalStateException;
 
 export abstract class ShareDealCommandUseCase {
   abstract open(command: OpenShareDealCommand): TaskEither<DBError, void>;

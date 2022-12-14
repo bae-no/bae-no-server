@@ -7,10 +7,12 @@ import { TaskEither } from 'fp-ts/TaskEither';
 import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
+import { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
 import {
   JoinChatError,
   ShareDealCommandUseCase,
   StartShareDealError,
+  UpdateShareDealError,
 } from '../port/in/ShareDealCommandUseCase';
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../port/out/ShareDealRepositoryPort';
@@ -59,6 +61,19 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
       TE.chainEitherKW((deal) => deal.end(command.userId)),
+      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
+      TE.map(constVoid),
+    );
+  }
+
+  override update(
+    command: UpdateShareDealCommand,
+  ): TaskEither<UpdateShareDealError, void> {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(command.shareDealId),
+      TE.chainEitherKW((deal) =>
+        deal.update(command.userId, command.toShareDealProps()),
+      ),
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(constVoid),
     );

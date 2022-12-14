@@ -7,6 +7,7 @@ import { EndShareDealCommand } from '../../../src/module/share-deal/application/
 import { JoinShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/JoinShareDealCommand';
 import { OpenShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/StartShareDealCommand';
+import { UpdateShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/UpdateShareDealCommand';
 import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealRepositoryPort';
@@ -176,6 +177,48 @@ describe('ShareDealCommandService', () => {
       // then
       await assertResolvesLeft(result, (error) => {
         expect(error).toBeInstanceOf(IllegalStateException);
+      });
+    });
+  });
+
+  describe('update', () => {
+    it('공유딜 수정을 수행한다.', async () => {
+      // given
+      const ownerId = 'ownerId';
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId,
+      });
+      const command = new UpdateShareDealCommand(
+        ownerId,
+        'shareDealId',
+        'title',
+        FoodCategory.AMERICAN,
+        10,
+        1000,
+        'store',
+        'thumbnail',
+        'road',
+        'detail',
+        123,
+        45,
+      );
+
+      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+
+      // when
+      const result = shareDealCommandService.update(command);
+
+      // then
+      await assertResolvesRight(result, () => {
+        expect(shareDeal.title).toBe(command.title);
+        expect(shareDeal.zone.road).toBe(command.addressRoad);
+        expect(shareDeal.zone.detail).toBe(command.addressDetail);
+        expect(shareDeal.zone.coordinate.latitude).toBe(command.latitude);
+        expect(shareDeal.zone.coordinate.longitude).toBe(command.longitude);
+        expect(shareDeal.thumbnail).toBe(command.thumbnail);
+        expect(shareDeal.storeName).toBe(command.storeName);
+        expect(shareDeal.participantInfo.max).toBe(command.maxParticipants);
       });
     });
   });

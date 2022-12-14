@@ -1,3 +1,4 @@
+import { UpdateShareDealProps } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 export class UpdateShareDealCommand {
@@ -15,4 +16,19 @@ export class UpdateShareDealCommand {
     readonly latitude: number,
     readonly longitude: number,
   ) {}
+
+  toShareDealProps(): UpdateShareDealProps {
+    return {
+      title: this.title,
+      category: this.category,
+      maxParticipants: this.maxParticipants,
+      orderPrice: this.orderPrice,
+      storeName: this.storeName,
+      thumbnail: this.thumbnail,
+      road: this.addressRoad,
+      detail: this.addressDetail,
+      latitude: this.latitude,
+      longitude: this.longitude,
+    };
+  }
 }

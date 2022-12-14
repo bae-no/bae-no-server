@@ -20,7 +20,7 @@ export class ShareDealItemResponse {
   orderPrice: number;
 
   @Field(() => Int)
-  minParticipants: number;
+  maxParticipants: number;
 
   @Field(() => Int)
   currentParticipants: number;
@@ -44,7 +44,7 @@ export class ShareDealItemResponse {
     response.createdAt = shareDeal.createdAt;
     response.title = shareDeal.title;
     response.orderPrice = shareDeal.orderPrice;
-    response.minParticipants = shareDeal.participantInfo.min;
+    response.maxParticipants = shareDeal.participantInfo.max;
     response.currentParticipants = shareDeal.participantInfo.current;
     response.status = shareDeal.status;
     response.thumbnail = shareDeal.thumbnail;

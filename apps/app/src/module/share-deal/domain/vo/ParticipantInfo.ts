@@ -1,21 +1,25 @@
 export class ParticipantInfo {
   constructor(
     readonly ids: string[],
-    readonly min: number,
+    readonly max: number,
     readonly current: number,
     readonly remaining: number,
   ) {}
 
-  get canStart() {
+  get canStart(): boolean {
     return this.remaining <= this.current;
   }
 
-  static of(ids: string[], min: number): ParticipantInfo {
+  get hasRemaining(): boolean {
+    return this.remaining > 0;
+  }
+
+  static of(ids: string[], max: number): ParticipantInfo {
     return new ParticipantInfo(
       ids,
-      min,
+      max,
       ids.length,
-      Math.max(min - ids.length, 0),
+      Math.max(max - ids.length, 0),
     );
   }
 
@@ -26,7 +30,7 @@ export class ParticipantInfo {
 
     return new ParticipantInfo(
       [...this.ids, id],
-      this.min,
+      this.max,
       this.current + 1,
       Math.max(this.remaining - 1, 0),
     );

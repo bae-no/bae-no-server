@@ -6,12 +6,15 @@ import { identity, pipe } from 'fp-ts/function';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { UserQueryRepositoryPort } from '../../../../user/application/port/out/UserQueryRepositoryPort';
+import { ShareDealAccessDeniedException } from '../../../application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
+import { FindShareDealStatusInput } from './input/FindShareDealStatusInput';
 import { ShareDealItemResponse } from './response/ShareDealItemResponse';
 import { ShareDealResponse } from './response/ShareDealResponse';
+import { ShareDealStatusResponse } from './response/ShareDealStatusResponse';
 
 @Resolver()
 export class ShareDealQueryResolver {
@@ -65,6 +68,27 @@ export class ShareDealQueryResolver {
         ShareDealStatus.END,
       ),
       toResponse(identity),
+    )();
+  }
+
+  @Query(() => ShareDealStatusResponse, { description: '공유딜 상태보기' })
+  async shareDealStatus(
+    @Args('input') input: FindShareDealStatusInput,
+    @CurrentSession() session: Session,
+  ): Promise<ShareDealStatusResponse> {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(input.shareDealId),
+      TE.filterOrElseW(
+        (shareDeal) => shareDeal.participantInfo.hasId(session.id),
+        () => new ShareDealAccessDeniedException('공유딜 참여자가 아닙니다.'),
+      ),
+      TE.bindTo('shareDeal'),
+      TE.bind('users', ({ shareDeal }) =>
+        this.userQueryRepositoryPort.findByIds(shareDeal.participantInfo.ids),
+      ),
+      toResponse(({ shareDeal, users }) =>
+        ShareDealStatusResponse.of(shareDeal, users, session.id),
+      ),
     )();
   }
 }

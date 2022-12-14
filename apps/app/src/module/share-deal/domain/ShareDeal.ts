@@ -2,6 +2,7 @@ import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Either, left, right } from 'fp-ts/Either';
 
+import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from './event/ShareDealStartedEvent';
 import { FoodCategory } from './vo/FoodCategory';
@@ -25,7 +26,7 @@ export type CreateShareDealProps = Omit<
   ShareDealProps,
   'status' | 'participantInfo'
 > & {
-  minParticipants: number;
+  maxParticipants: number;
 };
 
 export class ShareDeal extends AggregateRoot<ShareDealProps> {
@@ -70,16 +71,18 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
   }
 
   get isJoinable() {
-    return this.status === ShareDealStatus.OPEN;
+    return (
+      this.status === ShareDealStatus.OPEN && this.participantInfo.hasRemaining
+    );
   }
 
   static open(props: CreateShareDealProps): ShareDeal {
-    const { ownerId, minParticipants, ...otherProps } = props;
+    const { ownerId, maxParticipants, ...otherProps } = props;
 
     return new ShareDeal({
       ...otherProps,
       ownerId,
-      participantInfo: ParticipantInfo.of([ownerId], minParticipants),
+      participantInfo: ParticipantInfo.of([ownerId], maxParticipants),
       status: ShareDealStatus.OPEN,
     });
   }
@@ -104,17 +107,26 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return this.participantInfo.hasId(userId);
   }
 
-  join(participantId: string): this {
+  join(participantId: string): Either<NotJoinableShareDealException, this> {
+    if (!this.isJoinable) {
+      return left(
+        new NotJoinableShareDealException('입장 가능한 공유딜이 아닙니다.'),
+      );
+    }
     this.props.participantInfo = this.participantInfo.addId(participantId);
 
-    return this;
+    return right(this);
   }
 
-  start(): this {
+  start(userId: string): Either<IllegalStateException, this> {
+    if (!this.canStart(userId)) {
+      return left(new IllegalStateException('시작할 수 없습니다.'));
+    }
+
     this.props.status = ShareDealStatus.START;
     this.addDomainEvent(new ShareDealStartedEvent(this.id));
 
-    return this;
+    return right(this);
   }
 
   end(userId: string): Either<IllegalStateException, this> {

@@ -33,7 +33,7 @@ describe('ShareDealRepositoryAdapter', () => {
         storeName: 'store',
         thumbnail: 'thumbnail',
         zone: shareZone,
-        minParticipants: 2,
+        maxParticipants: 2,
       });
 
       // when
@@ -55,7 +55,7 @@ describe('ShareDealRepositoryAdapter', () => {
         storeName: 'store',
         thumbnail: 'thumbnail',
         zone: new ShareZone('road', 'detail', 0, 0),
-        minParticipants: 2,
+        maxParticipants: 2,
       });
       const newShareDeal = await prisma.shareDeal
         .create({ data: ShareDealOrmMapper.toOrm(shareDeal) })

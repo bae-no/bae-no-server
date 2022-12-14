@@ -135,6 +135,10 @@ input FindShareDealInput {
   sortType: ShareDealSortType
 }
 
+input FindShareDealStatusInput {
+  shareDealId: ID!
+}
+
 type FoodCatalog {
   code: FoodCategory!
   name: String!
@@ -217,7 +221,7 @@ type Mutation {
 
 input OpenShareDealInput {
   category: FoodCategory!
-  minParticipants: Int!
+  maxParticipant: Int!
   orderPrice: Int!
   shareZone: CreateShareZoneInput!
   storeName: String!
@@ -248,6 +252,9 @@ type Query {
   profile: UserProfileResponse!
   sample(id: ID!): SampleResponse!
 
+  """공유딜 상태보기"""
+  shareDealStatus(input: FindShareDealStatusInput!): ShareDealStatusResponse!
+
   """공유딜 목록"""
   shareDeals(input: FindShareDealInput!): ShareDealResponse!
 
@@ -271,11 +278,19 @@ type ShareDealItemResponse {
   createdAt: DateTime!
   currentParticipants: Int!
   id: ID!
-  minParticipants: Int!
+  maxParticipants: Int!
   orderPrice: Int!
   status: ShareDealStatus!
   thumbnail: String!
   title: String!
+}
+
+type ShareDealParticipantResponse {
+  id: ID!
+  introduce: String!
+  isMe: Boolean!
+  isOwner: Boolean!
+  nickname: String!
 }
 
 type ShareDealResponse {
@@ -308,6 +323,15 @@ enum ShareDealStatus {
   END
   OPEN
   START
+}
+
+type ShareDealStatusResponse {
+  canEnd: Boolean!
+  canStart: Boolean!
+
+  """api 요청한 사람이 방장인지 여부"""
+  isOwner: Boolean!
+  participants: [ShareDealParticipantResponse!]!
 }
 
 input SignInInput {

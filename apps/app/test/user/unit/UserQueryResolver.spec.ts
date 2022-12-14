@@ -135,12 +135,12 @@ describe('UserQueryResolver', () => {
     });
   });
 
-  describe('profile', () => {
-    it('사용자 프로필 정보를 조회한다.', async () => {
+  describe('myProfile', () => {
+    it('내 프로필 정보를 조회한다.', async () => {
       // given
       const query = gql`
-        query profile {
-          profile {
+        query myProfile {
+          myProfile {
             nickname
             phoneNumber
             imageUri
@@ -166,11 +166,49 @@ describe('UserQueryResolver', () => {
       expect(response.body).toMatchInlineSnapshot(`
         {
           "data": {
-            "profile": {
+            "myProfile": {
               "imageUri": "uri",
               "introduce": "introduce",
               "nickname": "nickname",
               "phoneNumber": "01011112222",
+            },
+          },
+        }
+      `);
+    });
+  });
+
+  describe('profile', () => {
+    it('사용자 프로필 정보를 조회한다.', async () => {
+      // given
+      const query = gql`
+        query profile($userId: ID!) {
+          profile(userId: $userId) {
+            nickname
+            introduce
+          }
+        }
+      `;
+
+      const user = UserFactory.create({
+        nickname: 'nickname',
+        profile: new Profile('userId', 'introduce'),
+      });
+
+      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { userId: user.id } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "profile": {
+              "introduce": "introduce",
+              "nickname": "nickname",
             },
           },
         }

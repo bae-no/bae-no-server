@@ -1,10 +1,11 @@
 import { O, TE, toResponse } from '@app/custom/fp-ts';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
 import { CurrentSession } from './auth/CurrentSession';
 import { Session } from './auth/Session';
+import { MyProfileResponse } from './response/MyProfileResponse';
 import { UserAddressResponse } from './response/UserAddressResponse';
 import { UserProfileResponse } from './response/UserProfileResponse';
 
@@ -33,12 +34,22 @@ export class UserQueryResolver {
     )();
   }
 
-  @Query(() => UserProfileResponse, { description: '프로필 정보' })
-  async profile(
+  @Query(() => MyProfileResponse, { description: '내 프로필 정보' })
+  async myProfile(
     @CurrentSession() session: Session,
-  ): Promise<UserProfileResponse> {
+  ): Promise<MyProfileResponse> {
     return pipe(
       this.userQueryRepositoryPort.findById(session.id),
+      toResponse(MyProfileResponse.of),
+    )();
+  }
+
+  @Query(() => UserProfileResponse, { description: '프로필 정보' })
+  async profile(
+    @Args('userId', { type: () => ID }) userId: string,
+  ): Promise<UserProfileResponse> {
+    return pipe(
+      this.userQueryRepositoryPort.findById(userId),
       toResponse(UserProfileResponse.of),
     )();
   }

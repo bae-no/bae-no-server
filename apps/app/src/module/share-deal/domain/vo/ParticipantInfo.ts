@@ -39,4 +39,8 @@ export class ParticipantInfo {
   hasId(id: string) {
     return this.ids.includes(id);
   }
+
+  isLessOrEquals(value: number): boolean {
+    return this.current <= value;
+  }
 }

@@ -219,6 +219,13 @@ type Mutation {
   writeChat(input: WriteChatInput!): Boolean!
 }
 
+type MyProfileResponse {
+  imageUri: String!
+  introduce: String!
+  nickname: String!
+  phoneNumber: String!
+}
+
 input OpenShareDealInput {
   category: FoodCategory!
   maxParticipant: Int!
@@ -249,7 +256,10 @@ type Query {
   myEndDealCount: Int!
 
   """프로필 정보"""
-  profile: UserProfileResponse!
+  myProfile: MyProfileResponse!
+
+  """프로필 정보"""
+  profile(userId: ID!): UserProfileResponse!
   sample(id: ID!): SampleResponse!
 
   """공유딜 상태보기"""
@@ -377,10 +387,8 @@ type UserAddressResponse {
 }
 
 type UserProfileResponse {
-  imageUri: String!
   introduce: String!
   nickname: String!
-  phoneNumber: String!
 }
 
 input VerifyPhoneVerificationCodeInput {

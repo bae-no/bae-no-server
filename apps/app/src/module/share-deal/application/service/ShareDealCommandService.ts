@@ -11,6 +11,7 @@ import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
 import { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
 import {
   JoinChatError,
+  LeaveShareDealError,
   ShareDealCommandUseCase,
   StartShareDealError,
   UpdateShareDealError,
@@ -80,7 +81,12 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
     );
   }
 
-  leave(command: LeaveShareDealCommand): TaskEither<DBError, void> {
-    throw new Error(command.shareDealId);
+  leave(command: LeaveShareDealCommand): TaskEither<LeaveShareDealError, void> {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(command.shareDealId),
+      TE.chainEitherKW((deal) => deal.leave(command.userId)),
+      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
+      TE.map(constVoid),
+    );
   }
 }

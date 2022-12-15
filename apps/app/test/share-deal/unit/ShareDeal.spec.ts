@@ -1,6 +1,7 @@
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { assertLeft, assertRight } from '../../fixture/utils';
 
 describe('ShareDeal', () => {
   describe('canWriteChat', () => {
@@ -244,6 +245,54 @@ describe('ShareDeal', () => {
 
       // then
       expect(result).toBe(false);
+    });
+  });
+
+  describe('leave', () => {
+    it('공유딜이 활성화 상태이고 방장이면 파기상태로 변경한다', () => {
+      // given
+      const ownerId = 'ownerId';
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId,
+        participantInfo: ParticipantInfo.of([ownerId, 'user2'], 10),
+      });
+
+      // when
+      const result = shareDeal.leave(ownerId);
+
+      // then
+      assertRight(result, (deal) => {
+        expect(deal.status).toBe(ShareDealStatus.CLOSE);
+        expect(deal.domainEvents).toHaveLength(1);
+      });
+    });
+
+    it('참여자가 아니면 에러를 반환한다', () => {
+      // given
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: 'ownerId',
+        participantInfo: ParticipantInfo.of(['user1', 'user2'], 10),
+      });
+
+      // when
+      const result = shareDeal.leave('user3');
+
+      // then
+      assertLeft(result);
+    });
+
+    it('참가자 정보를 삭제한다', () => {
+      // given
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: 'ownerId',
+        participantInfo: ParticipantInfo.of(['user1', 'user2'], 10),
+      });
+
+      // when
+      shareDeal.leave('user2');
+
+      // then
+      expect(shareDeal.participantInfo.hasId('user2')).toBe(false);
     });
   });
 });

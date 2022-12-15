@@ -3,6 +3,7 @@ import { IllegalStateException } from '@app/domain/exception/IllegalStateExcepti
 import { Either, left, right } from 'fp-ts/Either';
 
 import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
+import { ShareDealClosedEvent } from './event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from './event/ShareDealStartedEvent';
 import { FoodCategory } from './vo/FoodCategory';
@@ -84,6 +85,13 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
   get isJoinable() {
     return (
       this.status === ShareDealStatus.OPEN && this.participantInfo.hasRemaining
+    );
+  }
+
+  get isActive(): boolean {
+    return (
+      this.status === ShareDealStatus.START ||
+      this.status === ShareDealStatus.OPEN
     );
   }
 
@@ -182,6 +190,29 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
         props.maxParticipants,
       ),
     };
+
+    return right(this);
+  }
+
+  leave(userId: string): Either<IllegalStateException, this> {
+    if (this.isOwner(userId) && this.isActive) {
+      this.props.status = ShareDealStatus.CLOSE;
+      this.addDomainEvent(new ShareDealClosedEvent(this.id));
+    }
+
+    return this.leaveMember(userId);
+  }
+
+  private isOwner(userId: string): boolean {
+    return this.ownerId === userId;
+  }
+
+  private leaveMember(userId: string): Either<IllegalStateException, this> {
+    if (!this.participantInfo.hasId(userId)) {
+      return left(new IllegalStateException('존재하지 않는 참가자입니다.'));
+    }
+
+    this.props.participantInfo = this.props.participantInfo.removeId(userId);
 
     return right(this);
   }

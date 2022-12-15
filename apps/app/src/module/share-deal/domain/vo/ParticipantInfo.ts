@@ -36,6 +36,15 @@ export class ParticipantInfo {
     );
   }
 
+  removeId(id: string): ParticipantInfo {
+    return new ParticipantInfo(
+      this.ids.filter((participantId) => participantId !== id),
+      this.max,
+      this.current - 1,
+      this.remaining + 1,
+    );
+  }
+
   hasId(id: string) {
     return this.ids.includes(id);
   }

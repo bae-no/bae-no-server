@@ -31,6 +31,11 @@ export type UpdateShareDealError =
   | NotFoundException
   | IllegalStateException;
 
+export type LeaveShareDealError =
+  | DBError
+  | NotFoundException
+  | IllegalStateException;
+
 export abstract class ShareDealCommandUseCase {
   abstract open(command: OpenShareDealCommand): TaskEither<DBError, void>;
 
@@ -48,5 +53,7 @@ export abstract class ShareDealCommandUseCase {
     command: UpdateShareDealCommand,
   ): TaskEither<UpdateShareDealError, void>;
 
-  abstract leave(command: LeaveShareDealCommand): TaskEither<DBError, void>;
+  abstract leave(
+    command: LeaveShareDealCommand,
+  ): TaskEither<LeaveShareDealError, void>;
 }

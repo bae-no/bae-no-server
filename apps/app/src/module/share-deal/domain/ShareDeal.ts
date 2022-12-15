@@ -29,6 +29,17 @@ export type CreateShareDealProps = Omit<
   maxParticipants: number;
 };
 
+export type UpdateShareDealProps = Omit<
+  ShareDealProps,
+  'status' | 'participantInfo' | 'ownerId' | 'zone'
+> & {
+  maxParticipants: number;
+  road: string;
+  detail: string;
+  latitude: number;
+  longitude: number;
+};
+
 export class ShareDeal extends AggregateRoot<ShareDealProps> {
   constructor(props: ShareDealProps) {
     super(props);
@@ -136,6 +147,41 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
 
     this.props.status = ShareDealStatus.END;
     this.addDomainEvent(new ShareDealEndedEvent(this.id));
+
+    return right(this);
+  }
+
+  canUpdate(userId: string, maxParticipants: number): boolean {
+    return (
+      this.props.ownerId === userId &&
+      this.props.status === ShareDealStatus.OPEN &&
+      this.participantInfo.isLessOrEquals(maxParticipants)
+    );
+  }
+
+  update(
+    userId: string,
+    props: UpdateShareDealProps,
+  ): Either<IllegalStateException, this> {
+    if (!this.canUpdate(userId, props.maxParticipants)) {
+      return left(new IllegalStateException('수정이 불가능한 상태입니다.'));
+    }
+
+    const zone = new ShareZone(
+      props.road,
+      props.detail,
+      props.latitude,
+      props.longitude,
+    );
+    this.props = {
+      ...this.props,
+      ...props,
+      zone,
+      participantInfo: ParticipantInfo.of(
+        this.participantInfo.ids,
+        props.maxParticipants,
+      ),
+    };
 
     return right(this);
   }

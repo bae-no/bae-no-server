@@ -212,6 +212,9 @@ type Mutation {
   """프로필 정보 수정"""
   updateProfile(input: UpdateProfileInput!): Boolean!
 
+  """공유딜 수정하기"""
+  updateShareDeal(input: UpdateShareDealInput!): Boolean!
+
   """전화번호 인증번호 검증하기"""
   verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
 
@@ -255,7 +258,7 @@ type Query {
   """내가 참여완료한 공유딜 개수"""
   myEndDealCount: Int!
 
-  """프로필 정보"""
+  """내 프로필 정보"""
   myProfile: MyProfileResponse!
 
   """프로필 정보"""
@@ -374,6 +377,17 @@ type Subscription {
 
 input UpdateProfileInput {
   introduce: String!
+}
+
+input UpdateShareDealInput {
+  category: FoodCategory!
+  id: ID!
+  maxParticipant: Int!
+  orderPrice: Int!
+  shareZone: CreateShareZoneInput!
+  storeName: String!
+  thumbnail: String!
+  title: String!
 }
 
 type UserAddressResponse {

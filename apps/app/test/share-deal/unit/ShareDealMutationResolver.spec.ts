@@ -9,6 +9,7 @@ import { EndShareDealInput } from '../../../src/module/share-deal/adapter/in/gql
 import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
 import { StartShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/StartShareDealInput';
+import { UpdateShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/UpdateShareDealInput';
 import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealMutationResolver';
 import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
@@ -302,6 +303,49 @@ describe('ShareDealMutationResolver', () => {
               ],
             },
           ],
+        }
+      `);
+    });
+  });
+
+  describe('updateShareDeal', () => {
+    it('공유딜을 수정한다.', async () => {
+      // given
+      const input = new UpdateShareDealInput();
+      input.id = 'shareDealId';
+      input.title = 'PIIIIIIIIZZA';
+      input.category = FoodCategory.BURGER;
+      input.maxParticipant = 2;
+      input.storeName = 'IPPPPPPPPPAAZ';
+      input.orderPrice = 1000;
+      input.thumbnail = 'thumbnail';
+
+      const shareZoneInput = new CreateShareZoneInput();
+      shareZoneInput.addressDetail = 'detail';
+      shareZoneInput.addressRoad = 'road';
+      shareZoneInput.longitude = 100;
+      shareZoneInput.latitude = 50;
+      input.shareZone = shareZoneInput;
+
+      const mutation = gql`
+        mutation updateShareDeal($input: UpdateShareDealInput!) {
+          updateShareDeal(input: $input)
+        }
+      `;
+
+      sharedDealCommandUseCase.update.mockReturnValue(right(undefined));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "updateShareDeal": true,
+          },
         }
       `);
     });

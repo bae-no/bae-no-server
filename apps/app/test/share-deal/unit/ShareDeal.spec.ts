@@ -165,4 +165,85 @@ describe('ShareDeal', () => {
       expect(result).toBe(false);
     });
   });
+
+  describe('canUpdate', () => {
+    it('자신의 공유딜이 시작 상태인 경우 수정할 수 있다.', () => {
+      // given
+      const ownerId = 'ownerId';
+      const maxParticipants = 10;
+      const shareDeal = ShareDealFactory.create({
+        ownerId,
+        status: ShareDealStatus.OPEN,
+        participantInfo: ParticipantInfo.of(
+          ['user1', 'user2'],
+          maxParticipants,
+        ),
+      });
+
+      // when
+      const result = shareDeal.canUpdate(ownerId, maxParticipants);
+
+      // then
+      expect(result).toBe(true);
+    });
+
+    it('방장이 아닌 경우 수정할 수 없다.', () => {
+      // given
+      const maxParticipants = 10;
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: 'ownerId',
+        participantInfo: ParticipantInfo.of(
+          ['user1', 'user2'],
+          maxParticipants,
+        ),
+      });
+      const userId = 'userId';
+
+      // when
+      const result = shareDeal.canUpdate(userId, maxParticipants);
+
+      // then
+      expect(result).toBe(false);
+    });
+
+    it('오픈 상태가 아닌 경우 수정할 수 없다.', () => {
+      // given
+      const ownerId = 'ownerId';
+      const maxParticipants = 10;
+      const shareDeal = ShareDealFactory.create({
+        ownerId,
+        status: ShareDealStatus.START,
+        participantInfo: ParticipantInfo.of(
+          ['user1', 'user2'],
+          maxParticipants,
+        ),
+      });
+
+      // when
+      const result = shareDeal.canUpdate(ownerId, maxParticipants);
+
+      // then
+      expect(result).toBe(false);
+    });
+
+    it('현재 참여 인원수 보다 작은 인원수로 수정할 경우 실패한다.', () => {
+      // given
+      const ownerId = 'ownerId';
+      const maxParticipants = 1;
+      const shareDeal = ShareDealFactory.create({
+        ownerId,
+        status: ShareDealStatus.START,
+        participantInfo: ParticipantInfo.of(
+          ['user1', 'user2'],
+          maxParticipants,
+        ),
+      });
+
+      // when
+      const result = shareDeal.canUpdate(ownerId, maxParticipants);
+
+      // then
+      expect(result).toBe(false);
+    });
+  });
 });

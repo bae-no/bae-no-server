@@ -9,6 +9,7 @@ import { EndShareDealInput } from './input/EndShareDealInput';
 import { JoinShareDealInput } from './input/JoinShareDealInput';
 import { OpenShareDealInput } from './input/OpenShareDealInput';
 import { StartShareDealInput } from './input/StartShareDealInput';
+import { UpdateShareDealInput } from './input/UpdateShareDealInput';
 
 @Resolver()
 export class ShareDealMutationResolver {
@@ -60,6 +61,18 @@ export class ShareDealMutationResolver {
     return pipe(
       input.toCommand(session.id),
       (command) => this.shareDealCommandUseCase.end(command),
+      toResponse(constTrue),
+    )();
+  }
+
+  @Mutation(() => Boolean, { description: '공유딜 수정하기' })
+  async updateShareDeal(
+    @Args('input') input: UpdateShareDealInput,
+    @CurrentSession() session: Session,
+  ): Promise<boolean> {
+    return pipe(
+      input.toCommand(session.id),
+      (command) => this.shareDealCommandUseCase.update(command),
       toResponse(constTrue),
     )();
   }

@@ -5,6 +5,7 @@ import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
+import { LeaveShareDealCommand } from '../port/in/dto/LeaveShareDealCommand';
 import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
 import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
 import { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
@@ -77,5 +78,9 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
       TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
       TE.map(constVoid),
     );
+  }
+
+  leave(command: LeaveShareDealCommand): TaskEither<DBError, void> {
+    throw new Error(command.shareDealId);
   }
 }

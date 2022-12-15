@@ -5,6 +5,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { EndShareDealCommand } from './dto/EndShareDealCommand';
 import { JoinShareDealCommand } from './dto/JoinShareDealCommand';
+import { LeaveShareDealCommand } from './dto/LeaveShareDealCommand';
 import { OpenShareDealCommand } from './dto/OpenShareDealCommand';
 import { StartShareDealCommand } from './dto/StartShareDealCommand';
 import { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
@@ -46,4 +47,6 @@ export abstract class ShareDealCommandUseCase {
   abstract update(
     command: UpdateShareDealCommand,
   ): TaskEither<UpdateShareDealError, void>;
+
+  abstract leave(command: LeaveShareDealCommand): TaskEither<DBError, void>;
 }

@@ -23,3 +23,9 @@ services:
     command: ["--replSet", "replica-set", "--bind_ip_all", "--port", "30003"]
     ports:
       - 30003:30003
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379

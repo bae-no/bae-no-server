@@ -7,6 +7,7 @@ import * as request from 'supertest';
 import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/gql/input/CreateShareZoneInput';
 import { EndShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/EndShareDealInput';
 import { JoinShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/JoinShareDealInput';
+import { LeaveShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/LeaveShareDealInput';
 import { OpenShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/OpenShareDealInput';
 import { StartShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/StartShareDealInput';
 import { UpdateShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/UpdateShareDealInput';
@@ -345,6 +346,36 @@ describe('ShareDealMutationResolver', () => {
         {
           "data": {
             "updateShareDeal": true,
+          },
+        }
+      `);
+    });
+  });
+
+  describe('leaveShareDeal', () => {
+    it('공유딜을 떠난다.', async () => {
+      // given
+      const input = new LeaveShareDealInput();
+      input.shareDealId = 'abcd1234';
+
+      const mutation = gql`
+        mutation leaveShareDeal($input: LeaveShareDealInput!) {
+          leaveShareDeal(input: $input)
+        }
+      `;
+
+      sharedDealCommandUseCase.leave.mockReturnValue(right(undefined));
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "leaveShareDeal": true,
           },
         }
       `);

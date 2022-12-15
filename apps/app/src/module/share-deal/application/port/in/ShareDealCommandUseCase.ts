@@ -5,6 +5,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { EndShareDealCommand } from './dto/EndShareDealCommand';
 import { JoinShareDealCommand } from './dto/JoinShareDealCommand';
+import { LeaveShareDealCommand } from './dto/LeaveShareDealCommand';
 import { OpenShareDealCommand } from './dto/OpenShareDealCommand';
 import { StartShareDealCommand } from './dto/StartShareDealCommand';
 import { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
@@ -30,6 +31,11 @@ export type UpdateShareDealError =
   | NotFoundException
   | IllegalStateException;
 
+export type LeaveShareDealError =
+  | DBError
+  | NotFoundException
+  | IllegalStateException;
+
 export abstract class ShareDealCommandUseCase {
   abstract open(command: OpenShareDealCommand): TaskEither<DBError, void>;
 
@@ -46,4 +52,8 @@ export abstract class ShareDealCommandUseCase {
   abstract update(
     command: UpdateShareDealCommand,
   ): TaskEither<UpdateShareDealError, void>;
+
+  abstract leave(
+    command: LeaveShareDealCommand,
+  ): TaskEither<LeaveShareDealError, void>;
 }

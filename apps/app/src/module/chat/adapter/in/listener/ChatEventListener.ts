@@ -7,6 +7,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
 
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealClosedEvent } from '../../../../share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../../share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../../share-deal/domain/event/ShareDealStartedEvent';
 import { ShareDeal } from '../../../../share-deal/domain/ShareDeal';
@@ -46,11 +47,16 @@ export class ChatEventListener {
     );
   }
 
-  @OnEvent([ShareDealStartedEvent.name, ShareDealEndedEvent.name], {
-    async: true,
-  })
+  @OnEvent(
+    [
+      ShareDealStartedEvent.name,
+      ShareDealEndedEvent.name,
+      ShareDealClosedEvent.name,
+    ],
+    { async: true },
+  )
   async handleShareDealUpdatedEvent(
-    event: ShareDealStartedEvent | ShareDealEndedEvent,
+    event: ShareDealStartedEvent | ShareDealEndedEvent | ShareDealClosedEvent,
   ) {
     await pipe(
       this.shareDealQueryRepositoryPort.findById(event.shareDealId),
@@ -64,10 +70,19 @@ export class ChatEventListener {
 
   private createChats(
     shareDeal: ShareDeal,
-    event: ShareDealStartedEvent | ShareDealEndedEvent,
+    event: ShareDealStartedEvent | ShareDealEndedEvent | ShareDealClosedEvent,
   ): Chat[] {
     if (event instanceof ShareDealStartedEvent) {
       return Chat.createByStartShareDeal(
+        shareDeal.id,
+        shareDeal.participantInfo.ids,
+        shareDeal.ownerId,
+        this.ticketGeneratorPort.generateId(),
+      );
+    }
+
+    if (event instanceof ShareDealClosedEvent) {
+      return Chat.createByCloseShareDeal(
         shareDeal.id,
         shareDeal.participantInfo.ids,
         shareDeal.ownerId,

@@ -166,6 +166,10 @@ input JoinShareDealInput {
   shareDealId: ID!
 }
 
+input LeaveShareDealInput {
+  shareDealId: ID!
+}
+
 input LeaveUserInput {
   name: String!
   reason: String!
@@ -196,6 +200,9 @@ type Mutation {
 
   """회원탈퇴하기"""
   leave(input: LeaveUserInput!): Boolean!
+
+  """공유딜 나가기"""
+  leaveShareDeal(input: LeaveShareDealInput!): Boolean!
 
   """공유딜 생성하기"""
   openShareDeal(input: OpenShareDealInput!): Boolean!

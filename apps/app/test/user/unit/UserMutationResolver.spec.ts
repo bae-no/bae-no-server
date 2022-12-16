@@ -6,6 +6,7 @@ import * as request from 'supertest';
 import { AddressInput } from '../../../src/module/user/adapter/in/gql/input/AddressInput';
 import { CoordinateInput } from '../../../src/module/user/adapter/in/gql/input/CoordinateInput';
 import { EnrollUserInput } from '../../../src/module/user/adapter/in/gql/input/EnrollUserInput';
+import { LeaveReasonType } from '../../../src/module/user/adapter/in/gql/input/LeaveReasonType';
 import { LeaveUserInput } from '../../../src/module/user/adapter/in/gql/input/LeaveUserInput';
 import { SignInInput } from '../../../src/module/user/adapter/in/gql/input/SignInInput';
 import { UpdateProfileInput } from '../../../src/module/user/adapter/in/gql/input/UpdateProfileInput';
@@ -189,11 +190,54 @@ describe('UserMutationResolver', () => {
   });
 
   describe('leave', () => {
+    it('탈퇴유형이 직접입력인 경우 body가 없으면 에러가 발생한다', async () => {
+      // given
+      const input = new LeaveUserInput();
+      input.name = 'name';
+      input.type = LeaveReasonType.ETC;
+
+      const mutation = gql`
+        mutation leave($input: LeaveUserInput!) {
+          leave(input: $input)
+        }
+      `;
+
+      userCommandUseCase.leave.mockReturnValue(right(undefined));
+      setMockUser();
+
+      // when
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query: mutation, variables: { input } });
+
+      // then
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "errors": [
+            {
+              "extensions": {
+                "code": "BAD_USER_INPUT",
+                "response": {
+                  "error": "Bad Request",
+                  "message": [
+                    "body should not be empty",
+                  ],
+                  "statusCode": 400,
+                },
+              },
+              "message": "Bad Request Exception",
+            },
+          ],
+        }
+      `);
+    });
+
     it('회원탈퇴에 성공한다', async () => {
       // given
       const input = new LeaveUserInput();
       input.name = 'name';
-      input.reason = 'reason';
+      input.type = LeaveReasonType.USER_COUNT;
 
       const mutation = gql`
         mutation leave($input: LeaveUserInput!) {

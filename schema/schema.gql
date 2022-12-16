@@ -166,13 +166,22 @@ input JoinShareDealInput {
   shareDealId: ID!
 }
 
+"""탈퇴 사유"""
+enum LeaveReasonType {
+  ETC
+  PLACE
+  PRICE
+  USER_COUNT
+}
+
 input LeaveShareDealInput {
   shareDealId: ID!
 }
 
 input LeaveUserInput {
+  body: String
   name: String!
-  reason: String!
+  type: LeaveReasonType!
 }
 
 """메시지 유형"""

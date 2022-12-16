@@ -4,6 +4,7 @@ import { MessageType } from '../../../../chat/domain/vo/MessageType';
 import { ShareDealSortType } from '../../../../share-deal/application/port/out/dto/ShareDealSortType';
 import { FoodCategory } from '../../../../share-deal/domain/vo/FoodCategory';
 import { ShareDealStatus } from '../../../../share-deal/domain/vo/ShareDealStatus';
+import { LeaveReasonType } from '../../../../user/adapter/in/gql/input/LeaveReasonType';
 import { AddressSystem } from '../../../../user/domain/vo/AddressSystem';
 import { AddressType } from '../../../../user/domain/vo/AddressType';
 import { AuthType } from '../../../../user/domain/vo/AuthType';
@@ -37,4 +38,8 @@ registerEnumType(ShareDealSortType, {
 registerEnumType(MessageType, {
   name: 'MessageType',
   description: '메시지 유형',
+});
+registerEnumType(LeaveReasonType, {
+  name: 'LeaveReasonType',
+  description: '탈퇴 사유',
 });

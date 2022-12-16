@@ -8,6 +8,7 @@ import { FoodCategory } from '../../src/module/share-deal/domain/vo/FoodCategory
 import { ParticipantInfo } from '../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareZone } from '../../src/module/share-deal/domain/vo/ShareZone';
+import { AddressSystem } from '../../src/module/user/domain/vo/AddressSystem';
 
 type BaseType = {
   id?: string;
@@ -19,6 +20,7 @@ type BaseType = {
 export class ShareDealFactory {
   static create(props: Partial<ShareDealProps & BaseType> = {}): ShareDeal {
     const shareZone = new ShareZone(
+      faker.helpers.arrayElement(Object.values(AddressSystem)),
       faker.address.streetAddress(true),
       faker.address.buildingNumber(),
       +faker.address.latitude(undefined, 0),

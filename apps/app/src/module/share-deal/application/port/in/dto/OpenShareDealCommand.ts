@@ -1,3 +1,4 @@
+import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
 import { ShareDeal } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 import { ShareZone } from '../../../../domain/vo/ShareZone';
@@ -11,7 +12,8 @@ export class OpenShareDealCommand {
     readonly orderPrice: number,
     readonly storeName: string,
     readonly thumbnail: string,
-    readonly addressRoad: string,
+    readonly addressSystem: AddressSystem,
+    readonly addressPath: string,
     readonly addressDetail: string,
     readonly latitude: number,
     readonly longitude: number,
@@ -27,7 +29,8 @@ export class OpenShareDealCommand {
       storeName: this.storeName,
       thumbnail: this.thumbnail,
       zone: new ShareZone(
-        this.addressRoad,
+        this.addressSystem,
+        this.addressPath,
         this.addressDetail,
         this.latitude,
         this.longitude,

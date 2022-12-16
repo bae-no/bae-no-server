@@ -1,3 +1,4 @@
+import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
 import { UpdateShareDealProps } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
@@ -11,7 +12,8 @@ export class UpdateShareDealCommand {
     readonly orderPrice: number,
     readonly storeName: string,
     readonly thumbnail: string,
-    readonly addressRoad: string,
+    readonly addressSystem: AddressSystem,
+    readonly addressPath: string,
     readonly addressDetail: string,
     readonly latitude: number,
     readonly longitude: number,
@@ -25,7 +27,8 @@ export class UpdateShareDealCommand {
       orderPrice: this.orderPrice,
       storeName: this.storeName,
       thumbnail: this.thumbnail,
-      road: this.addressRoad,
+      system: this.addressSystem,
+      path: this.addressPath,
       detail: this.addressDetail,
       latitude: this.latitude,
       longitude: this.longitude,

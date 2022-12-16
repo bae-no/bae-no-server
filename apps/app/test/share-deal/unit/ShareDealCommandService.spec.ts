@@ -16,6 +16,7 @@ import { ShareDealCommandService } from '../../../src/module/share-deal/applicat
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
@@ -45,6 +46,7 @@ describe('ShareDealCommandService', () => {
         1000,
         'store',
         'thumbnail',
+        AddressSystem.ROAD,
         'road',
         'detail',
         123,
@@ -198,6 +200,7 @@ describe('ShareDealCommandService', () => {
         1000,
         'store',
         'thumbnail',
+        AddressSystem.ROAD,
         'road',
         'detail',
         123,
@@ -213,7 +216,7 @@ describe('ShareDealCommandService', () => {
       // then
       await assertResolvesRight(result, () => {
         expect(shareDeal.title).toBe(command.title);
-        expect(shareDeal.zone.road).toBe(command.addressRoad);
+        expect(shareDeal.zone.path).toBe(command.addressPath);
         expect(shareDeal.zone.detail).toBe(command.addressDetail);
         expect(shareDeal.zone.coordinate.latitude).toBe(command.latitude);
         expect(shareDeal.zone.coordinate.longitude).toBe(command.longitude);

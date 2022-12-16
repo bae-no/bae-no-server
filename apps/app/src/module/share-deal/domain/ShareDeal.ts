@@ -2,6 +2,7 @@ import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Either, left, right } from 'fp-ts/Either';
 
+import { AddressSystem } from '../../user/domain/vo/AddressSystem';
 import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealClosedEvent } from './event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
@@ -35,7 +36,8 @@ export type UpdateShareDealProps = Omit<
   'status' | 'participantInfo' | 'ownerId' | 'zone'
 > & {
   maxParticipants: number;
-  road: string;
+  system: AddressSystem;
+  path: string;
   detail: string;
   latitude: number;
   longitude: number;
@@ -176,7 +178,8 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     }
 
     const zone = new ShareZone(
-      props.road,
+      props.system,
+      props.path,
       props.detail,
       props.latitude,
       props.longitude,

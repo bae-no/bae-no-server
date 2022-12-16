@@ -1,5 +1,6 @@
 import { ShareDeal as OrmShareDeal } from '@prisma/client';
 
+import { AddressSystem } from '../../../../user/domain/vo/AddressSystem';
 import { ShareDeal } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../domain/vo/ParticipantInfo';
@@ -17,7 +18,8 @@ export class ShareDealOrmMapper {
       title: orm.title,
       status: ShareDealStatus[orm.status as ShareDealStatus],
       zone: new ShareZone(
-        orm.zone.road,
+        AddressSystem[orm.zone.system as AddressSystem],
+        orm.zone.path,
         orm.zone.detail,
         orm.zone.coordinate.coordinates[1],
         orm.zone.coordinate.coordinates[0],
@@ -41,7 +43,8 @@ export class ShareDealOrmMapper {
       thumbnail: domain.thumbnail,
       title: domain.title,
       zone: {
-        road: domain.zone.road,
+        system: domain.zone.system,
+        path: domain.zone.path,
         detail: domain.zone.detail,
         coordinate: {
           type: 'Point',

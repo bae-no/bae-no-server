@@ -83,7 +83,8 @@ input CreateSampleInput {
 
 input CreateShareZoneInput {
   addressDetail: String!
-  addressRoad: String!
+  addressPath: String!
+  addressSystem: AddressSystem!
   latitude: Float!
   longitude: Float!
 }

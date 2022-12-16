@@ -13,6 +13,7 @@ import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCateg
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
@@ -298,13 +299,31 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       await prisma.shareDeal.createMany({
         data: [
           ShareDealFactory.createOpen({
-            zone: new ShareZone('yohan', 'detail', 37.566998, 127.066402),
+            zone: new ShareZone(
+              AddressSystem.JIBUN,
+              'yohan',
+              'detail',
+              37.566998,
+              127.066402,
+            ),
           }),
           ShareDealFactory.createOpen({
-            zone: new ShareZone('int', 'detail', 37.3418754, 126.9744649),
+            zone: new ShareZone(
+              AddressSystem.JIBUN,
+              'int',
+              'detail',
+              37.3418754,
+              126.9744649,
+            ),
           }),
           ShareDealFactory.createOpen({
-            zone: new ShareZone('haru', 'detail', 37.366278237, 127.1118002),
+            zone: new ShareZone(
+              AddressSystem.JIBUN,
+              'haru',
+              'detail',
+              37.366278237,
+              127.1118002,
+            ),
           }),
         ].map(ShareDealOrmMapper.toOrm),
       });
@@ -319,7 +338,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
       // then
       await assertResolvesRight(result, (value) => {
-        const roads = value.map((v) => v.zone.road);
+        const roads = value.map((v) => v.zone.path);
         const nearRoads = ['haru', 'int', 'yohan'];
         expect(roads).toStrictEqual(nearRoads);
       });

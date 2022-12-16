@@ -8,6 +8,7 @@ import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/eve
 import { ShareDeal } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesRight } from '../../fixture/utils';
 
@@ -24,7 +25,13 @@ describe('ShareDealRepositoryAdapter', () => {
   describe('save', () => {
     it('주어진 공유딜을 생성한다', async () => {
       // given
-      const shareZone = new ShareZone('road', 'detail', 0, 0);
+      const shareZone = new ShareZone(
+        AddressSystem.ROAD,
+        'road',
+        'detail',
+        0,
+        0,
+      );
       const shareDeal = ShareDeal.open({
         title: 'title',
         category: FoodCategory.AMERICAN,
@@ -54,7 +61,7 @@ describe('ShareDealRepositoryAdapter', () => {
         ownerId: faker.database.mongodbObjectId(),
         storeName: 'store',
         thumbnail: 'thumbnail',
-        zone: new ShareZone('road', 'detail', 0, 0),
+        zone: new ShareZone(AddressSystem.ROAD, 'road', 'detail', 0, 0),
         maxParticipants: 2,
       });
       const newShareDeal = await prisma.shareDeal

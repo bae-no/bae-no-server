@@ -93,7 +93,7 @@ describe('ShareDealQueryResolver', () => {
         thumbnail: 'thumbnail',
         participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
         category: FoodCategory.CHINESE,
-        zone: new ShareZone('road', 'detail', 123.5, 45.6),
+        zone: new ShareZone(AddressSystem.ROAD, 'road', 'detail', 123.5, 45.6),
       });
 
       shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
@@ -183,7 +183,7 @@ describe('ShareDealQueryResolver', () => {
         thumbnail: 'thumbnail',
         participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
         category: FoodCategory.CHINESE,
-        zone: new ShareZone('road', 'detail', 123.5, 45.6),
+        zone: new ShareZone(AddressSystem.JIBUN, 'road', 'detail', 123.5, 45.6),
       });
 
       userQueryRepositoryPort.findById.mockReturnValue(right(user));

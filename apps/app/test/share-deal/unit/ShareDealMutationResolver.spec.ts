@@ -15,6 +15,7 @@ import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapte
 import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
+import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import {
   graphQLTestHelper,
   setMockUser,
@@ -54,8 +55,9 @@ describe('ShareDealMutationResolver', () => {
       input.thumbnail = 'thumbnail';
 
       const shareZoneInput = new CreateShareZoneInput();
+      shareZoneInput.addressSystem = AddressSystem.ROAD;
       shareZoneInput.addressDetail = 'detail';
-      shareZoneInput.addressRoad = 'road';
+      shareZoneInput.addressPath = 'road';
       shareZoneInput.longitude = 100;
       shareZoneInput.latitude = 50;
       input.shareZone = shareZoneInput;
@@ -322,8 +324,9 @@ describe('ShareDealMutationResolver', () => {
       input.thumbnail = 'thumbnail';
 
       const shareZoneInput = new CreateShareZoneInput();
+      shareZoneInput.addressSystem = AddressSystem.JIBUN;
       shareZoneInput.addressDetail = 'detail';
-      shareZoneInput.addressRoad = 'road';
+      shareZoneInput.addressPath = 'road';
       shareZoneInput.longitude = 100;
       shareZoneInput.latitude = 50;
       input.shareZone = shareZoneInput;

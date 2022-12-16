@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -84,7 +84,8 @@ model PhoneVerification {
 }
 
 type ShareZone {
-  road       String
+  system     String
+  path       String
   detail     String
   coordinate Coordinate
 }

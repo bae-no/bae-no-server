@@ -1,10 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsLatitude, IsLongitude } from 'class-validator';
 
+import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
+
 @InputType()
 export class CreateShareZoneInput {
+  @Field(() => AddressSystem)
+  addressSystem: AddressSystem;
+
   @Field()
-  addressRoad: string;
+  addressPath: string;
 
   @Field()
   addressDetail: string;

@@ -17,10 +17,10 @@ import { SmsSensService } from './SmsSensService';
       ) =>
         new SmsSensService(
           httpClientPort,
-          configService.get('SMS_SERVICE_ID', ''),
-          configService.get('SMS_ACCESS_KEY', ''),
-          configService.get('SMS_SECRET_KEY', ''),
-          configService.get('SMS_SEND_NUMBER', ''),
+          configService.getOrThrow('SMS_SERVICE_ID'),
+          configService.getOrThrow('SMS_ACCESS_KEY'),
+          configService.getOrThrow('SMS_SECRET_KEY'),
+          configService.getOrThrow('SMS_SEND_NUMBER'),
         ),
     },
   ],

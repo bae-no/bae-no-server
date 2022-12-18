@@ -53,7 +53,7 @@ import { UserCommandService } from './application/service/UserCommandService';
       useFactory: (jwtService: JwtService, configService: ConfigService) =>
         new JwtTokenGeneratorAdapter(
           jwtService,
-          Number(configService.get('JWT_EXPIRE_DAYS', '1')),
+          Number(configService.getOrThrow('JWT_EXPIRE_DAYS')),
         ),
     },
     {
@@ -73,8 +73,8 @@ import { UserCommandService } from './application/service/UserCommandService';
       ) =>
         new KakaoAuthStrategy(
           httpClientPort,
-          configService.get('KAKAO_CLIENT_ID', ''),
-          configService.get('KAKAO_REDIRECT_URL', ''),
+          configService.getOrThrow('KAKAO_CLIENT_ID'),
+          configService.getOrThrow('KAKAO_REDIRECT_URL'),
         ),
     },
     {
@@ -86,16 +86,16 @@ import { UserCommandService } from './application/service/UserCommandService';
       ) =>
         new GoogleAuthStrategy(
           httpClientPort,
-          configService.get('GOOGLE_CLIENT_ID', ''),
-          configService.get('GOOGLE_CLIENT_SECRET', ''),
-          configService.get('GOOGLE_REDIRECT_URL', ''),
+          configService.getOrThrow('GOOGLE_CLIENT_ID'),
+          configService.getOrThrow('GOOGLE_CLIENT_SECRET'),
+          configService.getOrThrow('GOOGLE_REDIRECT_URL'),
         ),
     },
     {
       provide: JwtStrategy,
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        new JwtStrategy(configService.get('JWT_SECRET', '')),
+        new JwtStrategy(configService.getOrThrow('JWT_SECRET')),
     },
   ],
   imports: [

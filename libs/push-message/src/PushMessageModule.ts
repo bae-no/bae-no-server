@@ -14,9 +14,9 @@ import * as app from 'firebase-admin';
         const messaging = app
           .initializeApp({
             credential: app.credential.cert({
-              projectId: configService.get('FIREBASE_PROJECT_ID'),
-              clientEmail: configService.get('FIREBASE_CLIENT_EMAIL'),
-              privateKey: configService.get('FIREBASE_PRIVATE_KEY'),
+              projectId: configService.getOrThrow('FIREBASE_PROJECT_ID'),
+              clientEmail: configService.getOrThrow('FIREBASE_CLIENT_EMAIL'),
+              privateKey: configService.getOrThrow('FIREBASE_PRIVATE_KEY'),
             }),
           })
           .messaging();

@@ -15,8 +15,8 @@ import { PubSubAdapter } from './PubSubAdapter';
         new PubSubAdapter(
           new RedisPubSub({
             connection: {
-              host: configService.get('REDIS_HOST'),
-              port: configService.get('REDIS_PORT'),
+              host: configService.getOrThrow('REDIS_HOST'),
+              port: configService.getOrThrow('REDIS_PORT'),
             },
           }),
         ),

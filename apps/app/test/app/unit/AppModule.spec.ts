@@ -2,6 +2,7 @@ import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '../../../src/AppModule';
@@ -20,6 +21,8 @@ describe('AppModule', () => {
       .useValue({})
       .overrideProvider(PubSubPort)
       .useValue({})
+      .overrideProvider(ConfigService)
+      .useValue({ getOrThrow: () => 'config' })
       .compile();
 
     app = module.createNestApplication();

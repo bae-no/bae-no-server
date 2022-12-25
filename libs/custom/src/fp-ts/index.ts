@@ -8,6 +8,7 @@ export * as TE from 'fp-ts/TaskEither';
 export * as O from 'fp-ts/Option';
 export * as E from 'fp-ts/Either';
 export * as RNEA from 'fp-ts/ReadonlyNonEmptyArray';
+export * as Json from 'fp-ts/Json';
 
 export const toResponse =
   <FROM, TO, ERROR extends Error>(transformFn: (value: FROM) => TO) =>

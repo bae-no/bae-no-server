@@ -53,7 +53,7 @@ specifiers:
   prettier: 2.8.1
   prisma: 4.7.1
   reflect-metadata: 0.1.13
-  rimraf: 3.0.2
+  rimraf: 4.1.1
   rxjs: 7.6.0
   source-map-support: 0.5.21
   supertest: 6.3.3
@@ -87,7 +87,7 @@ dependencies:
   passport: 0.6.0
   passport-jwt: 4.0.0
   reflect-metadata: 0.1.13
-  rimraf: 3.0.2
+  rimraf: 4.1.1
   rxjs: 7.6.0
 
 devDependencies:
@@ -6652,6 +6652,12 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+
+  /rimraf/4.1.1:
+    resolution: {integrity: sha512-Z4Y81w8atcvaJuJuBB88VpADRH66okZAuEm+Jtaufa+s7rZmIz+Hik2G53kGaNytE7lsfXyWktTmfVz0H9xuDg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: false
 
   /run-async/2.4.1:
     resolution: {integrity: sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==}

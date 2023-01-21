@@ -14,9 +14,7 @@ import { PubSubAdapter } from './PubSubAdapter';
       useFactory: (configService: ConfigService) =>
         new PubSubAdapter(
           new RedisPubSub({
-            connection: {
-              connectionName: configService.getOrThrow('REDIS_CONNECTION_NAME'),
-            },
+            connection: configService.getOrThrow('REDIS_CONNECTION_NAME'),
           }),
         ),
     },

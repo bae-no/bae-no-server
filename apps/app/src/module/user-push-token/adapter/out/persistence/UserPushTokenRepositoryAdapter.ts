@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 import { UserPushTokenRepositoryPort } from '../../../application/port/out/UserPushTokenRepositoryPort';
 import { UserPushToken } from '../../../domain/UserPushToken';
-import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 
 @Injectable()
 export class UserPushTokenRepositoryAdapter extends UserPushTokenRepositoryPort {

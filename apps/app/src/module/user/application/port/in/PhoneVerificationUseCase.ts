@@ -3,10 +3,10 @@ import { NotificationError } from '@app/domain/error/NotificationError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { ExpiredCodeException } from '../../../domain/exception/ExpiredCodeException';
-import { MismatchedCodeException } from '../../../domain/exception/MismatchedCodeException';
 import { SendPhoneVerificationCodeCommand } from './dto/SendPhoneVerificationCodeCommand';
 import { VerifyPhoneVerificationCodeCommand } from './dto/VerifyPhoneVerificationCodeCommand';
+import { ExpiredCodeException } from '../../../domain/exception/ExpiredCodeException';
+import { MismatchedCodeException } from '../../../domain/exception/MismatchedCodeException';
 
 export type VerifyPhoneVerificationCodeError =
   | DBError

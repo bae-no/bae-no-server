@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
 
+import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealClosedEvent } from '../../../../share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../../share-deal/domain/event/ShareDealEndedEvent';
@@ -16,7 +17,6 @@ import { Chat } from '../../../domain/Chat';
 import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
 import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
-import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 
 @Injectable()
 export class ChatEventListener {

@@ -2,8 +2,8 @@ import { Field, InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
-import { EnrollUserCommand } from '../../../../application/port/in/dto/EnrollUserCommand';
 import { AddressInput } from './AddressInput';
+import { EnrollUserCommand } from '../../../../application/port/in/dto/EnrollUserCommand';
 
 @InputType()
 export class EnrollUserInput {

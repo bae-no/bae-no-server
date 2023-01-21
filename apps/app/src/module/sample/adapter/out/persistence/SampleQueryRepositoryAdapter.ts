@@ -7,9 +7,9 @@ import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
 import { Sample } from '../../../domain/Sample';
-import { SampleOrmMapper } from './SampleOrmMapper';
 
 @Injectable()
 export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {

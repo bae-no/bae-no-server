@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ChatOrmMapper } from './ChatOrmMapper';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import { Chat } from '../../../domain/Chat';
-import { ChatOrmMapper } from './ChatOrmMapper';
 
 @Injectable()
 export class ChatRepositoryAdapter extends ChatRepositoryPort {

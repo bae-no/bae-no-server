@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleRepositoryPort } from '../../../application/port/out/SampleRepositoryPort';
 import { Sample } from '../../../domain/Sample';
-import { SampleOrmMapper } from './SampleOrmMapper';
 
 @Injectable()
 export class SampleRepositoryAdapter extends SampleRepositoryPort {

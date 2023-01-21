@@ -2,8 +2,8 @@ import './registerEnum';
 
 import { Query, Resolver } from '@nestjs/graphql';
 
-import { Public } from '../../../../user/adapter/in/gql/auth/Public';
 import { CategoryResponse } from './response/CategoryResponse';
+import { Public } from '../../../../user/adapter/in/gql/auth/Public';
 
 @Resolver()
 export class CategoryQueryResolver {

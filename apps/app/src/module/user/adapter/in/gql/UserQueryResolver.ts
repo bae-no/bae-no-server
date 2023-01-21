@@ -2,12 +2,12 @@ import { O, TE, toResponse } from '@app/custom/fp-ts';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
-import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
 import { CurrentSession } from './auth/CurrentSession';
 import { Session } from './auth/Session';
 import { MyProfileResponse } from './response/MyProfileResponse';
 import { UserAddressResponse } from './response/UserAddressResponse';
 import { UserProfileResponse } from './response/UserProfileResponse';
+import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
 
 @Resolver()
 export class UserQueryResolver {

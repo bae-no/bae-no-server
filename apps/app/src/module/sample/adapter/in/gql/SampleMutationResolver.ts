@@ -3,10 +3,10 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { identity, pipe } from 'fp-ts/function';
 
-import { CreateSampleCommand } from '../../../application/port/in/dto/CreateSampleCommand';
-import { SampleCommandUseCase } from '../../../application/port/in/SampleCommandUseCase';
 import { CreateSampleInput } from './input/CreateSampleInput';
 import { SampleResponse } from './response/SampleResponse';
+import { CreateSampleCommand } from '../../../application/port/in/dto/CreateSampleCommand';
+import { SampleCommandUseCase } from '../../../application/port/in/SampleCommandUseCase';
 
 @Resolver()
 export class SampleMutationResolver {

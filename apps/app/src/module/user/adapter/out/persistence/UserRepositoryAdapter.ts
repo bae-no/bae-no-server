@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { UserOrmMapper } from './UserOrmMapper';
 import { UserRepositoryPort } from '../../../application/port/out/UserRepositoryPort';
 import { User } from '../../../domain/User';
-import { UserOrmMapper } from './UserOrmMapper';
 
 @Injectable()
 export class UserRepositoryAdapter extends UserRepositoryPort {

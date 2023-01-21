@@ -6,9 +6,9 @@ import { pipe } from 'fp-ts/function';
 import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
 import { UserPushToken } from '../../../domain/UserPushToken';
-import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 
 @Injectable()
 export class UserPushTokenQueryRepositoryAdapter extends UserPushTokenQueryRepositoryPort {
@@ -20,7 +20,7 @@ export class UserPushTokenQueryRepositoryAdapter extends UserPushTokenQueryRepos
     userIds: ReadonlyNonEmptyArray<string>,
   ): TaskEither<DBError, UserPushToken[]> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDB(async () =>
         this.prisma.userPushToken.findMany({
           where: { userId: { in: [...userIds] } },
         }),

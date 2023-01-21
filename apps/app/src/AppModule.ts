@@ -15,9 +15,9 @@ import { CategoryModule } from './module/category/CategoryModule';
 import { ChatModule } from './module/chat/ChatModule';
 import { SampleModule } from './module/sample/SampleModule';
 import { ShareDealModule } from './module/share-deal/ShareDealModule';
-import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModule';
 import { GqlAuthGuard } from './module/user/adapter/in/gql/auth/GqlAuthGuard';
 import { UserModule } from './module/user/UserModule';
+import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModule';
 
 @Module({
   imports: [

@@ -2,11 +2,11 @@ import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { ShareDeal } from '../../../domain/ShareDeal';
-import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 import { FindByUserShareDealCommand } from './dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from './dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from './dto/FindShareDealCommand';
+import { ShareDeal } from '../../../domain/ShareDeal';
+import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 export abstract class ShareDealQueryRepositoryPort {
   abstract find(

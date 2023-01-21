@@ -2,12 +2,12 @@ import { AuthError } from '@app/domain/error/AuthError';
 import { Injectable } from '@nestjs/common';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort';
-import { Auth } from '../../../domain/vo/Auth';
-import { AuthType } from '../../../domain/vo/AuthType';
 import { AuthStrategy } from './strategy/AuthStrategy';
 import { GoogleAuthStrategy } from './strategy/GoogleAuthStrategy';
 import { KakaoAuthStrategy } from './strategy/KakaoAuthStrategy';
+import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort';
+import { Auth } from '../../../domain/vo/Auth';
+import { AuthType } from '../../../domain/vo/AuthType';
 
 @Injectable()
 export class AuthProvider extends AuthProviderPort {

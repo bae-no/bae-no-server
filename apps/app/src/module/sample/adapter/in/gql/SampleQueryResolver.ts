@@ -2,8 +2,8 @@ import { toResponse } from '@app/custom/fp-ts';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
-import { SampleQueryUseCase } from '../../../application/port/in/SampleQueryUseCase';
 import { SampleResponse } from './response/SampleResponse';
+import { SampleQueryUseCase } from '../../../application/port/in/SampleQueryUseCase';
 
 @Resolver()
 export class SampleQueryResolver {

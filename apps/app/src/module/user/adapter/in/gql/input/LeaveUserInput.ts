@@ -1,8 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, ValidateIf } from 'class-validator';
 
-import { LeaveUserCommand } from '../../../../application/port/in/dto/LeaveUserCommand';
 import { LeaveReasonType } from './LeaveReasonType';
+import { LeaveUserCommand } from '../../../../application/port/in/dto/LeaveUserCommand';
 
 @InputType()
 export class LeaveUserInput {

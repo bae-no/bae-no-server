@@ -7,6 +7,7 @@ import { Prisma, ShareDeal as OrmShareDeal } from '@prisma/client';
 import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
@@ -14,7 +15,6 @@ import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSo
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDeal } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
-import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 
 @Injectable()
 export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPort {
@@ -52,7 +52,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     }
 
     return pipe(
-      tryCatchDB(() => this.prisma.shareDeal.findMany(args)),
+      tryCatchDB(async () => this.prisma.shareDeal.findMany(args)),
       TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
@@ -70,7 +70,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       args.where = { ...args.where, category: command.category };
     }
 
-    return tryCatchDB(() => this.prisma.shareDeal.count(args));
+    return tryCatchDB(async () => this.prisma.shareDeal.count(args));
   }
 
   override findByNearest(
@@ -98,12 +98,12 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     };
 
     return pipe(
-      tryCatchDB(() => this.prisma.shareDeal.findRaw(args)),
+      tryCatchDB(async () => this.prisma.shareDeal.findRaw(args)),
       TE.map((row) => unsafeCoerce<any, { _id: { $oid: string } }[]>(row)),
       TE.map((rows) => rows.map((row) => row._id.$oid)),
       TE.bindTo('ids'),
       TE.bind('shareDeals', ({ ids }) =>
-        tryCatchDB(() =>
+        tryCatchDB(async () =>
           this.prisma.shareDeal.findMany({ where: { id: { in: ids } } }),
         ),
       ),
@@ -136,7 +136,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     userId: string,
     status: ShareDealStatus,
   ): TaskEither<DBError, number> {
-    return tryCatchDB(() =>
+    return tryCatchDB(async () =>
       this.prisma.shareDeal.count({
         where: { status, participants: { is: { ids: { has: userId } } } },
       }),
@@ -147,7 +147,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     command: FindByUserShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDB(async () =>
         this.prisma.shareDeal.findMany({
           where: {
             status: command.status,

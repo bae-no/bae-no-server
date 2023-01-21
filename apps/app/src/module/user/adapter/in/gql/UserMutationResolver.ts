@@ -2,8 +2,6 @@ import { toResponse } from '@app/custom/fp-ts';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 
-import { DeleteAddressCommand } from '../../../application/port/in/dto/DeleteAddressCommand';
-import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseCase';
 import { CurrentSession } from './auth/CurrentSession';
 import { Public } from './auth/Public';
 import { Session } from './auth/Session';
@@ -13,6 +11,8 @@ import { LeaveUserInput } from './input/LeaveUserInput';
 import { SignInInput } from './input/SignInInput';
 import { UpdateProfileInput } from './input/UpdateProfileInput';
 import { SignInResponse } from './response/SignInResponse';
+import { DeleteAddressCommand } from '../../../application/port/in/dto/DeleteAddressCommand';
+import { UserCommandUseCase } from '../../../application/port/in/UserCommandUseCase';
 
 @Resolver()
 export class UserMutationResolver {

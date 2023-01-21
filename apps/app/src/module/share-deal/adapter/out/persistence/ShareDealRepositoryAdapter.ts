@@ -6,9 +6,9 @@ import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 import { ShareDealRepositoryPort } from '../../../application/port/out/ShareDealRepositoryPort';
 import { ShareDeal } from '../../../domain/ShareDeal';
-import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 
 @Injectable()
 export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {

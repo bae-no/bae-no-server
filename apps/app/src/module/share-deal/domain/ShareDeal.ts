@@ -2,8 +2,6 @@ import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Either, left, right } from 'fp-ts/Either';
 
-import { AddressSystem } from '../../user/domain/vo/AddressSystem';
-import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealClosedEvent } from './event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from './event/ShareDealStartedEvent';
@@ -11,6 +9,8 @@ import { FoodCategory } from './vo/FoodCategory';
 import { ParticipantInfo } from './vo/ParticipantInfo';
 import { ShareDealStatus } from './vo/ShareDealStatus';
 import { ShareZone } from './vo/ShareZone';
+import { AddressSystem } from '../../user/domain/vo/AddressSystem';
+import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
 
 export interface ShareDealProps {
   title: string;

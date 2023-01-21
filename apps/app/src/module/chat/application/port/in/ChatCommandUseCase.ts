@@ -2,8 +2,8 @@ import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { ShareDealAccessDeniedException } from '../../../../share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { WriteChatCommand } from './dto/WriteChatCommand';
+import { ShareDealAccessDeniedException } from '../../../../share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 
 export type WriteChatError =
   | DBError

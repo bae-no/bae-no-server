@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { UserQueryRepositoryAdapter } from '../user/adapter/out/persistence/UserQueryRepositoryAdapter';
-import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryRepositoryPort';
 import { ShareDealMutationResolver } from './adapter/in/gql/ShareDealMutationResolver';
 import { ShareDealQueryResolver } from './adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealQueryRepositoryAdapter } from './adapter/out/persistence/ShareDealQueryRepositoryAdapter';
@@ -12,6 +10,8 @@ import { ShareDealQueryRepositoryPort } from './application/port/out/ShareDealQu
 import { ShareDealRepositoryPort } from './application/port/out/ShareDealRepositoryPort';
 import { ShareDealCommandService } from './application/service/ShareDealCommandService';
 import { ShareDealQueryService } from './application/service/ShareDealQueryService';
+import { UserQueryRepositoryAdapter } from '../user/adapter/out/persistence/UserQueryRepositoryAdapter';
+import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryRepositoryPort';
 
 @Module({
   providers: [

@@ -2,11 +2,11 @@ import { toResponse } from '@app/custom/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 
-import { PhoneVerificationUseCase } from '../../../application/port/in/PhoneVerificationUseCase';
 import { CurrentSession } from './auth/CurrentSession';
 import { Session } from './auth/Session';
 import { SendPhoneVerificationCodeInput } from './input/SendPhoneVerificationCodeInput';
 import { VerifyPhoneVerificationCodeInput } from './input/VerifyPhoneVerificationCodeInput';
+import { PhoneVerificationUseCase } from '../../../application/port/in/PhoneVerificationUseCase';
 
 @Resolver()
 export class PhoneVerificationMutationResolver {

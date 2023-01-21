@@ -2,9 +2,9 @@ import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { IsPositive, Min, ValidateNested } from 'class-validator';
 
+import { CreateShareZoneInput } from './CreateShareZoneInput';
 import { UpdateShareDealCommand } from '../../../../application/port/in/dto/UpdateShareDealCommand';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
-import { CreateShareZoneInput } from './CreateShareZoneInput';
 
 @InputType()
 export class UpdateShareDealInput {

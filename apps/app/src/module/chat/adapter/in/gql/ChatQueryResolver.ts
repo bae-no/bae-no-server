@@ -2,13 +2,13 @@ import { toResponseArray } from '@app/custom/fp-ts';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
-import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
-import { Session } from '../../../../user/adapter/in/gql/auth/Session';
-import { ChatQueryUseCase } from '../../../application/port/in/ChatQueryUseCase';
 import { FindChatDetailInput } from './input/FindChatDetailInput';
 import { FindChatInput } from './input/FindChatInput';
 import { ChatDetailResponse } from './response/ChatDetailResponse';
 import { ChatResponse } from './response/ChatResponse';
+import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
+import { Session } from '../../../../user/adapter/in/gql/auth/Session';
+import { ChatQueryUseCase } from '../../../application/port/in/ChatQueryUseCase';
 
 @Resolver()
 export class ChatQueryResolver {

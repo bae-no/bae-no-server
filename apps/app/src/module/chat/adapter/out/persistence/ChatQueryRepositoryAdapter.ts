@@ -6,10 +6,10 @@ import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { ChatOrmMapper } from './ChatOrmMapper';
 import { FindChatByUserCommand } from '../../../application/port/in/dto/FindChatByUserCommand';
 import { ChatQueryRepositoryPort } from '../../../application/port/out/ChatQueryRepositoryPort';
 import { Chat } from '../../../domain/Chat';
-import { ChatOrmMapper } from './ChatOrmMapper';
 
 @Injectable()
 export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
@@ -39,7 +39,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     userId: string,
   ): TaskEither<DBError, number> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDB(async () =>
         this.prisma.chat.count({
           where: {
             shareDealId,
@@ -55,7 +55,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     command: FindChatByUserCommand,
   ): TaskEither<DBError, Chat[]> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDB(async () =>
         this.prisma.chat.findMany({
           where: { shareDealId: command.shareDealId, userId: command.userId },
           ...(command.cursor ? { cursor: { orderedKey: command.cursor } } : {}),

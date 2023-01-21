@@ -2,10 +2,10 @@ import { toResponse } from '@app/custom/fp-ts';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { constTrue, pipe } from 'fp-ts/function';
 
+import { WriteChatInput } from './input/WriteChatInput';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ChatCommandUseCase } from '../../../application/port/in/ChatCommandUseCase';
-import { WriteChatInput } from './input/WriteChatInput';
 
 @Resolver()
 export class ChatMutationResolver {

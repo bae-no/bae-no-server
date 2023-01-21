@@ -3,11 +3,11 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
+import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/in/ShareDealQueryUseCase';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
-import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 
 @Resolver()
 export class ChatSubscriptionResolver {

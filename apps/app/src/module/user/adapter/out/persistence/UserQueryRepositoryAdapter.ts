@@ -8,10 +8,10 @@ import { pipe } from 'fp-ts/function';
 import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { UserOrmMapper } from './UserOrmMapper';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
 import { User } from '../../../domain/User';
 import { Auth } from '../../../domain/vo/Auth';
-import { UserOrmMapper } from './UserOrmMapper';
 
 @Injectable()
 export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
@@ -57,7 +57,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
 
   override findByIds(ids: string[]): TaskEither<DBError, User[]> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDB(async () =>
         this.prisma.user.findMany({ where: { id: { in: ids } } }),
       ),
       TE.map((ormUsers) => ormUsers.map(UserOrmMapper.toDomain)),

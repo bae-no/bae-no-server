@@ -7,11 +7,11 @@ import { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { AuthStrategy } from './AuthStrategy';
 import { Auth } from '../../../../domain/vo/Auth';
 import { AuthType } from '../../../../domain/vo/AuthType';
 import { GoogleAuthResponse } from '../response/GoogleAuthResponse';
 import { GoogleProfileResponse } from '../response/GoogleProfileResponse';
-import { AuthStrategy } from './AuthStrategy';
 
 export class GoogleAuthStrategy implements AuthStrategy {
   constructor(

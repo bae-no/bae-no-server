@@ -29,7 +29,7 @@ specifiers:
   apollo-server-express: 3.11.1
   class-transformer: 0.5.1
   class-validator: 0.13.2
-  cuid: ^2.1.8
+  cuid: ^3.0.0
   date-fns: 2.29.3
   eslint: 8.32.0
   eslint-config-async: 2.0.1
@@ -78,7 +78,7 @@ dependencies:
   apollo-server-express: 3.11.1_5ha345eiak62qiwwva5z4dp6gu
   class-transformer: 0.5.1
   class-validator: 0.13.2
-  cuid: 2.1.8
+  cuid: 3.0.0
   date-fns: 2.29.3
   firebase-admin: 11.5.0
   fp-ts: 2.13.1
@@ -3288,8 +3288,9 @@ packages:
     resolution: {integrity: sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==}
     dev: false
 
-  /cuid/2.1.8:
-    resolution: {integrity: sha512-xiEMER6E7TlTPnDxrM4eRiC6TRgjNX9xzEZ5U/Se2YJKr7Mq4pJn/2XEHjl3STcSh96GmkHPcBXLES8M29wyyg==}
+  /cuid/3.0.0:
+    resolution: {integrity: sha512-WZYYkHdIDnaxdeP8Misq3Lah5vFjJwGuItJuV+tvMafosMzw0nF297T7mrm8IOWiPJkV6gc7sa8pzx27+w25Zg==}
+    deprecated: Cuid and other k-sortable and non-cryptographic ids (Ulid, ObjectId, KSUID, all UUIDs) are all insecure. Use @paralleldrive/cuid2 instead.
     dev: false
 
   /date-fns/2.29.3:

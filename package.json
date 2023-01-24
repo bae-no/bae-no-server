@@ -48,7 +48,7 @@
     "apollo-server-express": "3.11.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",
-    "cuid": "^2.1.8",
+    "cuid": "^3.0.0",
     "date-fns": "2.29.3",
     "firebase-admin": "11.5.0",
     "fp-ts": "2.13.1",

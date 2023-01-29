@@ -8,6 +8,7 @@ import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
+import { CountShareDealCommand } from '../../../application/port/out/dto/CountShareDealCommand';
 import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
@@ -57,7 +58,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     );
   }
 
-  override count(command: FindShareDealCommand): TaskEither<DBError, number> {
+  override count(command: CountShareDealCommand): TaskEither<DBError, number> {
     const args: Prisma.ShareDealCountArgs = {
       where: { status: { in: [ShareDealStatus.OPEN, ShareDealStatus.START] } },
     };

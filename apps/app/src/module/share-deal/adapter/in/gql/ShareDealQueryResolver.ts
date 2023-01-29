@@ -1,4 +1,4 @@
-import { TE, toResponse, toResponseArray } from '@app/custom/fp-ts';
+import { TE, toResponse } from '@app/custom/fp-ts';
 import { NotFoundException } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { identity, pipe } from 'fp-ts/function';
@@ -6,7 +6,6 @@ import { identity, pipe } from 'fp-ts/function';
 import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
 import { FindShareDealStatusInput } from './input/FindShareDealStatusInput';
-import { ShareDealItemResponse } from './response/ShareDealItemResponse';
 import { ShareDealResponse } from './response/ShareDealResponse';
 import { ShareDealStatusResponse } from './response/ShareDealStatusResponse';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
@@ -37,13 +36,13 @@ export class ShareDealQueryResolver {
     )();
   }
 
-  @Query(() => [ShareDealItemResponse], {
+  @Query(() => ShareDealResponse, {
     description: '공유딜 목록 (가까운 순)',
   })
   async shareDealsByNearest(
     @Args('input') input: FindShareDealByNearestInput,
     @CurrentSession() session: Session,
-  ): Promise<ShareDealItemResponse[]> {
+  ): Promise<ShareDealResponse> {
     return pipe(
       this.userQueryRepositoryPort.findById(session.id),
       TE.map((user) => user.findAddress(input.addressKey)),
@@ -53,10 +52,14 @@ export class ShareDealQueryResolver {
           : TE.left(new NotFoundException('주소가 존재하지 않습니다.')),
       ),
       TE.map((address) => input.toCommand(address.coordinate)),
-      TE.chainW((command) =>
+      TE.bindTo('command'),
+      TE.bindW('items', ({ command }) =>
         this.shareDealQueryRepositoryPort.findByNearest(command),
       ),
-      toResponseArray(ShareDealItemResponse.of),
+      TE.bindW('total', ({ command }) =>
+        this.shareDealQueryRepositoryPort.count(command),
+      ),
+      toResponse(({ items, total }) => ShareDealResponse.of(items, total)),
     )();
   }
 

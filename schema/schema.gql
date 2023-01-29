@@ -289,7 +289,7 @@ type Query {
   shareDeals(input: FindShareDealInput!): ShareDealResponse!
 
   """공유딜 목록 (가까운 순)"""
-  shareDealsByNearest(input: FindShareDealByNearestInput!): [ShareDealItemResponse!]!
+  shareDealsByNearest(input: FindShareDealByNearestInput!): ShareDealResponse!
 }
 
 type SampleResponse {

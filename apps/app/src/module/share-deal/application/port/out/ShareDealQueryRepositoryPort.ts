@@ -2,6 +2,7 @@ import { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { TaskEither } from 'fp-ts/TaskEither';
 
+import { CountShareDealCommand } from './dto/CountShareDealCommand';
 import { FindByUserShareDealCommand } from './dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from './dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from './dto/FindShareDealCommand';
@@ -13,7 +14,7 @@ export abstract class ShareDealQueryRepositoryPort {
     command: FindShareDealCommand,
   ): TaskEither<DBError, ShareDeal[]>;
 
-  abstract count(command: FindShareDealCommand): TaskEither<DBError, number>;
+  abstract count(command: CountShareDealCommand): TaskEither<DBError, number>;
 
   abstract findByNearest(
     command: FindShareDealByNearestCommand,

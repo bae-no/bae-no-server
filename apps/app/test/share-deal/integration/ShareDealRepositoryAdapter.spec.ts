@@ -8,6 +8,7 @@ import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/eve
 import { ShareDeal } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
+import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesRight } from '../../fixture/utils';
@@ -36,7 +37,7 @@ describe('ShareDealRepositoryAdapter', () => {
         title: 'title',
         category: FoodCategory.AMERICAN,
         orderPrice: 2000,
-        ownerId: faker.database.mongodbObjectId(),
+        ownerId: UserId(faker.database.mongodbObjectId()),
         storeName: 'store',
         thumbnail: 'thumbnail',
         zone: shareZone,
@@ -58,7 +59,7 @@ describe('ShareDealRepositoryAdapter', () => {
         title: 'title',
         category: FoodCategory.AMERICAN,
         orderPrice: 2000,
-        ownerId: faker.database.mongodbObjectId(),
+        ownerId: UserId(faker.database.mongodbObjectId()),
         storeName: 'store',
         thumbnail: 'thumbnail',
         zone: new ShareZone(AddressSystem.ROAD, 'road', 'detail', 0, 0),
@@ -67,7 +68,7 @@ describe('ShareDealRepositoryAdapter', () => {
       const newShareDeal = await prisma.shareDeal
         .create({ data: ShareDealOrmMapper.toOrm(shareDeal) })
         .then(ShareDealOrmMapper.toDomain);
-      newShareDeal.join(faker.database.mongodbObjectId());
+      newShareDeal.join(UserId(faker.database.mongodbObjectId()));
 
       // when
       const result = shareDealRepositoryAdapter.save(newShareDeal);

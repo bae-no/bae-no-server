@@ -8,6 +8,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerificationRepositoryPort } from '../../../application/port/out/PhoneVerificationRepositoryPort';
 import { PhoneVerification } from '../../../domain/PhoneVerification';
+import { UserId } from '../../../domain/User';
 
 @Injectable()
 export class PhoneVerificationRepositoryAdapter extends PhoneVerificationRepositoryPort {
@@ -16,7 +17,7 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
   }
 
   override save(
-    userId: string,
+    userId: UserId,
     phoneVerification: PhoneVerification,
   ): TaskEither<DBError, PhoneVerification> {
     return pipe(
@@ -37,7 +38,7 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
   }
 
   override findLatest(
-    userId: string,
+    userId: UserId,
   ): TaskEither<DBError | NotFoundException, PhoneVerification> {
     return pipe(
       tryCatchDB(() =>

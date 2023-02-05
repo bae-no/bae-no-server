@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import { IsPositive, Min, ValidateNested } from 'class-validator';
 
 import { CreateShareZoneInput } from './CreateShareZoneInput';
+import { UserId } from '../../../../../user/domain/User';
 import { UpdateShareDealCommand } from '../../../../application/port/in/dto/UpdateShareDealCommand';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
@@ -36,7 +37,7 @@ export class UpdateShareDealInput {
   @ValidateNested()
   shareZone: CreateShareZoneInput;
 
-  toCommand(userId: string): UpdateShareDealCommand {
+  toCommand(userId: UserId): UpdateShareDealCommand {
     return new UpdateShareDealCommand(
       userId,
       this.id,

@@ -10,6 +10,7 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
+import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatCommandService', () => {
@@ -34,7 +35,11 @@ describe('ChatCommandService', () => {
   describe('write', () => {
     it('공유딜 권한이 없으면 에러가 발생한다', async () => {
       // given
-      const command = new WriteChatCommand('userId', 'shareDealId', 'content');
+      const command = new WriteChatCommand(
+        UserId('userId'),
+        'shareDealId',
+        'content',
+      );
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
         left(new ShareDealAccessDeniedException('error')),
@@ -51,11 +56,15 @@ describe('ChatCommandService', () => {
 
     it('참여자에게 모두 채팅을 추가한다', async () => {
       // given
-      const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
+      const command = new WriteChatCommand(
+        UserId('user 1'),
+        'shareDealId',
+        'content',
+      );
       let db: Chat[] = [];
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
-        right(['user 1', 'user 2', 'user 3']),
+        right(['user 1', 'user 2', 'user 3'].map(UserId)),
       );
       chatRepositoryPort.create.mockImplementation((chats) => {
         db = chats;
@@ -106,10 +115,14 @@ describe('ChatCommandService', () => {
 
     it('채팅 작성 이벤트를 발송한다', async () => {
       // given
-      const command = new WriteChatCommand('user 1', 'shareDealId', 'content');
+      const command = new WriteChatCommand(
+        UserId('user 1'),
+        'shareDealId',
+        'content',
+      );
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
-        right(['user 1', 'user 2', 'user 3']),
+        right(['user 1', 'user 2', 'user 3'].map(UserId)),
       );
       chatRepositoryPort.create.mockImplementation((chats) => right(chats));
 

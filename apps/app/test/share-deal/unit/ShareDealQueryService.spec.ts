@@ -6,6 +6,7 @@ import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/app
 import { ShareDealQueryService } from '../../../src/module/share-deal/application/service/ShareDealQueryService';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { UserId } from '../../../src/module/user/domain/User';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
@@ -27,7 +28,7 @@ describe('ShareDealQueryService', () => {
       // when
       const result = shareDealQueryService.isParticipant(
         shareDeal.id,
-        'not match user',
+        UserId('not match user'),
       );
 
       // then
@@ -40,7 +41,10 @@ describe('ShareDealQueryService', () => {
       // given
       const shareDeal = ShareDealFactory.create({
         id: 'shareDealId',
-        participantInfo: ParticipantInfo.of(['user 1', 'user 2'], 5),
+        participantInfo: ParticipantInfo.of(
+          ['user 1', 'user 2'].map(UserId),
+          5,
+        ),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -62,7 +66,7 @@ describe('ShareDealQueryService', () => {
       const shareDeal = ShareDealFactory.create({
         id: 'shareDealId',
         status: ShareDealStatus.END,
-        participantInfo: ParticipantInfo.of(['user'], 2),
+        participantInfo: ParticipantInfo.of([UserId('user')], 2),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -84,7 +88,10 @@ describe('ShareDealQueryService', () => {
       const shareDeal = ShareDealFactory.create({
         id: 'shareDealId',
         status: ShareDealStatus.START,
-        participantInfo: ParticipantInfo.of(['user 1', 'user 2'], 5),
+        participantInfo: ParticipantInfo.of(
+          ['user 1', 'user 2'].map(UserId),
+          5,
+        ),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));

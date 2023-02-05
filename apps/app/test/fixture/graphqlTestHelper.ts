@@ -12,10 +12,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { CategoryQueryResolver } from '../../src/module/category/adapter/in/gql/CategoryQueryResolver';
 import { Session } from '../../src/module/user/adapter/in/gql/auth/Session';
+import { UserId } from '../../src/module/user/domain/User';
 
-let userId: string | undefined;
+let userId: UserId | undefined;
 
-export function setMockUser(id = 'userId') {
+export function setMockUser(id = UserId('userId')) {
   userId = id;
 }
 
@@ -28,7 +29,7 @@ export class MockGuard implements CanActivate {
     if (userId) {
       const ctx = GqlExecutionContext.create(context);
       const request = ctx.getContext().req;
-      request.user = new Session(userId);
+      request.user = new Session(UserId(userId));
     }
 
     return true;

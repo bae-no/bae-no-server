@@ -11,7 +11,7 @@ import { UserRepositoryPort } from '../../../src/module/user/application/port/ou
 import { PhoneVerificationService } from '../../../src/module/user/application/service/PhoneVerificationService';
 import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
-import { User } from '../../../src/module/user/domain/User';
+import { User, UserId } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
@@ -36,7 +36,10 @@ describe('PhoneVerificationService', () => {
   describe('sendCode', () => {
     it('전화번호 인증코드를 전송한다', async () => {
       // given
-      const command = new SendPhoneVerificationCodeCommand('id', '01011112222');
+      const command = new SendPhoneVerificationCodeCommand(
+        UserId('id'),
+        '01011112222',
+      );
 
       phoneVerificationRepository.save.mockReturnValue(
         right(PhoneVerification.of(command.phoneNumber)),
@@ -54,7 +57,10 @@ describe('PhoneVerificationService', () => {
   describe('verify', () => {
     it('인증번호가 없으면 에러를 반환한다', async () => {
       // given
-      const command = new VerifyPhoneVerificationCodeCommand('id', '1234');
+      const command = new VerifyPhoneVerificationCodeCommand(
+        UserId('id'),
+        '1234',
+      );
 
       const notFoundException = new NotFoundException('');
       phoneVerificationRepository.findLatest.mockReturnValue(
@@ -73,7 +79,10 @@ describe('PhoneVerificationService', () => {
     it('인증번호 검증에 실패하면 에러를 반환한다', async () => {
       // given
       const phoneVerification = PhoneVerification.of('01011112222', '1234');
-      const command = new VerifyPhoneVerificationCodeCommand('id', '1245');
+      const command = new VerifyPhoneVerificationCodeCommand(
+        UserId('id'),
+        '1245',
+      );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
 
       userQueryRepository.findById.mockReturnValue(right(user));
@@ -94,7 +103,7 @@ describe('PhoneVerificationService', () => {
       // given
       const phoneVerification = PhoneVerification.of('01011112222', '1234');
       const command = new VerifyPhoneVerificationCodeCommand(
-        'id',
+        UserId('id'),
         phoneVerification.code,
       );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));

@@ -14,6 +14,7 @@ import { ShareDealClosedEvent } from '../../../src/module/share-deal/domain/even
 import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 
@@ -60,8 +61,8 @@ describe('ChatEventListener', () => {
       const shareDealId = '1234';
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
-        ownerId: 'ownerId',
-        participantInfo: ParticipantInfo.of(['participantId'], 3),
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -104,8 +105,8 @@ describe('ChatEventListener', () => {
       const shareDealId = '1234';
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
-        ownerId: 'ownerId',
-        participantInfo: ParticipantInfo.of(['participantId'], 3),
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -146,8 +147,8 @@ describe('ChatEventListener', () => {
       const shareDealId = '1234';
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
-        ownerId: 'ownerId',
-        participantInfo: ParticipantInfo.of(['participantId'], 3),
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));

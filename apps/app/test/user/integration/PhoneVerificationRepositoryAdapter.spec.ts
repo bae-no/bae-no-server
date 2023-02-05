@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 
 import { PhoneVerificationRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/PhoneVerificationRepositoryAdapter';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
+import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('PhoneVerificationRepositoryAdapter', () => {
@@ -22,7 +23,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
 
       // when
       const result = phoneVerificationRepositoryAdapter.save(
-        faker.database.mongodbObjectId(),
+        UserId(faker.database.mongodbObjectId()),
         phoneVerification,
       );
 
@@ -36,7 +37,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
   describe('findLatest', () => {
     it('주어진 사용자에 대한 인증번호가 없으면 에러가 발생한다', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
 
       // when
       const result = phoneVerificationRepositoryAdapter.findLatest(userId);
@@ -53,7 +54,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
 
     it('주어진 사용자에 대한 가장 최근 인증번호를 가져온다', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.phoneVerification.create({
         data: {
           phoneNumber: '01011112222',

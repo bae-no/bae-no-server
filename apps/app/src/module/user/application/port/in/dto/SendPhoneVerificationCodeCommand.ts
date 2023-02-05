@@ -1,3 +1,5 @@
+import { UserId } from '../../../../domain/User';
+
 export class SendPhoneVerificationCodeCommand {
-  constructor(readonly id: string, readonly phoneNumber: string) {}
+  constructor(readonly userId: UserId, readonly phoneNumber: string) {}
 }

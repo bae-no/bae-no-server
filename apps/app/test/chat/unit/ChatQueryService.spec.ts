@@ -13,6 +13,7 @@ import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { UserFactory } from '../../fixture/UserFactory';
@@ -51,9 +52,9 @@ describe('ChatQueryService', () => {
       const chats = shareDeals.map((deal) =>
         Chat.of({
           shareDealId: deal.id,
-          userId: 'userId',
+          userId: UserId('userId'),
           orderedKey: 'orderedKey',
-          message: Message.normal('123', 'content', true),
+          message: Message.normal(UserId('123'), 'content', true),
         }),
       );
 
@@ -68,7 +69,7 @@ describe('ChatQueryService', () => {
       );
 
       const command = new FindChatCommand(
-        'userId',
+        UserId('userId'),
         ShareDealStatus.START,
         1,
         10,
@@ -107,7 +108,10 @@ describe('ChatQueryService', () => {
       chatQueryRepositoryPort.findByUser.mockReturnValue(right([]));
       userQueryRepositoryPort.findByIds.mockReturnValue(right([]));
 
-      const command = new FindChatByUserCommand('shareDealId', 'userId');
+      const command = new FindChatByUserCommand(
+        'shareDealId',
+        UserId('userId'),
+      );
 
       // when
       const result = shareDealCommandService.findByUser(command);
@@ -129,7 +133,10 @@ describe('ChatQueryService', () => {
       chatQueryRepositoryPort.findByUser.mockReturnValue(right([chat]));
       userQueryRepositoryPort.findByIds.mockReturnValue(right([user]));
 
-      const command = new FindChatByUserCommand('shareDealId', 'userId');
+      const command = new FindChatByUserCommand(
+        'shareDealId',
+        UserId('userId'),
+      );
 
       // when
       const result = shareDealCommandService.findByUser(command);

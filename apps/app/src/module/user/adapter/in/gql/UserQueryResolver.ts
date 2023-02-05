@@ -8,6 +8,7 @@ import { MyProfileResponse } from './response/MyProfileResponse';
 import { UserAddressResponse } from './response/UserAddressResponse';
 import { UserProfileResponse } from './response/UserProfileResponse';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
+import { UserId } from '../../../domain/User';
 
 @Resolver()
 export class UserQueryResolver {
@@ -46,7 +47,7 @@ export class UserQueryResolver {
 
   @Query(() => UserProfileResponse, { description: '프로필 정보' })
   async profile(
-    @Args('userId', { type: () => ID }) userId: string,
+    @Args('userId', { type: () => ID }) userId: UserId,
   ): Promise<UserProfileResponse> {
     return pipe(
       this.userQueryRepositoryPort.findById(userId),

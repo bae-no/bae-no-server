@@ -33,7 +33,7 @@ export class PhoneVerificationService extends PhoneVerificationUseCase {
   ): TaskEither<DBError | NotificationError, void> {
     return pipe(
       this.phoneVerificationRepositoryPort.save(
-        command.id,
+        command.userId,
         PhoneVerification.of(command.phoneNumber),
       ),
       TE.chainW((verification) =>

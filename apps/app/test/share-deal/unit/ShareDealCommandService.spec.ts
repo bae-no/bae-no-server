@@ -16,6 +16,7 @@ import { ShareDealCommandService } from '../../../src/module/share-deal/applicat
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
@@ -39,7 +40,7 @@ describe('ShareDealCommandService', () => {
     it('공유딜 생성 요청을 수행한다.', async () => {
       // given
       const command = new OpenShareDealCommand(
-        'userId',
+        UserId('userId'),
         'title',
         FoodCategory.AMERICAN,
         10,
@@ -66,7 +67,7 @@ describe('ShareDealCommandService', () => {
   describe('join', () => {
     it('채팅 참여가 불가능한 공유딜에 참여 요청할 경우 NotOpenShareDealException이 반환된다.', async () => {
       // given
-      const command = new JoinShareDealCommand('userId', 'shareDealId');
+      const command = new JoinShareDealCommand(UserId('userId'), 'shareDealId');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
       });
@@ -84,7 +85,7 @@ describe('ShareDealCommandService', () => {
 
     it('공유딜 채팅방 참여를 요청한다.', async () => {
       // given
-      const command = new JoinShareDealCommand('userId', 'shareDealId');
+      const command = new JoinShareDealCommand(UserId('userId'), 'shareDealId');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
       });
@@ -105,11 +106,14 @@ describe('ShareDealCommandService', () => {
   describe('start', () => {
     it('방장은 공유딜을 시작할 수 있다', async () => {
       // given
-      const command = new StartShareDealCommand('userId', 'shareDealId');
+      const command = new StartShareDealCommand(
+        UserId('userId'),
+        'shareDealId',
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
         ownerId: command.userId,
-        participantInfo: ParticipantInfo.of(['1'], 2),
+        participantInfo: ParticipantInfo.of([UserId('1')], 2),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -126,7 +130,10 @@ describe('ShareDealCommandService', () => {
 
     it('OPEN 상태가 아닌 경우 시작할 수 없다', async () => {
       // given
-      const command = new StartShareDealCommand('userId', 'shareDealId');
+      const command = new StartShareDealCommand(
+        UserId('userId'),
+        'shareDealId',
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.END,
       });
@@ -146,11 +153,11 @@ describe('ShareDealCommandService', () => {
   describe('end', () => {
     it('방장은 공유딜을 종료할 수 있다', async () => {
       // given
-      const command = new EndShareDealCommand('userId', 'shareDealId');
+      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
         ownerId: command.userId,
-        participantInfo: ParticipantInfo.of(['1'], 2),
+        participantInfo: ParticipantInfo.of([UserId('1')], 2),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
@@ -167,7 +174,7 @@ describe('ShareDealCommandService', () => {
 
     it('START 상태가 아닌 경우 종료할 수 없다', async () => {
       // given
-      const command = new EndShareDealCommand('userId', 'shareDealId');
+      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.END,
       });
@@ -187,7 +194,7 @@ describe('ShareDealCommandService', () => {
   describe('update', () => {
     it('공유딜 수정을 수행한다.', async () => {
       // given
-      const ownerId = 'ownerId';
+      const ownerId = UserId('ownerId');
       const shareDeal = ShareDealFactory.createOpen({
         ownerId,
       });
@@ -230,7 +237,10 @@ describe('ShareDealCommandService', () => {
   describe('leave', () => {
     it('참가자는 공유딜을 떠날 수 있다.', async () => {
       // given
-      const command = new LeaveShareDealCommand('userId', 'shareDealId');
+      const command = new LeaveShareDealCommand(
+        UserId('userId'),
+        'shareDealId',
+      );
       const shareDeal = ShareDealFactory.create({
         ownerId: command.userId,
         participantInfo: ParticipantInfo.of([command.userId], 2),
@@ -250,9 +260,9 @@ describe('ShareDealCommandService', () => {
 
     it('참가자가 아니면 에러를 반환한다', async () => {
       // given
-      const command = new EndShareDealCommand('userId', 'shareDealId');
+      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
       const shareDeal = ShareDealFactory.create({
-        participantInfo: ParticipantInfo.of(['user1'], 2),
+        participantInfo: ParticipantInfo.of([UserId('user1')], 2),
       });
 
       shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));

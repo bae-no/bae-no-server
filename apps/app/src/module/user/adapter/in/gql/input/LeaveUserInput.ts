@@ -3,6 +3,7 @@ import { IsNotEmpty, ValidateIf } from 'class-validator';
 
 import { LeaveReasonType } from './LeaveReasonType';
 import { LeaveUserCommand } from '../../../../application/port/in/dto/LeaveUserCommand';
+import { UserId } from '../../../../domain/User';
 
 @InputType()
 export class LeaveUserInput {
@@ -17,7 +18,7 @@ export class LeaveUserInput {
   @IsNotEmpty()
   body?: string;
 
-  toCommand(userId: string): LeaveUserCommand {
+  toCommand(userId: UserId): LeaveUserCommand {
     return new LeaveUserCommand(userId, this.name, this.toBody());
   }
 

@@ -1,6 +1,7 @@
 import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { IsPositive } from 'class-validator';
 
+import { UserId } from '../../../../../user/domain/User';
 import { FindChatByUserCommand } from '../../../../application/port/in/dto/FindChatByUserCommand';
 
 @InputType()
@@ -15,7 +16,7 @@ export class FindChatDetailInput {
   @IsPositive()
   size: number;
 
-  toCommand(userId: string): FindChatByUserCommand {
+  toCommand(userId: UserId): FindChatByUserCommand {
     return new FindChatByUserCommand(
       this.shareDealId,
       userId,

@@ -1,4 +1,5 @@
 import { MessageType } from './MessageType';
+import { UserId } from '../../../user/domain/User';
 
 export class Message {
   static FIRST_MESSAGE =
@@ -18,14 +19,14 @@ export class Message {
     '공유딜이 파기되었습니다.\n더이상의 채팅은 불가합니다.';
 
   private constructor(
-    readonly authorId: string,
+    readonly authorId: UserId,
     readonly type: MessageType,
     readonly content: string,
     readonly unread: boolean,
   ) {}
 
   static of(
-    authorId: string,
+    authorId: UserId,
     type: MessageType,
     content: string,
     unread: boolean,
@@ -33,11 +34,11 @@ export class Message {
     return new Message(authorId, type, content, unread);
   }
 
-  static normal(authorId: string, content: string, unread: boolean): Message {
+  static normal(authorId: UserId, content: string, unread: boolean): Message {
     return Message.of(authorId, MessageType.NORMAL, content, unread);
   }
 
-  static firstMessage(authorId: string): Message {
+  static firstMessage(authorId: UserId): Message {
     return new Message(
       authorId,
       MessageType.NOTICE,
@@ -46,7 +47,7 @@ export class Message {
     );
   }
 
-  static startShareDealMessage(authorId: string): Message {
+  static startShareDealMessage(authorId: UserId): Message {
     return new Message(
       authorId,
       MessageType.NOTICE,
@@ -55,7 +56,7 @@ export class Message {
     );
   }
 
-  static endShareDealMessage(authorId: string): Message {
+  static endShareDealMessage(authorId: UserId): Message {
     return new Message(
       authorId,
       MessageType.NOTICE,
@@ -64,7 +65,7 @@ export class Message {
     );
   }
 
-  static closeShareDealMessage(authorId: string): Message {
+  static closeShareDealMessage(authorId: UserId): Message {
     return new Message(
       authorId,
       MessageType.NOTICE,

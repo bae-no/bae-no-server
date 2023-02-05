@@ -7,6 +7,7 @@ import { Option } from 'fp-ts/Option';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
+import { UserId } from '../../../../user/domain/User';
 import { FindChatByUserCommand } from '../../../application/port/in/dto/FindChatByUserCommand';
 import { ChatQueryRepositoryPort } from '../../../application/port/out/ChatQueryRepositoryPort';
 import { Chat } from '../../../domain/Chat';
@@ -19,7 +20,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
 
   override last(
     shareDealId: string,
-    userId: string,
+    userId: UserId,
   ): TaskEither<DBError, Option<Chat>> {
     return pipe(
       tryCatchDB(() =>
@@ -36,7 +37,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
 
   override unreadCount(
     shareDealId: string,
-    userId: string,
+    userId: UserId,
   ): TaskEither<DBError, number> {
     return pipe(
       tryCatchDB(async () =>

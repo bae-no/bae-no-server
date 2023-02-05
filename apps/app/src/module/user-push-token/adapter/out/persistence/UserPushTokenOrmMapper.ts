@@ -1,12 +1,13 @@
 import { UserPushToken as OrmUserPushToken } from '@prisma/client';
 
+import { UserId } from '../../../../user/domain/User';
 import { UserPushToken } from '../../../domain/UserPushToken';
 
 export class UserPushTokenOrmMapper {
   static toDomain(orm: OrmUserPushToken): UserPushToken {
     return new UserPushToken({
       token: orm.token,
-      userId: orm.userId,
+      userId: orm.userId as UserId,
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);
   }
 

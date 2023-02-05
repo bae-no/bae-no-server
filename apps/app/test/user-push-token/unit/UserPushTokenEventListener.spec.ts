@@ -5,6 +5,7 @@ import { StubPushMessage } from '../../../../../libs/push-message/test/fixture/S
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { UserId } from '../../../src/module/user/domain/User';
 import { UserPushTokenEventListener } from '../../../src/module/user-push-token/adapter/in/listener/UserPushTokenEventListener';
 import { UserPushTokenQueryRepositoryPort } from '../../../src/module/user-push-token/application/port/out/UserPushTokenQueryRepositoryPort';
 import { UserPushToken } from '../../../src/module/user-push-token/domain/UserPushToken';
@@ -29,9 +30,9 @@ describe('UserPushTokenEventListener', () => {
       const chats = new ChatWrittenEvent([
         Chat.of({
           shareDealId: 'shareDealId',
-          userId: 'authorId',
+          userId: UserId('authorId'),
           orderedKey: 'orderedKey',
-          message: Message.normal('authorId', 'content', false),
+          message: Message.normal(UserId('authorId'), 'content', false),
         }),
       ]);
 
@@ -48,14 +49,16 @@ describe('UserPushTokenEventListener', () => {
       const chats = new ChatWrittenEvent([
         Chat.of({
           shareDealId: 'shareDealId',
-          userId: 'userId',
+          userId: UserId('userId'),
           orderedKey: 'orderedKey',
-          message: Message.normal('authorId', 'content', false),
+          message: Message.normal(UserId('authorId'), 'content', false),
         }),
       ]);
 
       userPushTokenQueryRepositoryPort.findByUserIds.mockReturnValue(
-        right([new UserPushToken({ userId: 'userId', token: 'token' })]),
+        right([
+          new UserPushToken({ userId: UserId('userId'), token: 'token' }),
+        ]),
       );
 
       // when

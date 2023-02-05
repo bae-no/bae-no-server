@@ -1,4 +1,5 @@
-import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
+import { Branded } from '@app/domain/entity/Branded';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import * as E from 'fp-ts/Either';
 import { Either } from 'fp-ts/Either';
@@ -24,7 +25,13 @@ export interface UserProps {
   leaveReason: LeaveReason | null;
 }
 
-export class User extends BaseEntity<UserProps> {
+export type UserId = Branded<string, 'UserId'>;
+
+export function UserId(id: string): UserId {
+  return id as UserId;
+}
+
+export class User extends BaseBrandedEntity<UserProps, UserId> {
   constructor(props: UserProps) {
     super(props);
   }

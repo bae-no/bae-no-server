@@ -13,6 +13,7 @@ import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCateg
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
+import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
@@ -377,7 +378,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
   describe('countByStatus', () => {
     it('주어진 상태에 대한 공유딜이 없으면 0을 반환한다', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
 
       // when
       const result = shareDealRepositoryAdapter.countByStatus(
@@ -393,7 +394,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
     it('내가 만든 공유딜 개수를 가져온다', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.shareDeal.createMany({
         data: [
           ShareDealStatus.START,
@@ -419,7 +420,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
     it('내가 참여한 공유딜 개수를 가져온다', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.shareDeal.create({
         data: ShareDealOrmMapper.toOrm(
           ShareDealFactory.create({
@@ -482,7 +483,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
 
       const command = new FindByUserShareDealCommand(
-        faker.database.mongodbObjectId(),
+        UserId(faker.database.mongodbObjectId()),
         ShareDealStatus.OPEN,
       );
 
@@ -497,12 +498,12 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
     it('지정된 상태가 아닌 공유딜의 경우 참여 여부와 상관없이 조회되지 않는다.', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.shareDeal.create({
         data: ShareDealOrmMapper.toOrm(
           ShareDealFactory.create({
             status: ShareDealStatus.START,
-            participantInfo: ParticipantInfo.of([userId], 3),
+            participantInfo: ParticipantInfo.of([userId].map(UserId), 3),
           }),
         ),
       });
@@ -523,7 +524,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
 
     it('참여중인 공유딜 중에서 지정된 상태의 공유딜 목록을 조회한다.', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.shareDeal.create({
         data: ShareDealOrmMapper.toOrm(
           ShareDealFactory.create({

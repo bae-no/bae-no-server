@@ -1,5 +1,6 @@
 import { ShareDeal as OrmShareDeal } from '@prisma/client';
 
+import { UserId } from '../../../../user/domain/User';
 import { AddressSystem } from '../../../../user/domain/vo/AddressSystem';
 import { ShareDeal } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
@@ -12,7 +13,7 @@ export class ShareDealOrmMapper {
     return new ShareDeal({
       category: FoodCategory[orm.category as FoodCategory],
       orderPrice: orm.orderPrice,
-      ownerId: orm.ownerId,
+      ownerId: orm.ownerId as UserId,
       storeName: orm.storeName,
       thumbnail: orm.thumbnail,
       title: orm.title,
@@ -25,7 +26,7 @@ export class ShareDealOrmMapper {
         orm.zone.coordinate.coordinates[0],
       ),
       participantInfo: ParticipantInfo.of(
-        orm.participants.ids,
+        orm.participants.ids as UserId[],
         orm.participants.max,
       ),
     }).setBase(orm.id, orm.createdAt, orm.updatedAt);

@@ -2,7 +2,7 @@ import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { ShareDealParticipantResponse } from './ShareDealParticipantResponse';
-import { User } from '../../../../../user/domain/User';
+import { User, UserId } from '../../../../../user/domain/User';
 import { ShareDeal } from '../../../../domain/ShareDeal';
 
 @ObjectType()
@@ -19,7 +19,7 @@ export class ShareDealStatusResponse {
   @Field(() => [ShareDealParticipantResponse])
   participants: ShareDealParticipantResponse[];
 
-  static of(shareDeal: ShareDeal, users: User[], userId: string) {
+  static of(shareDeal: ShareDeal, users: User[], userId: UserId) {
     const response = new ShareDealStatusResponse();
     response.canStart = shareDeal.canStart(shareDeal.ownerId);
     response.canEnd = shareDeal.canEnd(shareDeal.ownerId);

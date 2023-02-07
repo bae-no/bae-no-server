@@ -1,3 +1,5 @@
+import { UserId } from '../../../../domain/User';
+
 export class Session {
-  constructor(readonly id: string) {}
+  constructor(readonly id: UserId) {}
 }

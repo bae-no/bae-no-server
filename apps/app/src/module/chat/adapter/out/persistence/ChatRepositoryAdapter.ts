@@ -6,6 +6,7 @@ import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
+import { UserId } from '../../../../user/domain/User';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import { Chat } from '../../../domain/Chat';
 
@@ -30,7 +31,7 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
 
   override updateRead(
     shareDealId: string,
-    userId: string,
+    userId: UserId,
   ): TaskEither<DBError, void> {
     return pipe(
       tryCatchDB(async () =>

@@ -16,7 +16,7 @@ import { TokenGeneratorPort } from '../../../src/module/user/application/port/ou
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
-import { User } from '../../../src/module/user/domain/User';
+import { User, UserId } from '../../../src/module/user/domain/User';
 import { Address } from '../../../src/module/user/domain/vo/Address';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
@@ -98,7 +98,7 @@ describe('UserCommandService', () => {
     it('사용자 등록에 성공한다', async () => {
       // given
       const command = new EnrollUserCommand(
-        'userId',
+        UserId('userId'),
         'nickname',
         10.2,
         20.3,
@@ -125,7 +125,7 @@ describe('UserCommandService', () => {
     it('유저가 없으면 NotFoundException 을 반환한다', async () => {
       // given
       const command = new EnrollUserCommand(
-        'userId',
+        UserId('userId'),
         'nickname',
         10.2,
         20.3,
@@ -150,7 +150,11 @@ describe('UserCommandService', () => {
     it('회원탈퇴 처리한다', async () => {
       // given
       const now = new Date();
-      const command = new LeaveUserCommand('userId', 'nickname', 'reason');
+      const command = new LeaveUserCommand(
+        UserId('userId'),
+        'nickname',
+        'reason',
+      );
 
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
@@ -173,7 +177,7 @@ describe('UserCommandService', () => {
     it('주소가 6개 이상이면 에러가 발생한다', async () => {
       // given
       const command = new AppendAddressCommand(
-        'userId',
+        UserId('userId'),
         10,
         20,
         AddressType.HOME,
@@ -214,7 +218,7 @@ describe('UserCommandService', () => {
     it('주소등록에 성공한다', async () => {
       // given
       const command = new AppendAddressCommand(
-        'userId',
+        UserId('userId'),
         10,
         20,
         AddressType.HOME,
@@ -240,7 +244,7 @@ describe('UserCommandService', () => {
   describe('deleteAddress', () => {
     it('주어진 주소를 삭제한다', async () => {
       // given
-      const command = new DeleteAddressCommand('1', 'userId');
+      const command = new DeleteAddressCommand('1', UserId('userId'));
 
       const user = UserFactory.create({
         addressList: UserAddressList.of([
@@ -290,7 +294,7 @@ describe('UserCommandService', () => {
   describe('updateProfile', () => {
     it('프로필 정보를 수정한다.', async () => {
       // given
-      const command = new UpdateProfileCommand('userId', 'introduce');
+      const command = new UpdateProfileCommand(UserId('userId'), 'introduce');
       const user = UserFactory.create();
 
       userQueryRepository.findById.mockReturnValue(right(user));

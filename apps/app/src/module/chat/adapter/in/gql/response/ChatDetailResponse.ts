@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+import { UserId } from '../../../../../user/domain/User';
 import { FindByUserDto } from '../../../../application/port/in/dto/FindByUserDto';
 import { MessageType } from '../../../../domain/vo/MessageType';
 
@@ -20,7 +21,7 @@ export class ChatDetailResponse {
   @Field({ description: '내가 쓴 글인지 여부' })
   writtenByMe: boolean;
 
-  static of(dto: FindByUserDto, userId: string): ChatDetailResponse {
+  static of(dto: FindByUserDto, userId: UserId): ChatDetailResponse {
     const response = new ChatDetailResponse();
 
     response.id = dto.chat.id;

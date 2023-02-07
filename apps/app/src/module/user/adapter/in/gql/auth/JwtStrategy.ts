@@ -2,6 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { Session } from './Session';
+import { UserId } from '../../../../domain/User';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(jwtSecret: string) {
@@ -13,6 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: { id: string }): Promise<Session> {
-    return new Session(payload.id);
+    return new Session(UserId(payload.id));
   }
 }

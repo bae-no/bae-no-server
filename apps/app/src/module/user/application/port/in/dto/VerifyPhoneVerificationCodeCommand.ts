@@ -1,3 +1,5 @@
+import { UserId } from '../../../../domain/User';
+
 export class VerifyPhoneVerificationCodeCommand {
-  constructor(readonly userId: string, readonly code: string) {}
+  constructor(readonly userId: UserId, readonly code: string) {}
 }

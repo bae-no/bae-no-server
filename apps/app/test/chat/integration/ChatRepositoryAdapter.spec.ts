@@ -5,6 +5,7 @@ import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesRight } from '../../fixture/utils';
 
 describe('ChatRepositoryAdapter', () => {
@@ -19,16 +20,18 @@ describe('ChatRepositoryAdapter', () => {
       const chats = [
         Chat.of({
           shareDealId: faker.database.mongodbObjectId(),
-          userId: faker.database.mongodbObjectId(),
+          userId: UserId(faker.database.mongodbObjectId()),
           orderedKey: faker.random.numeric(),
-          message: Message.firstMessage(faker.database.mongodbObjectId()),
+          message: Message.firstMessage(
+            UserId(faker.database.mongodbObjectId()),
+          ),
         }),
         Chat.of({
           shareDealId: faker.database.mongodbObjectId(),
-          userId: faker.database.mongodbObjectId(),
+          userId: UserId(faker.database.mongodbObjectId()),
           orderedKey: faker.random.numeric(),
           message: Message.startShareDealMessage(
-            faker.database.mongodbObjectId(),
+            UserId(faker.database.mongodbObjectId()),
           ),
         }),
       ];
@@ -53,14 +56,14 @@ describe('ChatRepositoryAdapter', () => {
     it('주어진 채팅을 모두 읽음처리한다', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       const chats = [
         Chat.of({
           shareDealId,
           userId,
           orderedKey: faker.random.numeric(),
           message: Message.normal(
-            faker.database.mongodbObjectId(),
+            UserId(faker.database.mongodbObjectId()),
             'content 1',
             true,
           ),
@@ -70,7 +73,7 @@ describe('ChatRepositoryAdapter', () => {
           userId,
           orderedKey: faker.random.numeric(),
           message: Message.normal(
-            faker.database.mongodbObjectId(),
+            UserId(faker.database.mongodbObjectId()),
             'content 2',
             true,
           ),

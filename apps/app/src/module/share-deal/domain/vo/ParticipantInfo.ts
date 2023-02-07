@@ -1,6 +1,8 @@
+import { UserId } from '../../../user/domain/User';
+
 export class ParticipantInfo {
   constructor(
-    readonly ids: string[],
+    readonly ids: UserId[],
     readonly max: number,
     readonly current: number,
     readonly remaining: number,
@@ -14,7 +16,7 @@ export class ParticipantInfo {
     return this.remaining > 0;
   }
 
-  static of(ids: string[], max: number): ParticipantInfo {
+  static of(ids: UserId[], max: number): ParticipantInfo {
     return new ParticipantInfo(
       ids,
       max,
@@ -23,7 +25,7 @@ export class ParticipantInfo {
     );
   }
 
-  addId(id: string): ParticipantInfo {
+  addId(id: UserId): ParticipantInfo {
     if (this.hasId(id)) {
       return this;
     }
@@ -45,7 +47,7 @@ export class ParticipantInfo {
     );
   }
 
-  hasId(id: string) {
+  hasId(id: UserId) {
     return this.ids.includes(id);
   }
 

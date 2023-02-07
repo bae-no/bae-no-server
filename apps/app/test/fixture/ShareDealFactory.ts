@@ -8,6 +8,7 @@ import { FoodCategory } from '../../src/module/share-deal/domain/vo/FoodCategory
 import { ParticipantInfo } from '../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { ShareZone } from '../../src/module/share-deal/domain/vo/ShareZone';
+import { UserId } from '../../src/module/user/domain/User';
 import { AddressSystem } from '../../src/module/user/domain/vo/AddressSystem';
 
 type BaseType = {
@@ -26,7 +27,7 @@ export class ShareDealFactory {
       +faker.address.latitude(undefined, 0),
       +faker.address.longitude(undefined, 0),
     );
-    const ownerId = props.ownerId ?? faker.database.mongodbObjectId();
+    const ownerId = UserId(props.ownerId ?? faker.database.mongodbObjectId());
 
     return new ShareDeal({
       title: faker.word.noun(3),

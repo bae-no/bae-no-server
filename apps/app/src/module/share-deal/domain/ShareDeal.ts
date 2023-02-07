@@ -9,6 +9,7 @@ import { FoodCategory } from './vo/FoodCategory';
 import { ParticipantInfo } from './vo/ParticipantInfo';
 import { ShareDealStatus } from './vo/ShareDealStatus';
 import { ShareZone } from './vo/ShareZone';
+import { UserId } from '../../user/domain/User';
 import { AddressSystem } from '../../user/domain/vo/AddressSystem';
 import { NotJoinableShareDealException } from '../application/port/in/exception/NotJoinableShareDealException';
 
@@ -17,7 +18,7 @@ export interface ShareDealProps {
   status: ShareDealStatus;
   category: FoodCategory;
   orderPrice: number;
-  ownerId: string;
+  ownerId: UserId;
   participantInfo: ParticipantInfo;
   storeName: string;
   thumbnail: string;
@@ -60,7 +61,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return this.props.orderPrice;
   }
 
-  get ownerId(): string {
+  get ownerId(): UserId {
     return this.props.ownerId;
   }
 
@@ -108,7 +109,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     });
   }
 
-  canStart(userId: string): boolean {
+  canStart(userId: UserId): boolean {
     return (
       this.status === ShareDealStatus.OPEN &&
       userId === this.ownerId &&
@@ -116,11 +117,11 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     );
   }
 
-  canEnd(userId: string): boolean {
+  canEnd(userId: UserId): boolean {
     return this.status === ShareDealStatus.START && userId === this.ownerId;
   }
 
-  canWriteChat(userId: string): boolean {
+  canWriteChat(userId: UserId): boolean {
     if (this.status !== ShareDealStatus.START) {
       return false;
     }
@@ -128,7 +129,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return this.participantInfo.hasId(userId);
   }
 
-  join(participantId: string): Either<NotJoinableShareDealException, this> {
+  join(participantId: UserId): Either<NotJoinableShareDealException, this> {
     if (!this.isJoinable) {
       return left(
         new NotJoinableShareDealException('입장 가능한 공유딜이 아닙니다.'),
@@ -139,7 +140,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return right(this);
   }
 
-  start(userId: string): Either<IllegalStateException, this> {
+  start(userId: UserId): Either<IllegalStateException, this> {
     if (!this.canStart(userId)) {
       return left(new IllegalStateException('시작할 수 없습니다.'));
     }
@@ -150,7 +151,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return right(this);
   }
 
-  end(userId: string): Either<IllegalStateException, this> {
+  end(userId: UserId): Either<IllegalStateException, this> {
     if (!this.canEnd(userId)) {
       return left(new IllegalStateException('종료할 수 없습니다.'));
     }
@@ -161,7 +162,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return right(this);
   }
 
-  canUpdate(userId: string, maxParticipants: number): boolean {
+  canUpdate(userId: UserId, maxParticipants: number): boolean {
     return (
       this.props.ownerId === userId &&
       this.props.status === ShareDealStatus.OPEN &&
@@ -170,7 +171,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
   }
 
   update(
-    userId: string,
+    userId: UserId,
     props: UpdateShareDealProps,
   ): Either<IllegalStateException, this> {
     if (!this.canUpdate(userId, props.maxParticipants)) {
@@ -197,7 +198,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return right(this);
   }
 
-  leave(userId: string): Either<IllegalStateException, this> {
+  leave(userId: UserId): Either<IllegalStateException, this> {
     if (this.isOwner(userId) && this.isActive) {
       this.props.status = ShareDealStatus.CLOSE;
       this.addDomainEvent(new ShareDealClosedEvent(this.id));
@@ -206,11 +207,11 @@ export class ShareDeal extends AggregateRoot<ShareDealProps> {
     return this.leaveMember(userId);
   }
 
-  private isOwner(userId: string): boolean {
+  private isOwner(userId: UserId): boolean {
     return this.ownerId === userId;
   }
 
-  private leaveMember(userId: string): Either<IllegalStateException, this> {
+  private leaveMember(userId: UserId): Either<IllegalStateException, this> {
     if (!this.participantInfo.hasId(userId)) {
       return left(new IllegalStateException('존재하지 않는 참가자입니다.'));
     }

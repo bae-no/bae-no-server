@@ -8,6 +8,7 @@ import { pipe, unsafeCoerce } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
+import { UserId } from '../../../../user/domain/User';
 import { CountShareDealCommand } from '../../../application/port/out/dto/CountShareDealCommand';
 import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
@@ -134,7 +135,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   }
 
   override countByStatus(
-    userId: string,
+    userId: UserId,
     status: ShareDealStatus,
   ): TaskEither<DBError, number> {
     return tryCatchDB(async () =>

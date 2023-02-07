@@ -1,10 +1,11 @@
+import { UserId } from '../../../../domain/User';
 import { Address } from '../../../../domain/vo/Address';
 import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
 
 export class EnrollUserCommand {
   constructor(
-    readonly userId: string,
+    readonly userId: UserId,
     readonly nickname: string,
     readonly latitude: number,
     readonly longitude: number,

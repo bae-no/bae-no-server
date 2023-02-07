@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 
 import { AddressInput } from './AddressInput';
 import { EnrollUserCommand } from '../../../../application/port/in/dto/EnrollUserCommand';
+import { UserId } from '../../../../domain/User';
 
 @InputType()
 export class EnrollUserInput {
@@ -15,7 +16,7 @@ export class EnrollUserInput {
   @ValidateNested()
   address: AddressInput;
 
-  toCommand(userId: string) {
+  toCommand(userId: UserId) {
     return new EnrollUserCommand(
       userId,
       this.nickname,

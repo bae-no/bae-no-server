@@ -1,9 +1,10 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
 import { Message } from './vo/Message';
+import { UserId } from '../../user/domain/User';
 
 export interface ChatProps {
-  userId: string;
+  userId: UserId;
   shareDealId: string;
   message: Message;
   orderedKey: string;
@@ -44,8 +45,8 @@ export class Chat extends BaseEntity<ChatProps> {
 
   static create(
     shareDealId: string,
-    participantIds: string[],
-    authorId: string,
+    participantIds: UserId[],
+    authorId: UserId,
     content: string,
     orderedKey: string,
   ): Chat[] {
@@ -61,8 +62,8 @@ export class Chat extends BaseEntity<ChatProps> {
 
   static createByStartShareDeal(
     shareDealId: string,
-    participantIds: string[],
-    authorId: string,
+    participantIds: UserId[],
+    authorId: UserId,
     orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>
@@ -77,8 +78,8 @@ export class Chat extends BaseEntity<ChatProps> {
 
   static createByEndShareDeal(
     shareDealId: string,
-    participantIds: string[],
-    authorId: string,
+    participantIds: UserId[],
+    authorId: UserId,
     orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>
@@ -93,8 +94,8 @@ export class Chat extends BaseEntity<ChatProps> {
 
   static createByCloseShareDeal(
     shareDealId: string,
-    participantIds: string[],
-    authorId: string,
+    participantIds: UserId[],
+    authorId: UserId,
     orderedKey: string,
   ): Chat[] {
     return participantIds.map((id) =>

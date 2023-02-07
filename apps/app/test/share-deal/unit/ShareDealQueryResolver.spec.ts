@@ -13,6 +13,7 @@ import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCateg
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import { UserId } from '../../../src/module/user/domain/User';
 import { Address } from '../../../src/module/user/domain/vo/Address';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { AddressType } from '../../../src/module/user/domain/vo/AddressType';
@@ -91,7 +92,7 @@ describe('ShareDealQueryResolver', () => {
         title: 'title',
         createdAt: new Date('2022-01-01'),
         thumbnail: 'thumbnail',
-        participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
+        participantInfo: ParticipantInfo.of(['1', '2', '3'].map(UserId), 10),
         category: FoodCategory.CHINESE,
         zone: new ShareZone(AddressSystem.ROAD, 'road', 'detail', 123.5, 45.6),
       });
@@ -184,7 +185,7 @@ describe('ShareDealQueryResolver', () => {
         title: 'title',
         createdAt: new Date('2022-01-01'),
         thumbnail: 'thumbnail',
-        participantInfo: ParticipantInfo.of(['1', '2', '3'], 10),
+        participantInfo: ParticipantInfo.of(['1', '2', '3'].map(UserId), 10),
         category: FoodCategory.CHINESE,
         zone: new ShareZone(AddressSystem.JIBUN, 'road', 'detail', 123.5, 45.6),
       });

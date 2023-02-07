@@ -5,6 +5,7 @@ import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/
 import { ChatQueryRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatQueryRepositoryAdapter';
 import { FindChatByUserCommand } from '../../../src/module/chat/application/port/in/dto/FindChatByUserCommand';
 import { MessageType } from '../../../src/module/chat/domain/vo/MessageType';
+import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   assertNone,
@@ -26,7 +27,7 @@ describe('ChatQueryRepositoryAdapter', () => {
     it('작성된 채팅이 없는 경우 빈 채팅 목록이 반환된다.', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
 
       // when
       const result = chatQueryRepositoryAdapter.last(shareDealId, userId);
@@ -40,7 +41,7 @@ describe('ChatQueryRepositoryAdapter', () => {
     it('채팅방에 작성된 마지막 메시지를 조회한다.', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       await prisma.chat.createMany({
         data: [
           {
@@ -86,7 +87,7 @@ describe('ChatQueryRepositoryAdapter', () => {
     it('작성된 채팅이 없는 경우 0이 반환된다.', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
 
       // when
       const result = chatQueryRepositoryAdapter.unreadCount(
@@ -103,7 +104,7 @@ describe('ChatQueryRepositoryAdapter', () => {
     it('채팅방의 안읽은 메시지의 개수를 조회한다.', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
 
       await prisma.chat.createMany({
         data: [true, true, false, true].map((unread) => ({
@@ -136,7 +137,7 @@ describe('ChatQueryRepositoryAdapter', () => {
     it('주어진 사용자의 채팅목록을 가져온다', async () => {
       // given
       const shareDealId = faker.database.mongodbObjectId();
-      const userId = faker.database.mongodbObjectId();
+      const userId = UserId(faker.database.mongodbObjectId());
       const chats = [
         ChatFactory.create({
           shareDealId,

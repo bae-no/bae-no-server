@@ -11,6 +11,7 @@ import { FindByUserDto } from '../../../src/module/chat/application/port/in/dto/
 import { FindChatResult } from '../../../src/module/chat/application/port/in/dto/FindChatResult';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
+import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   graphQLTestHelper,
@@ -110,7 +111,7 @@ describe('ChatQueryResolver', () => {
       const chatByUserDto = new FindByUserDto(
         ChatFactory.create({
           id: 'id',
-          message: Message.normal('id', 'content', true),
+          message: Message.normal(UserId('id'), 'content', true),
         }),
         UserFactory.create({ id: 'id', nickname: 'nickname' }),
       );

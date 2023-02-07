@@ -13,6 +13,7 @@ import { NotJoinableShareDealException } from '../../../src/module/share-deal/ap
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealRepositoryPort';
 import { ShareDealCommandService } from '../../../src/module/share-deal/application/service/ShareDealCommandService';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -67,7 +68,10 @@ describe('ShareDealCommandService', () => {
   describe('join', () => {
     it('채팅 참여가 불가능한 공유딜에 참여 요청할 경우 NotOpenShareDealException이 반환된다.', async () => {
       // given
-      const command = new JoinShareDealCommand(UserId('userId'), 'shareDealId');
+      const command = new JoinShareDealCommand(
+        UserId('userId'),
+        ShareDealId('shareDealId'),
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
       });
@@ -85,7 +89,10 @@ describe('ShareDealCommandService', () => {
 
     it('공유딜 채팅방 참여를 요청한다.', async () => {
       // given
-      const command = new JoinShareDealCommand(UserId('userId'), 'shareDealId');
+      const command = new JoinShareDealCommand(
+        UserId('userId'),
+        ShareDealId('shareDealId'),
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
       });
@@ -108,7 +115,7 @@ describe('ShareDealCommandService', () => {
       // given
       const command = new StartShareDealCommand(
         UserId('userId'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
       );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.OPEN,
@@ -132,7 +139,7 @@ describe('ShareDealCommandService', () => {
       // given
       const command = new StartShareDealCommand(
         UserId('userId'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
       );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.END,
@@ -153,7 +160,10 @@ describe('ShareDealCommandService', () => {
   describe('end', () => {
     it('방장은 공유딜을 종료할 수 있다', async () => {
       // given
-      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
+      const command = new EndShareDealCommand(
+        UserId('userId'),
+        ShareDealId('shareDealId'),
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.START,
         ownerId: command.userId,
@@ -174,7 +184,10 @@ describe('ShareDealCommandService', () => {
 
     it('START 상태가 아닌 경우 종료할 수 없다', async () => {
       // given
-      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
+      const command = new EndShareDealCommand(
+        UserId('userId'),
+        ShareDealId('shareDealId'),
+      );
       const shareDeal = ShareDealFactory.create({
         status: ShareDealStatus.END,
       });
@@ -200,7 +213,7 @@ describe('ShareDealCommandService', () => {
       });
       const command = new UpdateShareDealCommand(
         ownerId,
-        'shareDealId',
+        ShareDealId('shareDealId'),
         'title',
         FoodCategory.AMERICAN,
         10,
@@ -239,7 +252,7 @@ describe('ShareDealCommandService', () => {
       // given
       const command = new LeaveShareDealCommand(
         UserId('userId'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
       );
       const shareDeal = ShareDealFactory.create({
         ownerId: command.userId,
@@ -260,7 +273,10 @@ describe('ShareDealCommandService', () => {
 
     it('참가자가 아니면 에러를 반환한다', async () => {
       // given
-      const command = new EndShareDealCommand(UserId('userId'), 'shareDealId');
+      const command = new EndShareDealCommand(
+        UserId('userId'),
+        ShareDealId('shareDealId'),
+      );
       const shareDeal = ShareDealFactory.create({
         participantInfo: ParticipantInfo.of([UserId('user1')], 2),
       });

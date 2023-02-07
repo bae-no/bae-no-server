@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/function';
 
 import { SampleResponse } from './response/SampleResponse';
 import { SampleQueryUseCase } from '../../../application/port/in/SampleQueryUseCase';
+import { SampleId } from '../../../domain/Sample';
 
 @Resolver()
 export class SampleQueryResolver {
@@ -14,7 +15,7 @@ export class SampleQueryResolver {
     @Args({ name: 'id', type: () => ID }) id: string,
   ): Promise<SampleResponse> {
     return pipe(
-      this.sampleQueryUseCase.findById(id),
+      this.sampleQueryUseCase.findById(SampleId(id)),
       toResponse(SampleResponse.of),
     )();
   }

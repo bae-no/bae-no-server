@@ -11,6 +11,7 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatReadEvent } from '../../../src/module/chat/domain/event/ChatReadEvent';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserId } from '../../../src/module/user/domain/User';
@@ -43,7 +44,7 @@ describe('ChatQueryService', () => {
       // given
       const shareDeals = ['1', '2'].map((id) =>
         ShareDealFactory.create({
-          id,
+          id: ShareDealId(id),
           title: `shareDeal${id}`,
           thumbnail: `https://baeno${id}.com`,
         }),
@@ -109,7 +110,7 @@ describe('ChatQueryService', () => {
       userQueryRepositoryPort.findByIds.mockReturnValue(right([]));
 
       const command = new FindChatByUserCommand(
-        'shareDealId',
+        ShareDealId('shareDealId'),
         UserId('userId'),
       );
 
@@ -134,7 +135,7 @@ describe('ChatQueryService', () => {
       userQueryRepositoryPort.findByIds.mockReturnValue(right([user]));
 
       const command = new FindChatByUserCommand(
-        'shareDealId',
+        ShareDealId('shareDealId'),
         UserId('userId'),
       );
 

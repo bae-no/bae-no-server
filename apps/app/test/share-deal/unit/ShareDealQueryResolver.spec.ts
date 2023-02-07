@@ -9,6 +9,7 @@ import { FindShareDealStatusInput } from '../../../src/module/share-deal/adapter
 import { ShareDealQueryResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealQueryResolver';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
@@ -87,7 +88,7 @@ describe('ShareDealQueryResolver', () => {
       `;
 
       const shareDeal = ShareDealFactory.createOpen({
-        id: '12345',
+        id: ShareDealId('12345'),
         orderPrice: 1000,
         title: 'title',
         createdAt: new Date('2022-01-01'),
@@ -180,7 +181,7 @@ describe('ShareDealQueryResolver', () => {
         ]),
       });
       const shareDeal = ShareDealFactory.createOpen({
-        id: '12345',
+        id: ShareDealId('12345'),
         orderPrice: 1000,
         title: 'title',
         createdAt: new Date('2022-01-01'),
@@ -261,7 +262,7 @@ describe('ShareDealQueryResolver', () => {
     it('내가 참여하는 공유딜 상태를 가져온다 ', async () => {
       // given
       const input = new FindShareDealStatusInput();
-      input.shareDealId = '12345';
+      input.shareDealId = ShareDealId('12345');
 
       const query = gql`
         query shareDealStatus($input: FindShareDealStatusInput!) {
@@ -280,11 +281,11 @@ describe('ShareDealQueryResolver', () => {
       `;
 
       const owner = UserFactory.create({
-        id: 'ownerId',
+        id: UserId('ownerId'),
         nickname: 'owner name',
       });
       const participant = UserFactory.create({
-        id: 'participantId',
+        id: UserId('participantId'),
         nickname: 'participant name',
       });
       setMockUser(owner.id);

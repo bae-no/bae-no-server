@@ -1,7 +1,8 @@
 import { Chat as OrmChat } from '@prisma/client';
 
+import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
 import { UserId } from '../../../../user/domain/User';
-import { Chat } from '../../../domain/Chat';
+import { Chat, ChatId } from '../../../domain/Chat';
 import { Message } from '../../../domain/vo/Message';
 import { MessageType } from '../../../domain/vo/MessageType';
 
@@ -9,7 +10,7 @@ export class ChatOrmMapper {
   static toDomain(orm: OrmChat): Chat {
     return new Chat({
       userId: orm.userId as UserId,
-      shareDealId: orm.shareDealId,
+      shareDealId: orm.shareDealId as ShareDealId,
       orderedKey: orm.orderedKey,
       message: Message.of(
         orm.message.authorId as UserId,
@@ -17,7 +18,7 @@ export class ChatOrmMapper {
         orm.message.content,
         orm.message.unread,
       ),
-    }).setBase(orm.id, orm.createdAt, orm.updatedAt);
+    }).setBase(orm.id as ChatId, orm.createdAt, orm.updatedAt);
   }
 
   static toOrm(domain: Chat): OrmChat {

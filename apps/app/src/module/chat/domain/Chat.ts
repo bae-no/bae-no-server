@@ -1,25 +1,33 @@
-import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
+import { Branded } from '@app/domain/entity/Branded';
 
 import { Message } from './vo/Message';
+import { ShareDealId } from '../../share-deal/domain/ShareDeal';
 import { UserId } from '../../user/domain/User';
 
 export interface ChatProps {
   userId: UserId;
-  shareDealId: string;
+  shareDealId: ShareDealId;
   message: Message;
   orderedKey: string;
 }
 
-export class Chat extends BaseEntity<ChatProps> {
+export type ChatId = Branded<string, 'ChatId'>;
+
+export function ChatId(id: string): ChatId {
+  return id as ChatId;
+}
+
+export class Chat extends BaseBrandedEntity<ChatProps, ChatId> {
   constructor(props: ChatProps) {
     super(props);
   }
 
-  get userId(): string {
+  get userId(): UserId {
     return this.props.userId;
   }
 
-  get shareDealId(): string {
+  get shareDealId(): ShareDealId {
     return this.props.shareDealId;
   }
 
@@ -44,7 +52,7 @@ export class Chat extends BaseEntity<ChatProps> {
   }
 
   static create(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     participantIds: UserId[],
     authorId: UserId,
     content: string,
@@ -61,7 +69,7 @@ export class Chat extends BaseEntity<ChatProps> {
   }
 
   static createByStartShareDeal(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     participantIds: UserId[],
     authorId: UserId,
     orderedKey: string,
@@ -77,7 +85,7 @@ export class Chat extends BaseEntity<ChatProps> {
   }
 
   static createByEndShareDeal(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     participantIds: UserId[],
     authorId: UserId,
     orderedKey: string,
@@ -93,7 +101,7 @@ export class Chat extends BaseEntity<ChatProps> {
   }
 
   static createByCloseShareDeal(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     participantIds: UserId[],
     authorId: UserId,
     orderedKey: string,

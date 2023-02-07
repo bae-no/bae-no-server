@@ -5,6 +5,7 @@ import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesRight } from '../../fixture/utils';
 
@@ -19,7 +20,7 @@ describe('ChatRepositoryAdapter', () => {
       // given
       const chats = [
         Chat.of({
-          shareDealId: faker.database.mongodbObjectId(),
+          shareDealId: ShareDealId(faker.database.mongodbObjectId()),
           userId: UserId(faker.database.mongodbObjectId()),
           orderedKey: faker.random.numeric(),
           message: Message.firstMessage(
@@ -27,7 +28,7 @@ describe('ChatRepositoryAdapter', () => {
           ),
         }),
         Chat.of({
-          shareDealId: faker.database.mongodbObjectId(),
+          shareDealId: ShareDealId(faker.database.mongodbObjectId()),
           userId: UserId(faker.database.mongodbObjectId()),
           orderedKey: faker.random.numeric(),
           message: Message.startShareDealMessage(
@@ -55,7 +56,7 @@ describe('ChatRepositoryAdapter', () => {
   describe('updateRead', () => {
     it('주어진 채팅을 모두 읽음처리한다', async () => {
       // given
-      const shareDealId = faker.database.mongodbObjectId();
+      const shareDealId = ShareDealId(faker.database.mongodbObjectId());
       const userId = UserId(faker.database.mongodbObjectId());
       const chats = [
         Chat.of({

@@ -1,4 +1,5 @@
 import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
+import { Branded } from '@app/domain/entity/Branded';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { Either, left, right } from 'fp-ts/Either';
 
@@ -44,7 +45,13 @@ export type UpdateShareDealProps = Omit<
   longitude: number;
 };
 
-export class ShareDeal extends AggregateRoot<ShareDealProps> {
+export type ShareDealId = Branded<string, 'ShareDealId'>;
+
+export function ShareDealId(id: string): ShareDealId {
+  return id as ShareDealId;
+}
+
+export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
   constructor(props: ShareDealProps) {
     super(props);
   }

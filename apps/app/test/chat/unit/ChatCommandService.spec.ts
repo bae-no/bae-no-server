@@ -10,6 +10,7 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
@@ -37,7 +38,7 @@ describe('ChatCommandService', () => {
       // given
       const command = new WriteChatCommand(
         UserId('userId'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
         'content',
       );
 
@@ -58,7 +59,7 @@ describe('ChatCommandService', () => {
       // given
       const command = new WriteChatCommand(
         UserId('user 1'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
         'content',
       );
       let db: Chat[] = [];
@@ -117,7 +118,7 @@ describe('ChatCommandService', () => {
       // given
       const command = new WriteChatCommand(
         UserId('user 1'),
-        'shareDealId',
+        ShareDealId('shareDealId'),
         'content',
       );
 

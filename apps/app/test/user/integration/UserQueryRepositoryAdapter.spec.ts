@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
 import { UserQueryRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/UserQueryRepositoryAdapter';
-import { User } from '../../../src/module/user/domain/User';
+import { User, UserId } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import {
@@ -56,7 +56,7 @@ describe('UserQueryRepositoryAdapter', () => {
   describe('findById', () => {
     it('id 를 가진 유저가 존재하지 않으면 에러를 반환한다', async () => {
       // given
-      const id = faker.database.mongodbObjectId();
+      const id = UserId(faker.database.mongodbObjectId());
 
       // when
       const result = userQueryRepositoryAdapter.findById(id);
@@ -75,7 +75,7 @@ describe('UserQueryRepositoryAdapter', () => {
       });
 
       // when
-      const result = userQueryRepositoryAdapter.findById(user.id);
+      const result = userQueryRepositoryAdapter.findById(UserId(user.id));
 
       // then
       await assertResolvesRight(result, (value) => {
@@ -124,7 +124,7 @@ describe('UserQueryRepositoryAdapter', () => {
   describe('findByIds', () => {
     it('빈배열 id를 제공하면 빈배열을 반환한다', async () => {
       // given
-      const ids: string[] = [];
+      const ids: UserId[] = [];
 
       // when
       const result = userQueryRepositoryAdapter.findByIds(ids);
@@ -143,7 +143,7 @@ describe('UserQueryRepositoryAdapter', () => {
       });
 
       // when
-      const result = userQueryRepositoryAdapter.findByIds([user.id]);
+      const result = userQueryRepositoryAdapter.findByIds([UserId(user.id)]);
 
       // then
       await assertResolvesRight(result, (value) => {

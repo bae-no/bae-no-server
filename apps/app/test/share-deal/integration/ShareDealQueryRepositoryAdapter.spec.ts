@@ -9,6 +9,7 @@ import { FindByUserShareDealCommand } from '../../../src/module/share-deal/appli
 import { FindShareDealByNearestCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from '../../../src/module/share-deal/application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../src/module/share-deal/application/port/out/dto/ShareDealSortType';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
@@ -446,10 +447,10 @@ describe('ShareDealQueryRepositoryAdapter', () => {
   describe('findById', () => {
     it('조회한 공유딜이 없는 경우 NotFoundException을 반환한다.', async () => {
       // given
-      const userId = faker.database.mongodbObjectId();
+      const shareDealId = ShareDealId(faker.database.mongodbObjectId());
 
       // when
-      const result = shareDealRepositoryAdapter.findById(userId);
+      const result = shareDealRepositoryAdapter.findById(shareDealId);
 
       // then
       await assertResolvesLeft(result, (value) => {
@@ -464,7 +465,9 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       });
 
       // when
-      const result = shareDealRepositoryAdapter.findById(shareDeal.id);
+      const result = shareDealRepositoryAdapter.findById(
+        ShareDealId(shareDeal.id),
+      );
 
       // then
       await assertResolvesRight(result, (value) => {

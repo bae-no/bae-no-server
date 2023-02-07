@@ -1,13 +1,13 @@
 import { Sample as OrmSample } from '@prisma/client';
 
-import { Sample } from '../../../domain/Sample';
+import { Sample, SampleId } from '../../../domain/Sample';
 
 export class SampleOrmMapper {
   static toDomain(orm: OrmSample): Sample {
     return Sample.of({
       name: orm.name,
       email: orm.email,
-    }).setBase(orm.id, orm.createdAt, orm.updatedAt);
+    }).setBase(orm.id as SampleId, orm.createdAt, orm.updatedAt);
   }
 
   static toOrm(domain: Sample): OrmSample {

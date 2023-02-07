@@ -15,7 +15,7 @@ import { FindShareDealByNearestCommand } from '../../../application/port/out/dto
 import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
-import { ShareDeal } from '../../../domain/ShareDeal';
+import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 @Injectable()
@@ -119,7 +119,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
   }
 
   override findById(
-    id: string,
+    id: ShareDealId,
   ): TaskEither<DBError | NotFoundException, ShareDeal> {
     return pipe(
       tryCatchDB(() => this.prisma.shareDeal.findUnique({ where: { id } })),

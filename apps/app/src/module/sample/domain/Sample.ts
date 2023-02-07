@@ -1,4 +1,5 @@
-import { BaseEntity } from '@app/domain/entity/BaseEntity';
+import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
+import { Branded } from '@app/domain/entity/Branded';
 
 export interface CreateSampleProps {
   email: string;
@@ -10,7 +11,13 @@ export interface SampleProps {
   name: string;
 }
 
-export class Sample extends BaseEntity<SampleProps> {
+export type SampleId = Branded<string, 'SampleId'>;
+
+export function SampleId(id: string): SampleId {
+  return id as SampleId;
+}
+
+export class Sample extends BaseBrandedEntity<SampleProps, SampleId> {
   private constructor(props: SampleProps) {
     super(props);
   }

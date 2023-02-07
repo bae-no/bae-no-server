@@ -1,4 +1,4 @@
-import { TE, O } from '@app/custom/fp-ts';
+import { O, TE } from '@app/custom/fp-ts';
 import { DBError, tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
@@ -10,7 +10,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserOrmMapper } from './UserOrmMapper';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
-import { User } from '../../../domain/User';
+import { User, UserId } from '../../../domain/User';
 import { Auth } from '../../../domain/vo/Auth';
 
 @Injectable()
@@ -35,7 +35,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
     );
   }
 
-  override findById(id: string): TaskEither<DBError | NotFoundException, User> {
+  override findById(id: UserId): TaskEither<DBError | NotFoundException, User> {
     return pipe(
       tryCatchDB(() => this.prisma.user.findUnique({ where: { id } })),
       TE.chainW((ormUser) =>
@@ -55,7 +55,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
     );
   }
 
-  override findByIds(ids: string[]): TaskEither<DBError, User[]> {
+  override findByIds(ids: UserId[]): TaskEither<DBError, User[]> {
     return pipe(
       tryCatchDB(async () =>
         this.prisma.user.findMany({ where: { id: { in: ids } } }),

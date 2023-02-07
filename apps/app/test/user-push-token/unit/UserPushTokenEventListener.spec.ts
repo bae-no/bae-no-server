@@ -5,6 +5,7 @@ import { StubPushMessage } from '../../../../../libs/push-message/test/fixture/S
 import { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
 import { UserPushTokenEventListener } from '../../../src/module/user-push-token/adapter/in/listener/UserPushTokenEventListener';
 import { UserPushTokenQueryRepositoryPort } from '../../../src/module/user-push-token/application/port/out/UserPushTokenQueryRepositoryPort';
@@ -29,7 +30,7 @@ describe('UserPushTokenEventListener', () => {
       // given
       const chats = new ChatWrittenEvent([
         Chat.of({
-          shareDealId: 'shareDealId',
+          shareDealId: ShareDealId('shareDealId'),
           userId: UserId('authorId'),
           orderedKey: 'orderedKey',
           message: Message.normal(UserId('authorId'), 'content', false),
@@ -48,7 +49,7 @@ describe('UserPushTokenEventListener', () => {
       // given
       const chats = new ChatWrittenEvent([
         Chat.of({
-          shareDealId: 'shareDealId',
+          shareDealId: ShareDealId('shareDealId'),
           userId: UserId('userId'),
           orderedKey: 'orderedKey',
           message: Message.normal(UserId('authorId'), 'content', false),

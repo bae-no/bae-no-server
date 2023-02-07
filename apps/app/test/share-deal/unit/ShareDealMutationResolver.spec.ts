@@ -14,6 +14,7 @@ import { UpdateShareDealInput } from '../../../src/module/share-deal/adapter/in/
 import { ShareDealMutationResolver } from '../../../src/module/share-deal/adapter/in/gql/ShareDealMutationResolver';
 import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ShareDealCommandUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealCommandUseCase';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../../src/module/share-deal/domain/vo/FoodCategory';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import {
@@ -90,7 +91,7 @@ describe('ShareDealMutationResolver', () => {
     it('공유딜 참여 실패 시 ILLEGAL_STATE를 반환한다.', async () => {
       // given
       const input = new JoinShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation joinShareDeal($input: JoinShareDealInput!) {
@@ -135,7 +136,7 @@ describe('ShareDealMutationResolver', () => {
     it('공유딜에 참여한다.', async () => {
       // given
       const input = new JoinShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation joinShareDeal($input: JoinShareDealInput!) {
@@ -165,7 +166,7 @@ describe('ShareDealMutationResolver', () => {
     it('공유딜을 시작한다.', async () => {
       // given
       const input = new StartShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation startShareDeal($input: StartShareDealInput!) {
@@ -193,7 +194,7 @@ describe('ShareDealMutationResolver', () => {
     it('유효하지 않은 상태의 공유딜을 시작할 경우 예외를 반환한다.', async () => {
       // given
       const input = new StartShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation startShareDeal($input: StartShareDealInput!) {
@@ -240,7 +241,7 @@ describe('ShareDealMutationResolver', () => {
     it('공유딜을 종료한다.', async () => {
       // given
       const input = new EndShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation endShareDeal($input: EndShareDealInput!) {
@@ -268,7 +269,7 @@ describe('ShareDealMutationResolver', () => {
     it('유효하지 않은 상태의 공유딜을 종료할 경우 예외를 반환한다.', async () => {
       // given
       const input = new EndShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation endShareDeal($input: EndShareDealInput!) {
@@ -359,7 +360,7 @@ describe('ShareDealMutationResolver', () => {
     it('공유딜을 떠난다.', async () => {
       // given
       const input = new LeaveShareDealInput();
-      input.shareDealId = 'abcd1234';
+      input.shareDealId = ShareDealId('abcd1234');
 
       const mutation = gql`
         mutation leaveShareDeal($input: LeaveShareDealInput!) {

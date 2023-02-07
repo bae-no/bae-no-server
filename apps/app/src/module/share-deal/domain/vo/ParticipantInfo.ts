@@ -38,7 +38,7 @@ export class ParticipantInfo {
     );
   }
 
-  removeId(id: string): ParticipantInfo {
+  removeId(id: UserId): ParticipantInfo {
     return new ParticipantInfo(
       this.ids.filter((participantId) => participantId !== id),
       this.max,

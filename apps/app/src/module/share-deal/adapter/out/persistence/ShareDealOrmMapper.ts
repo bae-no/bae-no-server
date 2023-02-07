@@ -2,7 +2,7 @@ import { ShareDeal as OrmShareDeal } from '@prisma/client';
 
 import { UserId } from '../../../../user/domain/User';
 import { AddressSystem } from '../../../../user/domain/vo/AddressSystem';
-import { ShareDeal } from '../../../domain/ShareDeal';
+import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
@@ -29,7 +29,7 @@ export class ShareDealOrmMapper {
         orm.participants.ids as UserId[],
         orm.participants.max,
       ),
-    }).setBase(orm.id, orm.createdAt, orm.updatedAt);
+    }).setBase(orm.id as ShareDealId, orm.createdAt, orm.updatedAt);
   }
 
   static toOrm(domain: ShareDeal): OrmShareDeal {

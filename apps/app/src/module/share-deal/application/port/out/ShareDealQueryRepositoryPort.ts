@@ -7,7 +7,7 @@ import { FindByUserShareDealCommand } from './dto/FindByUserShareDealCommand';
 import { FindShareDealByNearestCommand } from './dto/FindShareDealByNearestCommand';
 import { FindShareDealCommand } from './dto/FindShareDealCommand';
 import { UserId } from '../../../../user/domain/User';
-import { ShareDeal } from '../../../domain/ShareDeal';
+import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 export abstract class ShareDealQueryRepositoryPort {
@@ -26,7 +26,7 @@ export abstract class ShareDealQueryRepositoryPort {
   ): TaskEither<DBError, ShareDeal[]>;
 
   abstract findById(
-    id: string,
+    id: ShareDealId,
   ): TaskEither<DBError | NotFoundException, ShareDeal>;
 
   abstract countByStatus(

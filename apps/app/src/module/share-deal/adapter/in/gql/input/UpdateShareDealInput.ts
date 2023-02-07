@@ -5,6 +5,7 @@ import { IsPositive, Min, ValidateNested } from 'class-validator';
 import { CreateShareZoneInput } from './CreateShareZoneInput';
 import { UserId } from '../../../../../user/domain/User';
 import { UpdateShareDealCommand } from '../../../../application/port/in/dto/UpdateShareDealCommand';
+import { ShareDealId } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 @InputType()
@@ -40,7 +41,7 @@ export class UpdateShareDealInput {
   toCommand(userId: UserId): UpdateShareDealCommand {
     return new UpdateShareDealCommand(
       userId,
-      this.id,
+      ShareDealId(this.id),
       this.title,
       this.category,
       this.maxParticipant,

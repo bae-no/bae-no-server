@@ -6,6 +6,7 @@ import { constVoid, pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserId } from '../../../user/domain/User';
+import { ShareDealId } from '../../domain/ShareDeal';
 import { ShareDealAccessDeniedException } from '../port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryUseCase } from '../port/in/ShareDealQueryUseCase';
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';
@@ -19,7 +20,7 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
   }
 
   override isParticipant(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     userId: UserId,
   ): TaskEither<DBError | ShareDealAccessDeniedException, void> {
     return pipe(
@@ -33,7 +34,7 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
   }
 
   override participantIds(
-    shareDealId: string,
+    shareDealId: ShareDealId,
     userId: UserId,
   ): TaskEither<
     DBError | NotFoundException | ShareDealAccessDeniedException,

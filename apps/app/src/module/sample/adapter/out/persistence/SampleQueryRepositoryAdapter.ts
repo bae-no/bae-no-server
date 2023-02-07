@@ -9,7 +9,7 @@ import { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
-import { Sample } from '../../../domain/Sample';
+import { Sample, SampleId } from '../../../domain/Sample';
 
 @Injectable()
 export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
@@ -17,7 +17,7 @@ export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
     super();
   }
 
-  override findById(id: string): TaskEither<DBError, Option<Sample>> {
+  override findById(id: SampleId): TaskEither<DBError, Option<Sample>> {
     return pipe(
       tryCatchDB(() => this.prisma.sample.findFirst({ where: { id } })),
       TE.map(this.toDomainSample),

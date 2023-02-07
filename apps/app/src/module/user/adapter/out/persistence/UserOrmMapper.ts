@@ -1,6 +1,6 @@
 import { User as OrmUser } from '@prisma/client';
 
-import { User } from '../../../domain/User';
+import { User, UserId } from '../../../domain/User';
 import { Address } from '../../../domain/vo/Address';
 import { AddressSystem } from '../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../domain/vo/AddressType';
@@ -43,7 +43,7 @@ export class UserOrmMapper {
             orm.leaveReason.reason,
           )
         : null,
-    }).setBase(orm.id, orm.createdAt, orm.updatedAt);
+    }).setBase(orm.id as UserId, orm.createdAt, orm.updatedAt);
   }
 
   static toOrm(domain: User): OrmUser {

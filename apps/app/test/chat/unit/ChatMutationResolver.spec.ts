@@ -7,6 +7,7 @@ import * as request from 'supertest';
 import { ChatMutationResolver } from '../../../src/module/chat/adapter/in/gql/ChatMutationResolver';
 import { WriteChatInput } from '../../../src/module/chat/adapter/in/gql/input/WriteChatInput';
 import { ChatCommandUseCase } from '../../../src/module/chat/application/port/in/ChatCommandUseCase';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import {
   graphQLTestHelper,
   setMockUser,
@@ -38,7 +39,7 @@ describe('ChatMutationResolver', () => {
     it('채팅 입력에 성공한다', async () => {
       // given
       const input = new WriteChatInput();
-      input.shareDealId = faker.database.mongodbObjectId();
+      input.shareDealId = ShareDealId(faker.database.mongodbObjectId());
       input.content = 'test';
 
       const mutation = gql`

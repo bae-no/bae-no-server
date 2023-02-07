@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import { TaskEither } from 'fp-ts/TaskEither';
 
-import { Sample } from '../../domain/Sample';
+import { Sample, SampleId } from '../../domain/Sample';
 import { SampleQueryUseCase } from '../port/in/SampleQueryUseCase';
 import { SampleQueryRepositoryPort } from '../port/out/SampleQueryRepositoryPort';
 
@@ -18,7 +18,7 @@ export class SampleQueryService extends SampleQueryUseCase {
   }
 
   override findById(
-    id: string,
+    id: SampleId,
   ): TaskEither<DBError | NotFoundException, Sample> {
     return pipe(
       this.sampleQueryRepositoryPort.findById(id),

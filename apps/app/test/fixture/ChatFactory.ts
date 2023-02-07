@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker';
 
-import { Chat, ChatProps } from '../../src/module/chat/domain/Chat';
+import { Chat, ChatId, ChatProps } from '../../src/module/chat/domain/Chat';
 import { Message } from '../../src/module/chat/domain/vo/Message';
 import { MessageType } from '../../src/module/chat/domain/vo/MessageType';
+import { ShareDealId } from '../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../src/module/user/domain/User';
 
 type BaseType = {
-  id?: string;
+  id?: ChatId;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -21,13 +22,13 @@ export class ChatFactory {
     );
 
     return new Chat({
-      shareDealId: faker.database.mongodbObjectId(),
+      shareDealId: ShareDealId(faker.database.mongodbObjectId()),
       userId: UserId(faker.database.mongodbObjectId()),
       orderedKey: faker.random.numeric(),
       message,
       ...props,
     }).setBase(
-      props.id ?? faker.database.mongodbObjectId(),
+      ChatId(props.id ?? faker.database.mongodbObjectId()),
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );

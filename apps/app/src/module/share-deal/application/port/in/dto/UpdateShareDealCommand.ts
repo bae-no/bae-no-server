@@ -1,12 +1,15 @@
 import { UserId } from '../../../../../user/domain/User';
 import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
-import { UpdateShareDealProps } from '../../../../domain/ShareDeal';
+import {
+  ShareDealId,
+  UpdateShareDealProps,
+} from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 export class UpdateShareDealCommand {
   constructor(
     readonly userId: UserId,
-    readonly shareDealId: string,
+    readonly shareDealId: ShareDealId,
     readonly title: string,
     readonly category: FoodCategory,
     readonly maxParticipants: number,

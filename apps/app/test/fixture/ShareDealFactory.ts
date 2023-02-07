@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import {
   ShareDeal,
+  ShareDealId,
   ShareDealProps,
 } from '../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../src/module/share-deal/domain/vo/FoodCategory';
@@ -12,7 +13,7 @@ import { UserId } from '../../src/module/user/domain/User';
 import { AddressSystem } from '../../src/module/user/domain/vo/AddressSystem';
 
 type BaseType = {
-  id?: string;
+  id?: ShareDealId;
   createdAt: Date;
   updatedAt: Date;
   participantInfo?: ParticipantInfo;
@@ -43,7 +44,7 @@ export class ShareDealFactory {
       zone: shareZone,
       ...props,
     }).setBase(
-      props.id ?? faker.database.mongodbObjectId(),
+      ShareDealId(props.id ?? faker.database.mongodbObjectId()),
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );

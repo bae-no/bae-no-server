@@ -5,6 +5,7 @@ import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/in/ShareDealQueryUseCase';
+import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
@@ -20,7 +21,7 @@ export class ChatSubscriptionResolver {
     description: '채팅 작성 이벤트 구독하기',
   })
   async chatWritten(
-    @Args({ name: 'shareDealId', type: () => ID }) shareDealId: string,
+    @Args({ name: 'shareDealId', type: () => ID }) shareDealId: ShareDealId,
     @CurrentSession() session: Session,
   ): Promise<AsyncIterator<ChatWrittenResponse>> {
     return pipe(

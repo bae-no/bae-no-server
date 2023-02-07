@@ -29,8 +29,8 @@ export abstract class BaseBrandedEntity<PROPS, PK>
     return this._updatedAt;
   }
 
-  setBase(id: string, createdAt: Date, updatedAt: Date) {
-    (this._id as any) = id.toString();
+  setBase(id: PK, createdAt: Date, updatedAt: Date) {
+    (this._id as any) = id;
     (this._createdAt as any) = createdAt;
     this._updatedAt = updatedAt;
 

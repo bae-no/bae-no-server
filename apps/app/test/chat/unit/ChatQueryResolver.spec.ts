@@ -9,7 +9,9 @@ import { FindChatInput } from '../../../src/module/chat/adapter/in/gql/input/Fin
 import { ChatQueryUseCase } from '../../../src/module/chat/application/port/in/ChatQueryUseCase';
 import { FindByUserDto } from '../../../src/module/chat/application/port/in/dto/FindByUserDto';
 import { FindChatResult } from '../../../src/module/chat/application/port/in/dto/FindChatResult';
+import { ChatId } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
@@ -61,7 +63,7 @@ describe('ChatQueryResolver', () => {
         }
       `;
       const chatResult = new FindChatResult(
-        'id',
+        ShareDealId('id'),
         'title',
         'thumbnail',
         'lastContent',
@@ -110,16 +112,16 @@ describe('ChatQueryResolver', () => {
       `;
       const chatByUserDto = new FindByUserDto(
         ChatFactory.create({
-          id: 'id',
+          id: ChatId('id'),
           message: Message.normal(UserId('id'), 'content', true),
         }),
-        UserFactory.create({ id: 'id', nickname: 'nickname' }),
+        UserFactory.create({ id: UserId('id'), nickname: 'nickname' }),
       );
 
       chatQueryUseCase.findByUser.mockReturnValue(right([chatByUserDto]));
 
       const input = new FindChatDetailInput();
-      input.shareDealId = 'shareDealId';
+      input.shareDealId = ShareDealId('shareDealId');
       input.cursor = '123';
       input.size = 10;
 

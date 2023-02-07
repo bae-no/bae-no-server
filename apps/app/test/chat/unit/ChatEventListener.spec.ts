@@ -13,6 +13,7 @@ import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/app
 import { ShareDealClosedEvent } from '../../../src/module/share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
+import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
@@ -58,7 +59,7 @@ describe('ChatEventListener', () => {
   describe('handleShareDealUpdatedEvent', () => {
     it('공유딜 시작 이벤트를 처리한다', async () => {
       // given
-      const shareDealId = '1234';
+      const shareDealId = ShareDealId('1234');
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
         ownerId: UserId('ownerId'),
@@ -102,7 +103,7 @@ describe('ChatEventListener', () => {
 
     it('공유딜 종료 이벤트를 처리한다', async () => {
       // given
-      const shareDealId = '1234';
+      const shareDealId = ShareDealId('1234');
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
         ownerId: UserId('ownerId'),
@@ -144,7 +145,7 @@ describe('ChatEventListener', () => {
 
     it('공유딜 파기 이벤트를 처리한다', async () => {
       // given
-      const shareDealId = '1234';
+      const shareDealId = ShareDealId('1234');
       const shareDeal = ShareDealFactory.create({
         id: shareDealId,
         ownerId: UserId('ownerId'),

@@ -6,7 +6,7 @@ import { mock, mockReset } from 'jest-mock-extended';
 
 import { SampleQueryRepositoryPort } from '../../../src/module/sample/application/port/out/SampleQueryRepositoryPort';
 import { SampleQueryService } from '../../../src/module/sample/application/service/SampleQueryService';
-import { Sample } from '../../../src/module/sample/domain/Sample';
+import { Sample, SampleId } from '../../../src/module/sample/domain/Sample';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
 
 describe('SampleQueryService', () => {
@@ -21,7 +21,7 @@ describe('SampleQueryService', () => {
     it('데이터가 존재하지 않으면 left 를 반환한다', async () => {
       // given
       sampleQueryRepositoryPort.findById.mockReturnValue(right(none));
-      const id = faker.database.mongodbObjectId();
+      const id = SampleId(faker.database.mongodbObjectId());
 
       // when
       const result = sampleQueryService.findById(id);
@@ -36,7 +36,7 @@ describe('SampleQueryService', () => {
       // given
       const sample = Sample.of({ email: 'email', name: 'name' });
       sampleQueryRepositoryPort.findById.mockReturnValue(right(some(sample)));
-      const id = faker.database.mongodbObjectId();
+      const id = SampleId(faker.database.mongodbObjectId());
 
       // when
       const result = sampleQueryService.findById(id);

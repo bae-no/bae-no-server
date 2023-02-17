@@ -2,8 +2,8 @@ import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { ShareDealParticipantResponse } from './ShareDealParticipantResponse';
-import { User, UserId } from '../../../../../user/domain/User';
-import { ShareDeal } from '../../../../domain/ShareDeal';
+import type { User, UserId } from '../../../../../user/domain/User';
+import type { ShareDeal } from '../../../../domain/ShareDeal';
 
 @ObjectType()
 export class ShareDealStatusResponse {

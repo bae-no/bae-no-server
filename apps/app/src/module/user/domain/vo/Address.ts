@@ -1,5 +1,5 @@
-import { AddressSystem } from './AddressSystem';
-import { AddressType } from './AddressType';
+import type { AddressSystem } from './AddressSystem';
+import type { AddressType } from './AddressType';
 import { Coordinate } from './Coordinate';
 
 export class Address {

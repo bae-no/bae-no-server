@@ -1,7 +1,7 @@
 import { CoordinateResponse } from '@app/custom/nest/response/CoordinateResponse';
 import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
-import { ShareDeal } from '../../../../domain/ShareDeal';
+import type { ShareDeal } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
 

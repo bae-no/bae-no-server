@@ -1,6 +1,7 @@
-import { User as OrmUser } from '@prisma/client';
+import type { User as OrmUser } from '@prisma/client';
 
-import { User, UserId } from '../../../domain/User';
+import type { UserId } from '../../../domain/User';
+import { User } from '../../../domain/User';
 import { Address } from '../../../domain/vo/Address';
 import { AddressSystem } from '../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../domain/vo/AddressType';

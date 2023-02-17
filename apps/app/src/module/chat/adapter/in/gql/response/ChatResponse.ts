@@ -1,6 +1,6 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
-import { FindChatResult } from '../../../../application/port/in/dto/FindChatResult';
+import type { FindChatResult } from '../../../../application/port/in/dto/FindChatResult';
 
 @ObjectType()
 export class ChatResponse {

@@ -1,7 +1,7 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 
 import { ShareDealId } from '../../../../../share-deal/domain/ShareDeal';
-import { UserId } from '../../../../../user/domain/User';
+import type { UserId } from '../../../../../user/domain/User';
 import { WriteChatCommand } from '../../../../application/port/in/dto/WriteChatCommand';
 
 @InputType()

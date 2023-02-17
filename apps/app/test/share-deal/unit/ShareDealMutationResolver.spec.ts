@@ -1,5 +1,5 @@
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';

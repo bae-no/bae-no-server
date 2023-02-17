@@ -1,5 +1,5 @@
 import { PushMessageAdapter } from '@app/push-message/PushMessageAdapter';
-import { Messaging } from 'firebase-admin/lib/messaging';
+import type { Messaging } from 'firebase-admin/lib/messaging';
 import { mock } from 'jest-mock-extended';
 
 import {

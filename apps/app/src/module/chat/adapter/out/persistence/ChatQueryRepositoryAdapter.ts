@@ -1,17 +1,18 @@
 import { O, TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { Option } from 'fp-ts/Option';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
-import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
-import { UserId } from '../../../../user/domain/User';
-import { FindChatByUserCommand } from '../../../application/port/in/dto/FindChatByUserCommand';
+import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
+import type { UserId } from '../../../../user/domain/User';
+import type { FindChatByUserCommand } from '../../../application/port/in/dto/FindChatByUserCommand';
 import { ChatQueryRepositoryPort } from '../../../application/port/out/ChatQueryRepositoryPort';
-import { Chat } from '../../../domain/Chat';
+import type { Chat } from '../../../domain/Chat';
 
 @Injectable()
 export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {

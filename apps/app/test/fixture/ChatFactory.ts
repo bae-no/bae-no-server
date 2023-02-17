@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
-import { Chat, ChatId, ChatProps } from '../../src/module/chat/domain/Chat';
+import type { ChatProps } from '../../src/module/chat/domain/Chat';
+import { Chat, ChatId } from '../../src/module/chat/domain/Chat';
 import { Message } from '../../src/module/chat/domain/vo/Message';
 import { MessageType } from '../../src/module/chat/domain/vo/MessageType';
 import { ShareDealId } from '../../src/module/share-deal/domain/ShareDeal';

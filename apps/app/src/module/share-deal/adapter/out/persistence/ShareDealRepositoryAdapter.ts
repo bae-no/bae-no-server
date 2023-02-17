@@ -1,14 +1,15 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 import { ShareDealRepositoryPort } from '../../../application/port/out/ShareDealRepositoryPort';
-import { ShareDeal } from '../../../domain/ShareDeal';
+import type { ShareDeal } from '../../../domain/ShareDeal';
 
 @Injectable()
 export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {

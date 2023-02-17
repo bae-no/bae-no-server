@@ -1,6 +1,6 @@
 import { BaseEntity } from '@app/domain/entity/BaseEntity';
 
-import { UserId } from '../../user/domain/User';
+import type { UserId } from '../../user/domain/User';
 
 export interface UserPushTokenProps {
   userId: UserId;

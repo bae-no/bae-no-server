@@ -1,15 +1,16 @@
 import { O, TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
-import { Sample as OrmSample } from '@prisma/client';
+import type { Sample as OrmSample } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { Option } from 'fp-ts/Option';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
-import { Sample, SampleId } from '../../../domain/Sample';
+import type { Sample, SampleId } from '../../../domain/Sample';
 
 @Injectable()
 export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {

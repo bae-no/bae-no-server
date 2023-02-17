@@ -1,4 +1,4 @@
-import { UserId } from '../../../user/domain/User';
+import type { UserId } from '../../../user/domain/User';
 
 export class ParticipantInfo {
   constructor(

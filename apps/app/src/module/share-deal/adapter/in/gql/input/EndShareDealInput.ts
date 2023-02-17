@@ -1,6 +1,6 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 
-import { UserId } from '../../../../../user/domain/User';
+import type { UserId } from '../../../../../user/domain/User';
 import { EndShareDealCommand } from '../../../../application/port/in/dto/EndShareDealCommand';
 import { ShareDealId } from '../../../../domain/ShareDeal';
 

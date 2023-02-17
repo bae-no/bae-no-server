@@ -1,14 +1,15 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerificationRepositoryPort } from '../../../application/port/out/PhoneVerificationRepositoryPort';
 import { PhoneVerification } from '../../../domain/PhoneVerification';
-import { UserId } from '../../../domain/User';
+import type { UserId } from '../../../domain/User';
 
 @Injectable()
 export class PhoneVerificationRepositoryAdapter extends PhoneVerificationRepositoryPort {

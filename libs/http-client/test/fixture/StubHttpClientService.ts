@@ -1,9 +1,10 @@
 import { TE } from '@app/custom/fp-ts';
 import { HttpError } from '@app/domain/error/HttpError';
-import { HttpClientPort, HttpOption } from '@app/domain/http/HttpClientPort';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { HttpStatus } from '@nestjs/common';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { HttpOption } from '@app/domain/http/HttpClientPort';
+import { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { HttpStatus } from '@nestjs/common';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { FakeHttpResponse } from './FakeHttpResponse';
 

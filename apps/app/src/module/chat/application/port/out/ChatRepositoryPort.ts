@@ -1,9 +1,9 @@
-import { DBError } from '@app/domain/error/DBError';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
-import { UserId } from '../../../../user/domain/User';
-import { Chat } from '../../../domain/Chat';
+import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
+import type { UserId } from '../../../../user/domain/User';
+import type { Chat } from '../../../domain/Chat';
 
 export abstract class ChatRepositoryPort {
   abstract create(chats: Chat[]): TaskEither<DBError, Chat[]>;

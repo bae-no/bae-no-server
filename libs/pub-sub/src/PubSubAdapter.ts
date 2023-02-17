@@ -1,6 +1,6 @@
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Logger } from '@nestjs/common';
-import { PubSubEngine } from 'graphql-subscriptions';
+import type { PubSubEngine } from 'graphql-subscriptions';
 
 export class PubSubAdapter extends PubSubPort {
   private readonly logger = new Logger(PubSubAdapter.name);

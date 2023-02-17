@@ -1,7 +1,7 @@
 import { CoordinateResponse } from '@app/custom/nest/response/CoordinateResponse';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Address } from '../../../../domain/vo/Address';
+import type { Address } from '../../../../domain/vo/Address';
 import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
 

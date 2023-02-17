@@ -1,6 +1,7 @@
-import { Sample as OrmSample } from '@prisma/client';
+import type { Sample as OrmSample } from '@prisma/client';
 
-import { Sample, SampleId } from '../../../domain/Sample';
+import type { SampleId } from '../../../domain/Sample';
+import { Sample } from '../../../domain/Sample';
 
 export class SampleOrmMapper {
   static toDomain(orm: OrmSample): Sample {

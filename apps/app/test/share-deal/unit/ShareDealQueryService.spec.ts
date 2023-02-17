@@ -2,7 +2,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
-import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import type { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealQueryService } from '../../../src/module/share-deal/application/service/ShareDealQueryService';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';

@@ -1,12 +1,12 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { UserId } from '../../../user/domain/User';
-import { ShareDealId } from '../../domain/ShareDeal';
+import type { UserId } from '../../../user/domain/User';
+import type { ShareDealId } from '../../domain/ShareDeal';
 import { ShareDealAccessDeniedException } from '../port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryUseCase } from '../port/in/ShareDealQueryUseCase';
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';

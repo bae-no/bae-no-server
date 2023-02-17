@@ -1,7 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
+import { createParamDecorator } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { Session } from './Session';
+import type { Session } from './Session';
 
 export const CurrentSession = createParamDecorator(
   (_data: unknown, context: ExecutionContext) => {

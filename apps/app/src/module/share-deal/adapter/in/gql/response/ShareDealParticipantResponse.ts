@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { User } from '../../../../../user/domain/User';
+import type { User } from '../../../../../user/domain/User';
 
 @ObjectType()
 export class ShareDealParticipantResponse {

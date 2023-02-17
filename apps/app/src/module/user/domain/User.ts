@@ -1,16 +1,16 @@
 import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
-import { Branded } from '@app/domain/entity/Branded';
+import type { Branded } from '@app/domain/entity/Branded';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import * as E from 'fp-ts/Either';
-import { Either } from 'fp-ts/Either';
+import type { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 
-import { ExpiredCodeException } from './exception/ExpiredCodeException';
-import { MismatchedCodeException } from './exception/MismatchedCodeException';
-import { PhoneVerification } from './PhoneVerification';
-import { Address } from './vo/Address';
+import type { ExpiredCodeException } from './exception/ExpiredCodeException';
+import type { MismatchedCodeException } from './exception/MismatchedCodeException';
+import type { PhoneVerification } from './PhoneVerification';
+import type { Address } from './vo/Address';
 import { Agreement } from './vo/Agreement';
-import { Auth } from './vo/Auth';
+import type { Auth } from './vo/Auth';
 import { LeaveReason } from './vo/LeaveReason';
 import { Profile } from './vo/Profile';
 import { UserAddressList } from './vo/UserAddressList';

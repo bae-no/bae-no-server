@@ -1,14 +1,16 @@
 import { BaseExceptionFilter } from '@app/custom/nest/filter/BaseExceptionFilter';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import {
+import type { ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver } from '@nestjs/apollo';
+import type {
   CanActivate,
   ExecutionContext,
   INestApplication,
   ModuleMetadata,
-  ValidationPipe,
 } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { GqlExecutionContext, GraphQLModule } from '@nestjs/graphql';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 
 import { CategoryQueryResolver } from '../../src/module/category/adapter/in/gql/CategoryQueryResolver';
 import { Session } from '../../src/module/user/adapter/in/gql/auth/Session';

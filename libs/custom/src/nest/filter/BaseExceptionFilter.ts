@@ -1,5 +1,6 @@
 import { BaseException } from '@app/domain/exception/BaseException';
-import { Catch, ExceptionFilter } from '@nestjs/common';
+import type { ExceptionFilter } from '@nestjs/common';
+import { Catch } from '@nestjs/common';
 import { ApolloError } from 'apollo-server-core';
 
 @Catch(BaseException)

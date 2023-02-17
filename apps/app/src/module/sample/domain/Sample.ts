@@ -1,5 +1,5 @@
 import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
-import { Branded } from '@app/domain/entity/Branded';
+import type { Branded } from '@app/domain/entity/Branded';
 
 export interface CreateSampleProps {
   email: string;

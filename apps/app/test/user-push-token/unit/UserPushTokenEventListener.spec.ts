@@ -8,7 +8,7 @@ import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
 import { UserPushTokenEventListener } from '../../../src/module/user-push-token/adapter/in/listener/UserPushTokenEventListener';
-import { UserPushTokenQueryRepositoryPort } from '../../../src/module/user-push-token/application/port/out/UserPushTokenQueryRepositoryPort';
+import type { UserPushTokenQueryRepositoryPort } from '../../../src/module/user-push-token/application/port/out/UserPushTokenQueryRepositoryPort';
 import { UserPushToken } from '../../../src/module/user-push-token/domain/UserPushToken';
 
 describe('UserPushTokenEventListener', () => {

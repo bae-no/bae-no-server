@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 import { SendPhoneVerificationCodeCommand } from '../../../../application/port/in/dto/SendPhoneVerificationCodeCommand';
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 
 @InputType()
 export class SendPhoneVerificationCodeInput {

@@ -4,7 +4,7 @@ import { ValidateNested } from 'class-validator';
 
 import { AddressInput } from './AddressInput';
 import { EnrollUserCommand } from '../../../../application/port/in/dto/EnrollUserCommand';
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 
 @InputType()
 export class EnrollUserInput {

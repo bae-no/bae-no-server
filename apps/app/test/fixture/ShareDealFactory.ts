@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
 
+import type { ShareDealProps } from '../../src/module/share-deal/domain/ShareDeal';
 import {
   ShareDeal,
   ShareDealId,
-  ShareDealProps,
 } from '../../src/module/share-deal/domain/ShareDeal';
 import { FoodCategory } from '../../src/module/share-deal/domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../src/module/share-deal/domain/vo/ParticipantInfo';

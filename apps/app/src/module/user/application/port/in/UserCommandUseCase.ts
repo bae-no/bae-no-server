@@ -1,15 +1,15 @@
-import { AuthError } from '@app/domain/error/AuthError';
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { AuthError } from '@app/domain/error/AuthError';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { AppendAddressCommand } from './dto/AppendAddressCommand';
-import { DeleteAddressCommand } from './dto/DeleteAddressCommand';
-import { EnrollUserCommand } from './dto/EnrollUserCommand';
-import { LeaveUserCommand } from './dto/LeaveUserCommand';
-import { SignInUserCommand } from './dto/SignInUserCommand';
-import { SignInUserDto } from './dto/SignInUserDto';
-import { UpdateProfileCommand } from './dto/UpdateProfileCommand';
+import type { AppendAddressCommand } from './dto/AppendAddressCommand';
+import type { DeleteAddressCommand } from './dto/DeleteAddressCommand';
+import type { EnrollUserCommand } from './dto/EnrollUserCommand';
+import type { LeaveUserCommand } from './dto/LeaveUserCommand';
+import type { SignInUserCommand } from './dto/SignInUserCommand';
+import type { SignInUserDto } from './dto/SignInUserDto';
+import type { UpdateProfileCommand } from './dto/UpdateProfileCommand';
 
 export abstract class UserCommandUseCase {
   abstract signIn(

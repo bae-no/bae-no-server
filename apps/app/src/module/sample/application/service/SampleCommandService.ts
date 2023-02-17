@@ -1,10 +1,10 @@
-import { DBError } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
 import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { Sample } from '../../domain/Sample';
-import { CreateSampleCommand } from '../port/in/dto/CreateSampleCommand';
+import type { CreateSampleCommand } from '../port/in/dto/CreateSampleCommand';
 import { SampleCommandUseCase } from '../port/in/SampleCommandUseCase';
 import { SampleRepositoryPort } from '../port/out/SampleRepositoryPort';
 

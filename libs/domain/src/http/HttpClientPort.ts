@@ -1,6 +1,6 @@
-import { HttpError } from '@app/domain/error/HttpError';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { HttpError } from '@app/domain/error/HttpError';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 export interface HttpOption {
   headers?: Record<string, string>;

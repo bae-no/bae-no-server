@@ -1,21 +1,21 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
-import { LeaveShareDealCommand } from '../port/in/dto/LeaveShareDealCommand';
-import { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
-import { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
-import { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
-import {
+import type { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
+import type { LeaveShareDealCommand } from '../port/in/dto/LeaveShareDealCommand';
+import type { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
+import type { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
+import type { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
+import type {
   JoinChatError,
   LeaveShareDealError,
-  ShareDealCommandUseCase,
   StartShareDealError,
   UpdateShareDealError,
 } from '../port/in/ShareDealCommandUseCase';
+import { ShareDealCommandUseCase } from '../port/in/ShareDealCommandUseCase';
 import { ShareDealQueryRepositoryPort } from '../port/out/ShareDealQueryRepositoryPort';
 import { ShareDealRepositoryPort } from '../port/out/ShareDealRepositoryPort';
 

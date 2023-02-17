@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
-import { User, UserId, UserProps } from '../../src/module/user/domain/User';
+import type { UserProps } from '../../src/module/user/domain/User';
+import { User, UserId } from '../../src/module/user/domain/User';
 import { Agreement } from '../../src/module/user/domain/vo/Agreement';
 import { Auth } from '../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../src/module/user/domain/vo/AuthType';

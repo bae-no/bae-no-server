@@ -1,6 +1,6 @@
 import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
-import { DomainEvent } from '@app/domain/event/DomainEvent';
-import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import type { DomainEvent } from '@app/domain/event/DomainEvent';
+import type { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 
 export abstract class AggregateRoot<T, P> extends BaseBrandedEntity<T, P> {
   #domainEvents: DomainEvent[] = [];

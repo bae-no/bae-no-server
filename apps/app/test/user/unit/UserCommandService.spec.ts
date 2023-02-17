@@ -11,10 +11,10 @@ import { EnrollUserCommand } from '../../../src/module/user/application/port/in/
 import { LeaveUserCommand } from '../../../src/module/user/application/port/in/dto/LeaveUserCommand';
 import { SignInUserCommand } from '../../../src/module/user/application/port/in/dto/SignInUserCommand';
 import { UpdateProfileCommand } from '../../../src/module/user/application/port/in/dto/UpdateProfileCommand';
-import { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
-import { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
-import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
-import { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
+import type { AuthProviderPort } from '../../../src/module/user/application/port/out/AuthProviderPort';
+import type { TokenGeneratorPort } from '../../../src/module/user/application/port/out/TokenGeneratorPort';
+import type { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
+import type { UserRepositoryPort } from '../../../src/module/user/application/port/out/UserRepositoryPort';
 import { UserCommandService } from '../../../src/module/user/application/service/UserCommandService';
 import { User, UserId } from '../../../src/module/user/domain/User';
 import { Address } from '../../../src/module/user/domain/vo/Address';

@@ -3,7 +3,7 @@ import { IsNotEmpty, ValidateIf } from 'class-validator';
 
 import { LeaveReasonType } from './LeaveReasonType';
 import { LeaveUserCommand } from '../../../../application/port/in/dto/LeaveUserCommand';
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 
 @InputType()
 export class LeaveUserInput {

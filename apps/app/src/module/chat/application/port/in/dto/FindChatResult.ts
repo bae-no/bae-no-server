@@ -1,4 +1,4 @@
-import { ShareDealId } from '../../../../../share-deal/domain/ShareDeal';
+import type { ShareDealId } from '../../../../../share-deal/domain/ShareDeal';
 
 export class FindChatResult {
   constructor(

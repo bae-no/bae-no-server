@@ -1,7 +1,7 @@
 import { PageCommand } from '@app/domain/command/PageCommand';
 
-import { ShareDealSortType } from './ShareDealSortType';
-import { FoodCategory } from '../../../../domain/vo/FoodCategory';
+import type { ShareDealSortType } from './ShareDealSortType';
+import type { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 interface FindShareDealCommandParams {
   keyword?: string;

@@ -1,8 +1,8 @@
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@nestjs/common';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@nestjs/common';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { Sample, SampleId } from '../../../domain/Sample';
+import type { Sample, SampleId } from '../../../domain/Sample';
 
 export abstract class SampleQueryUseCase {
   abstract findById(

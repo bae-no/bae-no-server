@@ -1,10 +1,10 @@
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { ShareDealAccessDeniedException } from './exception/ShareDealAccessDeniedException';
-import { UserId } from '../../../../user/domain/User';
-import { ShareDealId } from '../../../domain/ShareDeal';
+import type { ShareDealAccessDeniedException } from './exception/ShareDealAccessDeniedException';
+import type { UserId } from '../../../../user/domain/User';
+import type { ShareDealId } from '../../../domain/ShareDeal';
 
 export abstract class ShareDealQueryUseCase {
   abstract isParticipant(

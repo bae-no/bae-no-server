@@ -1,7 +1,7 @@
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 

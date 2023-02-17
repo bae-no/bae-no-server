@@ -1,4 +1,4 @@
-import { Server } from 'http';
+import type { Server } from 'http';
 
 import { HttpClientService } from '@app/http-client/HttpClientService';
 

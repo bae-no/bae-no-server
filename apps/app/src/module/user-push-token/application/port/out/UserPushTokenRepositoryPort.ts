@@ -1,7 +1,7 @@
-import { DBError } from '@app/domain/error/DBError';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { UserPushToken } from '../../../domain/UserPushToken';
+import type { UserPushToken } from '../../../domain/UserPushToken';
 
 export abstract class UserPushTokenRepositoryPort {
   abstract save(

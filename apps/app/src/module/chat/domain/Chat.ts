@@ -1,9 +1,9 @@
 import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
-import { Branded } from '@app/domain/entity/Branded';
+import type { Branded } from '@app/domain/entity/Branded';
 
 import { Message } from './vo/Message';
-import { ShareDealId } from '../../share-deal/domain/ShareDeal';
-import { UserId } from '../../user/domain/User';
+import type { ShareDealId } from '../../share-deal/domain/ShareDeal';
+import type { UserId } from '../../user/domain/User';
 
 export interface ChatProps {
   userId: UserId;

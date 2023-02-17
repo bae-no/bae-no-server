@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 import { ShareDealItemResponse } from './ShareDealItemResponse';
-import { ShareDeal } from '../../../../domain/ShareDeal';
+import type { ShareDeal } from '../../../../domain/ShareDeal';
 
 @ObjectType()
 export class ShareDealResponse {

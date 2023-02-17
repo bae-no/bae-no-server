@@ -1,10 +1,10 @@
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { Option } from 'fp-ts/Option';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { Option } from 'fp-ts/Option';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { User, UserId } from '../../../domain/User';
-import { Auth } from '../../../domain/vo/Auth';
+import type { User, UserId } from '../../../domain/User';
+import type { Auth } from '../../../domain/vo/Auth';
 
 export abstract class UserQueryRepositoryPort {
   abstract findByAuth(auth: Auth): TaskEither<DBError, Option<User>>;

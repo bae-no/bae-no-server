@@ -1,18 +1,16 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError } from '@app/domain/error/DBError';
-import { NotificationError } from '@app/domain/error/NotificationError';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotificationError } from '@app/domain/error/NotificationError';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerification } from '../../domain/PhoneVerification';
-import { SendPhoneVerificationCodeCommand } from '../port/in/dto/SendPhoneVerificationCodeCommand';
-import { VerifyPhoneVerificationCodeCommand } from '../port/in/dto/VerifyPhoneVerificationCodeCommand';
-import {
-  PhoneVerificationUseCase,
-  VerifyPhoneVerificationCodeError,
-} from '../port/in/PhoneVerificationUseCase';
+import type { SendPhoneVerificationCodeCommand } from '../port/in/dto/SendPhoneVerificationCodeCommand';
+import type { VerifyPhoneVerificationCodeCommand } from '../port/in/dto/VerifyPhoneVerificationCodeCommand';
+import type { VerifyPhoneVerificationCodeError } from '../port/in/PhoneVerificationUseCase';
+import { PhoneVerificationUseCase } from '../port/in/PhoneVerificationUseCase';
 import { PhoneVerificationRepositoryPort } from '../port/out/PhoneVerificationRepositoryPort';
 import { UserQueryRepositoryPort } from '../port/out/UserQueryRepositoryPort';
 import { UserRepositoryPort } from '../port/out/UserRepositoryPort';

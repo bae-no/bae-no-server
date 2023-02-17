@@ -1,6 +1,8 @@
 import { toError } from 'fp-ts/Either';
-import { Lazy, pipe } from 'fp-ts/function';
-import { TaskEither, tryCatch } from 'fp-ts/TaskEither';
+import type { Lazy } from 'fp-ts/function';
+import { pipe } from 'fp-ts/function';
+import type { TaskEither } from 'fp-ts/TaskEither';
+import { tryCatch } from 'fp-ts/TaskEither';
 
 export class DBError extends Error {
   constructor(error: Error) {

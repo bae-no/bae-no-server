@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 import { UpdateProfileCommand } from '../../../../application/port/in/dto/UpdateProfileCommand';
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 
 @InputType()
 export class UpdateProfileInput {

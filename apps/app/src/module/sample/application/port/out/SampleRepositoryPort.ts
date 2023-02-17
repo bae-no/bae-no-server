@@ -1,7 +1,7 @@
-import { DBError } from '@app/domain/error/DBError';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { Sample } from '../../../domain/Sample';
+import type { Sample } from '../../../domain/Sample';
 
 export abstract class SampleRepositoryPort {
   abstract save(sample: Sample): TaskEither<DBError, Sample>;

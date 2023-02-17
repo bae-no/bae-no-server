@@ -1,21 +1,23 @@
 import { TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
-import { Prisma, ShareDeal as OrmShareDeal } from '@prisma/client';
+import type { ShareDeal as OrmShareDeal } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { pipe, unsafeCoerce } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
-import { UserId } from '../../../../user/domain/User';
-import { CountShareDealCommand } from '../../../application/port/out/dto/CountShareDealCommand';
-import { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
-import { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
-import { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
+import type { UserId } from '../../../../user/domain/User';
+import type { CountShareDealCommand } from '../../../application/port/out/dto/CountShareDealCommand';
+import type { FindByUserShareDealCommand } from '../../../application/port/out/dto/FindByUserShareDealCommand';
+import type { FindShareDealByNearestCommand } from '../../../application/port/out/dto/FindShareDealByNearestCommand';
+import type { FindShareDealCommand } from '../../../application/port/out/dto/FindShareDealCommand';
 import { ShareDealSortType } from '../../../application/port/out/dto/ShareDealSortType';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
-import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
+import type { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsPositive, Min } from 'class-validator';
 
 import { ShareDealStatus } from '../../../../../share-deal/domain/vo/ShareDealStatus';
-import { UserId } from '../../../../../user/domain/User';
+import type { UserId } from '../../../../../user/domain/User';
 import { FindChatCommand } from '../../../../application/port/in/dto/FindChatCommand';
 
 @InputType()

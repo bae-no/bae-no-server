@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsPositive, Min } from 'class-validator';
 
-import { Coordinate } from '../../../../../user/domain/vo/Coordinate';
+import type { Coordinate } from '../../../../../user/domain/vo/Coordinate';
 import { FindShareDealByNearestCommand } from '../../../../application/port/out/dto/FindShareDealByNearestCommand';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 

@@ -1,5 +1,5 @@
 import { TE } from '@app/custom/fp-ts';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 

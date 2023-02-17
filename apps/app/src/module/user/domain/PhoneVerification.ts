@@ -1,7 +1,8 @@
 import { randomInt } from 'crypto';
 
 import { addMinutes, isAfter } from 'date-fns';
-import { Either, left, right } from 'fp-ts/Either';
+import type { Either } from 'fp-ts/Either';
+import { left, right } from 'fp-ts/Either';
 
 import { ExpiredCodeException } from './exception/ExpiredCodeException';
 import { MismatchedCodeException } from './exception/MismatchedCodeException';

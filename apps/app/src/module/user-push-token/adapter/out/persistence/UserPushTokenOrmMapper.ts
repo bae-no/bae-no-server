@@ -1,6 +1,6 @@
-import { UserPushToken as OrmUserPushToken } from '@prisma/client';
+import type { UserPushToken as OrmUserPushToken } from '@prisma/client';
 
-import { UserId } from '../../../../user/domain/User';
+import type { UserId } from '../../../../user/domain/User';
 import { UserPushToken } from '../../../domain/UserPushToken';
 
 export class UserPushTokenOrmMapper {

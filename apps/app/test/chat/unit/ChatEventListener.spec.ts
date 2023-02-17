@@ -1,4 +1,4 @@
-import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
+import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
@@ -7,9 +7,9 @@ import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubM
 import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/response/ChatWrittenResponse';
 import { ChatEventListener } from '../../../src/module/chat/adapter/in/listener/ChatEventListener';
 import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
-import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
+import type { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
-import { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
+import type { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealClosedEvent } from '../../../src/module/share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';

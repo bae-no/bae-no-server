@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Sample } from '../../../../domain/Sample';
+import type { Sample } from '../../../../domain/Sample';
 
 @ObjectType()
 export class SampleResponse {

@@ -1,10 +1,11 @@
-import { Chat as OrmChat } from '@prisma/client';
+import type { Chat as OrmChat } from '@prisma/client';
 
-import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
-import { UserId } from '../../../../user/domain/User';
-import { Chat, ChatId } from '../../../domain/Chat';
+import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
+import type { UserId } from '../../../../user/domain/User';
+import type { ChatId } from '../../../domain/Chat';
+import { Chat } from '../../../domain/Chat';
 import { Message } from '../../../domain/vo/Message';
-import { MessageType } from '../../../domain/vo/MessageType';
+import type { MessageType } from '../../../domain/vo/MessageType';
 
 export class ChatOrmMapper {
   static toDomain(orm: OrmChat): Chat {

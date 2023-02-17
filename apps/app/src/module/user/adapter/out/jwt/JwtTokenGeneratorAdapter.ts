@@ -1,10 +1,10 @@
-import { JwtService } from '@nestjs/jwt';
+import type { JwtService } from '@nestjs/jwt';
 import { addDays } from 'date-fns';
 import { pipe } from 'fp-ts/function';
 
 import { AuthToken } from '../../../application/port/in/dto/AuthToken';
 import { TokenGeneratorPort } from '../../../application/port/out/TokenGeneratorPort';
-import { User } from '../../../domain/User';
+import type { User } from '../../../domain/User';
 
 export class JwtTokenGeneratorAdapter extends TokenGeneratorPort {
   constructor(

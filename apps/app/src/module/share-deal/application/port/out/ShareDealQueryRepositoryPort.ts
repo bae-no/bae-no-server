@@ -1,14 +1,14 @@
-import { DBError } from '@app/domain/error/DBError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { CountShareDealCommand } from './dto/CountShareDealCommand';
-import { FindByUserShareDealCommand } from './dto/FindByUserShareDealCommand';
-import { FindShareDealByNearestCommand } from './dto/FindShareDealByNearestCommand';
-import { FindShareDealCommand } from './dto/FindShareDealCommand';
-import { UserId } from '../../../../user/domain/User';
-import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
-import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
+import type { CountShareDealCommand } from './dto/CountShareDealCommand';
+import type { FindByUserShareDealCommand } from './dto/FindByUserShareDealCommand';
+import type { FindShareDealByNearestCommand } from './dto/FindShareDealByNearestCommand';
+import type { FindShareDealCommand } from './dto/FindShareDealCommand';
+import type { UserId } from '../../../../user/domain/User';
+import type { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
+import type { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 export abstract class ShareDealQueryRepositoryPort {
   abstract find(

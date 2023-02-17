@@ -1,5 +1,5 @@
 import { MessageType } from './MessageType';
-import { UserId } from '../../../user/domain/User';
+import type { UserId } from '../../../user/domain/User';
 
 export class Message {
   static FIRST_MESSAGE =

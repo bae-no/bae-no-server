@@ -2,11 +2,11 @@ import { createHmac } from 'crypto';
 
 import { TE } from '@app/custom/fp-ts';
 import { NotificationError } from '@app/domain/error/NotificationError';
-import { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { SmsResponse } from '@app/sms/SmsResponse';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 export class SmsSensService extends SmsPort {
   constructor(

@@ -1,18 +1,18 @@
 import { O, TE } from '@app/custom/fp-ts';
-import { DBError } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { Injectable } from '@nestjs/common';
 import { constant, pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { UserQueryRepositoryPort } from '../../../user/application/port/out/UserQueryRepositoryPort';
-import { User } from '../../../user/domain/User';
+import type { User } from '../../../user/domain/User';
 import { ChatReadEvent } from '../../domain/event/ChatReadEvent';
 import { ChatQueryUseCase } from '../port/in/ChatQueryUseCase';
 import { FindByUserDto } from '../port/in/dto/FindByUserDto';
-import { FindChatByUserCommand } from '../port/in/dto/FindChatByUserCommand';
-import { FindChatCommand } from '../port/in/dto/FindChatCommand';
+import type { FindChatByUserCommand } from '../port/in/dto/FindChatByUserCommand';
+import type { FindChatCommand } from '../port/in/dto/FindChatCommand';
 import { FindChatResult } from '../port/in/dto/FindChatResult';
 import { ChatQueryRepositoryPort } from '../port/out/ChatQueryRepositoryPort';
 

@@ -1,17 +1,18 @@
 import { O, TE } from '@app/custom/fp-ts';
-import { DBError, tryCatchDB } from '@app/domain/error/DBError';
+import type { DBError } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { Injectable } from '@nestjs/common';
-import { User as OrmUser } from '@prisma/client';
+import type { User as OrmUser } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { Option } from 'fp-ts/Option';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserOrmMapper } from './UserOrmMapper';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
-import { User, UserId } from '../../../domain/User';
-import { Auth } from '../../../domain/vo/Auth';
+import type { User, UserId } from '../../../domain/User';
+import type { Auth } from '../../../domain/vo/Auth';
 
 @Injectable()
 export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {

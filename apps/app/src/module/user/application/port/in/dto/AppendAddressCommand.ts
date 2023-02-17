@@ -1,7 +1,7 @@
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 import { Address } from '../../../../domain/vo/Address';
-import { AddressSystem } from '../../../../domain/vo/AddressSystem';
-import { AddressType } from '../../../../domain/vo/AddressType';
+import type { AddressSystem } from '../../../../domain/vo/AddressSystem';
+import type { AddressType } from '../../../../domain/vo/AddressType';
 
 export class AppendAddressCommand {
   constructor(

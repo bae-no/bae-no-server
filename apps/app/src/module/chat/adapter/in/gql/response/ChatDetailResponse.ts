@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { UserId } from '../../../../../user/domain/User';
-import { FindByUserDto } from '../../../../application/port/in/dto/FindByUserDto';
+import type { UserId } from '../../../../../user/domain/User';
+import type { FindByUserDto } from '../../../../application/port/in/dto/FindByUserDto';
 import { MessageType } from '../../../../domain/vo/MessageType';
 
 @ObjectType()

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';

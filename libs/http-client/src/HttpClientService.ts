@@ -1,10 +1,11 @@
 import { TE } from '@app/domain/../../custom/src/fp-ts';
 import { HttpError } from '@app/domain/error/HttpError';
-import { HttpClientPort, HttpOption } from '@app/domain/http/HttpClientPort';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { HttpOption } from '@app/domain/http/HttpClientPort';
+import { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { NodeFetchResponse } from '@app/http-client/NodeFetchResponse';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
 export class HttpClientService extends HttpClientPort {
   #timeout = 5000;

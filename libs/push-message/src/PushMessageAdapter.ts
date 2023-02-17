@@ -1,10 +1,11 @@
 import { TE } from '@app/custom/fp-ts';
 import { NotificationError } from '@app/domain/error/NotificationError';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
-import { Messaging } from 'firebase-admin/lib/messaging';
+import type { Messaging } from 'firebase-admin/lib/messaging';
 import { toError } from 'fp-ts/Either';
 import { constVoid, pipe } from 'fp-ts/function';
-import { TaskEither, tryCatch } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
+import { tryCatch } from 'fp-ts/TaskEither';
 
 export class PushMessageAdapter extends PushMessagePort {
   constructor(private readonly messaging: Messaging) {

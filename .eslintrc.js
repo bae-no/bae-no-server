@@ -2,7 +2,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
-    tsconfigRootDir : __dirname, 
+    tsconfigRootDir : __dirname,
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'import', 'eslint-plugin-node'],
@@ -25,6 +25,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/promise-function-async': 'error',
     "@typescript-eslint/member-ordering": ["error"],
+    '@typescript-eslint/consistent-type-imports': 'error',
     'curly': 1,
     'no-console': 'error',
     'arrow-body-style': ['error', 'as-needed'],

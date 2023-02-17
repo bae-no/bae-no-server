@@ -4,7 +4,7 @@ import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
 import { CoordinateInput } from './CoordinateInput';
 import { AppendAddressCommand } from '../../../../application/port/in/dto/AppendAddressCommand';
-import { UserId } from '../../../../domain/User';
+import type { UserId } from '../../../../domain/User';
 import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
 

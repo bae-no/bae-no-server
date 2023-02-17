@@ -1,4 +1,4 @@
-import { DomainEvent } from '@app/domain/event/DomainEvent';
+import type { DomainEvent } from '@app/domain/event/DomainEvent';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 
 export class StubEventEmitter extends EventEmitterPort {

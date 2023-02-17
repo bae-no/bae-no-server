@@ -1,6 +1,6 @@
 import { DomainEvent } from '@app/domain/event/DomainEvent';
 
-import { Chat } from '../Chat';
+import type { Chat } from '../Chat';
 
 export class ChatWrittenEvent extends DomainEvent {
   constructor(readonly chats: Chat[]) {

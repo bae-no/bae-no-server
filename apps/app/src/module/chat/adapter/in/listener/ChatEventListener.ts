@@ -11,7 +11,7 @@ import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application
 import { ShareDealClosedEvent } from '../../../../share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../../share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../../share-deal/domain/event/ShareDealStartedEvent';
-import { ShareDeal } from '../../../../share-deal/domain/ShareDeal';
+import type { ShareDeal } from '../../../../share-deal/domain/ShareDeal';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import { Chat } from '../../../domain/Chat';
 import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';

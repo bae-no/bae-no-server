@@ -1,15 +1,15 @@
-import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
+import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { WriteChatCommand } from '../../../src/module/chat/application/port/in/dto/WriteChatCommand';
-import { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
+import type { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from '../../../src/module/chat/application/service/ChatCommandService';
-import { Chat } from '../../../src/module/chat/domain/Chat';
+import type { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
-import { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
+import type { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
 import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';

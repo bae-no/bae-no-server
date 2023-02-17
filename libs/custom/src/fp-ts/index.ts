@@ -1,8 +1,9 @@
 import { AuthError } from '@app/domain/error/AuthError';
 import { AuthenticationError } from 'apollo-server-express';
 import { pipe } from 'fp-ts/function';
-import { Task } from 'fp-ts/Task';
-import { getOrElse, TaskEither, map } from 'fp-ts/TaskEither';
+import type { Task } from 'fp-ts/Task';
+import type { TaskEither } from 'fp-ts/TaskEither';
+import { getOrElse, map } from 'fp-ts/TaskEither';
 
 export * as TE from 'fp-ts/TaskEither';
 export * as O from 'fp-ts/Option';

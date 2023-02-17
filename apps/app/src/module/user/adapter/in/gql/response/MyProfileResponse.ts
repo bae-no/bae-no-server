@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { User } from '../../../../domain/User';
+import type { User } from '../../../../domain/User';
 
 @ObjectType()
 export class MyProfileResponse {

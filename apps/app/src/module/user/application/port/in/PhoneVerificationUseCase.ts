@@ -1,12 +1,12 @@
-import { DBError } from '@app/domain/error/DBError';
-import { NotificationError } from '@app/domain/error/NotificationError';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotificationError } from '@app/domain/error/NotificationError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { SendPhoneVerificationCodeCommand } from './dto/SendPhoneVerificationCodeCommand';
-import { VerifyPhoneVerificationCodeCommand } from './dto/VerifyPhoneVerificationCodeCommand';
-import { ExpiredCodeException } from '../../../domain/exception/ExpiredCodeException';
-import { MismatchedCodeException } from '../../../domain/exception/MismatchedCodeException';
+import type { SendPhoneVerificationCodeCommand } from './dto/SendPhoneVerificationCodeCommand';
+import type { VerifyPhoneVerificationCodeCommand } from './dto/VerifyPhoneVerificationCodeCommand';
+import type { ExpiredCodeException } from '../../../domain/exception/ExpiredCodeException';
+import type { MismatchedCodeException } from '../../../domain/exception/MismatchedCodeException';
 
 export type VerifyPhoneVerificationCodeError =
   | DBError

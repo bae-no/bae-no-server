@@ -1,7 +1,8 @@
-import { NotificationError } from '@app/domain/error/NotificationError';
+import type { NotificationError } from '@app/domain/error/NotificationError';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { Module } from '@nestjs/common';
-import { right, TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
+import { right } from 'fp-ts/TaskEither';
 
 export class StubPushMessage extends PushMessagePort {
   pushToken = '';

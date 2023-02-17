@@ -1,4 +1,4 @@
-import { Address } from './Address';
+import type { Address } from './Address';
 
 export class UserAddressList {
   static MAX_ADDRESSES_COUNT = 6;

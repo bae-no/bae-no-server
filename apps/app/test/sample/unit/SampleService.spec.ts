@@ -2,7 +2,7 @@ import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { CreateSampleCommand } from '../../../src/module/sample/application/port/in/dto/CreateSampleCommand';
-import { SampleRepositoryPort } from '../../../src/module/sample/application/port/out/SampleRepositoryPort';
+import type { SampleRepositoryPort } from '../../../src/module/sample/application/port/out/SampleRepositoryPort';
 import { SampleCommandService } from '../../../src/module/sample/application/service/SampleCommandService';
 import { Sample } from '../../../src/module/sample/domain/Sample';
 import { assertResolvesRight } from '../../fixture/utils';

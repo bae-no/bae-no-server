@@ -1,7 +1,7 @@
-import { UserId } from '../../../../../user/domain/User';
-import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
+import type { UserId } from '../../../../../user/domain/User';
+import type { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
 import { ShareDeal } from '../../../../domain/ShareDeal';
-import { FoodCategory } from '../../../../domain/vo/FoodCategory';
+import type { FoodCategory } from '../../../../domain/vo/FoodCategory';
 import { ShareZone } from '../../../../domain/vo/ShareZone';
 
 export class OpenShareDealCommand {

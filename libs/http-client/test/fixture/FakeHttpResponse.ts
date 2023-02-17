@@ -1,6 +1,7 @@
-import { HttpError } from '@app/domain/error/HttpError';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { Either, right } from 'fp-ts/Either';
+import type { HttpError } from '@app/domain/error/HttpError';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { Either } from 'fp-ts/Either';
+import { right } from 'fp-ts/Either';
 
 type FakeHttpResponseProps<T> = {
   isOk?: boolean;

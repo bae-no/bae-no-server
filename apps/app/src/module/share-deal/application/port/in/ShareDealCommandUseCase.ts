@@ -1,15 +1,15 @@
-import { DBError } from '@app/domain/error/DBError';
-import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { DBError } from '@app/domain/error/DBError';
+import type { IllegalStateException } from '@app/domain/exception/IllegalStateException';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { EndShareDealCommand } from './dto/EndShareDealCommand';
-import { JoinShareDealCommand } from './dto/JoinShareDealCommand';
-import { LeaveShareDealCommand } from './dto/LeaveShareDealCommand';
-import { OpenShareDealCommand } from './dto/OpenShareDealCommand';
-import { StartShareDealCommand } from './dto/StartShareDealCommand';
-import { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
-import { NotJoinableShareDealException } from './exception/NotJoinableShareDealException';
+import type { EndShareDealCommand } from './dto/EndShareDealCommand';
+import type { JoinShareDealCommand } from './dto/JoinShareDealCommand';
+import type { LeaveShareDealCommand } from './dto/LeaveShareDealCommand';
+import type { OpenShareDealCommand } from './dto/OpenShareDealCommand';
+import type { StartShareDealCommand } from './dto/StartShareDealCommand';
+import type { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
+import type { NotJoinableShareDealException } from './exception/NotJoinableShareDealException';
 
 export type JoinChatError =
   | DBError

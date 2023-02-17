@@ -1,13 +1,13 @@
 import { TE, E } from '@app/custom/fp-ts';
 import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
-import { HttpClientPort } from '@app/domain/http/HttpClientPort';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
-import { Either } from 'fp-ts/Either';
+import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { Either } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
-import { TaskEither } from 'fp-ts/TaskEither';
+import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { AuthStrategy } from './AuthStrategy';
+import type { AuthStrategy } from './AuthStrategy';
 import { Auth } from '../../../../domain/vo/Auth';
 import { AuthType } from '../../../../domain/vo/AuthType';
 import { KakaoAuthResponse } from '../response/KakaoAuthResponse';

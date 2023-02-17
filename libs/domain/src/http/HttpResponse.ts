@@ -1,5 +1,5 @@
-import { HttpError } from '@app/domain/error/HttpError';
-import { Either } from 'fp-ts/Either';
+import type { HttpError } from '@app/domain/error/HttpError';
+import type { Either } from 'fp-ts/Either';
 
 export interface HttpResponse {
   get isOk(): boolean;

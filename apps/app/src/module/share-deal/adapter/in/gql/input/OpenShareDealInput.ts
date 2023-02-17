@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { IsPositive, Min, ValidateNested } from 'class-validator';
 
 import { CreateShareZoneInput } from './CreateShareZoneInput';
-import { UserId } from '../../../../../user/domain/User';
+import type { UserId } from '../../../../../user/domain/User';
 import { OpenShareDealCommand } from '../../../../application/port/in/dto/OpenShareDealCommand';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 

@@ -1,8 +1,9 @@
 import { E, Json } from '@app/custom/fp-ts';
 import { HttpError } from '@app/domain/error/HttpError';
-import { HttpResponse } from '@app/domain/http/HttpResponse';
+import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { plainToInstance } from 'class-transformer';
-import { Either, tryCatch } from 'fp-ts/Either';
+import type { Either } from 'fp-ts/Either';
+import { tryCatch } from 'fp-ts/Either';
 import { identity, pipe } from 'fp-ts/function';
 
 export class NodeFetchResponse implements HttpResponse {

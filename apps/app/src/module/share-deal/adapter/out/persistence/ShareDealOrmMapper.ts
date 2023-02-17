@@ -1,8 +1,9 @@
-import { ShareDeal as OrmShareDeal } from '@prisma/client';
+import type { ShareDeal as OrmShareDeal } from '@prisma/client';
 
-import { UserId } from '../../../../user/domain/User';
+import type { UserId } from '../../../../user/domain/User';
 import { AddressSystem } from '../../../../user/domain/vo/AddressSystem';
-import { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
+import type { ShareDealId } from '../../../domain/ShareDeal';
+import { ShareDeal } from '../../../domain/ShareDeal';
 import { FoodCategory } from '../../../domain/vo/FoodCategory';
 import { ParticipantInfo } from '../../../domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';

@@ -1,6 +1,6 @@
 import { PageCommand } from '@app/domain/command/PageCommand';
 
-import { FoodCategory } from '../../../../domain/vo/FoodCategory';
+import type { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 interface FindShareDealByNearestCommandParams {
   keyword?: string;

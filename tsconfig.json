@@ -76,6 +76,12 @@
       ],
       "@app/ticket-generator/*": [
         "libs/ticket-generator/src/*"
+      ],
+      "@app/monitoring": [
+        "libs/monitoring/src"
+      ],
+      "@app/monitoring/*": [
+        "libs/monitoring/src/*"
       ]
     }
   }

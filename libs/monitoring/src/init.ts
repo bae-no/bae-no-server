@@ -18,6 +18,8 @@ export const initTelemetry = (config: {
   // create an exporter to an open telemetry exporter. We create this collector instance locally using docker compose.
   const exporter = new OTLPTraceExporter({
     url: config.telemetryUrl, // e.g. "http://otel-collector:4318/v1/traces",
+    timeoutMillis: 15000,
+    concurrencyLimit: 10, // an optional limit on pending requests
   });
 
   // We add some common meta data to every trace. The service name is important.
@@ -33,7 +35,18 @@ export const initTelemetry = (config: {
 
   // The batch span provider is more efficient than the basic provider. This will batch sends to
   // the exporter you have configured
-  provider.addSpanProcessor(new BatchSpanProcessor(exporter));
+  provider.addSpanProcessor(
+    new BatchSpanProcessor(exporter, {
+      // The maximum queue size. After the size is reached spans are dropped.
+      maxQueueSize: 2048,
+      // The maximum batch size of every export. It must be smaller or equal to maxQueueSize.
+      maxExportBatchSize: 512,
+      // The interval between two consecutive exports
+      scheduledDelayMillis: 5000,
+      // How long the export can run before it is cancelled
+      exportTimeoutMillis: 30000,
+    }),
+  );
 
   // Initialize the propagator
   provider.register({
@@ -45,3 +58,12 @@ export const initTelemetry = (config: {
     instrumentations: getNodeAutoInstrumentations(),
   });
 };
+
+if (process.env.OTLP_TRACE) {
+  initTelemetry({
+    appName: 'bae-no-server',
+    telemetryUrl: 'http://localhost:4318/v1/traces',
+  });
+  // eslint-disable-next-line no-console
+  console.log('Telemetry initialized');
+}

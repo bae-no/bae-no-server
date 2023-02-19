@@ -12,7 +12,7 @@
     "prebuild": "pnpm prisma:generate && rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
+    "start": "OTLP_TRACE=ture nest start --entryFile main",
     "console": "nest start --entryFile repl",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

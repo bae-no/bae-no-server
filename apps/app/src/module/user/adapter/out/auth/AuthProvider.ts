@@ -1,5 +1,5 @@
+import { Service } from '@app/custom/nest/decorator/Service';
 import type { AuthError } from '@app/domain/error/AuthError';
-import { Injectable } from '@nestjs/common';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { AuthStrategy } from './strategy/AuthStrategy';
@@ -9,7 +9,7 @@ import { AuthProviderPort } from '../../../application/port/out/AuthProviderPort
 import type { Auth } from '../../../domain/vo/Auth';
 import { AuthType } from '../../../domain/vo/AuthType';
 
-@Injectable()
+@Service()
 export class AuthProvider extends AuthProviderPort {
   constructor(
     private readonly kakaoStrategy: KakaoAuthStrategy,

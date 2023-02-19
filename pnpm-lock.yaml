@@ -1,6 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@effect-ts/core': ^0.60.5
+  '@effect-ts/otel': ^0.14.1
   '@faker-js/faker': 7.6.0
   '@nestjs/apollo': 10.2.0
   '@nestjs/cli': 9.2.0
@@ -75,6 +77,8 @@ specifiers:
   typescript: 4.9.5
 
 dependencies:
+  '@effect-ts/core': 0.60.5
+  '@effect-ts/otel': 0.14.1_tn3sbd2r3x4i3jtgshff2q4e4i
   '@nestjs/apollo': 10.2.0_2ak7f2iiw4s7ofss6xno25zkbm
   '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
   '@nestjs/config': 2.3.1_jrq2rdgfp2sx67wmylmrqliwxe
@@ -706,6 +710,30 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
+
+  /@effect-ts/core/0.60.5:
+    resolution: {integrity: sha512-qi1WrtJA90XLMnj2hnUszW9Sx4dXP03ZJtCc5DiUBIOhF4Vw7plfb65/bdBySPoC9s7zy995TdUX1XBSxUkl5w==}
+    dependencies:
+      '@effect-ts/system': 0.57.5
+    dev: false
+
+  /@effect-ts/otel/0.14.1_tn3sbd2r3x4i3jtgshff2q4e4i:
+    resolution: {integrity: sha512-WtkxdoM1M8bl7F1mrSwBZQJAIaUXcupePrllL7iZnvSfUVhYXV98gRTV6EiVT+prX7rzCW4wPkF/XsyWbtMDtA==}
+    peerDependencies:
+      '@effect-ts/core': ^0.60.2
+      '@opentelemetry/api': ^1.1.0
+      '@opentelemetry/core': ^1.5.0
+      '@opentelemetry/sdk-trace-base': ^1.5.0
+    dependencies:
+      '@effect-ts/core': 0.60.5
+      '@opentelemetry/api': 1.4.0
+      '@opentelemetry/core': 1.9.1_@opentelemetry+api@1.4.0
+      '@opentelemetry/sdk-trace-base': 1.9.1_@opentelemetry+api@1.4.0
+    dev: false
+
+  /@effect-ts/system/0.57.5:
+    resolution: {integrity: sha512-/crHGujo0xnuHIYNc1VgP0HGJGFSoSqq88JFXe6FmFyXPpWt8Xu39LyLg7rchsxfXFeEdA9CrIZvLV5eswXV5g==}
+    dev: false
 
   /@eslint/eslintrc/1.4.1:
     resolution: {integrity: sha512-XXrH9Uarn0stsyldqDYq8r++mROmWRI1xKMXa640Bb//SY1+ECYX6VzT6Lcx5frD0V30XieqJ0oX9I2Xj5aoMA==}

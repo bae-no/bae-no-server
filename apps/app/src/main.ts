@@ -1,6 +1,7 @@
 import '@app/monitoring/init';
 
 import { BaseExceptionFilter } from '@app/custom/nest/filter/BaseExceptionFilter';
+import { EffectInterceptor } from '@app/custom/nest/interceptor/EffectInterceptor';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -12,6 +13,7 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new BaseExceptionFilter());
+  app.useGlobalInterceptors(new EffectInterceptor());
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);

@@ -1,5 +1,5 @@
+import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
-import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -8,7 +8,7 @@ import type { CreateSampleCommand } from '../port/in/dto/CreateSampleCommand';
 import { SampleCommandUseCase } from '../port/in/SampleCommandUseCase';
 import { SampleRepositoryPort } from '../port/out/SampleRepositoryPort';
 
-@Injectable()
+@Service()
 export class SampleCommandService extends SampleCommandUseCase {
   constructor(private readonly sampleRepositoryPort: SampleRepositoryPort) {
     super();

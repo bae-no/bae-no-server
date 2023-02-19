@@ -1,3 +1,5 @@
+import '@app/monitoring/init';
+
 import { BaseExceptionFilter } from '@app/custom/nest/filter/BaseExceptionFilter';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { ValidationPipe } from '@nestjs/common';

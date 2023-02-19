@@ -1,5 +1,6 @@
 import * as path from 'path';
 
+import { OTELModule } from '@app/custom/nest/aop/OTELModule';
 import { EventEmitterModule } from '@app/event-emitter/EventEmitterModule';
 import { PrismaModule } from '@app/prisma/PrismaModule';
 import { PubSubModule } from '@app/pub-sub/PubSubModule';
@@ -22,6 +23,7 @@ import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModul
 
 @Module({
   imports: [
+    OTELModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       context: (context) => {
         if (context?.extra?.request) {

@@ -1,8 +1,8 @@
 import { O, RNEA, TE } from '@app/custom/fp-ts';
+import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
-import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
 
@@ -18,7 +18,7 @@ import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
 import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
 
-@Injectable()
+@Service()
 export class ChatEventListener {
   constructor(
     private readonly pubSubPort: PubSubPort,

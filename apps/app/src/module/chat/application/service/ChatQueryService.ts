@@ -1,7 +1,7 @@
 import { O, TE } from '@app/custom/fp-ts';
+import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
-import { Injectable } from '@nestjs/common';
 import { constant, pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -16,7 +16,7 @@ import type { FindChatCommand } from '../port/in/dto/FindChatCommand';
 import { FindChatResult } from '../port/in/dto/FindChatResult';
 import { ChatQueryRepositoryPort } from '../port/out/ChatQueryRepositoryPort';
 
-@Injectable()
+@Service()
 export class ChatQueryService extends ChatQueryUseCase {
   constructor(
     private readonly shareDealQueryRepositoryPort: ShareDealQueryRepositoryPort,

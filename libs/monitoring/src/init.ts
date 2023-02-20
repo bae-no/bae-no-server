@@ -1,3 +1,4 @@
+import { T, OT, L, pipe } from '@app/custom/effect';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { W3CTraceContextPropagator } from '@opentelemetry/core';
@@ -8,13 +9,13 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
-// Set an internal logger for open telemetry to report any issues to your console/stdout
-diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.WARN);
-
 export const initTelemetry = (config: {
   appName: string;
   telemetryUrl: string;
-}): void => {
+}): NodeTracerProvider => {
+  // Set an internal logger for open telemetry to report any issues to your console/stdout
+  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.WARN);
+
   // create an exporter to an open telemetry exporter. We create this collector instance locally using docker compose.
   const exporter = new OTLPTraceExporter({
     url: config.telemetryUrl, // e.g. "http://otel-collector:4318/v1/traces",
@@ -57,13 +58,38 @@ export const initTelemetry = (config: {
   registerInstrumentations({
     instrumentations: getNodeAutoInstrumentations(),
   });
+
+  return provider;
 };
 
-if (process.env.OTLP_TRACE) {
-  initTelemetry({
-    appName: 'bae-no-server',
-    telemetryUrl: 'http://localhost:4318/v1/traces',
-  });
-  // eslint-disable-next-line no-console
-  console.log('Telemetry initialized');
-}
+export const NodeProviderLayer = (provider: NodeTracerProvider) =>
+  L.fromEffect(OT.TracerProvider)(
+    T.succeed({
+      [OT.TracerProviderSymbol]: OT.TracerProviderSymbol,
+      tracerProvider: provider,
+    }),
+  );
+
+const dummyProps = {} as any;
+export const DummyTracing = OT.Tracer.has({
+  [OT.TracerSymbol]: OT.TracerSymbol,
+  tracer: {
+    startSpan: () => ({
+      setAttribute: () => null,
+      setStatus: () => null,
+      end: () => null,
+    }),
+    ...dummyProps,
+  },
+});
+
+export const liveTracer = process.env.OTLP_TRACE
+  ? pipe(
+      initTelemetry({
+        appName: 'bae-no-server',
+        telemetryUrl: 'http://localhost:4318/v1/traces',
+      }),
+      (provider) =>
+        T.provideSomeLayer(OT.LiveTracer['<<<'](NodeProviderLayer(provider))),
+    )
+  : T.provide(DummyTracing);

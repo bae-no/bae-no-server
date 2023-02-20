@@ -1,13 +1,13 @@
 import { RNEA, TE } from '@app/custom/fp-ts';
+import { Service } from '@app/custom/nest/decorator/Service';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
-import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
 
-@Injectable()
+@Service()
 export class UserPushTokenEventListener {
   constructor(
     private readonly userPushTokenQueryRepositoryAdapter: UserPushTokenQueryRepositoryPort,

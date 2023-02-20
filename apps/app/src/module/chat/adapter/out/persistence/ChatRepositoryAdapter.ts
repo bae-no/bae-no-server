@@ -1,8 +1,8 @@
 import { TE } from '@app/custom/fp-ts';
+import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
 import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { Injectable } from '@nestjs/common';
 import { constVoid, pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -12,7 +12,7 @@ import type { UserId } from '../../../../user/domain/User';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import type { Chat } from '../../../domain/Chat';
 
-@Injectable()
+@Repository()
 export class ChatRepositoryAdapter extends ChatRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

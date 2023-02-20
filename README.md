@@ -177,6 +177,13 @@ pnpm test:unit # 유닛테스트
 pnpm test:integration # 통합테스트
 ```
 
+## Monitoring
+
+본 프로젝트는 `open-telemetry` 를 사용하여 trace 정보를 수집합니다.  
+`docker-compose.yml` 파일에 jaeger 서버가 포함되어 있으며 `pnpm start` 명령어를 통해 서버를 실행하면 jaeger 서버에 trace 정보가 수집됩니다.  
+`http://localhost:16686` 으로 접속하여 trace 정보를 확인할 수 있습니다.
+
+
 ## 개발 관련 사항
 
 ### Enum 등록

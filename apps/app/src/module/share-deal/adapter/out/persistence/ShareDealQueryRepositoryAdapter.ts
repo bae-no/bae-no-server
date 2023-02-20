@@ -1,9 +1,9 @@
 import { TE } from '@app/custom/fp-ts';
+import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
 import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { Injectable } from '@nestjs/common';
 import type { ShareDeal as OrmShareDeal } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { pipe, unsafeCoerce } from 'fp-ts/function';
@@ -20,7 +20,7 @@ import { ShareDealQueryRepositoryPort } from '../../../application/port/out/Shar
 import type { ShareDeal, ShareDealId } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
-@Injectable()
+@Repository()
 export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

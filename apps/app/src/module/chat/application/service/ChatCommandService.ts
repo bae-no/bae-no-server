@@ -1,7 +1,7 @@
 import { TE } from '@app/custom/fp-ts';
+import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -13,7 +13,7 @@ import { ChatCommandUseCase } from '../port/in/ChatCommandUseCase';
 import type { WriteChatCommand } from '../port/in/dto/WriteChatCommand';
 import { ChatRepositoryPort } from '../port/out/ChatRepositoryPort';
 
-@Injectable()
+@Service()
 export class ChatCommandService extends ChatCommandUseCase {
   constructor(
     private readonly shareDealQueryUseCase: ShareDealQueryUseCase,

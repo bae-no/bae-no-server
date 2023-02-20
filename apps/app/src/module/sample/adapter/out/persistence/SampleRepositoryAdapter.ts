@@ -1,8 +1,8 @@
 import { TE } from '@app/custom/fp-ts';
+import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
 import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { Injectable } from '@nestjs/common';
 import { pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -10,7 +10,7 @@ import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleRepositoryPort } from '../../../application/port/out/SampleRepositoryPort';
 import type { Sample } from '../../../domain/Sample';
 
-@Injectable()
+@Repository()
 export class SampleRepositoryAdapter extends SampleRepositoryPort {
   constructor(private readonly prisma: PrismaService) {
     super();

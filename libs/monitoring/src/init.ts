@@ -1,6 +1,4 @@
-import { T, OT, M, L } from '@app/custom/effect';
-import { pipe } from '@effect-ts/core';
-import { identity } from '@effect-ts/core/Function';
+import { T, OT, L, pipe } from '@app/custom/effect';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { W3CTraceContextPropagator } from '@opentelemetry/core';
@@ -64,16 +62,13 @@ export const initTelemetry = (config: {
   return provider;
 };
 
-const makeNodeTracingProvider = (tracerProvider: NodeTracerProvider) =>
-  M.gen(function* () {
-    return identity<OT.TracerProvider>({
-      [OT.TracerProviderSymbol]: OT.TracerProviderSymbol,
-      tracerProvider,
-    });
-  });
-
 export const NodeProviderLayer = (provider: NodeTracerProvider) =>
-  L.fromManaged(OT.TracerProvider)(makeNodeTracingProvider(provider));
+  L.fromEffect(OT.TracerProvider)(
+    T.succeed({
+      [OT.TracerProviderSymbol]: OT.TracerProviderSymbol,
+      tracerProvider: provider,
+    }),
+  );
 
 const dummyProps = {} as any;
 export const DummyTracing = OT.Tracer.has({

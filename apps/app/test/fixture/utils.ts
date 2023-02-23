@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import * as O from 'fp-ts/Option';
@@ -79,4 +80,30 @@ export function expectNonNullable<A>(
 
 export function gql(strings: TemplateStringsArray, ..._: string[]): string {
   return strings.join('');
+}
+
+export async function assertResolvesSuccess<L, A>(
+  e: T.IO<L, A>,
+  onSuccess: (a: A) => void = noop,
+): Promise<void> {
+  await pipe(
+    e,
+    T.fold((l) => {
+      throw new Error(`Succeed expected, got a Fail: ${l}`);
+    }, onSuccess),
+    T.runPromise,
+  );
+}
+
+export async function assertResolvesFail<L, A>(
+  e: T.IO<L, A>,
+  onFail: (a: L) => void = noop,
+): Promise<void> {
+  await pipe(
+    e,
+    T.fold(onFail, (a) => {
+      throw new Error(`Fail expected, got a Succeed: ${a}`);
+    }),
+    T.runPromise,
+  );
 }

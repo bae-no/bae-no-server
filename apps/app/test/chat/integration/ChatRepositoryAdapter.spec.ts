@@ -7,7 +7,10 @@ import { Chat } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
-import { assertResolvesRight } from '../../fixture/utils';
+import {
+  assertResolvesRight,
+  assertResolvesSuccess,
+} from '../../fixture/utils';
 
 describe('ChatRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -86,7 +89,7 @@ describe('ChatRepositoryAdapter', () => {
       const result = chatRepositoryAdapter.updateRead(shareDealId, userId);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       const updated = await prisma.chat.findMany({
         where: { shareDealId, userId },
       });

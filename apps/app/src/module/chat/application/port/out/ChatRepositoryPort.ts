@@ -1,3 +1,4 @@
+import type { T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
@@ -11,5 +12,5 @@ export abstract class ChatRepositoryPort {
   abstract updateRead(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, void>;
+  ): T.IO<DBError, void>;
 }

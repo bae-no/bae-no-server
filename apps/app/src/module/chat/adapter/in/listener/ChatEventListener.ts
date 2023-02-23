@@ -1,10 +1,10 @@
-import { O, RNEA, TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
+import { TE } from '@app/custom/fp-ts';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { OnEvent } from '@nestjs/event-emitter';
-import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
@@ -30,20 +30,21 @@ export class ChatEventListener {
 
   @OnEvent(ChatReadEvent.name, { async: true })
   async handleChatReadEvent(event: ChatReadEvent) {
-    await this.chatRepositoryPort.updateRead(event.shareDealId, event.userId)();
+    await pipe(
+      this.chatRepositoryPort.updateRead(event.shareDealId, event.userId),
+      T.runPromise,
+    );
   }
 
   @OnEvent(ChatWrittenEvent.name, { async: true })
   handleChatWrittenEvent(event: ChatWrittenEvent) {
-    pipe(
-      RNEA.fromArray(event.chats),
-      O.map(RNEA.head),
-      O.map((chat) =>
-        this.pubSubPort.publish(
-          ChatWrittenTrigger(chat.shareDealId),
-          ChatWrittenResponse.of(chat.message),
-        ),
-      ),
+    if (Array.isArray(event.chats) && event.chats.length === 0) {
+      return;
+    }
+
+    this.pubSubPort.publish(
+      ChatWrittenTrigger(event.chats[0].shareDealId),
+      ChatWrittenResponse.of(event.chats[0].message),
     );
   }
 

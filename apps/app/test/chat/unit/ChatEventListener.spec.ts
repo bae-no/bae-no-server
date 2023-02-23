@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
@@ -8,6 +9,7 @@ import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/res
 import { ChatEventListener } from '../../../src/module/chat/adapter/in/listener/ChatEventListener';
 import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
 import type { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
+import { ChatReadEvent } from '../../../src/module/chat/domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import type { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealClosedEvent } from '../../../src/module/share-deal/domain/event/ShareDealClosedEvent';
@@ -38,6 +40,23 @@ describe('ChatEventListener', () => {
     mockReset(shareDealQueryRepositoryPort);
     mockReset(chatRepositoryPort);
     mockReset(ticketGeneratorPort);
+  });
+
+  describe('handleChatReadEvent', () => {
+    it('채팅 작성 메시지를 전송한다', async () => {
+      // given
+      const userId = UserId('');
+      const shareDealId = ShareDealId('');
+      const event = new ChatReadEvent(userId, shareDealId);
+
+      chatRepositoryPort.updateRead.mockReturnValue(T.unit);
+
+      // when
+      await chatEventListener.handleChatReadEvent(event);
+
+      // then
+      expect(chatRepositoryPort.updateRead).toBeCalled();
+    });
   });
 
   describe('handleChatWrittenEvent', () => {

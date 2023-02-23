@@ -1,9 +1,9 @@
+import { T, pipe, constVoid } from '@app/custom/effect';
 import { TE } from '@app/custom/fp-ts';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDB, tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { constVoid, pipe } from 'fp-ts/function';
 import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
@@ -34,15 +34,15 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
   override updateRead(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, void> {
+  ): T.IO<DBError, void> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.chat.updateMany({
           where: { shareDealId, userId },
           data: { message: { update: { unread: false } } },
         }),
       ),
-      TE.map(constVoid),
+      T.map(constVoid),
     );
   }
 }

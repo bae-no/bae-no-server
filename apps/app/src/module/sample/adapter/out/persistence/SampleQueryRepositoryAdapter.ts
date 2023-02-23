@@ -1,12 +1,9 @@
-import { O, TE } from '@app/custom/fp-ts';
+import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { Sample as OrmSample } from '@prisma/client';
-import { pipe } from 'fp-ts/function';
-import type { Option } from 'fp-ts/Option';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleQueryRepositoryPort } from '../../../application/port/out/SampleQueryRepositoryPort';
@@ -18,14 +15,14 @@ export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
     super();
   }
 
-  override findById(id: SampleId): TaskEither<DBError, Option<Sample>> {
+  override findById(id: SampleId): T.IO<DBError, O.Option<Sample>> {
     return pipe(
-      tryCatchDB(() => this.prisma.sample.findFirst({ where: { id } })),
-      TE.map(this.toDomainSample),
+      tryCatchDBE(() => this.prisma.sample.findFirst({ where: { id } })),
+      T.map(this.toDomainSample),
     );
   }
 
-  private toDomainSample(ormEntity: OrmSample | null): Option<Sample> {
+  private toDomainSample(ormEntity: OrmSample | null): O.Option<Sample> {
     return pipe(O.fromNullable(ormEntity), O.map(SampleOrmMapper.toDomain));
   }
 }

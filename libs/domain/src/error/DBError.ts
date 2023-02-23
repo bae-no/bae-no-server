@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import { toError } from 'fp-ts/Either';
 import type { Lazy } from 'fp-ts/function';
 import { pipe } from 'fp-ts/function';
@@ -14,4 +15,8 @@ export class DBError extends Error {
 
 export function tryCatchDB<T>(f: Lazy<Promise<T>>): TaskEither<DBError, T> {
   return pipe(tryCatch(f, (e) => new DBError(toError(e))));
+}
+
+export function tryCatchDBE<E>(f: Lazy<Promise<E>>): T.IO<DBError, E> {
+  return T.tryCatchPromise(f, (e) => new DBError(toError(e)));
 }

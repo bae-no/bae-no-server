@@ -1,8 +1,7 @@
+import { T } from '@app/custom/effect';
 import type { NotificationError } from '@app/domain/error/NotificationError';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { Module } from '@nestjs/common';
-import type { TaskEither } from 'fp-ts/TaskEither';
-import { right } from 'fp-ts/TaskEither';
 
 export class StubPushMessage extends PushMessagePort {
   pushToken = '';
@@ -13,14 +12,11 @@ export class StubPushMessage extends PushMessagePort {
     this.content = '';
   }
 
-  send(
-    pushToken: string,
-    content: string,
-  ): TaskEither<NotificationError, void> {
+  send(pushToken: string, content: string): T.IO<NotificationError, void> {
     this.pushToken = pushToken;
     this.content = content;
 
-    return right(undefined);
+    return T.unit;
   }
 }
 

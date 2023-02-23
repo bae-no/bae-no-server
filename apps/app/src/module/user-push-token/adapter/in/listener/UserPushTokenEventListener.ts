@@ -1,8 +1,7 @@
-import { RNEA, TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import { OnEvent } from '@nestjs/event-emitter';
-import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
@@ -16,20 +15,23 @@ export class UserPushTokenEventListener {
 
   @OnEvent(ChatWrittenEvent.name, { async: true })
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
+    const userIds = event.chatsWithoutAuthor.map((chat) => chat.userId);
+
+    if (!userIds.length) {
+      return;
+    }
+
     await pipe(
-      RNEA.fromArray(event.chatsWithoutAuthor),
-      TE.fromOption(() => undefined),
-      TE.map(RNEA.map((chat) => chat.id)),
-      TE.chainW((ids) =>
-        this.userPushTokenQueryRepositoryAdapter.findByUserIds(ids),
-      ),
-      TE.chainW((tokens) =>
-        TE.sequenceArray(
+      this.userPushTokenQueryRepositoryAdapter.findByUserIds(userIds),
+      T.chain((tokens) =>
+        pipe(
           tokens.map((token) =>
             this.pushMessagePort.send(token.token, event.chats[0].content),
           ),
+          T.collectAllPar,
         ),
       ),
-    )();
+      T.runPromise,
+    );
   }
 }

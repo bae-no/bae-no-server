@@ -1,11 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, constVoid, pipe } from '@app/custom/effect';
 import { NotificationError } from '@app/domain/error/NotificationError';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
 import type { Messaging } from 'firebase-admin/lib/messaging';
 import { toError } from 'fp-ts/Either';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
-import { tryCatch } from 'fp-ts/TaskEither';
 
 export class PushMessageAdapter extends PushMessagePort {
   constructor(private readonly messaging: Messaging) {
@@ -15,9 +12,9 @@ export class PushMessageAdapter extends PushMessagePort {
   override send(
     pushToken: string,
     content: string,
-  ): TaskEither<NotificationError, void> {
+  ): T.IO<NotificationError, void> {
     return pipe(
-      tryCatch(
+      T.tryCatchPromise(
         async () =>
           this.messaging.send({
             token: pushToken,
@@ -25,7 +22,7 @@ export class PushMessageAdapter extends PushMessagePort {
           }),
         (e) => new NotificationError(toError(e)),
       ),
-      TE.map(constVoid),
+      T.map(constVoid),
     );
   }
 }

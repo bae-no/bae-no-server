@@ -1,6 +1,5 @@
 import { O, T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -104,7 +103,7 @@ describe('UserQueryResolver', () => {
         ),
       );
 
-      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
 
       // when
       const response = await request(app.getHttpServer())
@@ -155,7 +154,7 @@ describe('UserQueryResolver', () => {
         profile: new Profile('uri', 'introduce'),
       });
 
-      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
 
       // when
       const response = await request(app.getHttpServer())
@@ -195,7 +194,7 @@ describe('UserQueryResolver', () => {
         profile: new Profile('userId', 'introduce'),
       });
 
-      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
 
       // when
       const response = await request(app.getHttpServer())

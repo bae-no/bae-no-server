@@ -63,7 +63,7 @@ describe('PhoneVerificationService', () => {
       );
 
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       const notFoundException = new NotFoundException('');
       phoneVerificationRepository.findLatest.mockReturnValue(
         T.fail(notFoundException),
@@ -87,7 +87,7 @@ describe('PhoneVerificationService', () => {
       );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
 
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       phoneVerificationRepository.findLatest.mockReturnValue(
         T.succeed(phoneVerification),
       );
@@ -110,7 +110,7 @@ describe('PhoneVerificationService', () => {
       );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
 
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       phoneVerificationRepository.findLatest.mockReturnValue(
         T.succeed(phoneVerification),
       );

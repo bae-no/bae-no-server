@@ -57,7 +57,7 @@ export class UserCommandService extends UserCommandUseCase {
     command: EnrollUserCommand,
   ): T.IO<DBError | NotFoundException, void> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(command.userId),
+      this.userQueryRepositoryPort.findById(command.userId),
       T.map((user) => user.enroll(command.nickname, command.toAddress())),
       T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       T.map(constVoid),
@@ -69,7 +69,7 @@ export class UserCommandService extends UserCommandUseCase {
     now = new Date(),
   ): T.IO<DBError, void> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(command.userId),
+      this.userQueryRepositoryPort.findById(command.userId),
       T.map((user) => user.leave(command.name, command.reason, now)),
       T.chain((user) => this.userRepositoryPort.save(user)),
       T.map(constVoid),
@@ -80,7 +80,7 @@ export class UserCommandService extends UserCommandUseCase {
     command: AppendAddressCommand,
   ): T.IO<DBError | IllegalStateException, void> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(command.userId),
+      this.userQueryRepositoryPort.findById(command.userId),
       T.chain((user) =>
         T.fromEither(() => user.appendAddress(command.toAddress())),
       ),
@@ -91,7 +91,7 @@ export class UserCommandService extends UserCommandUseCase {
 
   override deleteAddress(command: DeleteAddressCommand): T.IO<DBError, void> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(command.userId),
+      this.userQueryRepositoryPort.findById(command.userId),
       T.map((user) => user.deleteAddress(command.key)),
       T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       T.map(constVoid),
@@ -100,7 +100,7 @@ export class UserCommandService extends UserCommandUseCase {
 
   override updateProfile(command: UpdateProfileCommand): T.IO<DBError, void> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(command.userId),
+      this.userQueryRepositoryPort.findById(command.userId),
       T.map((user) => user.updateProfile(command.introduce)),
       T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
       T.map(constVoid),

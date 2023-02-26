@@ -47,7 +47,7 @@ export class PhoneVerificationService extends PhoneVerificationUseCase {
         verification: this.phoneVerificationRepositoryPort.findLatest(
           command.userId,
         ),
-        user: this.userQueryRepositoryPort.findByIdE(command.userId),
+        user: this.userQueryRepositoryPort.findById(command.userId),
       }),
       T.chain(({ verification, user }) =>
         T.fromEither(() =>

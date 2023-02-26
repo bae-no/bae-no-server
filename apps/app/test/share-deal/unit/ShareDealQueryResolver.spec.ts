@@ -191,7 +191,7 @@ describe('ShareDealQueryResolver', () => {
         zone: new ShareZone(AddressSystem.JIBUN, 'road', 'detail', 123.5, 45.6),
       });
 
-      userQueryRepositoryPort.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
       shareDealQueryRepositoryPort.findByNearest.mockReturnValue(
         T.succeed([shareDeal]),
       );

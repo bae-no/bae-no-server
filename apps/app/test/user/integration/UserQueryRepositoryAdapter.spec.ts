@@ -9,8 +9,7 @@ import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import {
   assertNone,
-  assertResolvesLeft,
-  assertResolvesRight,
+  assertResolvesFail,
   assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
@@ -63,7 +62,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findById(id);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err).toBeInstanceOf(NotFoundException);
       });
     });
@@ -79,7 +78,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findById(UserId(user.id));
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).toBe(user.id);
       });
     });

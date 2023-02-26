@@ -45,7 +45,7 @@ export class ShareDealQueryResolver {
     @CurrentSession() session: Session,
   ): T.IO<DBError | NotFoundException, ShareDealResponse> {
     return pipe(
-      this.userQueryRepositoryPort.findByIdE(session.id),
+      this.userQueryRepositoryPort.findById(session.id),
       T.map((user) => user.findAddress(input.addressKey)),
       T.chain((address) =>
         address

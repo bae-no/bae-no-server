@@ -109,7 +109,7 @@ describe('UserCommandService', () => {
 
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
@@ -135,7 +135,7 @@ describe('UserCommandService', () => {
       );
 
       const exception = new NotFoundException('user not found');
-      userQueryRepository.findByIdE.mockReturnValue(T.fail(exception));
+      userQueryRepository.findById.mockReturnValue(T.fail(exception));
 
       // when
       const result = userCommandService.enroll(command);
@@ -157,7 +157,7 @@ describe('UserCommandService', () => {
 
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
@@ -202,7 +202,7 @@ describe('UserCommandService', () => {
         addressList: UserAddressList.of(addresses),
       });
 
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
@@ -227,7 +227,7 @@ describe('UserCommandService', () => {
       );
       const user = UserFactory.create();
 
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
@@ -276,7 +276,7 @@ describe('UserCommandService', () => {
           ),
         ]),
       });
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
@@ -296,7 +296,7 @@ describe('UserCommandService', () => {
       const command = new UpdateProfileCommand(UserId('userId'), 'introduce');
       const user = UserFactory.create();
 
-      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       userRepository.save.mockReturnValue(T.succeed(user));
 
       // when

@@ -1,12 +1,10 @@
 import { T, O, pipe } from '@app/custom/effect';
-import { TE } from '@app/custom/fp-ts';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB, tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { User as OrmUser } from '@prisma/client';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserOrmMapper } from './UserOrmMapper';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
@@ -35,20 +33,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
     );
   }
 
-  override findById(id: UserId): TaskEither<DBError | NotFoundException, User> {
-    return pipe(
-      tryCatchDB(() => this.prisma.user.findUnique({ where: { id } })),
-      TE.chainW((ormUser) =>
-        ormUser
-          ? TE.right(UserOrmMapper.toDomain(ormUser))
-          : TE.left(
-              new NotFoundException(`사용자가 존재하지 않습니다: id=${id}`),
-            ),
-      ),
-    );
-  }
-
-  override findByIdE(id: UserId): T.IO<DBError | NotFoundException, User> {
+  override findById(id: UserId): T.IO<DBError | NotFoundException, User> {
     return pipe(
       tryCatchDBE(() => this.prisma.user.findUnique({ where: { id } })),
       T.chain((ormUser) =>

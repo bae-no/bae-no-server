@@ -1,3 +1,4 @@
+import type { T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
 import type { Option } from 'fp-ts/Option';
@@ -11,7 +12,9 @@ export abstract class UserQueryRepositoryPort {
 
   abstract findById(id: UserId): TaskEither<DBError | NotFoundException, User>;
 
-  abstract findByIds(ids: UserId[]): TaskEither<DBError, User[]>;
+  abstract findByIdE(id: UserId): T.IO<DBError | NotFoundException, User>;
+
+  abstract findByIds(ids: UserId[]): T.IO<DBError, User[]>;
 
   abstract findByNickname(nickname: string): TaskEither<DBError, Option<User>>;
 }

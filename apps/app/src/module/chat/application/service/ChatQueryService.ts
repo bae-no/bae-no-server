@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import { O, TE } from '@app/custom/fp-ts';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
@@ -80,23 +81,18 @@ export class ChatQueryService extends ChatQueryUseCase {
 
   override findByUser(
     command: FindChatByUserCommand,
-  ): TaskEither<DBError, FindByUserDto[]> {
+  ): T.IO<DBError, FindByUserDto[]> {
     return pipe(
-      TE.Do,
-      TE.apS('chats', this.chatQueryRepository.findByUser(command)),
-      TE.bind('authors', ({ chats }) =>
-        this.userQueryRepositoryPort.findByIds(
-          chats.map((chat) => chat.message.authorId),
-        ),
+      this.chatQueryRepository.findByUser(command),
+      T.chain((chats) =>
+        T.structPar({
+          chats: T.succeed(chats),
+          authors: this.userQueryRepositoryPort.findByIds(
+            chats.map((chat) => chat.message.authorId),
+          ),
+        }),
       ),
-      TE.map((result) => {
-        this.eventEmitterPort.emit(
-          new ChatReadEvent(command.userId, command.shareDealId),
-        );
-
-        return result;
-      }),
-      TE.map(({ chats, authors }) =>
+      T.map(({ chats, authors }) =>
         chats.map(
           (chat) =>
             new FindByUserDto(
@@ -105,6 +101,13 @@ export class ChatQueryService extends ChatQueryUseCase {
                 (author) => author.id === chat.message.authorId,
               ) as User,
             ),
+        ),
+      ),
+      T.tap(() =>
+        T.succeedWith(() =>
+          this.eventEmitterPort.emit(
+            new ChatReadEvent(command.userId, command.shareDealId),
+          ),
         ),
       ),
     );

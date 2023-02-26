@@ -11,6 +11,7 @@ import {
   assertNone,
   assertResolvesLeft,
   assertResolvesRight,
+  assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
 
@@ -130,7 +131,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByIds(ids);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(0);
       });
     });
@@ -146,7 +147,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByIds([UserId(user.id)]);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(1);
         expect(value[0].id).toBe(user.id);
       });

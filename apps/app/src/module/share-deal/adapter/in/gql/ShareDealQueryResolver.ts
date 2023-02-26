@@ -1,7 +1,7 @@
-import { TE, toResponse } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
+import type { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import { identity, pipe } from 'fp-ts/function';
 
 import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
@@ -23,75 +23,82 @@ export class ShareDealQueryResolver {
   ) {}
 
   @Query(() => ShareDealResponse, { description: '공유딜 목록' })
-  async shareDeals(
+  shareDeals(
     @Args('input') input: FindShareDealInput,
-  ): Promise<ShareDealResponse> {
-    const command = input.toCommand();
-
+  ): T.IO<DBError, ShareDealResponse> {
     return pipe(
-      TE.Do,
-      TE.apS('items', this.shareDealQueryRepositoryPort.find(command)),
-      TE.apS('total', this.shareDealQueryRepositoryPort.count(command)),
-      toResponse(({ items, total }) => ShareDealResponse.of(items, total)),
-    )();
+      input.toCommand(),
+      (command) =>
+        T.structPar({
+          items: this.shareDealQueryRepositoryPort.find(command),
+          total: this.shareDealQueryRepositoryPort.count(command),
+        }),
+      T.map(({ items, total }) => ShareDealResponse.of(items, total)),
+    );
   }
 
   @Query(() => ShareDealResponse, {
     description: '공유딜 목록 (가까운 순)',
   })
-  async shareDealsByNearest(
+  shareDealsByNearest(
     @Args('input') input: FindShareDealByNearestInput,
     @CurrentSession() session: Session,
-  ): Promise<ShareDealResponse> {
+  ): T.IO<DBError | NotFoundException, ShareDealResponse> {
     return pipe(
-      this.userQueryRepositoryPort.findById(session.id),
-      TE.map((user) => user.findAddress(input.addressKey)),
-      TE.chainW((address) =>
+      this.userQueryRepositoryPort.findByIdE(session.id),
+      T.map((user) => user.findAddress(input.addressKey)),
+      T.chain((address) =>
         address
-          ? TE.right(address)
-          : TE.left(new NotFoundException('주소가 존재하지 않습니다.')),
+          ? T.succeed(address)
+          : T.fail(new NotFoundException('주소가 존재하지 않습니다.')),
       ),
-      TE.map((address) => input.toCommand(address.coordinate)),
-      TE.bindTo('command'),
-      TE.bindW('items', ({ command }) =>
-        this.shareDealQueryRepositoryPort.findByNearest(command),
+      T.map((address) => input.toCommand(address.coordinate)),
+      T.chain((command) =>
+        T.structPar({
+          items: this.shareDealQueryRepositoryPort.findByNearest(command),
+          total: this.shareDealQueryRepositoryPort.count(command),
+        }),
       ),
-      TE.bindW('total', ({ command }) =>
-        this.shareDealQueryRepositoryPort.count(command),
-      ),
-      toResponse(({ items, total }) => ShareDealResponse.of(items, total)),
-    )();
+      T.map(({ items, total }) => ShareDealResponse.of(items, total)),
+    );
   }
 
   @Query(() => Int, { description: '내가 참여완료한 공유딜 개수' })
-  async myEndDealCount(@CurrentSession() session: Session): Promise<number> {
-    return pipe(
-      this.shareDealQueryRepositoryPort.countByStatus(
-        session.id,
-        ShareDealStatus.END,
-      ),
-      toResponse(identity),
-    )();
+  myEndDealCount(@CurrentSession() session: Session): T.IO<DBError, number> {
+    return this.shareDealQueryRepositoryPort.countByStatus(
+      session.id,
+      ShareDealStatus.END,
+    );
   }
 
   @Query(() => ShareDealStatusResponse, { description: '공유딜 상태보기' })
-  async shareDealStatus(
+  shareDealStatus(
     @Args('input') input: FindShareDealStatusInput,
     @CurrentSession() session: Session,
-  ): Promise<ShareDealStatusResponse> {
+  ): T.IO<
+    DBError | NotFoundException | ShareDealAccessDeniedException,
+    ShareDealStatusResponse
+  > {
     return pipe(
-      this.shareDealQueryRepositoryPort.findById(input.shareDealId),
-      TE.filterOrElseW(
+      this.shareDealQueryRepositoryPort.findByIdE(input.shareDealId),
+      T.filterOrElse(
         (shareDeal) => shareDeal.participantInfo.hasId(session.id),
-        () => new ShareDealAccessDeniedException('공유딜 참여자가 아닙니다.'),
+        () =>
+          T.fail(
+            new ShareDealAccessDeniedException('공유딜 참여자가 아닙니다.'),
+          ),
       ),
-      TE.bindTo('shareDeal'),
-      TE.bind('users', ({ shareDeal }) =>
-        this.userQueryRepositoryPort.findByIds(shareDeal.participantInfo.ids),
+      T.chain((shareDeal) =>
+        T.structPar({
+          shareDeal: T.succeed(shareDeal),
+          users: this.userQueryRepositoryPort.findByIds(
+            shareDeal.participantInfo.ids,
+          ),
+        }),
       ),
-      toResponse(({ shareDeal, users }) =>
+      T.map(({ shareDeal, users }) =>
         ShareDealStatusResponse.of(shareDeal, users, session.id),
       ),
-    )();
+    );
   }
 }

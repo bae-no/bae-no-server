@@ -1,7 +1,8 @@
+import { T } from '@app/custom/effect';
 import { O, TE } from '@app/custom/fp-ts';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDB, tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { pipe } from 'fp-ts/function';
 import type { Option } from 'fp-ts/Option';
@@ -54,11 +55,9 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     );
   }
 
-  override findByUser(
-    command: FindChatByUserCommand,
-  ): TaskEither<DBError, Chat[]> {
+  override findByUser(command: FindChatByUserCommand): T.IO<DBError, Chat[]> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.chat.findMany({
           where: { shareDealId: command.shareDealId, userId: command.userId },
           ...(command.cursor ? { cursor: { orderedKey: command.cursor } } : {}),
@@ -66,7 +65,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
           orderBy: { orderedKey: 'desc' },
         }),
       ),
-      TE.map((chats) => chats.map(ChatOrmMapper.toDomain)),
+      T.map((chats) => chats.map(ChatOrmMapper.toDomain)),
     );
   }
 }

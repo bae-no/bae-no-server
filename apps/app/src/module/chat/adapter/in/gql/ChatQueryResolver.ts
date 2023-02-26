@@ -1,4 +1,6 @@
+import { T } from '@app/custom/effect';
 import { toResponseArray } from '@app/custom/fp-ts';
+import type { DBError } from '@app/domain/error/DBError';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
@@ -27,14 +29,16 @@ export class ChatQueryResolver {
   }
 
   @Query(() => [ChatDetailResponse], { description: '채팅방 상세' })
-  async chatDetail(
+  chatDetail(
     @Args('input') input: FindChatDetailInput,
     @CurrentSession() session: Session,
-  ): Promise<ChatDetailResponse[]> {
+  ): T.IO<DBError, ChatDetailResponse[]> {
     return pipe(
       input.toCommand(session.id),
       (command) => this.chatQueryUseCase.findByUser(command),
-      toResponseArray((dto) => ChatDetailResponse.of(dto, session.id)),
-    )();
+      T.map((dtoList) =>
+        dtoList.map((dto) => ChatDetailResponse.of(dto, session.id)),
+      ),
+    );
   }
 }

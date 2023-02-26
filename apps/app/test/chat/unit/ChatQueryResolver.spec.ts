@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
@@ -118,7 +119,7 @@ describe('ChatQueryResolver', () => {
         UserFactory.create({ id: UserId('id'), nickname: 'nickname' }),
       );
 
-      chatQueryUseCase.findByUser.mockReturnValue(right([chatByUserDto]));
+      chatQueryUseCase.findByUser.mockReturnValue(T.succeed([chatByUserDto]));
 
       const input = new FindChatDetailInput();
       input.shareDealId = ShareDealId('shareDealId');

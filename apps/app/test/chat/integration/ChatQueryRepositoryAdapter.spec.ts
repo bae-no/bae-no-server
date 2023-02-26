@@ -11,6 +11,7 @@ import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   assertNone,
   assertResolvesRight,
+  assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
 
@@ -158,7 +159,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (result) => {
+      await assertResolvesSuccess(result, (result) => {
         expect(result.length).toBe(2);
         expect(result[0].orderedKey).toBe(chats[1].orderedKey);
         expect(result[1].orderedKey).toBe(chats[0].orderedKey);

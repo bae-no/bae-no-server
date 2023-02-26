@@ -1,6 +1,5 @@
-import { E, T } from '@app/custom/effect';
-import type { Lazy } from 'fp-ts/function';
-import { pipe } from 'fp-ts/function';
+import type { Lazy } from '@app/custom/effect';
+import { E, T, pipe } from '@app/custom/effect';
 import type { TaskEither } from 'fp-ts/TaskEither';
 import { tryCatch } from 'fp-ts/TaskEither';
 

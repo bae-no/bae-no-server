@@ -10,12 +10,7 @@ import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/Partic
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
-import {
-  assertResolvesFail,
-  assertResolvesLeft,
-  assertResolvesRight,
-  assertResolvesSuccess,
-} from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ShareDealQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
@@ -41,7 +36,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesLeft(result, (exception) => {
+      await assertResolvesFail(result, (exception) => {
         expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
@@ -65,7 +60,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
     });
   });
 

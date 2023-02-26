@@ -1,10 +1,7 @@
-import { T } from '@app/custom/effect';
-import { TE } from '@app/custom/fp-ts';
+import { constVoid, pipe, T } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { UserId } from '../../../user/domain/User';
 import type { ShareDealId } from '../../domain/ShareDeal';
@@ -23,14 +20,17 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
   override isParticipant(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError | ShareDealAccessDeniedException, void> {
+  ): T.IO<DBError | ShareDealAccessDeniedException, void> {
     return pipe(
-      this.shareDealQueryRepositoryPort.findById(shareDealId),
-      TE.filterOrElseW(
+      this.shareDealQueryRepositoryPort.findByIdE(shareDealId),
+      T.filterOrElse(
         (shareDeal) => shareDeal.participantInfo.hasId(userId),
-        () => new ShareDealAccessDeniedException('채팅에 참여할 수 없습니다.'),
+        () =>
+          T.fail(
+            new ShareDealAccessDeniedException('채팅에 참여할 수 없습니다.'),
+          ),
       ),
-      TE.map(constVoid),
+      T.map(constVoid),
     );
   }
 

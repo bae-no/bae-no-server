@@ -1,7 +1,6 @@
+import { O, T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { none, some } from 'fp-ts/Option';
-import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { AppendAddressCommand } from '../../../src/module/user/application/port/in/dto/AppendAddressCommand';
@@ -25,8 +24,8 @@ import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import { UserAddressList } from '../../../src/module/user/domain/vo/UserAddressList';
 import { UserFactory } from '../../fixture/UserFactory';
 import {
-  assertResolvesLeft,
-  assertResolvesRight,
+  assertResolvesFail,
+  assertResolvesSuccess,
   expectNonNullable,
 } from '../../fixture/utils';
 
@@ -57,16 +56,16 @@ describe('UserCommandService', () => {
       const user = User.byAuth(auth);
       const authToken = new AuthToken('token', new Date());
 
-      authQueryRepository.findOne.mockReturnValue(right(auth));
-      userQueryRepository.findByAuth.mockReturnValue(right(none));
-      userRepository.save.mockReturnValue(right(user));
+      authQueryRepository.findOne.mockReturnValue(T.succeed(auth));
+      userQueryRepository.findByAuth.mockReturnValue(T.succeed(O.none));
+      userRepository.save.mockReturnValue(T.succeed(user));
       tokenGenerator.generateByUser.mockReturnValue(authToken);
 
       // when
       const result = userCommandService.signIn(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.user).toStrictEqual(user);
         expect(value.authToken).toStrictEqual(authToken);
       });
@@ -79,15 +78,15 @@ describe('UserCommandService', () => {
       const user = User.byAuth(auth);
       const authToken = new AuthToken('token', new Date());
 
-      authQueryRepository.findOne.mockReturnValue(right(auth));
-      userQueryRepository.findByAuth.mockReturnValue(right(some(user)));
+      authQueryRepository.findOne.mockReturnValue(T.succeed(auth));
+      userQueryRepository.findByAuth.mockReturnValue(T.succeed(O.some(user)));
       tokenGenerator.generateByUser.mockReturnValue(authToken);
 
       // when
       const result = userCommandService.signIn(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.user).toStrictEqual(user);
         expect(value.authToken).toStrictEqual(authToken);
       });
@@ -110,14 +109,14 @@ describe('UserCommandService', () => {
 
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.enroll(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expect(user.nickname).toBe(command.nickname);
       expect(user.addresses[0]).toStrictEqual(command.toAddress());
     });
@@ -136,13 +135,13 @@ describe('UserCommandService', () => {
       );
 
       const exception = new NotFoundException('user not found');
-      userQueryRepository.findById.mockReturnValue(left(exception));
+      userQueryRepository.findByIdE.mockReturnValue(T.fail(exception));
 
       // when
       const result = userCommandService.enroll(command);
 
       // then
-      await assertResolvesLeft(result, (err) => expect(err).toBe(exception));
+      await assertResolvesFail(result, (err) => expect(err).toBe(exception));
     });
   });
 
@@ -158,14 +157,14 @@ describe('UserCommandService', () => {
 
       const auth = new Auth('socialId', AuthType.GOOGLE);
       const user = User.byAuth(auth);
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.leave(command, now);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expectNonNullable(user.leaveReason);
       expect(user.leaveReason.createdAt).toStrictEqual(now);
       expect(user.leaveReason.name).toBe(command.name);
@@ -203,14 +202,14 @@ describe('UserCommandService', () => {
         addressList: UserAddressList.of(addresses),
       });
 
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.appendAddress(command);
 
       // then
-      await assertResolvesLeft(result, (error) => {
+      await assertResolvesFail(result, (error) => {
         expect(error).toBeInstanceOf(IllegalStateException);
       });
     });
@@ -228,14 +227,14 @@ describe('UserCommandService', () => {
       );
       const user = UserFactory.create();
 
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.appendAddress(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expect(user.addresses).toHaveLength(1);
       expect(user.addresses[0]).toStrictEqual(command.toAddress());
     });
@@ -277,14 +276,14 @@ describe('UserCommandService', () => {
           ),
         ]),
       });
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.deleteAddress(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expect(user.addresses).toHaveLength(2);
       expect(user.addresses[0].alias).toBe('alias1');
       expect(user.addresses[1].alias).toBe('alias3');
@@ -297,14 +296,14 @@ describe('UserCommandService', () => {
       const command = new UpdateProfileCommand(UserId('userId'), 'introduce');
       const user = UserFactory.create();
 
-      userQueryRepository.findById.mockReturnValue(right(user));
-      userRepository.save.mockReturnValue(right(user));
+      userQueryRepository.findByIdE.mockReturnValue(T.succeed(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = userCommandService.updateProfile(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expect(user.profile.introduce).toBe(command.introduce);
     });
   });

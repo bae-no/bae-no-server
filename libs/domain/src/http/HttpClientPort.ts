@@ -1,6 +1,6 @@
+import type { T } from '@app/custom/effect';
 import type { HttpError } from '@app/domain/error/HttpError';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 export interface HttpOption {
   headers?: Record<string, string>;
@@ -10,28 +10,22 @@ export interface HttpOption {
 }
 
 export abstract class HttpClientPort {
-  abstract get(
-    url: string,
-    option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse>;
+  abstract get(url: string, option?: HttpOption): T.IO<HttpError, HttpResponse>;
 
   abstract post(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse>;
+  ): T.IO<HttpError, HttpResponse>;
 
-  abstract put(
-    url: string,
-    option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse>;
+  abstract put(url: string, option?: HttpOption): T.IO<HttpError, HttpResponse>;
 
   abstract patch(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse>;
+  ): T.IO<HttpError, HttpResponse>;
 
   abstract delete(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse>;
+  ): T.IO<HttpError, HttpResponse>;
 }

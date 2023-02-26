@@ -5,7 +5,7 @@ import { UserRepositoryAdapter } from '../../../src/module/user/adapter/out/pers
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesSuccess } from '../../fixture/utils';
 
 describe('UserRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -23,7 +23,7 @@ describe('UserRepositoryAdapter', () => {
       const result = userRepositoryAdapter.save(user);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).toBeTruthy();
         expect(value.auth).toStrictEqual(auth);
       });
@@ -41,7 +41,7 @@ describe('UserRepositoryAdapter', () => {
       const result = userRepositoryAdapter.save(newUser);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).toBe(newUser.id);
         expect(value.profile.introduce).toStrictEqual('new introduction');
       });

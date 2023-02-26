@@ -1,5 +1,5 @@
+import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -74,7 +74,7 @@ describe('UserMutationResolver', () => {
       const auth = new Auth('socialId', AuthType.APPLE);
       const user = User.byAuth(auth);
       userCommandUseCase.signIn.mockReturnValue(
-        right(new SignInUserDto(authToken, user)),
+        T.succeed(new SignInUserDto(authToken, user)),
       );
 
       // when
@@ -170,7 +170,7 @@ describe('UserMutationResolver', () => {
         }
       `;
 
-      userCommandUseCase.enroll.mockReturnValue(right(undefined));
+      userCommandUseCase.enroll.mockReturnValue(T.unit);
       setMockUser();
 
       // when
@@ -202,7 +202,7 @@ describe('UserMutationResolver', () => {
         }
       `;
 
-      userCommandUseCase.leave.mockReturnValue(right(undefined));
+      userCommandUseCase.leave.mockReturnValue(T.unit);
       setMockUser();
 
       // when
@@ -245,7 +245,7 @@ describe('UserMutationResolver', () => {
         }
       `;
 
-      userCommandUseCase.leave.mockReturnValue(right(undefined));
+      userCommandUseCase.leave.mockReturnValue(T.unit);
       setMockUser();
 
       // when
@@ -283,7 +283,7 @@ describe('UserMutationResolver', () => {
         }
       `;
 
-      userCommandUseCase.appendAddress.mockReturnValue(right(undefined));
+      userCommandUseCase.appendAddress.mockReturnValue(T.unit);
       setMockUser();
 
       // when
@@ -311,7 +311,7 @@ describe('UserMutationResolver', () => {
         }
       `;
 
-      userCommandUseCase.deleteAddress.mockReturnValue(right(undefined));
+      userCommandUseCase.deleteAddress.mockReturnValue(T.unit);
       setMockUser();
 
       // when
@@ -342,7 +342,7 @@ describe('UserMutationResolver', () => {
       const input = new UpdateProfileInput();
       input.introduce = 'introduce';
 
-      userCommandUseCase.updateProfile.mockReturnValue(right(undefined));
+      userCommandUseCase.updateProfile.mockReturnValue(T.unit);
       setMockUser();
 
       // when

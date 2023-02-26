@@ -1,7 +1,7 @@
+import type { T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import type { NotificationError } from '@app/domain/error/NotificationError';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { SendPhoneVerificationCodeCommand } from './dto/SendPhoneVerificationCodeCommand';
 import type { VerifyPhoneVerificationCodeCommand } from './dto/VerifyPhoneVerificationCodeCommand';
@@ -17,9 +17,9 @@ export type VerifyPhoneVerificationCodeError =
 export abstract class PhoneVerificationUseCase {
   abstract sendCode(
     command: SendPhoneVerificationCodeCommand,
-  ): TaskEither<DBError | NotificationError, void>;
+  ): T.IO<DBError | NotificationError, void>;
 
   abstract verify(
     command: VerifyPhoneVerificationCodeCommand,
-  ): TaskEither<VerifyPhoneVerificationCodeError, void>;
+  ): T.IO<VerifyPhoneVerificationCodeError, void>;
 }

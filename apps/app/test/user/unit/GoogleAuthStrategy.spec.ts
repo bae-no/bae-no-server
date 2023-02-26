@@ -5,7 +5,7 @@ import { GoogleAuthResponse } from '../../../src/module/user/adapter/out/auth/re
 import { GoogleProfileResponse } from '../../../src/module/user/adapter/out/auth/response/GoogleProfileResponse';
 import { GoogleAuthStrategy } from '../../../src/module/user/adapter/out/auth/strategy/GoogleAuthStrategy';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('GoogleAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();
@@ -27,7 +27,7 @@ describe('GoogleAuthStrategy', () => {
     const result = strategy.request('invalid');
 
     // then
-    await assertResolvesLeft(result, (error) => {
+    await assertResolvesFail(result, (error) => {
       expect(error.message).toContain(errorContent);
     });
   });
@@ -45,7 +45,7 @@ describe('GoogleAuthStrategy', () => {
     const result = strategy.request('good code');
 
     // then
-    await assertResolvesLeft(result, (error) => {
+    await assertResolvesFail(result, (error) => {
       expect(error.message).toContain(errorContent);
     });
   });
@@ -67,7 +67,7 @@ describe('GoogleAuthStrategy', () => {
     const result = strategy.request('good code');
 
     // then
-    await assertResolvesRight(result, (auth) => {
+    await assertResolvesSuccess(result, (auth) => {
       expect(auth.socialId).toBe(`${socialId}`);
       expect(auth.type).toBe(AuthType.GOOGLE);
     });

@@ -1,7 +1,6 @@
+import { E } from '@app/custom/effect';
 import type { HttpError } from '@app/domain/error/HttpError';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
-import type { Either } from 'fp-ts/Either';
-import { right } from 'fp-ts/Either';
 
 type FakeHttpResponseProps<T> = {
   isOk?: boolean;
@@ -39,7 +38,7 @@ export class FakeHttpResponse<T> implements HttpResponse {
     );
   }
 
-  toEntity<T>(_entity: { new (...args: any[]): T }): Either<HttpError, T> {
-    return right(this._entity as any);
+  toEntity<T>(_entity: { new (...args: any[]): T }): E.Either<HttpError, T> {
+    return E.right(this._entity as any);
   }
 }

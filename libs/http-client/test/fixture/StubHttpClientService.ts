@@ -1,10 +1,9 @@
-import { TE } from '@app/custom/fp-ts';
+import { T } from '@app/custom/effect';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import type { HttpStatus } from '@nestjs/common';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { FakeHttpResponse } from './FakeHttpResponse';
 
@@ -49,38 +48,50 @@ export class StubHttpClientService extends HttpClientPort {
     return this;
   }
 
-  delete(
+  override delete(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send(url, option);
   }
 
-  get(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override get(
+    url: string,
+    option?: HttpOption,
+  ): T.IO<HttpError, HttpResponse> {
     return this.send(url, option);
   }
 
-  patch(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override patch(
+    url: string,
+    option?: HttpOption,
+  ): T.IO<HttpError, HttpResponse> {
     return this.send(url, option);
   }
 
-  post(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override post(
+    url: string,
+    option?: HttpOption,
+  ): T.IO<HttpError, HttpResponse> {
     return this.send(url, option);
   }
 
-  put(url: string, option?: HttpOption): TaskEither<HttpError, HttpResponse> {
+  override put(
+    url: string,
+    option?: HttpOption,
+  ): T.IO<HttpError, HttpResponse> {
     return this.send(url, option);
   }
 
   private send(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     this.#urls.push(url);
     this.#options.push(option);
 
     if (this.#errors.length) {
-      return TE.left(new HttpError(this.#errors.shift() as Error));
+      return T.fail(new HttpError(this.#errors.shift() as Error));
     }
 
     if (!this.#responses.length) {
@@ -90,7 +101,7 @@ export class StubHttpClientService extends HttpClientPort {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { status, body } = this.#responses.shift()!;
 
-    return TE.right(
+    return T.succeed(
       FakeHttpResponse.of({
         isOk: 200 <= status && status < 300,
         statusCode: status,

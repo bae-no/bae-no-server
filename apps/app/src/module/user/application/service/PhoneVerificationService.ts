@@ -1,10 +1,9 @@
-import { TE } from '@app/custom/fp-ts';
+import { T } from '@app/custom/effect';
+import { pipe, constVoid } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import type { NotificationError } from '@app/domain/error/NotificationError';
 import { SmsPort } from '@app/domain/notification/SmsPort';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerification } from '../../domain/PhoneVerification';
 import type { SendPhoneVerificationCodeCommand } from '../port/in/dto/SendPhoneVerificationCodeCommand';
@@ -28,13 +27,13 @@ export class PhoneVerificationService extends PhoneVerificationUseCase {
 
   override sendCode(
     command: SendPhoneVerificationCodeCommand,
-  ): TaskEither<DBError | NotificationError, void> {
+  ): T.IO<DBError | NotificationError, void> {
     return pipe(
       this.phoneVerificationRepositoryPort.save(
         command.userId,
         PhoneVerification.of(command.phoneNumber),
       ),
-      TE.chainW((verification) =>
+      T.chain((verification) =>
         this.smsPort.send(verification.phoneNumber, verification.code),
       ),
     );
@@ -42,19 +41,21 @@ export class PhoneVerificationService extends PhoneVerificationUseCase {
 
   override verify(
     command: VerifyPhoneVerificationCodeCommand,
-  ): TaskEither<VerifyPhoneVerificationCodeError, void> {
+  ): T.IO<VerifyPhoneVerificationCodeError, void> {
     return pipe(
-      TE.Do,
-      TE.apS(
-        'verification',
-        this.phoneVerificationRepositoryPort.findLatest(command.userId),
+      T.structPar({
+        verification: this.phoneVerificationRepositoryPort.findLatest(
+          command.userId,
+        ),
+        user: this.userQueryRepositoryPort.findByIdE(command.userId),
+      }),
+      T.chain(({ verification, user }) =>
+        T.fromEither(() =>
+          user.updateByPhoneVerification(verification, command.code),
+        ),
       ),
-      TE.apS('user', this.userQueryRepositoryPort.findById(command.userId)),
-      TE.chainEitherKW(({ verification, user }) =>
-        user.updateByPhoneVerification(verification, command.code),
-      ),
-      TE.chain((user) => this.userRepositoryPort.save(user)),
-      TE.map(constVoid),
+      T.chain((user) => this.userRepositoryPort.save(user)),
+      T.map(constVoid),
     );
   }
 }

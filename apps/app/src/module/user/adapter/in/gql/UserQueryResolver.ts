@@ -1,4 +1,6 @@
-import { O, TE, toResponse } from '@app/custom/fp-ts';
+import { T, O } from '@app/custom/effect';
+import { TE, toResponse } from '@app/custom/fp-ts';
+import type { DBError } from '@app/domain/error/DBError';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { pipe } from 'fp-ts/function';
 
@@ -17,11 +19,11 @@ export class UserQueryResolver {
   ) {}
 
   @Query(() => Boolean, { description: '닉네임 중복여부' })
-  async hasNickname(@Args('nickname') nickname: string): Promise<boolean> {
+  hasNickname(@Args('nickname') nickname: string): T.IO<DBError, boolean> {
     return pipe(
       this.userQueryRepositoryPort.findByNickname(nickname),
-      toResponse(O.isSome),
-    )();
+      T.map(O.isSome),
+    );
   }
 
   @Query(() => [UserAddressResponse], { description: '등록한 주소목록' })

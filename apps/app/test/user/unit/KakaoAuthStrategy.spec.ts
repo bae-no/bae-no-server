@@ -5,7 +5,7 @@ import { KakaoAuthResponse } from '../../../src/module/user/adapter/out/auth/res
 import { KakaoProfileResponse } from '../../../src/module/user/adapter/out/auth/response/KakaoProfileResponse';
 import { KakaoAuthStrategy } from '../../../src/module/user/adapter/out/auth/strategy/KakaoAuthStrategy';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('KakaoAuthStrategy', () => {
   const stubHttpClient = new StubHttpClientService();
@@ -26,7 +26,7 @@ describe('KakaoAuthStrategy', () => {
     const result = strategy.request('invalid');
 
     // then
-    await assertResolvesLeft(result, (error) => {
+    await assertResolvesFail(result, (error) => {
       expect(error.message).toContain(errorContent);
     });
   });
@@ -44,7 +44,7 @@ describe('KakaoAuthStrategy', () => {
     const result = strategy.request('good code');
 
     // then
-    await assertResolvesLeft(result, (error) => {
+    await assertResolvesFail(result, (error) => {
       expect(error.message).toContain(errorContent);
     });
   });
@@ -66,7 +66,7 @@ describe('KakaoAuthStrategy', () => {
     const result = strategy.request('good code');
 
     // then
-    await assertResolvesRight(result, (auth) => {
+    await assertResolvesSuccess(result, (auth) => {
       expect(auth.socialId).toBe(`${socialId}`);
       expect(auth.type).toBe(AuthType.KAKAO);
     });

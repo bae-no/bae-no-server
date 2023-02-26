@@ -3,8 +3,8 @@ import { SmsSensService } from '@app/sms/SmsSensService';
 import { HttpStatus } from '@nestjs/common';
 
 import {
-  assertResolvesLeft,
-  assertResolvesRight,
+  assertResolvesFail,
+  assertResolvesSuccess,
 } from '../../../../apps/app/test/fixture/utils';
 import { StubHttpClientService } from '../../../http-client/test/fixture/StubHttpClientService';
 
@@ -35,7 +35,7 @@ describe('SmsSensService', () => {
       const result = service.send(phoneNumber, content);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
     });
 
     it('상태코드 202 가 아닌경우 실패한다.', async () => {
@@ -51,7 +51,7 @@ describe('SmsSensService', () => {
       const result = service.send(phoneNumber, content);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err.message).toContain('SMS 발송이 실패했습니다');
       });
     });
@@ -67,7 +67,7 @@ describe('SmsSensService', () => {
       const result = service.send(phoneNumber, content);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err.message).toContain('http error');
       });
     });

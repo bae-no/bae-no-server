@@ -42,7 +42,7 @@ type CategoryResponse {
   shareDealSort: [ShareDealSortCategory!]!
 }
 
-type ChatDetailResponse {
+type ChatDetailResponse1 {
   authorName: String!
   content: String!
   id: ID!
@@ -52,7 +52,7 @@ type ChatDetailResponse {
   writtenByMe: Boolean!
 }
 
-type ChatResponse {
+type ChatResponse1 {
   id: ID!
   lastContent: String!
   thumbnail: String!
@@ -60,7 +60,7 @@ type ChatResponse {
   unreadCount: Int!
 }
 
-type ChatWrittenResponse {
+type ChatWrittenResponse1 {
   authorId: ID!
   content: String!
   type: MessageType!
@@ -194,7 +194,7 @@ enum MessageType {
 type Mutation {
   """주소 추가"""
   appendAddress(input: AddressInput!): Boolean!
-  createSample(input: CreateSampleInput!): SampleResponse!
+  createSample(input: CreateSampleInput!): SampleResponse1!
 
   """주소 삭제"""
   deleteAddress(key: ID!): Boolean!
@@ -221,7 +221,7 @@ type Mutation {
   sendPhoneVerificationCode(input: SendPhoneVerificationCodeInput!): Boolean!
 
   """회원 가입 & 로그인"""
-  signIn(input: SignInInput!): SignInResponse!
+  signIn(input: SignInInput!): SignInResponse1!
 
   """공유딜 시작하기"""
   startShareDeal(input: StartShareDealInput!): Boolean!
@@ -239,7 +239,7 @@ type Mutation {
   writeChat(input: WriteChatInput!): Boolean!
 }
 
-type MyProfileResponse {
+type MyProfileResponse1 {
   imageUri: String!
   introduce: String!
   nickname: String!
@@ -258,16 +258,16 @@ input OpenShareDealInput {
 
 type Query {
   """등록한 주소목록"""
-  addresses: [UserAddressResponse!]!
+  addresses: [UserAddressResponse1!]!
 
   """카테고리 목록"""
   categories: CategoryResponse!
 
   """채팅방 상세"""
-  chatDetail(input: FindChatDetailInput!): [ChatDetailResponse!]!
+  chatDetail(input: FindChatDetailInput!): [ChatDetailResponse1!]!
 
   """채팅방 목록"""
-  chats(input: FindChatInput!): [ChatResponse!]!
+  chats(input: FindChatInput!): [ChatResponse1!]!
 
   """닉네임 중복여부"""
   hasNickname(nickname: String!): Boolean!
@@ -276,23 +276,23 @@ type Query {
   myEndDealCount: Int!
 
   """내 프로필 정보"""
-  myProfile: MyProfileResponse!
+  myProfile: MyProfileResponse1!
 
   """프로필 정보"""
-  profile(userId: ID!): UserProfileResponse!
-  sample(id: ID!): SampleResponse!
+  profile(userId: ID!): UserProfileResponse1!
+  sample(id: ID!): SampleResponse1!
 
   """공유딜 상태보기"""
-  shareDealStatus(input: FindShareDealStatusInput!): ShareDealStatusResponse!
+  shareDealStatus(input: FindShareDealStatusInput!): ShareDealStatusResponse1!
 
   """공유딜 목록"""
-  shareDeals(input: FindShareDealInput!): ShareDealResponse!
+  shareDeals(input: FindShareDealInput!): ShareDealResponse1!
 
   """공유딜 목록 (가까운 순)"""
-  shareDealsByNearest(input: FindShareDealByNearestInput!): ShareDealResponse!
+  shareDealsByNearest(input: FindShareDealByNearestInput!): ShareDealResponse1!
 }
 
-type SampleResponse {
+type SampleResponse1 {
   email: String!
   id: ID!
   name: String!
@@ -302,7 +302,7 @@ input SendPhoneVerificationCodeInput {
   phoneNumber: String!
 }
 
-type ShareDealItemResponse {
+type ShareDealItemResponse1 {
   category: FoodCategory!
   coordinate: CoordinateResponse!
   createdAt: DateTime!
@@ -315,7 +315,7 @@ type ShareDealItemResponse {
   title: String!
 }
 
-type ShareDealParticipantResponse {
+type ShareDealParticipantResponse1 {
   id: ID!
   introduce: String!
   isMe: Boolean!
@@ -323,8 +323,8 @@ type ShareDealParticipantResponse {
   nickname: String!
 }
 
-type ShareDealResponse {
-  items: [ShareDealItemResponse!]!
+type ShareDealResponse1 {
+  items: [ShareDealItemResponse1!]!
   total: Int!
 }
 
@@ -355,13 +355,13 @@ enum ShareDealStatus {
   START
 }
 
-type ShareDealStatusResponse {
+type ShareDealStatusResponse1 {
   canEnd: Boolean!
   canStart: Boolean!
 
   """api 요청한 사람이 방장인지 여부"""
   isOwner: Boolean!
-  participants: [ShareDealParticipantResponse!]!
+  participants: [ShareDealParticipantResponse1!]!
 }
 
 input SignInInput {
@@ -369,7 +369,7 @@ input SignInInput {
   type: AuthType!
 }
 
-type SignInResponse {
+type SignInResponse1 {
   accessToken: String!
 
   """토큰 만료일"""
@@ -388,8 +388,8 @@ input StartShareDealInput {
 
 type Subscription {
   """채팅 작성 이벤트 구독하기"""
-  chatWritten(shareDealId: ID!): ChatWrittenResponse!
-  sampleAdded: SampleResponse!
+  chatWritten(shareDealId: ID!): ChatWrittenResponse1!
+  sampleAdded: SampleResponse1!
 }
 
 input UpdateProfileInput {
@@ -407,7 +407,7 @@ input UpdateShareDealInput {
   title: String!
 }
 
-type UserAddressResponse {
+type UserAddressResponse1 {
   alias: String!
   coordinate: CoordinateResponse!
   detail: String!
@@ -417,7 +417,7 @@ type UserAddressResponse {
   type: AddressType!
 }
 
-type UserProfileResponse {
+type UserProfileResponse1 {
   introduce: String!
   nickname: String!
 }

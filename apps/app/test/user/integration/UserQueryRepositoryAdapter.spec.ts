@@ -30,7 +30,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByAuth(auth);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertNone(value);
       });
     });
@@ -46,7 +46,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByAuth(auth);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertSome(value, (user) => {
           expect(user.auth).toStrictEqual(auth);
         });
@@ -94,7 +94,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByNickname(nickname);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertNone(value);
       });
     });
@@ -114,7 +114,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByNickname(user.nickname);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertSome(value, (user) => {
           expect(user.nickname).toBe(user.nickname);
         });

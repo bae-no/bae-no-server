@@ -1,9 +1,7 @@
-import { E, Json } from '@app/custom/fp-ts';
+import { E } from '@app/custom/effect';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { plainToInstance } from 'class-transformer';
-import type { Either } from 'fp-ts/Either';
-import { tryCatch } from 'fp-ts/Either';
 import { identity, pipe } from 'fp-ts/function';
 
 export class NodeFetchResponse implements HttpResponse {
@@ -21,13 +19,13 @@ export class NodeFetchResponse implements HttpResponse {
     return this.rawBody;
   }
 
-  toEntity<T>(entity: { new (...args: any[]): T }): Either<HttpError, T> {
+  toEntity<T>(entity: { new (...args: any[]): T }): E.Either<HttpError, T> {
     return pipe(
-      Json.parse(this.rawBody),
+      E.parseJSON(identity)(this.rawBody),
       E.chain((body) =>
-        tryCatch(() => plainToInstance(entity, body), identity),
+        E.tryCatch(() => plainToInstance(entity, body), identity),
       ),
-      E.mapLeft((error) => new HttpError(error as Error)),
+      E.mapLeft((error) => new HttpError(E.toError(error))),
     );
   }
 }

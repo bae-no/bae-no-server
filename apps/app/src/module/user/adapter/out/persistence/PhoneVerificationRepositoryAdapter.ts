@@ -1,11 +1,9 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { PhoneVerificationRepositoryPort } from '../../../application/port/out/PhoneVerificationRepositoryPort';
 import { PhoneVerification } from '../../../domain/PhoneVerification';
@@ -20,9 +18,9 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
   override save(
     userId: UserId,
     phoneVerification: PhoneVerification,
-  ): TaskEither<DBError, PhoneVerification> {
+  ): T.IO<DBError, PhoneVerification> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDBE(() =>
         this.prisma.phoneVerification.create({
           data: {
             code: phoneVerification.code,
@@ -32,7 +30,7 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
           },
         }),
       ),
-      TE.map((data) =>
+      T.map((data) =>
         PhoneVerification.of(data.phoneNumber, data.code, data.expiredAt),
       ),
     );
@@ -40,20 +38,20 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
 
   override findLatest(
     userId: UserId,
-  ): TaskEither<DBError | NotFoundException, PhoneVerification> {
+  ): T.IO<DBError | NotFoundException, PhoneVerification> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDBE(() =>
         this.prisma.phoneVerification.findFirst({
           where: { userId },
           orderBy: { createdAt: 'desc' },
         }),
       ),
-      TE.chainW((data) =>
+      T.chain((data) =>
         data
-          ? TE.right(
+          ? T.succeed(
               PhoneVerification.of(data.phoneNumber, data.code, data.expiredAt),
             )
-          : TE.left(
+          : T.fail(
               new NotFoundException(
                 `인증번호가 존재하지 않습니다: userId=${userId}`,
               ),

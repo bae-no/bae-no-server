@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker';
 import { PhoneVerificationRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/PhoneVerificationRepositoryAdapter';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
 import { UserId } from '../../../src/module/user/domain/User';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('PhoneVerificationRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -28,7 +28,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.phoneNumber).toBe(phoneVerification.phoneNumber);
       });
     });
@@ -43,7 +43,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
       const result = phoneVerificationRepositoryAdapter.findLatest(userId);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err).toStrictEqual(
           new NotFoundException(
             `인증번호가 존재하지 않습니다: userId=${userId}`,
@@ -76,7 +76,7 @@ describe('PhoneVerificationRepositoryAdapter', () => {
       const result = phoneVerificationRepositoryAdapter.findLatest(userId);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.code).toBe('5678');
       });
     });

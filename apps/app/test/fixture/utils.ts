@@ -1,7 +1,6 @@
-import { T } from '@app/custom/effect';
+import { O, T } from '@app/custom/effect';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
-import * as O from 'fp-ts/Option';
 import type * as TE from 'fp-ts/TaskEither';
 
 function noop(): void {

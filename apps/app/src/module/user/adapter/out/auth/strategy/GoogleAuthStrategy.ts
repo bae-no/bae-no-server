@@ -1,11 +1,8 @@
-import { E, TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
-import type { Either } from 'fp-ts/Either';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { AuthStrategy } from './AuthStrategy';
 import { Auth } from '../../../../domain/vo/Auth';
@@ -23,17 +20,17 @@ export class GoogleAuthStrategy implements AuthStrategy {
     private readonly userProfileUrl = 'https://www.googleapis.com/oauth2/v2/userinfo',
   ) {}
 
-  request(code: string): TaskEither<AuthError, Auth> {
+  request(code: string): T.IO<AuthError, Auth> {
     return pipe(
       this.requestSocialId(code),
-      TE.chainEitherK(this.toSocialResponse),
-      TE.chain((res) => this.requestProfile(res)),
-      TE.chainEitherK(this.toProfileResponse),
-      TE.bimap((error) => new AuthError(error), this.toAuth),
+      T.chain(this.toSocialResponse),
+      T.chain((res) => this.requestProfile(res)),
+      T.chain(this.toProfileResponse),
+      T.bimap((error) => new AuthError(error), this.toAuth),
     );
   }
 
-  private requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
+  private requestSocialId(code: string): T.IO<HttpError, HttpResponse> {
     return this.httpClientPort.post(this.tokenUrl, {
       form: {
         grant_type: 'authorization_code',
@@ -47,12 +44,12 @@ export class GoogleAuthStrategy implements AuthStrategy {
 
   private toSocialResponse(
     response: HttpResponse,
-  ): Either<HttpError, GoogleAuthResponse> {
+  ): T.IO<HttpError, GoogleAuthResponse> {
     if (response.isOk) {
-      return response.toEntity(GoogleAuthResponse);
+      return T.fromEither(() => response.toEntity(GoogleAuthResponse));
     }
 
-    return E.left(
+    return T.fail(
       HttpError.fromMessage(
         `Google 토큰받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),
@@ -61,7 +58,7 @@ export class GoogleAuthStrategy implements AuthStrategy {
 
   private requestProfile(
     authResponse: GoogleAuthResponse,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.httpClientPort.get(this.userProfileUrl, {
       headers: {
         Authorization: `Bearer ${authResponse.accessToken}`,
@@ -71,12 +68,12 @@ export class GoogleAuthStrategy implements AuthStrategy {
 
   private toProfileResponse(
     response: HttpResponse,
-  ): Either<HttpError, GoogleProfileResponse> {
+  ): T.IO<HttpError, GoogleProfileResponse> {
     if (response.isOk) {
-      return response.toEntity(GoogleProfileResponse);
+      return T.fromEither(() => response.toEntity(GoogleProfileResponse));
     }
 
-    return E.left(
+    return T.fail(
       HttpError.fromMessage(
         `Google 프로필 받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),

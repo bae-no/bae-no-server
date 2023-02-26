@@ -1,11 +1,9 @@
-import { TE, E } from '@app/custom/fp-ts';
+import { T } from '@app/custom/effect';
+import { pipe } from '@app/custom/effect';
 import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
-import type { Either } from 'fp-ts/Either';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { AuthStrategy } from './AuthStrategy';
 import { Auth } from '../../../../domain/vo/Auth';
@@ -22,17 +20,17 @@ export class KakaoAuthStrategy implements AuthStrategy {
     private readonly userProfileUrl = 'https://kapi.kakao.com/v2/user/me',
   ) {}
 
-  request(code: string): TaskEither<AuthError, Auth> {
+  request(code: string): T.IO<AuthError, Auth> {
     return pipe(
       this.requestSocialId(code),
-      TE.chainEitherK(this.toSocialResponse),
-      TE.chain((res) => this.requestProfile(res)),
-      TE.chainEitherK(this.toProfileResponse),
-      TE.bimap((error) => new AuthError(error), this.toAuth),
+      T.chain(this.toSocialResponse),
+      T.chain((res) => this.requestProfile(res)),
+      T.chain(this.toProfileResponse),
+      T.bimap((error) => new AuthError(error), this.toAuth),
     );
   }
 
-  private requestSocialId(code: string): TaskEither<HttpError, HttpResponse> {
+  private requestSocialId(code: string): T.IO<HttpError, HttpResponse> {
     return this.httpClientPort.post(this.tokenUrl, {
       form: {
         grant_type: 'authorization_code',
@@ -45,12 +43,12 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   private toSocialResponse(
     response: HttpResponse,
-  ): Either<HttpError, KakaoAuthResponse> {
+  ): T.IO<HttpError, KakaoAuthResponse> {
     if (response.isOk) {
-      return response.toEntity(KakaoAuthResponse);
+      return T.fromEither(() => response.toEntity(KakaoAuthResponse));
     }
 
-    return E.left(
+    return T.fail(
       HttpError.fromMessage(
         `카카오 토큰받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),
@@ -59,7 +57,7 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   private requestProfile(
     authResponse: KakaoAuthResponse,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.httpClientPort.get(this.userProfileUrl, {
       headers: {
         Authorization: `Bearer ${authResponse.accessToken}`,
@@ -69,12 +67,12 @@ export class KakaoAuthStrategy implements AuthStrategy {
 
   private toProfileResponse(
     response: HttpResponse,
-  ): Either<HttpError, KakaoProfileResponse> {
+  ): T.IO<HttpError, KakaoProfileResponse> {
     if (response.isOk) {
-      return response.toEntity(KakaoProfileResponse);
+      return T.fromEither(() => response.toEntity(KakaoProfileResponse));
     }
 
-    return E.left(
+    return T.fail(
       HttpError.fromMessage(
         `카카오 프로필 받기 실패: statusCode=${response.statusCode} body=${response.body}`,
       ),

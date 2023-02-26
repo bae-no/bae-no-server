@@ -1,3 +1,4 @@
+import { T } from '@app/custom/effect';
 import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
@@ -77,7 +78,9 @@ describe('ShareDealQueryService', () => {
         participantInfo: ParticipantInfo.of([UserId('user')], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.participantIds(
@@ -102,7 +105,9 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.participantIds(

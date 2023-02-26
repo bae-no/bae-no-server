@@ -1,4 +1,4 @@
-import { T, pipe } from '@app/custom/effect';
+import { T, pipe, O, NEA } from '@app/custom/effect';
 import { TE } from '@app/custom/fp-ts';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
@@ -38,13 +38,15 @@ export class ChatEventListener {
 
   @OnEvent(ChatWrittenEvent.name, { async: true })
   handleChatWrittenEvent(event: ChatWrittenEvent) {
-    if (Array.isArray(event.chats) && event.chats.length === 0) {
-      return;
-    }
-
-    this.pubSubPort.publish(
-      ChatWrittenTrigger(event.chats[0].shareDealId),
-      ChatWrittenResponse.of(event.chats[0].message),
+    pipe(
+      NEA.fromArray(event.chats),
+      O.map(NEA.head),
+      O.map((chat) =>
+        this.pubSubPort.publish(
+          ChatWrittenTrigger(chat.shareDealId),
+          ChatWrittenResponse.of(chat.message),
+        ),
+      ),
     );
   }
 

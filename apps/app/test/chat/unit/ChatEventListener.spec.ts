@@ -1,6 +1,5 @@
 import { T } from '@app/custom/effect';
 import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
@@ -85,9 +84,11 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');
-      chatRepositoryPort.create.mockImplementation((value) => right(value));
+      chatRepositoryPort.create.mockImplementation((value) => T.succeed(value));
 
       const event = new ShareDealStartedEvent(shareDealId);
 
@@ -129,9 +130,11 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');
-      chatRepositoryPort.create.mockImplementation((value) => right(value));
+      chatRepositoryPort.create.mockImplementation((value) => T.succeed(value));
 
       const event = new ShareDealEndedEvent(shareDealId);
 
@@ -171,9 +174,11 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');
-      chatRepositoryPort.create.mockImplementation((value) => right(value));
+      chatRepositoryPort.create.mockImplementation((value) => T.succeed(value));
 
       const event = new ShareDealClosedEvent(shareDealId);
 

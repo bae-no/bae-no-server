@@ -498,7 +498,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(0);
       });
     });
@@ -524,7 +524,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(0);
       });
     });
@@ -550,7 +550,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(1);
       });
     });

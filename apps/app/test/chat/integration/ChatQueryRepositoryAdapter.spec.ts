@@ -10,7 +10,6 @@ import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   assertNone,
-  assertResolvesRight,
   assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
@@ -35,7 +34,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.last(shareDealId, userId);
 
       // then
-      await assertResolvesRight(result, (deals) => {
+      await assertResolvesSuccess(result, (deals) => {
         assertNone(deals);
       });
     });
@@ -77,7 +76,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.last(shareDealId, userId);
 
       // then
-      await assertResolvesRight(result, (chat) => {
+      await assertResolvesSuccess(result, (chat) => {
         assertSome(chat, (chat) => {
           expect(chat.content).toBe('last');
         });
@@ -98,7 +97,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (deals) => {
+      await assertResolvesSuccess(result, (deals) => {
         expect(deals).toBe(0);
       });
     });
@@ -129,7 +128,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (count) => {
+      await assertResolvesSuccess(result, (count) => {
         expect(count).toBe(3);
       });
     });

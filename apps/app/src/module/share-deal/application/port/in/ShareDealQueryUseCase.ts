@@ -1,3 +1,4 @@
+import type { T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
 import type { TaskEither } from 'fp-ts/TaskEither';
@@ -15,7 +16,7 @@ export abstract class ShareDealQueryUseCase {
   abstract participantIds(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<
+  ): T.IO<
     DBError | NotFoundException | ShareDealAccessDeniedException,
     UserId[]
   >;

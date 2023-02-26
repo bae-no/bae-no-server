@@ -165,9 +165,9 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
 
   override findByUser(
     command: FindByUserShareDealCommand,
-  ): TaskEither<DBError, ShareDeal[]> {
+  ): T.IO<DBError, ShareDeal[]> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.shareDeal.findMany({
           where: {
             status: command.status,
@@ -178,7 +178,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
           take: command.size,
         }),
       ),
-      TE.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
+      T.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
 }

@@ -1,7 +1,5 @@
-import type { T } from '@app/custom/effect';
+import type { O, T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
-import type { Option } from 'fp-ts/Option';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
 import type { UserId } from '../../../../user/domain/User';
@@ -14,10 +12,10 @@ export abstract class ChatQueryRepositoryPort {
   abstract last(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, Option<Chat>>;
+  ): T.IO<DBError, O.Option<Chat>>;
 
   abstract unreadCount(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, number>;
+  ): T.IO<DBError, number>;
 }

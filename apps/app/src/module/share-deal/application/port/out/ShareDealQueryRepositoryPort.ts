@@ -22,7 +22,7 @@ export abstract class ShareDealQueryRepositoryPort {
 
   abstract findByUser(
     command: FindByUserShareDealCommand,
-  ): TaskEither<DBError, ShareDeal[]>;
+  ): T.IO<DBError, ShareDeal[]>;
 
   abstract findById(
     id: ShareDealId,

@@ -1,3 +1,4 @@
+import { O, pipe } from '@app/custom/effect';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 import type { FindChatResult } from '../../../../application/port/in/dto/FindChatResult';
@@ -16,6 +17,9 @@ export class ChatResponse {
   @Field()
   lastContent: string;
 
+  @Field()
+  lastUpdatedAt: Date;
+
   @Field(() => Int)
   unreadCount: number;
 
@@ -25,7 +29,16 @@ export class ChatResponse {
     response.id = result.id;
     response.title = result.title;
     response.thumbnail = result.thumbnail;
-    response.lastContent = result.lastContent;
+    response.lastContent = pipe(
+      result.lastChat,
+      O.map((chat) => chat.content),
+      O.getOrElse(() => ''),
+    );
+    response.lastUpdatedAt = pipe(
+      result.lastChat,
+      O.map((chat) => chat.createdAt),
+      O.getOrElse(() => new Date()),
+    );
     response.unreadCount = result.unreadCount;
 
     return response;

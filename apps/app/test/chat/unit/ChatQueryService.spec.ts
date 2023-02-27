@@ -84,14 +84,44 @@ describe('ChatQueryService', () => {
           [
             FindChatResult {
               "id": "1",
-              "lastContent": "content",
+              "lastChat": Some {
+                "_tag": "Some",
+                "value": Chat {
+                  "props": {
+                    "message": Message {
+                      "authorId": "123",
+                      "content": "content",
+                      "type": "NORMAL",
+                      "unread": true,
+                    },
+                    "orderedKey": "orderedKey",
+                    "shareDealId": "1",
+                    "userId": "userId",
+                  },
+                },
+              },
               "thumbnail": "https://baeno1.com",
               "title": "shareDeal1",
               "unreadCount": 20,
             },
             FindChatResult {
               "id": "2",
-              "lastContent": "content",
+              "lastChat": Some {
+                "_tag": "Some",
+                "value": Chat {
+                  "props": {
+                    "message": Message {
+                      "authorId": "123",
+                      "content": "content",
+                      "type": "NORMAL",
+                      "unread": true,
+                    },
+                    "orderedKey": "orderedKey",
+                    "shareDealId": "2",
+                    "userId": "userId",
+                  },
+                },
+              },
               "thumbnail": "https://baeno2.com",
               "title": "shareDeal2",
               "unreadCount": 10,

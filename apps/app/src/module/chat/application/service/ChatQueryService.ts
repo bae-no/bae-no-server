@@ -1,4 +1,4 @@
-import { T, O, pipe } from '@app/custom/effect';
+import { T, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
@@ -50,11 +50,7 @@ export class ChatQueryService extends ChatQueryUseCase {
               deal.id,
               deal.title,
               deal.thumbnail,
-              pipe(
-                [...lastChats][index],
-                O.map((chat) => chat.content),
-                O.getOrElse(() => ''),
-              ),
+              [...lastChats][index],
               [...unreadCounts][index],
             ),
         ),

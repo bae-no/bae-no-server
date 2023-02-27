@@ -19,4 +19,14 @@ export class UserPushToken extends BaseEntity<UserPushTokenProps> {
   get token(): string {
     return this.props.token;
   }
+
+  static create(props: UserPushTokenProps): UserPushToken {
+    return new UserPushToken(props);
+  }
+
+  update(token: string): this {
+    this.props.token = token;
+
+    return this;
+  }
 }

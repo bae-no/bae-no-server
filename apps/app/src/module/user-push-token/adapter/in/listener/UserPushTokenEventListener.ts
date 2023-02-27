@@ -9,7 +9,7 @@ import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/
 @Service()
 export class UserPushTokenEventListener {
   constructor(
-    private readonly userPushTokenQueryRepositoryAdapter: UserPushTokenQueryRepositoryPort,
+    private readonly userPushTokenQueryRepositoryPort: UserPushTokenQueryRepositoryPort,
     private readonly pushMessagePort: PushMessagePort,
   ) {}
 
@@ -22,7 +22,7 @@ export class UserPushTokenEventListener {
     }
 
     await pipe(
-      this.userPushTokenQueryRepositoryAdapter.findByUserIds(userIds),
+      this.userPushTokenQueryRepositoryPort.findByUserIds(userIds),
       T.chain((tokens) =>
         pipe(
           tokens.map((token) =>

@@ -1,10 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 import { UserPushTokenRepositoryPort } from '../../../application/port/out/UserPushTokenRepositoryPort';
@@ -16,18 +14,16 @@ export class UserPushTokenRepositoryAdapter extends UserPushTokenRepositoryPort 
     super();
   }
 
-  override save(
-    userPushToken: UserPushToken,
-  ): TaskEither<DBError, UserPushToken> {
+  override save(userPushToken: UserPushToken): T.IO<DBError, UserPushToken> {
     return pipe(
       UserPushTokenOrmMapper.toOrm(userPushToken),
       ({ id, ...data }) =>
-        tryCatchDB(() =>
+        tryCatchDBE(() =>
           id
             ? this.prisma.userPushToken.update({ data, where: { id } })
             : this.prisma.userPushToken.create({ data }),
         ),
-      TE.map(UserPushTokenOrmMapper.toDomain),
+      T.map(UserPushTokenOrmMapper.toDomain),
     );
   }
 }

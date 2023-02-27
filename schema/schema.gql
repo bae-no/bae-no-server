@@ -231,6 +231,7 @@ type Mutation {
 
   """공유딜 수정하기"""
   updateShareDeal(input: UpdateShareDealInput!): Boolean!
+  updateUserPushToken(input: UpdateUserPushTokenInput!): Boolean!
 
   """전화번호 인증번호 검증하기"""
   verifyPhoneVerificationCode(input: VerifyPhoneVerificationCodeInput!): Boolean!
@@ -405,6 +406,10 @@ input UpdateShareDealInput {
   storeName: String!
   thumbnail: String!
   title: String!
+}
+
+input UpdateUserPushTokenInput {
+  token: String!
 }
 
 type UserAddressResponse {

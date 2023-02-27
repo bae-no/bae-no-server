@@ -3,8 +3,8 @@ import type { Messaging } from 'firebase-admin/lib/messaging';
 import { mock } from 'jest-mock-extended';
 
 import {
-  assertResolvesLeft,
-  assertResolvesRight,
+  assertResolvesFail,
+  assertResolvesSuccess,
 } from '../../../../apps/app/test/fixture/utils';
 
 describe('PushMessageAdapter', () => {
@@ -22,7 +22,7 @@ describe('PushMessageAdapter', () => {
     const result = pushMessageAdapter.send(pushToken, content);
 
     // then
-    await assertResolvesRight(result);
+    await assertResolvesSuccess(result);
   });
 
   it('푸시 메시지 전송에 실패하면 에러를 반환한다', async () => {
@@ -36,7 +36,7 @@ describe('PushMessageAdapter', () => {
     const result = pushMessageAdapter.send(pushToken, content);
 
     // then
-    await assertResolvesLeft(result, (err) => {
+    await assertResolvesFail(result, (err) => {
       expect(err.message).toBe('error');
     });
   });

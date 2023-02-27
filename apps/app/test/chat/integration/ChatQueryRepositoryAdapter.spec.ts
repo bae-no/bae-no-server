@@ -10,7 +10,7 @@ import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import {
   assertNone,
-  assertResolvesRight,
+  assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
 
@@ -34,7 +34,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.last(shareDealId, userId);
 
       // then
-      await assertResolvesRight(result, (deals) => {
+      await assertResolvesSuccess(result, (deals) => {
         assertNone(deals);
       });
     });
@@ -76,7 +76,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.last(shareDealId, userId);
 
       // then
-      await assertResolvesRight(result, (chat) => {
+      await assertResolvesSuccess(result, (chat) => {
         assertSome(chat, (chat) => {
           expect(chat.content).toBe('last');
         });
@@ -97,7 +97,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (deals) => {
+      await assertResolvesSuccess(result, (deals) => {
         expect(deals).toBe(0);
       });
     });
@@ -128,7 +128,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (count) => {
+      await assertResolvesSuccess(result, (count) => {
         expect(count).toBe(3);
       });
     });
@@ -158,7 +158,7 @@ describe('ChatQueryRepositoryAdapter', () => {
       const result = chatQueryRepositoryAdapter.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (result) => {
+      await assertResolvesSuccess(result, (result) => {
         expect(result.length).toBe(2);
         expect(result[0].orderedKey).toBe(chats[1].orderedKey);
         expect(result[1].orderedKey).toBe(chats[0].orderedKey);

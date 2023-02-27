@@ -1,12 +1,9 @@
-import { O, TE } from '@app/custom/fp-ts';
+import { T, O, pipe, constVoid } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { AuthError } from '@app/domain/error/AuthError';
 import type { DBError } from '@app/domain/error/DBError';
 import type { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { Option } from 'fp-ts/Option';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { User } from '../../domain/User';
 import type { Auth } from '../../domain/vo/Auth';
@@ -36,16 +33,18 @@ export class UserCommandService extends UserCommandUseCase {
 
   override signIn(
     command: SignInUserCommand,
-  ): TaskEither<DBError | AuthError, SignInUserDto> {
+  ): T.IO<DBError | AuthError, SignInUserDto> {
     return pipe(
-      TE.Do,
-      TE.apS('auth', this.authProviderPort.findOne(command.code, command.type)),
-      TE.bindW('user', ({ auth }) =>
-        this.userQueryRepositoryPort.findByAuth(auth),
+      this.authProviderPort.findOne(command.code, command.type),
+      T.chain((auth) =>
+        T.structPar({
+          auth: T.succeed(auth),
+          user: this.userQueryRepositoryPort.findByAuth(auth),
+        }),
       ),
-      TE.bindW('updatedUser', ({ auth, user }) => this.updateUser(user, auth)),
-      TE.map(
-        ({ updatedUser }) =>
+      T.chain(({ auth, user }) => this.updateUser(user, auth)),
+      T.map(
+        (updatedUser) =>
           new SignInUserDto(
             this.tokenGeneratorPort.generateByUser(updatedUser),
             updatedUser,
@@ -56,69 +55,64 @@ export class UserCommandService extends UserCommandUseCase {
 
   override enroll(
     command: EnrollUserCommand,
-  ): TaskEither<DBError | NotFoundException, void> {
+  ): T.IO<DBError | NotFoundException, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.map((user) => user.enroll(command.nickname, command.toAddress())),
-      TE.chainW((updatedUser) => this.userRepositoryPort.save(updatedUser)),
-      TE.map(constVoid),
+      T.map((user) => user.enroll(command.nickname, command.toAddress())),
+      T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      T.map(constVoid),
     );
   }
 
   override leave(
     command: LeaveUserCommand,
     now = new Date(),
-  ): TaskEither<DBError, void> {
+  ): T.IO<DBError, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.map((user) => user.leave(command.name, command.reason, now)),
-      TE.chain((user) => this.userRepositoryPort.save(user)),
-      TE.map(constVoid),
+      T.map((user) => user.leave(command.name, command.reason, now)),
+      T.chain((user) => this.userRepositoryPort.save(user)),
+      T.map(constVoid),
     );
   }
 
   override appendAddress(
     command: AppendAddressCommand,
-  ): TaskEither<DBError | IllegalStateException, void> {
+  ): T.IO<DBError | IllegalStateException, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.chainEitherKW((user) => user.appendAddress(command.toAddress())),
-      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
-      TE.map(constVoid),
+      T.chain((user) =>
+        T.fromEither(() => user.appendAddress(command.toAddress())),
+      ),
+      T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      T.map(constVoid),
     );
   }
 
-  override deleteAddress(
-    command: DeleteAddressCommand,
-  ): TaskEither<DBError, void> {
+  override deleteAddress(command: DeleteAddressCommand): T.IO<DBError, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.map((user) => user.deleteAddress(command.key)),
-      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
-      TE.map(constVoid),
+      T.map((user) => user.deleteAddress(command.key)),
+      T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      T.map(constVoid),
     );
   }
 
-  override updateProfile(
-    command: UpdateProfileCommand,
-  ): TE.TaskEither<DBError, void> {
+  override updateProfile(command: UpdateProfileCommand): T.IO<DBError, void> {
     return pipe(
       this.userQueryRepositoryPort.findById(command.userId),
-      TE.map((user) => user.updateProfile(command.introduce)),
-      TE.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
-      TE.map(constVoid),
+      T.map((user) => user.updateProfile(command.introduce)),
+      T.chain((updatedUser) => this.userRepositoryPort.save(updatedUser)),
+      T.map(constVoid),
     );
   }
 
-  private updateUser(
-    user: Option<User>,
-    auth: Auth,
-  ): TaskEither<DBError, User> {
+  private updateUser(user: O.Option<User>, auth: Auth): T.IO<DBError, User> {
     return pipe(
       user,
       O.fold(
         () => this.userRepositoryPort.save(User.byAuth(auth)),
-        (s) => TE.right(s),
+        (s) => T.succeed(s),
       ),
     );
   }

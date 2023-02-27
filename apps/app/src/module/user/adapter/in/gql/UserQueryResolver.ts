@@ -1,6 +1,7 @@
-import { O, TE, toResponse } from '@app/custom/fp-ts';
+import { T, O, pipe } from '@app/custom/effect';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
-import { pipe } from 'fp-ts/function';
 
 import { CurrentSession } from './auth/CurrentSession';
 import { Session } from './auth/Session';
@@ -17,41 +18,41 @@ export class UserQueryResolver {
   ) {}
 
   @Query(() => Boolean, { description: '닉네임 중복여부' })
-  async hasNickname(@Args('nickname') nickname: string): Promise<boolean> {
+  hasNickname(@Args('nickname') nickname: string): T.IO<DBError, boolean> {
     return pipe(
       this.userQueryRepositoryPort.findByNickname(nickname),
-      toResponse(O.isSome),
-    )();
+      T.map(O.isSome),
+    );
   }
 
   @Query(() => [UserAddressResponse], { description: '등록한 주소목록' })
-  async addresses(
+  addresses(
     @CurrentSession() session: Session,
-  ): Promise<UserAddressResponse[]> {
+  ): T.IO<DBError | NotFoundException, UserAddressResponse[]> {
     return pipe(
       this.userQueryRepositoryPort.findById(session.id),
-      TE.map((user) => user.addresses),
-      toResponse(UserAddressResponse.of),
-    )();
+      T.map((user) => user.addresses),
+      T.map(UserAddressResponse.of),
+    );
   }
 
   @Query(() => MyProfileResponse, { description: '내 프로필 정보' })
-  async myProfile(
+  myProfile(
     @CurrentSession() session: Session,
-  ): Promise<MyProfileResponse> {
+  ): T.IO<DBError | NotFoundException, MyProfileResponse> {
     return pipe(
       this.userQueryRepositoryPort.findById(session.id),
-      toResponse(MyProfileResponse.of),
-    )();
+      T.map(MyProfileResponse.of),
+    );
   }
 
   @Query(() => UserProfileResponse, { description: '프로필 정보' })
-  async profile(
+  profile(
     @Args('userId', { type: () => ID }) userId: UserId,
-  ): Promise<UserProfileResponse> {
+  ): T.IO<DBError | NotFoundException, UserProfileResponse> {
     return pipe(
       this.userQueryRepositoryPort.findById(userId),
-      toResponse(UserProfileResponse.of),
-    )();
+      T.map(UserProfileResponse.of),
+    );
   }
 }

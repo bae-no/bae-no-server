@@ -1,11 +1,10 @@
-import { TE } from '@app/domain/../../custom/src/fp-ts';
+import { T } from '@app/custom/effect';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { NodeFetchResponse } from '@app/http-client/NodeFetchResponse';
 import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 export class HttpClientService extends HttpClientPort {
   #timeout = 5000;
@@ -17,35 +16,35 @@ export class HttpClientService extends HttpClientPort {
   override get(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send('GET', url, option);
   }
 
   override post(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send('POST', url, option);
   }
 
   override put(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send('PUT', url, option);
   }
 
   override patch(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send('PATCH', url, option);
   }
 
   override delete(
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     return this.send('DELETE', url, option);
   }
 
@@ -53,12 +52,12 @@ export class HttpClientService extends HttpClientPort {
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     url: string,
     option?: HttpOption,
-  ): TaskEither<HttpError, HttpResponse> {
+  ): T.IO<HttpError, HttpResponse> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.#timeout);
 
     return pipe(
-      TE.tryCatch(
+      T.tryCatchPromise(
         async () => {
           try {
             const response = await fetch(url + this.makeSearchParam(option), {

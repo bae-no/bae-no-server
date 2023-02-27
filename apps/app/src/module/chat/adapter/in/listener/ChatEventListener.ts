@@ -1,10 +1,9 @@
-import { O, RNEA, TE } from '@app/custom/fp-ts';
+import { T, pipe, O, NEA } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { OnEvent } from '@nestjs/event-emitter';
-import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
@@ -30,14 +29,17 @@ export class ChatEventListener {
 
   @OnEvent(ChatReadEvent.name, { async: true })
   async handleChatReadEvent(event: ChatReadEvent) {
-    await this.chatRepositoryPort.updateRead(event.shareDealId, event.userId)();
+    await pipe(
+      this.chatRepositoryPort.updateRead(event.shareDealId, event.userId),
+      T.runPromise,
+    );
   }
 
   @OnEvent(ChatWrittenEvent.name, { async: true })
   handleChatWrittenEvent(event: ChatWrittenEvent) {
     pipe(
-      RNEA.fromArray(event.chats),
-      O.map(RNEA.head),
+      NEA.fromArray(event.chats),
+      O.map(NEA.head),
       O.map((chat) =>
         this.pubSubPort.publish(
           ChatWrittenTrigger(chat.shareDealId),
@@ -59,13 +61,12 @@ export class ChatEventListener {
     event: ShareDealStartedEvent | ShareDealEndedEvent | ShareDealClosedEvent,
   ) {
     await pipe(
-      this.shareDealQueryRepositoryPort.findById(event.shareDealId),
-      TE.map((shareDeal) => this.createChats(shareDeal, event)),
-      TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chats) =>
-        this.eventEmitterPort.emit(new ChatWrittenEvent(chats)),
-      ),
-    )();
+      this.shareDealQueryRepositoryPort.findByIdE(event.shareDealId),
+      T.map((shareDeal) => this.createChats(shareDeal, event)),
+      T.chain((chats) => this.chatRepositoryPort.create(chats)),
+      T.map((chats) => this.eventEmitterPort.emit(new ChatWrittenEvent(chats))),
+      T.runPromise,
+    );
   }
 
   private createChats(

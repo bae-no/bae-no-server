@@ -1,10 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe, constVoid } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
 import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
@@ -18,31 +16,31 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
     super();
   }
 
-  override create(chats: Chat[]): TaskEither<DBError, Chat[]> {
+  override create(chats: Chat[]): T.IO<DBError, Chat[]> {
     return pipe(
       chats.map((chat) => ChatOrmMapper.toOrm(chat)),
       (chats) =>
-        tryCatchDB(async () =>
+        tryCatchDBE(async () =>
           this.prisma.$transaction(
             chats.map((data) => this.prisma.chat.create({ data })),
           ),
         ),
-      TE.map((chats) => chats.map(ChatOrmMapper.toDomain)),
+      T.map((chats) => chats.map(ChatOrmMapper.toDomain)),
     );
   }
 
   override updateRead(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, void> {
+  ): T.IO<DBError, void> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.chat.updateMany({
           where: { shareDealId, userId },
           data: { message: { update: { unread: false } } },
         }),
       ),
-      TE.map(constVoid),
+      T.map(constVoid),
     );
   }
 }

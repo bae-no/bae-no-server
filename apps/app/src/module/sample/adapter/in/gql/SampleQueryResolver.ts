@@ -1,8 +1,10 @@
-import { toResponse } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
+import type { DBError } from '@app/domain/error/DBError';
+import type { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
-import { pipe } from 'fp-ts/function';
 
 import { SampleResponse } from './response/SampleResponse';
+import { Public } from '../../../../user/adapter/in/gql/auth/Public';
 import { SampleQueryUseCase } from '../../../application/port/in/SampleQueryUseCase';
 import { SampleId } from '../../../domain/Sample';
 
@@ -11,12 +13,13 @@ export class SampleQueryResolver {
   constructor(private readonly sampleQueryUseCase: SampleQueryUseCase) {}
 
   @Query(() => SampleResponse)
-  async sample(
+  @Public()
+  sample(
     @Args({ name: 'id', type: () => ID }) id: string,
-  ): Promise<SampleResponse> {
+  ): T.IO<DBError | NotFoundException, SampleResponse> {
     return pipe(
       this.sampleQueryUseCase.findById(SampleId(id)),
-      toResponse(SampleResponse.of),
-    )();
+      T.map(SampleResponse.of),
+    );
   }
 }

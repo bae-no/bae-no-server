@@ -1,12 +1,10 @@
 import { createHmac } from 'crypto';
 
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { NotificationError } from '@app/domain/error/NotificationError';
 import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import { SmsPort } from '@app/domain/notification/SmsPort';
 import { SmsResponse } from '@app/sms/SmsResponse';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 export class SmsSensService extends SmsPort {
   constructor(
@@ -23,7 +21,7 @@ export class SmsSensService extends SmsPort {
   override send(
     phoneNumber: string,
     content: string,
-  ): TaskEither<NotificationError, void> {
+  ): T.IO<NotificationError, void> {
     const path = `/sms/v2/services/${this.serviceId}/messages`;
     const timestamp = Date.now().toString();
 
@@ -43,20 +41,22 @@ export class SmsSensService extends SmsPort {
             messages: [{ to: phoneNumber }],
           },
         }),
-      TE.bindTo('response'),
-      TE.bind('body', ({ response }) =>
-        TE.fromEither(response.toEntity(SmsResponse)),
+      T.chain((response) =>
+        T.structPar({
+          response: T.succeed(response),
+          body: T.fromEither(() => response.toEntity(SmsResponse)),
+        }),
       ),
-      TE.chainW(({ body, response }) =>
+      T.chain(({ body, response }) =>
         body.isSuccessful
-          ? TE.right(undefined)
-          : TE.left(
+          ? T.succeed(undefined)
+          : T.fail(
               new Error(
                 `SMS 발송이 실패했습니다: statusCode=${response.statusCode} body=${response.body}`,
               ),
             ),
       ),
-      TE.mapLeft((err) => new NotificationError(err)),
+      T.mapError((err) => new NotificationError(err)),
     );
   }
 

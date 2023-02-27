@@ -1,9 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryUseCase } from '../../../share-deal/application/port/in/ShareDealQueryUseCase';
 import { Chat } from '../../domain/Chat';
@@ -24,13 +23,13 @@ export class ChatCommandService extends ChatCommandUseCase {
     super();
   }
 
-  override write(command: WriteChatCommand): TaskEither<WriteChatError, void> {
+  override write(command: WriteChatCommand): T.IO<WriteChatError, void> {
     return pipe(
       this.shareDealQueryUseCase.participantIds(
         command.shareDealId,
         command.userId,
       ),
-      TE.map((participantIds) =>
+      T.map((participantIds) =>
         Chat.create(
           command.shareDealId,
           participantIds,
@@ -39,9 +38,11 @@ export class ChatCommandService extends ChatCommandUseCase {
           this.ticketGeneratorPort.generateId(),
         ),
       ),
-      TE.chainW((chats) => this.chatRepositoryPort.create(chats)),
-      TE.map((chats) =>
-        this.eventEmitterPort.emit(new ChatWrittenEvent(chats)),
+      T.chain((chats) => this.chatRepositoryPort.create(chats)),
+      T.tap((chats) =>
+        T.succeedWith(() =>
+          this.eventEmitterPort.emit(new ChatWrittenEvent(chats)),
+        ),
       ),
     );
   }

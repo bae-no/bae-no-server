@@ -1,4 +1,5 @@
 import { BaseExceptionFilter } from '@app/custom/nest/filter/BaseExceptionFilter';
+import { EffectInterceptor } from '@app/custom/nest/interceptor/EffectInterceptor';
 import type { ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloDriver } from '@nestjs/apollo';
 import type {
@@ -57,5 +58,6 @@ export async function graphQLTestHelper(
     .useGlobalGuards(new MockGuard())
     .useGlobalFilters(new BaseExceptionFilter())
     .useGlobalPipes(new ValidationPipe({ transform: true }))
+    .useGlobalInterceptors(new EffectInterceptor())
     .init();
 }

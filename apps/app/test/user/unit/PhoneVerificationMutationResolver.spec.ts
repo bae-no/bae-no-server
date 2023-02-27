@@ -1,4 +1,4 @@
-import { TE } from '@app/custom/fp-ts';
+import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
@@ -50,7 +50,7 @@ describe('PhoneVerificationMutationResolver ', () => {
         }
       `;
 
-      phoneVerificationUseCase.sendCode.mockReturnValue(TE.right(undefined));
+      phoneVerificationUseCase.sendCode.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -80,7 +80,7 @@ describe('PhoneVerificationMutationResolver ', () => {
         }
       `;
 
-      phoneVerificationUseCase.verify.mockReturnValue(TE.right(undefined));
+      phoneVerificationUseCase.verify.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -109,7 +109,7 @@ describe('PhoneVerificationMutationResolver ', () => {
       `;
 
       phoneVerificationUseCase.verify.mockReturnValue(
-        TE.left(new MismatchedCodeException('mismatch')),
+        T.fail(new MismatchedCodeException('mismatch')),
       );
 
       // when
@@ -154,7 +154,7 @@ describe('PhoneVerificationMutationResolver ', () => {
       `;
 
       phoneVerificationUseCase.verify.mockReturnValue(
-        TE.left(new ExpiredCodeException('expired')),
+        T.fail(new ExpiredCodeException('expired')),
       );
 
       // when

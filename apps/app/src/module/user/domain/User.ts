@@ -1,9 +1,7 @@
+import { E, pipe } from '@app/custom/effect';
 import { BaseBrandedEntity } from '@app/domain/entity/BaseBrandedEntity';
 import type { Branded } from '@app/domain/entity/Branded';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import * as E from 'fp-ts/Either';
-import type { Either } from 'fp-ts/Either';
-import { pipe } from 'fp-ts/function';
 
 import type { ExpiredCodeException } from './exception/ExpiredCodeException';
 import type { MismatchedCodeException } from './exception/MismatchedCodeException';
@@ -87,7 +85,7 @@ export class User extends BaseBrandedEntity<UserProps, UserId> {
   updateByPhoneVerification(
     phoneVerification: PhoneVerification,
     code: string,
-  ): Either<ExpiredCodeException | MismatchedCodeException, this> {
+  ): E.Either<ExpiredCodeException | MismatchedCodeException, this> {
     return pipe(
       phoneVerification.verify(code),
       E.map(() => {
@@ -112,7 +110,7 @@ export class User extends BaseBrandedEntity<UserProps, UserId> {
     return this;
   }
 
-  appendAddress(address: Address): Either<IllegalStateException, this> {
+  appendAddress(address: Address): E.Either<IllegalStateException, this> {
     try {
       this.props.addressList = UserAddressList.of([...this.addresses, address]);
 

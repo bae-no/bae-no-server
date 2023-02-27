@@ -1,6 +1,6 @@
+import { T } from '@app/custom/effect';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -48,7 +48,7 @@ describe('ChatMutationResolver', () => {
         }
       `;
 
-      chatCommandUseCase.write.mockReturnValue(right(undefined));
+      chatCommandUseCase.write.mockReturnValue(T.succeed(undefined));
 
       // when
       const response = await request(app.getHttpServer())

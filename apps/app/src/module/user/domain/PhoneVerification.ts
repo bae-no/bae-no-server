@@ -1,8 +1,7 @@
-import { randomInt } from 'crypto';
+import { randomInt } from 'node:crypto';
 
+import { E } from '@app/custom/effect';
 import { addMinutes, isAfter } from 'date-fns';
-import type { Either } from 'fp-ts/Either';
-import { left, right } from 'fp-ts/Either';
 
 import { ExpiredCodeException } from './exception/ExpiredCodeException';
 import { MismatchedCodeException } from './exception/MismatchedCodeException';
@@ -27,9 +26,9 @@ export class PhoneVerification {
   verify(
     code: string,
     now = new Date(),
-  ): Either<ExpiredCodeException | MismatchedCodeException, void> {
+  ): E.Either<ExpiredCodeException | MismatchedCodeException, void> {
     if (this.code !== code) {
-      return left(
+      return E.left(
         new MismatchedCodeException(
           `코드가 일치하지 않습니다: expected=${this.code}, actual=${code}`,
         ),
@@ -37,14 +36,14 @@ export class PhoneVerification {
     }
 
     if (this.isExpired(now)) {
-      return left(
+      return E.left(
         new ExpiredCodeException(
           `코드가 만료되었습니다: expiredAt=${this.expiredAt}`,
         ),
       );
     }
 
-    return right(undefined);
+    return E.right(undefined);
   }
 
   private isExpired(now: Date): boolean {

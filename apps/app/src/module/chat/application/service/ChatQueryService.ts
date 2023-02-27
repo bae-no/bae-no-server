@@ -1,9 +1,7 @@
-import { O, TE } from '@app/custom/fp-ts';
+import { T, O, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
-import { constant, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealQueryRepositoryPort } from '../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { UserQueryRepositoryPort } from '../../../user/application/port/out/UserQueryRepositoryPort';
@@ -27,39 +25,25 @@ export class ChatQueryService extends ChatQueryUseCase {
     super();
   }
 
-  override find(
-    command: FindChatCommand,
-  ): TaskEither<DBError, FindChatResult[]> {
+  override find(command: FindChatCommand): T.IO<DBError, FindChatResult[]> {
     return pipe(
-      TE.Do,
-      TE.apS(
-        'shareDeals',
-        this.shareDealQueryRepositoryPort.findByUser(
-          command.toShareDealCommand(),
-        ),
+      this.shareDealQueryRepositoryPort.findByUser(
+        command.toShareDealCommand(),
       ),
-      TE.bind('join', ({ shareDeals }) =>
-        pipe(
-          TE.Do,
-          TE.apS(
-            'lastChats',
-            TE.sequenceArray(
-              shareDeals.map((deal) =>
-                this.chatQueryRepository.last(deal.id, command.userId),
-              ),
+      T.chain((shareDeals) =>
+        T.structPar({
+          shareDeals: T.succeed(shareDeals),
+          join: T.structPar({
+            lastChats: T.forEachPar_(shareDeals, (deal) =>
+              this.chatQueryRepository.last(deal.id, command.userId),
             ),
-          ),
-          TE.apS(
-            'unreadCounts',
-            TE.sequenceArray(
-              shareDeals.map((deal) =>
-                this.chatQueryRepository.unreadCount(deal.id, command.userId),
-              ),
+            unreadCounts: T.forEachPar_(shareDeals, (deal) =>
+              this.chatQueryRepository.unreadCount(deal.id, command.userId),
             ),
-          ),
-        ),
+          }),
+        }),
       ),
-      TE.map(({ shareDeals, join: { lastChats, unreadCounts } }) =>
+      T.map(({ shareDeals, join: { lastChats, unreadCounts } }) =>
         shareDeals.map(
           (deal, index) =>
             new FindChatResult(
@@ -67,11 +51,11 @@ export class ChatQueryService extends ChatQueryUseCase {
               deal.title,
               deal.thumbnail,
               pipe(
-                lastChats[index],
+                [...lastChats][index],
                 O.map((chat) => chat.content),
-                O.getOrElse(constant('')),
+                O.getOrElse(() => ''),
               ),
-              unreadCounts[index],
+              [...unreadCounts][index],
             ),
         ),
       ),
@@ -80,23 +64,18 @@ export class ChatQueryService extends ChatQueryUseCase {
 
   override findByUser(
     command: FindChatByUserCommand,
-  ): TaskEither<DBError, FindByUserDto[]> {
+  ): T.IO<DBError, FindByUserDto[]> {
     return pipe(
-      TE.Do,
-      TE.apS('chats', this.chatQueryRepository.findByUser(command)),
-      TE.bind('authors', ({ chats }) =>
-        this.userQueryRepositoryPort.findByIds(
-          chats.map((chat) => chat.message.authorId),
-        ),
+      this.chatQueryRepository.findByUser(command),
+      T.chain((chats) =>
+        T.structPar({
+          chats: T.succeed(chats),
+          authors: this.userQueryRepositoryPort.findByIds(
+            chats.map((chat) => chat.message.authorId),
+          ),
+        }),
       ),
-      TE.map((result) => {
-        this.eventEmitterPort.emit(
-          new ChatReadEvent(command.userId, command.shareDealId),
-        );
-
-        return result;
-      }),
-      TE.map(({ chats, authors }) =>
+      T.map(({ chats, authors }) =>
         chats.map(
           (chat) =>
             new FindByUserDto(
@@ -105,6 +84,13 @@ export class ChatQueryService extends ChatQueryUseCase {
                 (author) => author.id === chat.message.authorId,
               ) as User,
             ),
+        ),
+      ),
+      T.tap(() =>
+        T.succeedWith(() =>
+          this.eventEmitterPort.emit(
+            new ChatReadEvent(command.userId, command.shareDealId),
+          ),
         ),
       ),
     );

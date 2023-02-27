@@ -1,4 +1,4 @@
-import { right } from 'fp-ts/TaskEither';
+import { T } from '@app/custom/effect';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
@@ -9,7 +9,7 @@ import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/Partic
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ShareDealQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
@@ -26,7 +26,9 @@ describe('ShareDealQueryService', () => {
         id: ShareDealId('shareDealId'),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.isParticipant(
@@ -35,7 +37,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesLeft(result, (exception) => {
+      await assertResolvesFail(result, (exception) => {
         expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
@@ -50,7 +52,9 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.isParticipant(
@@ -59,7 +63,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
     });
   });
 
@@ -72,7 +76,9 @@ describe('ShareDealQueryService', () => {
         participantInfo: ParticipantInfo.of([UserId('user')], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.participantIds(
@@ -81,7 +87,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesLeft(result, (exception) => {
+      await assertResolvesFail(result, (exception) => {
         expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
@@ -97,7 +103,9 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.participantIds(
@@ -106,7 +114,7 @@ describe('ShareDealQueryService', () => {
       );
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toEqual(['user 1', 'user 2']);
       });
     });

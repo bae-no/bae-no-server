@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 import { UserId } from '../../../src/module/user/domain/User';
 import { UserPushTokenRepositoryAdapter } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenRepositoryAdapter';
 import { UserPushToken } from '../../../src/module/user-push-token/domain/UserPushToken';
-import { assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesSuccess } from '../../fixture/utils';
 
 describe('UserPushTokenRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -28,7 +28,7 @@ describe('UserPushTokenRepositoryAdapter', () => {
       const result = userPushTokenRepositoryAdapter.save(userToken);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).not.toBeUndefined();
         expect(value.userId).toBe(userToken.userId);
         expect(value.token).toBe(userToken.token);

@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import { UserPushTokenOrmMapper } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenOrmMapper';
 import { UserPushTokenQueryRepositoryAdapter } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenQueryRepositoryAdapter';
-import { assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesSuccess } from '../../fixture/utils';
 
 describe('UserPushTokenQueryRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -23,7 +23,7 @@ describe('UserPushTokenQueryRepositoryAdapter', () => {
       const result = userPushTokenQueryRepositoryAdapter.findByUserIds([id]);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(0);
       });
     });
@@ -45,7 +45,7 @@ describe('UserPushTokenQueryRepositoryAdapter', () => {
       ]);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toStrictEqual([userPushToken]);
       });
     });

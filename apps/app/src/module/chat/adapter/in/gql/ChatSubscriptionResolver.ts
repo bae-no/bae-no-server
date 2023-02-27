@@ -1,7 +1,7 @@
-import { TE } from '@app/custom/fp-ts';
+import { pipe, T } from '@app/custom/effect';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
+import { liveTracer } from '@app/monitoring/init';
 import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
-import { pipe } from 'fp-ts/function';
 
 import { ChatWrittenResponse } from './response/ChatWrittenResponse';
 import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/in/ShareDealQueryUseCase';
@@ -26,14 +26,13 @@ export class ChatSubscriptionResolver {
   ): Promise<AsyncIterator<ChatWrittenResponse>> {
     return pipe(
       this.shareDealQueryUseCase.isParticipant(shareDealId, session.id),
-      TE.map(() =>
+      T.map(() =>
         this.pubSubPort.subscribe<ChatWrittenResponse>(
           ChatWrittenTrigger(shareDealId),
         ),
       ),
-      TE.getOrElse((error) => {
-        throw error;
-      }),
-    )();
+      liveTracer,
+      T.runPromise,
+    );
   }
 }

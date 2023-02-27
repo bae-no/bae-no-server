@@ -1,6 +1,6 @@
+import type { T } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { AuthError } from '@app/domain/error/AuthError';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { AuthStrategy } from './strategy/AuthStrategy';
 import { GoogleAuthStrategy } from './strategy/GoogleAuthStrategy';
@@ -18,7 +18,7 @@ export class AuthProvider extends AuthProviderPort {
     super();
   }
 
-  findOne(code: string, type: AuthType): TaskEither<AuthError, Auth> {
+  override findOne(code: string, type: AuthType): T.IO<AuthError, Auth> {
     return this.requestClientFactory(type).request(code);
   }
 

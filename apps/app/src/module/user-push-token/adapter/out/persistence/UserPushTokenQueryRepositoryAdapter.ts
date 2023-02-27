@@ -1,11 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { pipe } from 'fp-ts/function';
-import type { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
@@ -17,16 +14,14 @@ export class UserPushTokenQueryRepositoryAdapter extends UserPushTokenQueryRepos
     super();
   }
 
-  override findByUserIds(
-    userIds: ReadonlyNonEmptyArray<string>,
-  ): TaskEither<DBError, UserPushToken[]> {
+  override findByUserIds(userIds: string[]): T.IO<DBError, UserPushToken[]> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.userPushToken.findMany({
           where: { userId: { in: [...userIds] } },
         }),
       ),
-      TE.map((userPushTokens) =>
+      T.map((userPushTokens) =>
         userPushTokens.map(UserPushTokenOrmMapper.toDomain),
       ),
     );

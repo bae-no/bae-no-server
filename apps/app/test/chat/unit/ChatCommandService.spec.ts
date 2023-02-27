@@ -1,5 +1,5 @@
+import { T } from '@app/custom/effect';
 import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
@@ -12,7 +12,7 @@ import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/a
 import type { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { UserId } from '../../../src/module/user/domain/User';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ChatCommandService', () => {
   const shareDealQueryUseCase = mock<ShareDealQueryUseCase>();
@@ -43,14 +43,14 @@ describe('ChatCommandService', () => {
       );
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
-        left(new ShareDealAccessDeniedException('error')),
+        T.fail(new ShareDealAccessDeniedException('error')),
       );
 
       // when
       const result = shareDealCommandService.write(command);
 
       // then
-      await assertResolvesLeft(result, (exception) => {
+      await assertResolvesFail(result, (exception) => {
         expect(exception).toBeInstanceOf(ShareDealAccessDeniedException);
       });
     });
@@ -65,19 +65,19 @@ describe('ChatCommandService', () => {
       let db: Chat[] = [];
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
-        right(['user 1', 'user 2', 'user 3'].map(UserId)),
+        T.succeed(['user 1', 'user 2', 'user 3'].map(UserId)),
       );
       chatRepositoryPort.create.mockImplementation((chats) => {
         db = chats;
 
-        return right(chats);
+        return T.succeed(chats);
       });
 
       // when
       const result = shareDealCommandService.write(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(db).toHaveLength(3);
         expect(db.map((chat) => [chat.userId, chat.message]))
           .toMatchInlineSnapshot(`
@@ -123,15 +123,15 @@ describe('ChatCommandService', () => {
       );
 
       shareDealQueryUseCase.participantIds.mockReturnValue(
-        right(['user 1', 'user 2', 'user 3'].map(UserId)),
+        T.succeed(['user 1', 'user 2', 'user 3'].map(UserId)),
       );
-      chatRepositoryPort.create.mockImplementation((chats) => right(chats));
+      chatRepositoryPort.create.mockImplementation((chats) => T.succeed(chats));
 
       // when
       const result = shareDealCommandService.write(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         const event = eventEmitter.get(
           ChatWrittenEvent.name,
         ) as ChatWrittenEvent;

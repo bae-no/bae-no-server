@@ -1,4 +1,4 @@
-import { right } from 'fp-ts/TaskEither';
+import { T } from '@app/custom/effect';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubPushMessage } from '../../../../../libs/push-message/test/fixture/StubPushMessageModule';
@@ -57,7 +57,7 @@ describe('UserPushTokenEventListener', () => {
       ]);
 
       userPushTokenQueryRepositoryPort.findByUserIds.mockReturnValue(
-        right([
+        T.succeed([
           new UserPushToken({ userId: UserId('userId'), token: 'token' }),
         ]),
       );

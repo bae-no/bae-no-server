@@ -1,11 +1,8 @@
-import { O, TE } from '@app/custom/fp-ts';
+import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { pipe } from 'fp-ts/function';
-import type { Option } from 'fp-ts/Option';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
 import type { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
@@ -23,15 +20,15 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
   override last(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, Option<Chat>> {
+  ): T.IO<DBError, O.Option<Chat>> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDBE(() =>
         this.prisma.chat.findFirst({
           where: { shareDealId, userId },
           orderBy: { createdAt: 'desc' },
         }),
       ),
-      TE.map((chat) =>
+      T.map((chat) =>
         pipe(O.fromNullable(chat), O.map(ChatOrmMapper.toDomain)),
       ),
     );
@@ -40,9 +37,9 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
   override unreadCount(
     shareDealId: ShareDealId,
     userId: UserId,
-  ): TaskEither<DBError, number> {
+  ): T.IO<DBError, number> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.chat.count({
           where: {
             shareDealId,
@@ -54,11 +51,9 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     );
   }
 
-  override findByUser(
-    command: FindChatByUserCommand,
-  ): TaskEither<DBError, Chat[]> {
+  override findByUser(command: FindChatByUserCommand): T.IO<DBError, Chat[]> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.chat.findMany({
           where: { shareDealId: command.shareDealId, userId: command.userId },
           ...(command.cursor ? { cursor: { orderedKey: command.cursor } } : {}),
@@ -66,7 +61,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
           orderBy: { orderedKey: 'desc' },
         }),
       ),
-      TE.map((chats) => chats.map(ChatOrmMapper.toDomain)),
+      T.map((chats) => chats.map(ChatOrmMapper.toDomain)),
     );
   }
 }

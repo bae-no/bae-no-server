@@ -1,9 +1,7 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe, O } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { Sample, SampleId } from '../../domain/Sample';
 import { SampleQueryUseCase } from '../port/in/SampleQueryUseCase';
@@ -17,16 +15,16 @@ export class SampleQueryService extends SampleQueryUseCase {
     super();
   }
 
-  override findById(
-    id: SampleId,
-  ): TaskEither<DBError | NotFoundException, Sample> {
+  override findById(id: SampleId): T.IO<DBError | NotFoundException, Sample> {
     return pipe(
       this.sampleQueryRepositoryPort.findById(id),
-      TE.chainW(
-        TE.fromOption(
-          () => new NotFoundException('sample 이 존재하지 않습니다'),
-        ),
-      ),
+      T.chain((optionSample) => {
+        if (O.isNone(optionSample)) {
+          return T.fail(new NotFoundException('sample 이 존재하지 않습니다'));
+        }
+
+        return T.succeed(optionSample.value);
+      }),
     );
   }
 }

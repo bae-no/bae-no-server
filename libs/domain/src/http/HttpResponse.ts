@@ -1,5 +1,5 @@
+import type { E } from '@app/custom/effect';
 import type { HttpError } from '@app/domain/error/HttpError';
-import type { Either } from 'fp-ts/Either';
 
 export interface HttpResponse {
   get isOk(): boolean;
@@ -8,5 +8,5 @@ export interface HttpResponse {
 
   get body(): string;
 
-  toEntity<T>(entity: { new (...args: any[]): T }): Either<HttpError, T>;
+  toEntity<T>(entity: { new (...args: any[]): T }): E.Either<HttpError, T>;
 }

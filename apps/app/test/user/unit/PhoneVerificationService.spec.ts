@@ -1,6 +1,6 @@
+import { T } from '@app/custom/effect';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import type { SmsPort } from '@app/domain/notification/SmsPort';
-import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { SendPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/dto/SendPhoneVerificationCodeCommand';
@@ -14,7 +14,7 @@ import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerifica
 import { User, UserId } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('PhoneVerificationService', () => {
   const phoneVerificationRepository = mock<PhoneVerificationRepositoryPort>();
@@ -42,15 +42,15 @@ describe('PhoneVerificationService', () => {
       );
 
       phoneVerificationRepository.save.mockReturnValue(
-        right(PhoneVerification.of(command.phoneNumber)),
+        T.succeed(PhoneVerification.of(command.phoneNumber)),
       );
-      smsPort.send.mockReturnValue(right(undefined));
+      smsPort.send.mockReturnValue(T.unit);
 
       // when
       const result = phoneVerificationService.sendCode(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
     });
   });
 
@@ -62,16 +62,18 @@ describe('PhoneVerificationService', () => {
         '1234',
       );
 
+      const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       const notFoundException = new NotFoundException('');
       phoneVerificationRepository.findLatest.mockReturnValue(
-        left(notFoundException),
+        T.fail(notFoundException),
       );
 
       // when
       const result = phoneVerificationService.verify(command);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err).toBe(notFoundException);
       });
     });
@@ -85,16 +87,16 @@ describe('PhoneVerificationService', () => {
       );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
 
-      userQueryRepository.findById.mockReturnValue(right(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       phoneVerificationRepository.findLatest.mockReturnValue(
-        right(phoneVerification),
+        T.succeed(phoneVerification),
       );
 
       // when
       const result = phoneVerificationService.verify(command);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err).toBeInstanceOf(MismatchedCodeException);
       });
     });
@@ -108,17 +110,17 @@ describe('PhoneVerificationService', () => {
       );
       const user = User.byAuth(new Auth('id', AuthType.GOOGLE));
 
-      userQueryRepository.findById.mockReturnValue(right(user));
+      userQueryRepository.findById.mockReturnValue(T.succeed(user));
       phoneVerificationRepository.findLatest.mockReturnValue(
-        right(phoneVerification),
+        T.succeed(phoneVerification),
       );
-      userRepository.save.mockReturnValue(right(user));
+      userRepository.save.mockReturnValue(T.succeed(user));
 
       // when
       const result = phoneVerificationService.verify(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
       expect(user.phoneNumber).toBe(phoneVerification.phoneNumber);
     });
   });

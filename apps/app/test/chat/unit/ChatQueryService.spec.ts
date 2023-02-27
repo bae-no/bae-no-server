@@ -1,5 +1,4 @@
-import { some } from 'fp-ts/Option';
-import { right } from 'fp-ts/TaskEither';
+import { T, O } from '@app/custom/effect';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
@@ -18,7 +17,7 @@ import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { UserFactory } from '../../fixture/UserFactory';
-import { assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ChatQueryService', () => {
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
@@ -60,13 +59,13 @@ describe('ChatQueryService', () => {
       );
 
       chatQueryRepositoryPort.last
-        .mockReturnValueOnce(right(some(chats[0])))
-        .mockReturnValueOnce(right(some(chats[1])));
+        .mockReturnValueOnce(T.succeed(O.some(chats[0])))
+        .mockReturnValueOnce(T.succeed(O.some(chats[1])));
       chatQueryRepositoryPort.unreadCount
-        .mockReturnValueOnce(right(unreadCounts[1]))
-        .mockReturnValueOnce(right(unreadCounts[0]));
+        .mockReturnValueOnce(T.succeed(unreadCounts[1]))
+        .mockReturnValueOnce(T.succeed(unreadCounts[0]));
       shareDealQueryRepositoryPort.findByUser.mockReturnValue(
-        right(shareDeals),
+        T.succeed(shareDeals),
       );
 
       const command = new FindChatCommand(
@@ -80,7 +79,7 @@ describe('ChatQueryService', () => {
       const result = shareDealCommandService.find(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toMatchInlineSnapshot(`
           [
             FindChatResult {
@@ -106,8 +105,8 @@ describe('ChatQueryService', () => {
   describe('findByUser', () => {
     it('채팅방 조회 이벤트를 발송한다', async () => {
       // given
-      chatQueryRepositoryPort.findByUser.mockReturnValue(right([]));
-      userQueryRepositoryPort.findByIds.mockReturnValue(right([]));
+      chatQueryRepositoryPort.findByUser.mockReturnValue(T.succeed([]));
+      userQueryRepositoryPort.findByIds.mockReturnValue(T.succeed([]));
 
       const command = new FindChatByUserCommand(
         ShareDealId('shareDealId'),
@@ -118,7 +117,7 @@ describe('ChatQueryService', () => {
       const result = shareDealCommandService.findByUser(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         const event = eventEmitter.get(ChatReadEvent.name) as ChatReadEvent;
         expect(event.shareDealId).toBe('shareDealId');
         expect(event.userId).toBe('userId');
@@ -131,8 +130,8 @@ describe('ChatQueryService', () => {
       const chat = ChatFactory.create({
         message: Message.normal(user.id, 'content', true),
       });
-      chatQueryRepositoryPort.findByUser.mockReturnValue(right([chat]));
-      userQueryRepositoryPort.findByIds.mockReturnValue(right([user]));
+      chatQueryRepositoryPort.findByUser.mockReturnValue(T.succeed([chat]));
+      userQueryRepositoryPort.findByIds.mockReturnValue(T.succeed([user]));
 
       const command = new FindChatByUserCommand(
         ShareDealId('shareDealId'),
@@ -143,7 +142,7 @@ describe('ChatQueryService', () => {
       const result = shareDealCommandService.findByUser(command);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(1);
         expect(value[0].chat).toBe(chat);
         expect(value[0].author).toBe(user);

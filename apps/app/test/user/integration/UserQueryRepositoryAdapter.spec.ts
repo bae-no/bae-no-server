@@ -9,8 +9,8 @@ import { Auth } from '../../../src/module/user/domain/vo/Auth';
 import { AuthType } from '../../../src/module/user/domain/vo/AuthType';
 import {
   assertNone,
-  assertResolvesLeft,
-  assertResolvesRight,
+  assertResolvesFail,
+  assertResolvesSuccess,
   assertSome,
 } from '../../fixture/utils';
 
@@ -29,7 +29,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByAuth(auth);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertNone(value);
       });
     });
@@ -45,7 +45,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByAuth(auth);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertSome(value, (user) => {
           expect(user.auth).toStrictEqual(auth);
         });
@@ -62,7 +62,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findById(id);
 
       // then
-      await assertResolvesLeft(result, (err) => {
+      await assertResolvesFail(result, (err) => {
         expect(err).toBeInstanceOf(NotFoundException);
       });
     });
@@ -78,7 +78,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findById(UserId(user.id));
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).toBe(user.id);
       });
     });
@@ -93,7 +93,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByNickname(nickname);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertNone(value);
       });
     });
@@ -113,7 +113,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByNickname(user.nickname);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         assertSome(value, (user) => {
           expect(user.nickname).toBe(user.nickname);
         });
@@ -130,7 +130,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByIds(ids);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(0);
       });
     });
@@ -146,7 +146,7 @@ describe('UserQueryRepositoryAdapter', () => {
       const result = userQueryRepositoryAdapter.findByIds([UserId(user.id)]);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toHaveLength(1);
         expect(value[0].id).toBe(user.id);
       });

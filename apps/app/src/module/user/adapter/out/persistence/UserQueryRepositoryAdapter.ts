@@ -1,13 +1,10 @@
-import { O, TE } from '@app/custom/fp-ts';
+import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { User as OrmUser } from '@prisma/client';
-import { pipe } from 'fp-ts/function';
-import type { Option } from 'fp-ts/Option';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { UserOrmMapper } from './UserOrmMapper';
 import { UserQueryRepositoryPort } from '../../../application/port/out/UserQueryRepositoryPort';
@@ -20,9 +17,9 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
     super();
   }
 
-  override findByAuth(auth: Auth): TaskEither<DBError, Option<User>> {
+  override findByAuth(auth: Auth): T.IO<DBError, O.Option<User>> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDBE(() =>
         this.prisma.user.findFirst({
           where: {
             auth: {
@@ -32,40 +29,40 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
           },
         }),
       ),
-      TE.map(this.toOptionUser),
+      T.map(this.toOptionUser),
     );
   }
 
-  override findById(id: UserId): TaskEither<DBError | NotFoundException, User> {
+  override findById(id: UserId): T.IO<DBError | NotFoundException, User> {
     return pipe(
-      tryCatchDB(() => this.prisma.user.findUnique({ where: { id } })),
-      TE.chainW((ormUser) =>
+      tryCatchDBE(() => this.prisma.user.findUnique({ where: { id } })),
+      T.chain((ormUser) =>
         ormUser
-          ? TE.right(UserOrmMapper.toDomain(ormUser))
-          : TE.left(
+          ? T.succeed(UserOrmMapper.toDomain(ormUser))
+          : T.fail(
               new NotFoundException(`사용자가 존재하지 않습니다: id=${id}`),
             ),
       ),
     );
   }
 
-  override findByNickname(nickname: string): TaskEither<DBError, Option<User>> {
+  override findByNickname(nickname: string): T.IO<DBError, O.Option<User>> {
     return pipe(
-      tryCatchDB(() => this.prisma.user.findUnique({ where: { nickname } })),
-      TE.map(this.toOptionUser),
+      tryCatchDBE(() => this.prisma.user.findUnique({ where: { nickname } })),
+      T.map(this.toOptionUser),
     );
   }
 
-  override findByIds(ids: UserId[]): TaskEither<DBError, User[]> {
+  override findByIds(ids: UserId[]): T.IO<DBError, User[]> {
     return pipe(
-      tryCatchDB(async () =>
+      tryCatchDBE(async () =>
         this.prisma.user.findMany({ where: { id: { in: ids } } }),
       ),
-      TE.map((ormUsers) => ormUsers.map(UserOrmMapper.toDomain)),
+      T.map((ormUsers) => ormUsers.map(UserOrmMapper.toDomain)),
     );
   }
 
-  private toOptionUser(ormUser: OrmUser | null): Option<User> {
+  private toOptionUser(ormUser: OrmUser | null): O.Option<User> {
     return pipe(
       O.fromNullable(ormUser),
       O.map((user) => UserOrmMapper.toDomain(user)),

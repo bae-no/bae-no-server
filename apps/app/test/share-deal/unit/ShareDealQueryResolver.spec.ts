@@ -1,5 +1,5 @@
+import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -98,8 +98,8 @@ describe('ShareDealQueryResolver', () => {
         zone: new ShareZone(AddressSystem.ROAD, 'road', 'detail', 123.5, 45.6),
       });
 
-      shareDealQueryRepositoryPort.find.mockReturnValue(right([shareDeal]));
-      shareDealQueryRepositoryPort.count.mockReturnValue(right(10));
+      shareDealQueryRepositoryPort.find.mockReturnValue(T.succeed([shareDeal]));
+      shareDealQueryRepositoryPort.count.mockReturnValue(T.succeed(10));
 
       // when
       const response = await request(app.getHttpServer())
@@ -191,11 +191,11 @@ describe('ShareDealQueryResolver', () => {
         zone: new ShareZone(AddressSystem.JIBUN, 'road', 'detail', 123.5, 45.6),
       });
 
-      userQueryRepositoryPort.findById.mockReturnValue(right(user));
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
       shareDealQueryRepositoryPort.findByNearest.mockReturnValue(
-        right([shareDeal]),
+        T.succeed([shareDeal]),
       );
-      shareDealQueryRepositoryPort.count.mockReturnValue(right(10));
+      shareDealQueryRepositoryPort.count.mockReturnValue(T.succeed(10));
 
       // when
       const response = await request(app.getHttpServer())
@@ -240,7 +240,7 @@ describe('ShareDealQueryResolver', () => {
           myEndDealCount
         }
       `;
-      shareDealQueryRepositoryPort.countByStatus.mockReturnValue(right(10));
+      shareDealQueryRepositoryPort.countByStatus.mockReturnValue(T.succeed(10));
 
       // then
       const response = await request(app.getHttpServer())
@@ -295,9 +295,11 @@ describe('ShareDealQueryResolver', () => {
         participantInfo: ParticipantInfo.of([owner.id, participant.id], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
       userQueryRepositoryPort.findByIds.mockReturnValue(
-        right([owner, participant]),
+        T.succeed([owner, participant]),
       );
 
       // then

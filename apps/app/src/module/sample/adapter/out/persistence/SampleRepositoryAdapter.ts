@@ -1,10 +1,8 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { SampleOrmMapper } from './SampleOrmMapper';
 import { SampleRepositoryPort } from '../../../application/port/out/SampleRepositoryPort';
@@ -16,9 +14,9 @@ export class SampleRepositoryAdapter extends SampleRepositoryPort {
     super();
   }
 
-  override save(sample: Sample): TaskEither<DBError, Sample> {
+  override save(sample: Sample): T.IO<DBError, Sample> {
     return pipe(
-      tryCatchDB(() =>
+      tryCatchDBE(() =>
         this.prisma.sample.create({
           data: {
             name: sample.name,
@@ -26,7 +24,7 @@ export class SampleRepositoryAdapter extends SampleRepositoryPort {
           },
         }),
       ),
-      TE.map(SampleOrmMapper.toDomain),
+      T.map(SampleOrmMapper.toDomain),
     );
   }
 }

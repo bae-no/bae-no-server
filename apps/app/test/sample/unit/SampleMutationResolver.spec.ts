@@ -1,5 +1,5 @@
+import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -50,7 +50,7 @@ describe('SampleMutationResolver', () => {
         }
       `;
       const sample = Sample.of({ name: 'name', email: 'email' });
-      sampleCommandUserCase.create.mockReturnValue(right(sample));
+      sampleCommandUserCase.create.mockReturnValue(T.succeed(sample));
 
       // when
       const response = await request(app.getHttpServer())

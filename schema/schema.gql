@@ -55,6 +55,7 @@ type ChatDetailResponse {
 type ChatResponse {
   id: ID!
   lastContent: String!
+  lastUpdatedAt: DateTime!
   thumbnail: String!
   title: String!
   unreadCount: Int!

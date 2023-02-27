@@ -1,4 +1,4 @@
-import { T } from '@app/custom/effect';
+import { O, T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
@@ -58,15 +58,22 @@ describe('ChatQueryResolver', () => {
             title
             thumbnail
             lastContent
+            lastUpdatedAt
             unreadCount
           }
         }
       `;
+      const lastUpdatedAt = new Date('2021-01-01T00:00:00.000Z');
       const chatResult = new FindChatResult(
         ShareDealId('id'),
         'title',
         'thumbnail',
-        'lastContent',
+        O.some(
+          ChatFactory.create({
+            createdAt: lastUpdatedAt,
+            message: Message.normal(UserId('id'), 'lastContent', false),
+          }),
+        ),
         1,
       );
 
@@ -85,6 +92,7 @@ describe('ChatQueryResolver', () => {
               {
                 "id": "id",
                 "lastContent": "lastContent",
+                "lastUpdatedAt": "2021-01-01T00:00:00.000Z",
                 "thumbnail": "thumbnail",
                 "title": "title",
                 "unreadCount": 1,

@@ -12,7 +12,7 @@ export class UserPushToken extends BaseEntity<UserPushTokenProps> {
     super(props);
   }
 
-  get userId(): string {
+  get userId(): UserId {
     return this.props.userId;
   }
 

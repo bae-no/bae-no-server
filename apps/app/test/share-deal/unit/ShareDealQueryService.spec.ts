@@ -1,5 +1,4 @@
 import { T } from '@app/custom/effect';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
@@ -27,7 +26,9 @@ describe('ShareDealQueryService', () => {
         id: ShareDealId('shareDealId'),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.isParticipant(
@@ -51,7 +52,9 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealQueryService.isParticipant(

@@ -1,7 +1,7 @@
+import type { T } from '@app/custom/effect';
+import { pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
-import { pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { Sample } from '../../domain/Sample';
 import type { CreateSampleCommand } from '../port/in/dto/CreateSampleCommand';
@@ -14,7 +14,7 @@ export class SampleCommandService extends SampleCommandUseCase {
     super();
   }
 
-  override create(command: CreateSampleCommand): TaskEither<DBError, Sample> {
+  override create(command: CreateSampleCommand): T.IO<DBError, Sample> {
     return pipe(
       Sample.of({ name: command.name, email: command.email }),
       (sample) => this.sampleRepositoryPort.save(sample),

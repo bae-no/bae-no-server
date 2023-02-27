@@ -1,7 +1,7 @@
-import { TE, toResponse } from '@app/custom/fp-ts';
+import { T, pipe } from '@app/custom/effect';
+import type { DBError } from '@app/domain/error/DBError';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { identity, pipe } from 'fp-ts/function';
 
 import { CreateSampleInput } from './input/CreateSampleInput';
 import { SampleResponse } from './response/SampleResponse';
@@ -16,19 +16,18 @@ export class SampleMutationResolver {
   ) {}
 
   @Mutation(() => SampleResponse)
-  async createSample(
+  createSample(
     @Args('input') input: CreateSampleInput,
-  ): Promise<SampleResponse> {
+  ): T.IO<DBError, SampleResponse> {
     return pipe(
       new CreateSampleCommand(input.name, input.email),
       (command) => this.sampleCommandUseCase.create(command),
-      TE.map((sample) => {
+      T.map((sample) => {
         const response = SampleResponse.of(sample);
         this.pubSubPort.publish('sampleAdded', { sampleAdded: response });
 
         return sample;
       }),
-      toResponse(identity),
-    )();
+    );
   }
 }

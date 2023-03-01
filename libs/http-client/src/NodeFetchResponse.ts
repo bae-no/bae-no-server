@@ -1,8 +1,7 @@
-import { E } from '@app/custom/effect';
+import { E, pipe } from '@app/custom/effect';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { plainToInstance } from 'class-transformer';
-import { identity, pipe } from 'fp-ts/function';
 
 export class NodeFetchResponse implements HttpResponse {
   constructor(private status: number, private rawBody: string) {}
@@ -21,9 +20,12 @@ export class NodeFetchResponse implements HttpResponse {
 
   toEntity<T>(entity: { new (...args: any[]): T }): E.Either<HttpError, T> {
     return pipe(
-      E.parseJSON(identity)(this.rawBody),
+      E.parseJSON((v) => v)(this.rawBody),
       E.chain((body) =>
-        E.tryCatch(() => plainToInstance(entity, body), identity),
+        E.tryCatch(
+          () => plainToInstance(entity, body),
+          (v) => v,
+        ),
       ),
       E.mapLeft((error) => new HttpError(E.toError(error))),
     );

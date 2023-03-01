@@ -1,8 +1,7 @@
-import { T } from '@app/custom/effect';
+import { T, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { pipe } from 'fp-ts/function';
 
 import { ShareDealQueryUseCase } from '../../../share-deal/application/port/in/ShareDealQueryUseCase';
 import { Chat } from '../../domain/Chat';

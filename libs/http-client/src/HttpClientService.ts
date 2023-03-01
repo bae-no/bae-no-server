@@ -1,10 +1,9 @@
-import { T } from '@app/custom/effect';
+import { T, pipe } from '@app/custom/effect';
 import { HttpError } from '@app/domain/error/HttpError';
 import type { HttpOption } from '@app/domain/http/HttpClientPort';
 import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 import { NodeFetchResponse } from '@app/http-client/NodeFetchResponse';
-import { pipe } from 'fp-ts/function';
 
 export class HttpClientService extends HttpClientPort {
   #timeout = 5000;

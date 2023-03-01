@@ -1,7 +1,4 @@
-import { O, T } from '@app/custom/effect';
-import * as E from 'fp-ts/Either';
-import { pipe } from 'fp-ts/function';
-import type * as TE from 'fp-ts/TaskEither';
+import { O, E, T, pipe } from '@app/custom/effect';
 
 function noop(): void {
   return;
@@ -53,20 +50,6 @@ export function assertLeft<L, A>(
       throw new Error(`Left expected, got a Right: ${a}`);
     }),
   );
-}
-
-export async function assertResolvesRight<L, A>(
-  e: TE.TaskEither<L, A>,
-  onRight: (a: A) => void = noop,
-): Promise<void> {
-  assertRight(await e(), onRight);
-}
-
-export async function assertResolvesLeft<L, A>(
-  e: TE.TaskEither<L, A>,
-  onLeft: (a: L) => void = noop,
-): Promise<void> {
-  assertLeft(await e(), onLeft);
 }
 
 export function expectNonNullable<A>(

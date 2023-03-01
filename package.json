@@ -64,7 +64,6 @@
     "cuid": "^3.0.0",
     "date-fns": "2.29.3",
     "firebase-admin": "11.5.0",
-    "fp-ts": "2.13.1",
     "graphql": "16.6.0",
     "graphql-redis-subscriptions": "^2.5.0",
     "graphql-subscriptions": "2.0.0",

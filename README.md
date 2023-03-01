@@ -144,27 +144,31 @@ export abstract class SmsPort {
 }
 ```
 
-## fp-ts
+## Effect TS
 
-프로젝트의 모든 어댑터 내부 로직은 `fp-ts` 를 사용하고 있습니다.  
-`fp-ts` 는 `Either`, `Option` 과 같은 대수적 자료형을 지원하는 라이브러리로 `TaskEither` 를 주로 사용하고 있습니다.  
-Repository 와 Service 구현체 내부의 메소들은 모두 순수함수로 이루어지며 Resolver 에서 side effect 가 발생하는 구조입니다.  
-`fp-ts` 를 사용하다보면 `map`, `chain` 과 같은 함수의 이름이 중복되는 경우가 있어 보통 다음과 같은 축약어로 export 하여 사용합니다.
+프로젝트의 모든 내부 로직은 `Effect TS` 를 사용하고 있습니다.  
+`Effect TS` 는 `Either`, `Option` 과 같은 대수적 자료형을 제공하며, 추가로 사이드 이팩트를 효과적으로 다루는 `Effect` 자료형을 제공합니다.  
+`Effect` 는 의존성에 대한 파라미터를 제공하지만 로깅 외에는 사용하지 않으며 오직 성공과 실패를 표현하는 용도로 사용합니다.  
 
-- TaskEither -> TE
+소스코드에서 해당 라이브러리를 직접 사용하는 대신 커스텀 라이브러리 모듈에서 다시 export 한 것을 사용합니다.  
+보통 라이브러리 관례에 따라 다음과 같은 축약 표현을 사용합니다.
+
+- Effect -> T
 - Either -> E
 - Option -> O
 
 ```typescript
-// libs/custom/src/fp-ts/index.ts
-export * as TE from 'fp-ts/TaskEither';
-export * as O from 'fp-ts/Option';
-export * as E from 'fp-ts/Either';
-export * as RNEA from 'fp-ts/ReadonlyNonEmptyArray';
+// libs/custom/src/effect/index.ts
+export * as T from '@effect-ts/core/Effect';
+export * as O from '@effect-ts/core/Option';
+export * as E from '@effect-ts/core/Either';
+export * as NEA from '@effect-ts/core/Collections/Immutable/NonEmptyArray';
 
 // 아래와 같이 import 하여 사용
-import { TE, O, E, RNEA } from '@app/custom/fp-ts';
+import { T, O, E, NEA } from '@app/custom/effect';
 ```
+
+> Effect TS 에 대한 자세한 내용은 [블로그 글](https://jbl428.github.io/2023/02/11/write-testable-efficient-code-with-effect-ts/) 을 참고하세요.
 
 ## Test
 

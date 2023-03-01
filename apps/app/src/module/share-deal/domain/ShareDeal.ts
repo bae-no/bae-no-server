@@ -1,8 +1,7 @@
+import { E } from '@app/custom/effect';
 import { AggregateRoot } from '@app/domain/entity/AggregateRoot';
 import type { Branded } from '@app/domain/entity/Branded';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import type { Either } from 'fp-ts/Either';
-import { left, right } from 'fp-ts/Either';
 
 import { ShareDealClosedEvent } from './event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from './event/ShareDealEndedEvent';
@@ -137,37 +136,37 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
     return this.participantInfo.hasId(userId);
   }
 
-  join(participantId: UserId): Either<NotJoinableShareDealException, this> {
+  join(participantId: UserId): E.Either<NotJoinableShareDealException, this> {
     if (!this.isJoinable) {
-      return left(
+      return E.left(
         new NotJoinableShareDealException('입장 가능한 공유딜이 아닙니다.'),
       );
     }
     this.props.participantInfo = this.participantInfo.addId(participantId);
 
-    return right(this);
+    return E.right(this);
   }
 
-  start(userId: UserId): Either<IllegalStateException, this> {
+  start(userId: UserId): E.Either<IllegalStateException, this> {
     if (!this.canStart(userId)) {
-      return left(new IllegalStateException('시작할 수 없습니다.'));
+      return E.left(new IllegalStateException('시작할 수 없습니다.'));
     }
 
     this.props.status = ShareDealStatus.START;
     this.addDomainEvent(new ShareDealStartedEvent(this.id));
 
-    return right(this);
+    return E.right(this);
   }
 
-  end(userId: UserId): Either<IllegalStateException, this> {
+  end(userId: UserId): E.Either<IllegalStateException, this> {
     if (!this.canEnd(userId)) {
-      return left(new IllegalStateException('종료할 수 없습니다.'));
+      return E.left(new IllegalStateException('종료할 수 없습니다.'));
     }
 
     this.props.status = ShareDealStatus.END;
     this.addDomainEvent(new ShareDealEndedEvent(this.id));
 
-    return right(this);
+    return E.right(this);
   }
 
   canUpdate(userId: UserId, maxParticipants: number): boolean {
@@ -181,9 +180,9 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
   update(
     userId: UserId,
     props: UpdateShareDealProps,
-  ): Either<IllegalStateException, this> {
+  ): E.Either<IllegalStateException, this> {
     if (!this.canUpdate(userId, props.maxParticipants)) {
-      return left(new IllegalStateException('수정이 불가능한 상태입니다.'));
+      return E.left(new IllegalStateException('수정이 불가능한 상태입니다.'));
     }
 
     const zone = new ShareZone(
@@ -203,10 +202,10 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
       ),
     };
 
-    return right(this);
+    return E.right(this);
   }
 
-  leave(userId: UserId): Either<IllegalStateException, this> {
+  leave(userId: UserId): E.Either<IllegalStateException, this> {
     if (this.isOwner(userId) && this.isActive) {
       this.props.status = ShareDealStatus.CLOSE;
       this.addDomainEvent(new ShareDealClosedEvent(this.id));
@@ -219,13 +218,13 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
     return this.ownerId === userId;
   }
 
-  private leaveMember(userId: UserId): Either<IllegalStateException, this> {
+  private leaveMember(userId: UserId): E.Either<IllegalStateException, this> {
     if (!this.participantInfo.hasId(userId)) {
-      return left(new IllegalStateException('존재하지 않는 참가자입니다.'));
+      return E.left(new IllegalStateException('존재하지 않는 참가자입니다.'));
     }
 
     this.props.participantInfo = this.props.participantInfo.removeId(userId);
 
-    return right(this);
+    return E.right(this);
   }
 }

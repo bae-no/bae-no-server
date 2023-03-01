@@ -1,13 +1,11 @@
 import { T, pipe } from '@app/custom/effect';
-import { TE } from '@app/custom/fp-ts';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDB, tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDBE } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { ShareDeal as OrmShareDeal } from '@prisma/client';
 import { Prisma } from '@prisma/client';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { ShareDealOrmMapper } from './ShareDealOrmMapper';
 import type { UserId } from '../../../../user/domain/User';
@@ -122,17 +120,17 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
 
   override findById(
     id: ShareDealId,
-  ): TaskEither<DBError | NotFoundException, ShareDeal> {
+  ): T.IO<DBError | NotFoundException, ShareDeal> {
     return pipe(
-      tryCatchDB(() => this.prisma.shareDeal.findUnique({ where: { id } })),
-      TE.chainW((deal) =>
+      tryCatchDBE(() => this.prisma.shareDeal.findUnique({ where: { id } })),
+      T.chain((deal) =>
         deal
-          ? TE.right(deal)
-          : TE.left(
+          ? T.succeed(deal)
+          : T.fail(
               new NotFoundException(`${id}에 해당하는 공유딜이 없습니다.`),
             ),
       ),
-      TE.map(ShareDealOrmMapper.toDomain),
+      T.map(ShareDealOrmMapper.toDomain),
     );
   }
 

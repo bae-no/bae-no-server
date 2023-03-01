@@ -1,6 +1,6 @@
+import { T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import type { INestApplication } from '@nestjs/common';
-import { left, right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 import * as request from 'supertest';
 
@@ -69,7 +69,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.open.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.open.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -100,7 +100,7 @@ describe('ShareDealMutationResolver', () => {
       `;
 
       sharedDealCommandUseCase.join.mockReturnValue(
-        left(new NotJoinableShareDealException('error')),
+        T.fail(new NotJoinableShareDealException('error')),
       );
 
       // when
@@ -144,7 +144,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.join.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.join.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -174,7 +174,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.start.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.start.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -203,7 +203,7 @@ describe('ShareDealMutationResolver', () => {
       `;
 
       sharedDealCommandUseCase.start.mockReturnValue(
-        left(new IllegalStateException('error')),
+        T.fail(new IllegalStateException('error')),
       );
 
       // when
@@ -249,7 +249,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.end.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.end.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -278,7 +278,7 @@ describe('ShareDealMutationResolver', () => {
       `;
 
       sharedDealCommandUseCase.end.mockReturnValue(
-        left(new IllegalStateException('error')),
+        T.fail(new IllegalStateException('error')),
       );
 
       // when
@@ -338,7 +338,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.update.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.update.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())
@@ -368,7 +368,7 @@ describe('ShareDealMutationResolver', () => {
         }
       `;
 
-      sharedDealCommandUseCase.leave.mockReturnValue(right(undefined));
+      sharedDealCommandUseCase.leave.mockReturnValue(T.unit);
 
       // when
       const response = await request(app.getHttpServer())

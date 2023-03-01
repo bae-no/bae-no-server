@@ -11,7 +11,7 @@ import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
-import { assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ShareDealRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -48,7 +48,7 @@ describe('ShareDealRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.save(shareDeal);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value).toStrictEqual(expect.objectContaining(shareDeal));
       });
     });
@@ -74,7 +74,7 @@ describe('ShareDealRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.save(newShareDeal);
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.participantInfo.current).toBe(2);
       });
     });
@@ -90,7 +90,7 @@ describe('ShareDealRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.save(shareDeal);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(eventEmitter.get(ShareDealStartedEvent.name)).toBeTruthy();
       });
     });

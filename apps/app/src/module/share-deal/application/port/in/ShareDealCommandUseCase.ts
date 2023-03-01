@@ -1,7 +1,7 @@
+import type { T } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import type { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import type { NotFoundException } from '@app/domain/exception/NotFoundException';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { EndShareDealCommand } from './dto/EndShareDealCommand';
 import type { JoinShareDealCommand } from './dto/JoinShareDealCommand';
@@ -11,7 +11,7 @@ import type { StartShareDealCommand } from './dto/StartShareDealCommand';
 import type { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
 import type { NotJoinableShareDealException } from './exception/NotJoinableShareDealException';
 
-export type JoinChatError =
+export type JoinShareDealError =
   | DBError
   | NotFoundException
   | NotJoinableShareDealException;
@@ -37,23 +37,21 @@ export type LeaveShareDealError =
   | IllegalStateException;
 
 export abstract class ShareDealCommandUseCase {
-  abstract open(command: OpenShareDealCommand): TaskEither<DBError, void>;
+  abstract open(command: OpenShareDealCommand): T.IO<DBError, void>;
 
-  abstract join(command: JoinShareDealCommand): TaskEither<JoinChatError, void>;
+  abstract join(command: JoinShareDealCommand): T.IO<JoinShareDealError, void>;
 
   abstract start(
     command: StartShareDealCommand,
-  ): TaskEither<StartShareDealError, void>;
+  ): T.IO<StartShareDealError, void>;
 
-  abstract end(
-    command: EndShareDealCommand,
-  ): TaskEither<EndShareDealError, void>;
+  abstract end(command: EndShareDealCommand): T.IO<EndShareDealError, void>;
 
   abstract update(
     command: UpdateShareDealCommand,
-  ): TaskEither<UpdateShareDealError, void>;
+  ): T.IO<UpdateShareDealError, void>;
 
   abstract leave(
     command: LeaveShareDealCommand,
-  ): TaskEither<LeaveShareDealError, void>;
+  ): T.IO<LeaveShareDealError, void>;
 }

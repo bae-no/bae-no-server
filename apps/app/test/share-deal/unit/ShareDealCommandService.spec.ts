@@ -1,5 +1,5 @@
+import { T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { right } from 'fp-ts/TaskEither';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
@@ -20,7 +20,7 @@ import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareD
 import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
-import { assertResolvesLeft, assertResolvesRight } from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ShareDealCommandService', () => {
   const shareDealRepositoryPort = mock<ShareDealRepositoryPort>();
@@ -55,13 +55,15 @@ describe('ShareDealCommandService', () => {
         45,
       );
 
-      shareDealRepositoryPort.save.mockReturnValue(right(command.toDomain()));
+      shareDealRepositoryPort.save.mockReturnValue(
+        T.succeed(command.toDomain()),
+      );
 
       // when
       const result = shareDealCommandService.open(command);
 
       // then
-      await assertResolvesRight(result);
+      await assertResolvesSuccess(result);
     });
   });
 
@@ -76,13 +78,15 @@ describe('ShareDealCommandService', () => {
         status: ShareDealStatus.START,
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealCommandService.join(command);
 
       // then
-      await assertResolvesLeft(result, (value) => {
+      await assertResolvesFail(result, (value) => {
         expect(value).toBeInstanceOf(NotJoinableShareDealException);
       });
     });
@@ -97,14 +101,16 @@ describe('ShareDealCommandService', () => {
         status: ShareDealStatus.OPEN,
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
-      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+      shareDealRepositoryPort.save.mockReturnValue(T.succeed(shareDeal));
 
       // when
       const result = shareDealCommandService.join(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(shareDeal.participantInfo.hasId(command.userId)).toBe(true);
       });
     });
@@ -123,14 +129,16 @@ describe('ShareDealCommandService', () => {
         participantInfo: ParticipantInfo.of([UserId('1')], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
-      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+      shareDealRepositoryPort.save.mockReturnValue(T.succeed(shareDeal));
 
       // when
       const result = shareDealCommandService.start(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(shareDeal.status).toBe(ShareDealStatus.START);
       });
     });
@@ -145,13 +153,15 @@ describe('ShareDealCommandService', () => {
         status: ShareDealStatus.END,
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealCommandService.start(command);
 
       // then
-      await assertResolvesLeft(result, (error) => {
+      await assertResolvesFail(result, (error) => {
         expect(error).toBeInstanceOf(IllegalStateException);
       });
     });
@@ -170,14 +180,16 @@ describe('ShareDealCommandService', () => {
         participantInfo: ParticipantInfo.of([UserId('1')], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
-      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+      shareDealRepositoryPort.save.mockReturnValue(T.succeed(shareDeal));
 
       // when
       const result = shareDealCommandService.end(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(shareDeal.status).toBe(ShareDealStatus.END);
       });
     });
@@ -192,13 +204,15 @@ describe('ShareDealCommandService', () => {
         status: ShareDealStatus.END,
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealCommandService.end(command);
 
       // then
-      await assertResolvesLeft(result, (error) => {
+      await assertResolvesFail(result, (error) => {
         expect(error).toBeInstanceOf(IllegalStateException);
       });
     });
@@ -227,14 +241,16 @@ describe('ShareDealCommandService', () => {
         45,
       );
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
-      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+      shareDealRepositoryPort.save.mockReturnValue(T.succeed(shareDeal));
 
       // when
       const result = shareDealCommandService.update(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(shareDeal.title).toBe(command.title);
         expect(shareDeal.zone.path).toBe(command.addressPath);
         expect(shareDeal.zone.detail).toBe(command.addressDetail);
@@ -259,14 +275,16 @@ describe('ShareDealCommandService', () => {
         participantInfo: ParticipantInfo.of([command.userId], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
-      shareDealRepositoryPort.save.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+      shareDealRepositoryPort.save.mockReturnValue(T.succeed(shareDeal));
 
       // when
       const result = shareDealCommandService.leave(command);
 
       // then
-      await assertResolvesRight(result, () => {
+      await assertResolvesSuccess(result, () => {
         expect(shareDeal.participantInfo.hasId(command.userId)).toBe(false);
       });
     });
@@ -281,13 +299,15 @@ describe('ShareDealCommandService', () => {
         participantInfo: ParticipantInfo.of([UserId('user1')], 2),
       });
 
-      shareDealQueryRepositoryPort.findById.mockReturnValue(right(shareDeal));
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
 
       // when
       const result = shareDealCommandService.end(command);
 
       // then
-      await assertResolvesLeft(result, (error) => {
+      await assertResolvesFail(result, (error) => {
         expect(error).toBeInstanceOf(IllegalStateException);
       });
     });

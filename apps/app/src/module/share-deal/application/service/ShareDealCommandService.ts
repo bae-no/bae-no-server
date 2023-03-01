@@ -1,8 +1,6 @@
-import { TE } from '@app/custom/fp-ts';
+import { T, pipe, constVoid } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
-import { constVoid, pipe } from 'fp-ts/function';
-import type { TaskEither } from 'fp-ts/TaskEither';
 
 import type { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import type { LeaveShareDealCommand } from '../port/in/dto/LeaveShareDealCommand';
@@ -10,7 +8,7 @@ import type { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
 import type { StartShareDealCommand } from '../port/in/dto/StartShareDealCommand';
 import type { UpdateShareDealCommand } from '../port/in/dto/UpdateShareDealCommand';
 import type {
-  JoinChatError,
+  JoinShareDealError,
   LeaveShareDealError,
   StartShareDealError,
   UpdateShareDealError,
@@ -28,65 +26,65 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
     super();
   }
 
-  override open(command: OpenShareDealCommand): TaskEither<DBError, void> {
+  override open(command: OpenShareDealCommand): T.IO<DBError, void> {
     return pipe(
       this.shareDealRepositoryPort.save(command.toDomain()),
-      TE.map(constVoid),
+      T.map(constVoid),
     );
   }
 
-  override join(
-    command: JoinShareDealCommand,
-  ): TaskEither<JoinChatError, void> {
+  override join(command: JoinShareDealCommand): T.IO<JoinShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.chainEitherKW((deal) => deal.join(command.userId)),
-      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(constVoid),
+      T.chain((deal) => T.fromEither(() => deal.join(command.userId))),
+      T.chain((deal) => this.shareDealRepositoryPort.save(deal)),
+      T.map(constVoid),
     );
   }
 
   override start(
     command: StartShareDealCommand,
-  ): TaskEither<StartShareDealError, void> {
+  ): T.IO<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.chainEitherKW((deal) => deal.start(command.userId)),
-      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(constVoid),
+      T.chain((deal) => T.fromEither(() => deal.start(command.userId))),
+      T.chain((deal) => this.shareDealRepositoryPort.save(deal)),
+      T.map(constVoid),
     );
   }
 
   override end(
     command: StartShareDealCommand,
-  ): TaskEither<StartShareDealError, void> {
+  ): T.IO<StartShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.chainEitherKW((deal) => deal.end(command.userId)),
-      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(constVoid),
+      T.chain((deal) => T.fromEither(() => deal.end(command.userId))),
+      T.chain((deal) => this.shareDealRepositoryPort.save(deal)),
+      T.map(constVoid),
     );
   }
 
   override update(
     command: UpdateShareDealCommand,
-  ): TaskEither<UpdateShareDealError, void> {
+  ): T.IO<UpdateShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.chainEitherKW((deal) =>
-        deal.update(command.userId, command.toShareDealProps()),
+      T.chain((deal) =>
+        T.fromEither(() =>
+          deal.update(command.userId, command.toShareDealProps()),
+        ),
       ),
-      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(constVoid),
+      T.chain((deal) => this.shareDealRepositoryPort.save(deal)),
+      T.map(constVoid),
     );
   }
 
-  leave(command: LeaveShareDealCommand): TaskEither<LeaveShareDealError, void> {
+  leave(command: LeaveShareDealCommand): T.IO<LeaveShareDealError, void> {
     return pipe(
       this.shareDealQueryRepositoryPort.findById(command.shareDealId),
-      TE.chainEitherKW((deal) => deal.leave(command.userId)),
-      TE.chainW((deal) => this.shareDealRepositoryPort.save(deal)),
-      TE.map(constVoid),
+      T.chain((deal) => T.fromEither(() => deal.leave(command.userId))),
+      T.chain((deal) => this.shareDealRepositoryPort.save(deal)),
+      T.map(constVoid),
     );
   }
 }

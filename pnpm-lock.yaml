@@ -53,7 +53,6 @@ specifiers:
   eslint-plugin-prettier: 4.2.1
   express: 4.18.2
   firebase-admin: 11.5.0
-  fp-ts: 2.13.1
   graphql: 16.6.0
   graphql-redis-subscriptions: ^2.5.0
   graphql-subscriptions: 2.0.0
@@ -107,7 +106,6 @@ dependencies:
   cuid: 3.0.0
   date-fns: 2.29.3
   firebase-admin: 11.5.0
-  fp-ts: 2.13.1
   graphql: 16.6.0
   graphql-redis-subscriptions: 2.5.0_nsv4zbviaf54hk5nfhl4slig7i
   graphql-subscriptions: 2.0.0_graphql@16.6.0
@@ -5471,10 +5469,6 @@ packages:
   /forwarded/0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
-
-  /fp-ts/2.13.1:
-    resolution: {integrity: sha512-0eu5ULPS2c/jsa1lGFneEFFEdTbembJv8e4QKXeVJ3lm/5hyve06dlKZrpxmMwJt6rYen7sxmHHK2CLaXvWuWQ==}
-    dev: false
 
   /fresh/0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}

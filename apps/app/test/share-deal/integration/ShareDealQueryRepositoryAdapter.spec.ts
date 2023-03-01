@@ -17,11 +17,7 @@ import { ShareZone } from '../../../src/module/share-deal/domain/vo/ShareZone';
 import { UserId } from '../../../src/module/user/domain/User';
 import { AddressSystem } from '../../../src/module/user/domain/vo/AddressSystem';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
-import {
-  assertResolvesLeft,
-  assertResolvesRight,
-  assertResolvesSuccess,
-} from '../../fixture/utils';
+import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ShareDealQueryRepositoryAdapter', () => {
   const prisma = new PrismaService();
@@ -457,7 +453,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       const result = shareDealRepositoryAdapter.findById(shareDealId);
 
       // then
-      await assertResolvesLeft(result, (value) => {
+      await assertResolvesFail(result, (value) => {
         expect(value).toBeInstanceOf(NotFoundException);
       });
     });
@@ -474,7 +470,7 @@ describe('ShareDealQueryRepositoryAdapter', () => {
       );
 
       // then
-      await assertResolvesRight(result, (value) => {
+      await assertResolvesSuccess(result, (value) => {
         expect(value.id).toBe(shareDeal.id);
       });
     });

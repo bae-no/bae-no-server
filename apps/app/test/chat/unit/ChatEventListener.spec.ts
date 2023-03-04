@@ -1,6 +1,7 @@
 import { T } from '@app/custom/effect';
 import type { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';

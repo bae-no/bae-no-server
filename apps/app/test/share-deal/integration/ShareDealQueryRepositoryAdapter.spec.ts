@@ -2,6 +2,7 @@ import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
 import { addDays, compareDesc } from 'date-fns';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
 import { ShareDealQueryRepositoryAdapter } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
@@ -25,7 +26,9 @@ describe('ShareDealQueryRepositoryAdapter', () => {
     prisma,
   );
 
-  beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.shareDeal.deleteMany()]);
+  });
 
   describe('find', () => {
     it('주어진 페이지에 해당하는 공유딜을 가져온다', async () => {

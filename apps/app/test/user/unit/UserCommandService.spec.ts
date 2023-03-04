@@ -1,7 +1,8 @@
 import { O, T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { AppendAddressCommand } from '../../../src/module/user/application/port/in/dto/AppendAddressCommand';
 import { AuthToken } from '../../../src/module/user/application/port/in/dto/AuthToken';

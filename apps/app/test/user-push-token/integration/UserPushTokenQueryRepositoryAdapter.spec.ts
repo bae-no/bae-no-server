@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { UserPushTokenOrmMapper } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenOrmMapper';
 import { UserPushTokenQueryRepositoryAdapter } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenQueryRepositoryAdapter';
@@ -10,9 +11,9 @@ describe('UserPushTokenQueryRepositoryAdapter', () => {
   const userPushTokenQueryRepositoryAdapter =
     new UserPushTokenQueryRepositoryAdapter(prisma);
 
-  beforeEach(async () =>
-    prisma.$transaction([prisma.userPushToken.deleteMany()]),
-  );
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.userPushToken.deleteMany()]);
+  });
 
   describe('findByUserIds', () => {
     it('존재하지 않는 id 로 요청하면 빈 배열을 반환한다', async () => {

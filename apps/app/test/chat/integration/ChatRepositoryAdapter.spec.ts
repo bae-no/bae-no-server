@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/ChatOrmMapper';
 import { ChatRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatRepositoryAdapter';
@@ -13,7 +14,9 @@ describe('ChatRepositoryAdapter', () => {
   const prisma = new PrismaService();
   const chatRepositoryAdapter = new ChatRepositoryAdapter(prisma);
 
-  beforeEach(async () => prisma.$transaction([prisma.chat.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.chat.deleteMany()]);
+  });
 
   describe('create', () => {
     it('주어진 채팅을 생성한다', async () => {

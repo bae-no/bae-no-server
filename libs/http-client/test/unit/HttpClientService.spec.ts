@@ -2,6 +2,7 @@ import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 
 import { HttpClientService } from '@app/http-client/HttpClientService';
+import { beforeAll, afterAll, describe, expect, it } from 'vitest';
 
 import {
   assertResolvesFail,
@@ -19,9 +20,12 @@ describe('HttpClientService', () => {
     port = (server.address() as AddressInfo).port;
   });
 
-  afterAll((done) => {
-    server.close(() => done());
-  });
+  afterAll(
+    async () =>
+      new Promise((resolve) => {
+        server.close(() => resolve());
+      }),
+  );
 
   it.each([['get'], ['post'], ['put'], ['patch'], ['delete']] as const)(
     '%s 메서드 요청을 보낸다',
@@ -63,7 +67,7 @@ describe('HttpClientService', () => {
     // then
     await assertResolvesSuccess(result, (response) => {
       expect(response.body).toMatchInlineSnapshot(
-        `"{"query":{"foo":"bar"},"body":{}}"`,
+        '"{\\"query\\":{\\"foo\\":\\"bar\\"},\\"body\\":{}}"',
       );
     });
   });
@@ -79,7 +83,7 @@ describe('HttpClientService', () => {
     // then
     await assertResolvesSuccess(result, (response) => {
       expect(response.body).toMatchInlineSnapshot(
-        `"{"query":{},"body":{"foo":"bar"}}"`,
+        '"{\\"query\\":{},\\"body\\":{\\"foo\\":\\"bar\\"}}"',
       );
     });
   });
@@ -95,7 +99,7 @@ describe('HttpClientService', () => {
     // then
     await assertResolvesSuccess(result, (response) => {
       expect(response.body).toMatchInlineSnapshot(
-        `"{"query":{},"body":{"foo":"bar"}}"`,
+        '"{\\"query\\":{},\\"body\\":{\\"foo\\":\\"bar\\"}}"',
       );
     });
   });

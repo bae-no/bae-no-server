@@ -1,6 +1,7 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
 import { UserQueryRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/UserQueryRepositoryAdapter';
@@ -18,7 +19,9 @@ describe('UserQueryRepositoryAdapter', () => {
   const prisma = new PrismaService();
   const userQueryRepositoryAdapter = new UserQueryRepositoryAdapter(prisma);
 
-  beforeEach(async () => prisma.$transaction([prisma.user.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.user.deleteMany()]);
+  });
 
   describe('findByAuth', () => {
     it('auth 를 가진 유저가 존재하지 않으면 none 을 반환한다', async () => {

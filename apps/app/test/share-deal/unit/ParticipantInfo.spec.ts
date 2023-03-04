@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { UserId } from '../../../src/module/user/domain/User';
 

@@ -1,7 +1,8 @@
 import { T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { mock, mockReset } from 'jest-mock-extended';
-import * as request from 'supertest';
+import request from 'supertest';
+import { beforeAll, afterAll, beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { UpdateUserPushTokenInput } from '../../../src/module/user-push-token/adapter/in/gql/input/UpdateUserPushTokenInput';
 import { UserPushTokenMutationResolver } from '../../../src/module/user-push-token/adapter/in/gql/UserPushTokenMutationResolver';

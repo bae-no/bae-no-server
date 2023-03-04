@@ -1,5 +1,6 @@
 import { T, O } from '@app/custom/effect';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { FindChatByUserCommand } from '../../../src/module/chat/application/port/in/dto/FindChatByUserCommand';

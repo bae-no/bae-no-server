@@ -1,5 +1,6 @@
 import { T } from '@app/custom/effect';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { CreateSampleCommand } from '../../../src/module/sample/application/port/in/dto/CreateSampleCommand';
 import type { SampleRepositoryPort } from '../../../src/module/sample/application/port/out/SampleRepositoryPort';

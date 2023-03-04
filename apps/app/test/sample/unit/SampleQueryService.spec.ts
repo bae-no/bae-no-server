@@ -1,7 +1,8 @@
 import { O, T } from '@app/custom/effect';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { faker } from '@faker-js/faker';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import type { SampleQueryRepositoryPort } from '../../../src/module/sample/application/port/out/SampleQueryRepositoryPort';
 import { SampleQueryService } from '../../../src/module/sample/application/service/SampleQueryService';

@@ -1,4 +1,5 @@
 import { PubSubAdapter } from '@app/pub-sub/PubSubAdapter';
+import { describe, expect, it } from 'vitest';
 
 import { StubPubSubEngine } from '../fixture/StubPubSubEngine';
 

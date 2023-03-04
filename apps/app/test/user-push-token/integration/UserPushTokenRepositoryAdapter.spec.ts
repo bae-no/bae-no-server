@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { UserId } from '../../../src/module/user/domain/User';
 import { UserPushTokenRepositoryAdapter } from '../../../src/module/user-push-token/adapter/out/persistence/UserPushTokenRepositoryAdapter';
@@ -12,9 +13,9 @@ describe('UserPushTokenRepositoryAdapter', () => {
     prisma,
   );
 
-  beforeEach(async () =>
-    prisma.$transaction([prisma.userPushToken.deleteMany()]),
-  );
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.userPushToken.deleteMany()]);
+  });
 
   describe('save', () => {
     it('주어진 푸시토큰 데이터를 생성한다', async () => {

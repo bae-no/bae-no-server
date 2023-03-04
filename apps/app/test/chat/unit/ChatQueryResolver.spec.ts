@@ -1,7 +1,8 @@
 import { O, T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { mock, mockReset } from 'jest-mock-extended';
-import * as request from 'supertest';
+import request from 'supertest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { ChatQueryResolver } from '../../../src/module/chat/adapter/in/gql/ChatQueryResolver';
 import { FindChatDetailInput } from '../../../src/module/chat/adapter/in/gql/input/FindChatDetailInput';

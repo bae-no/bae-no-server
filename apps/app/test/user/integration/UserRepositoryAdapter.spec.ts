@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/prisma/PrismaService';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { UserOrmMapper } from '../../../src/module/user/adapter/out/persistence/UserOrmMapper';
 import { UserRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/UserRepositoryAdapter';
@@ -11,7 +12,9 @@ describe('UserRepositoryAdapter', () => {
   const prisma = new PrismaService();
   const userRepositoryAdapter = new UserRepositoryAdapter(prisma);
 
-  beforeEach(async () => prisma.$transaction([prisma.user.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.user.deleteMany()]);
+  });
 
   describe('save', () => {
     it('주어진 사용자를 생성한다', async () => {

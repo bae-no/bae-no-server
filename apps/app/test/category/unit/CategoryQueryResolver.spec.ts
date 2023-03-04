@@ -1,5 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { CategoryQueryResolver } from '../../../src/module/category/adapter/in/gql/CategoryQueryResolver';
 import { graphQLTestHelper } from '../../fixture/graphqlTestHelper';

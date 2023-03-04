@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { ChatOrmMapper } from '../../../src/module/chat/adapter/out/persistence/ChatOrmMapper';
 import { ChatQueryRepositoryAdapter } from '../../../src/module/chat/adapter/out/persistence/ChatQueryRepositoryAdapter';
@@ -22,7 +23,9 @@ describe('ChatQueryRepositoryAdapter', () => {
 
   afterAll(async () => prisma.$disconnect());
 
-  beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.shareDeal.deleteMany()]);
+  });
 
   describe('last', () => {
     it('작성된 채팅이 없는 경우 빈 채팅 목록이 반환된다.', async () => {

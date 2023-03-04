@@ -69,13 +69,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: test-results
-          path: junit-*.xml
-          fail-on-error: 'false'
-          reporter: jest-junit
-          token: ${{ secrets.GITHUB_TOKEN }}

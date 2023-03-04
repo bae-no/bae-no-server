@@ -1,5 +1,5 @@
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import * as cuid from 'cuid';
+import cuid from 'cuid';
 
 export class TicketGeneratorAdapter extends TicketGeneratorPort {
   constructor() {

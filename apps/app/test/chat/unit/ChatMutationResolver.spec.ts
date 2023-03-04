@@ -1,8 +1,9 @@
 import { T } from '@app/custom/effect';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
-import { mock, mockReset } from 'jest-mock-extended';
-import * as request from 'supertest';
+import request from 'supertest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { ChatMutationResolver } from '../../../src/module/chat/adapter/in/gql/ChatMutationResolver';
 import { WriteChatInput } from '../../../src/module/chat/adapter/in/gql/input/WriteChatInput';

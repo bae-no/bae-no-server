@@ -1,6 +1,7 @@
 import { T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { EndShareDealCommand } from '../../../src/module/share-deal/application/port/in/dto/EndShareDealCommand';

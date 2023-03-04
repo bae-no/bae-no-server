@@ -1,6 +1,7 @@
 import { PushMessageAdapter } from '@app/push-message/PushMessageAdapter';
 import type { Messaging } from 'firebase-admin/lib/messaging';
-import { mock } from 'jest-mock-extended';
+import { describe, expect, it } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
 import {
   assertResolvesFail,

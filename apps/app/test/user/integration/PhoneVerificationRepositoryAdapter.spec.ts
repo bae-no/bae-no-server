@@ -1,6 +1,7 @@
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { PhoneVerificationRepositoryAdapter } from '../../../src/module/user/adapter/out/persistence/PhoneVerificationRepositoryAdapter';
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
@@ -12,9 +13,9 @@ describe('PhoneVerificationRepositoryAdapter', () => {
   const phoneVerificationRepositoryAdapter =
     new PhoneVerificationRepositoryAdapter(prisma);
 
-  beforeEach(async () =>
-    prisma.$transaction([prisma.phoneVerification.deleteMany()]),
-  );
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.phoneVerification.deleteMany()]);
+  });
 
   describe('save', () => {
     it('주어진 인증번호를 생성한다', async () => {

@@ -4,6 +4,7 @@ import { PrismaService } from '@app/prisma/PrismaService';
 import type { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { AppModule } from '../../../src/AppModule';
 

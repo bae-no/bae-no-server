@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { PhoneVerification } from '../../../src/module/user/domain/PhoneVerification';
 import { User } from '../../../src/module/user/domain/User';
 import { Auth } from '../../../src/module/user/domain/vo/Auth';

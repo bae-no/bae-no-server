@@ -1,7 +1,8 @@
 import { O, T } from '@app/custom/effect';
 import type { INestApplication } from '@nestjs/common';
-import { mock, mockReset } from 'jest-mock-extended';
-import * as request from 'supertest';
+import request from 'supertest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { UserQueryResolver } from '../../../src/module/user/adapter/in/gql/UserQueryResolver';
 import { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';

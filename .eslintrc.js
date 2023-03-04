@@ -9,7 +9,6 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    "plugin:jest-formatting/recommended",
     'eslint-config-async',
   ],
   root: true,

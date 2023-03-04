@@ -1,6 +1,7 @@
 import { DomainEvent } from '@app/domain/event/DomainEvent';
 import { EventEmitterAdapter } from '@app/event-emitter/EventEmitterAdapter';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { describe, expect, it } from 'vitest';
 
 import { expectNonNullable } from '../../../../apps/app/test/fixture/utils';
 

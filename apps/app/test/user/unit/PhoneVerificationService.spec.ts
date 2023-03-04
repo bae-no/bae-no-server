@@ -1,7 +1,8 @@
 import { T } from '@app/custom/effect';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import type { SmsPort } from '@app/domain/notification/SmsPort';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { SendPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/dto/SendPhoneVerificationCodeCommand';
 import { VerifyPhoneVerificationCodeCommand } from '../../../src/module/user/application/port/in/dto/VerifyPhoneVerificationCodeCommand';

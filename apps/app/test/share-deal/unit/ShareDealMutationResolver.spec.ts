@@ -1,8 +1,9 @@
 import { T } from '@app/custom/effect';
 import { IllegalStateException } from '@app/domain/exception/IllegalStateException';
 import type { INestApplication } from '@nestjs/common';
-import { mock, mockReset } from 'jest-mock-extended';
-import * as request from 'supertest';
+import request from 'supertest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { CreateShareZoneInput } from '../../../src/module/share-deal/adapter/in/gql/input/CreateShareZoneInput';
 import { EndShareDealInput } from '../../../src/module/share-deal/adapter/in/gql/input/EndShareDealInput';

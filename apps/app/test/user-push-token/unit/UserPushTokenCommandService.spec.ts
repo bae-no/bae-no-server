@@ -1,5 +1,6 @@
 import { T } from '@app/custom/effect';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { UserId } from '../../../src/module/user/domain/User';
 import { UpdateUserPushTokenCommand } from '../../../src/module/user-push-token/application/port/in/dto/UpdateUserPushTokenCommand';

@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/prisma/PrismaService';
 import { faker } from '@faker-js/faker';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { ShareDealOrmMapper } from '../../../src/module/share-deal/adapter/out/persistence/ShareDealOrmMapper';
@@ -21,7 +22,9 @@ describe('ShareDealRepositoryAdapter', () => {
     eventEmitter,
   );
 
-  beforeEach(async () => prisma.$transaction([prisma.shareDeal.deleteMany()]));
+  beforeEach(async () => {
+    await prisma.$transaction([prisma.shareDeal.deleteMany()]);
+  });
 
   describe('save', () => {
     it('주어진 공유딜을 생성한다', async () => {

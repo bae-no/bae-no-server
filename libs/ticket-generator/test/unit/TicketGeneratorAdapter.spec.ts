@@ -1,4 +1,5 @@
 import { TicketGeneratorAdapter } from '@app/ticket-generator/TicketGeneratorAdapter';
+import { describe, expect, it } from 'vitest';
 
 describe('TicketGeneratorAdapter', () => {
   const ticketGeneratorAdapter = new TicketGeneratorAdapter();

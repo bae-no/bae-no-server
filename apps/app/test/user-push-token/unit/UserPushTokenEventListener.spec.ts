@@ -1,5 +1,6 @@
 import { T } from '@app/custom/effect';
-import { mock, mockReset } from 'jest-mock-extended';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubPushMessage } from '../../../../../libs/push-message/test/fixture/StubPushMessageModule';
 import { Chat } from '../../../src/module/chat/domain/Chat';

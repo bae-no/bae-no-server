@@ -1,5 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { addDays } from 'date-fns';
+import { describe, expect, it } from 'vitest';
 
 import { JwtTokenGeneratorAdapter } from '../../../src/module/user/adapter/out/jwt/JwtTokenGeneratorAdapter';
 import { UserFactory } from '../../fixture/UserFactory';

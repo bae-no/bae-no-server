@@ -1,4 +1,5 @@
 import { addSeconds } from 'date-fns';
+import { describe, expect, it } from 'vitest';
 
 import { ExpiredCodeException } from '../../../src/module/user/domain/exception/ExpiredCodeException';
 import { MismatchedCodeException } from '../../../src/module/user/domain/exception/MismatchedCodeException';

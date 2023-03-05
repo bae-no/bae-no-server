@@ -8,6 +8,7 @@ import { Resource } from '@opentelemetry/resources';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { PrismaInstrumentation } from '@prisma/instrumentation';
 
 export const initTelemetry = (config: {
   appName: string;
@@ -56,7 +57,10 @@ export const initTelemetry = (config: {
 
   // Registering instrumentations / plugins
   registerInstrumentations({
-    instrumentations: getNodeAutoInstrumentations(),
+    instrumentations: [
+      ...getNodeAutoInstrumentations(),
+      new PrismaInstrumentation(),
+    ],
   });
 
   return provider;

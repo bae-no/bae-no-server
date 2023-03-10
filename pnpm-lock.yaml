@@ -10,7 +10,7 @@ specifiers:
   '@nestjs/config': 2.3.1
   '@nestjs/core': 9.3.9
   '@nestjs/event-emitter': 1.4.1
-  '@nestjs/graphql': 10.2.0
+  '@nestjs/graphql': 11.0.0
   '@nestjs/jwt': 10.0.2
   '@nestjs/passport': 9.0.3
   '@nestjs/platform-express': 9.3.9
@@ -78,12 +78,12 @@ specifiers:
 dependencies:
   '@effect-ts/core': 0.60.5
   '@effect-ts/otel': 0.14.1_tn3sbd2r3x4i3jtgshff2q4e4i
-  '@nestjs/apollo': 10.2.0_ag4z6z4wcxfyztoavmb533yzlq
+  '@nestjs/apollo': 10.2.0_kaadsj3c3uozowsphs6ngahewu
   '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
   '@nestjs/config': 2.3.1_jrq2rdgfp2sx67wmylmrqliwxe
   '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
   '@nestjs/event-emitter': 1.4.1_shbtxdxgogsm4p64bg2toeylku
-  '@nestjs/graphql': 10.2.0_mx67tdfoah2i42xit4xgrngpmm
+  '@nestjs/graphql': 11.0.0_mx67tdfoah2i42xit4xgrngpmm
   '@nestjs/jwt': 10.0.2_@nestjs+common@9.3.9
   '@nestjs/passport': 9.0.3_v3ijvyhfbmibt6kvwmic262qla
   '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
@@ -807,8 +807,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@graphql-tools/merge/8.3.18_graphql@16.6.0:
-    resolution: {integrity: sha512-R8nBglvRWPAyLpZL/f3lxsY7wjnAeE0l056zHhcO/CgpvK76KYUt9oEkR05i8Hmt8DLRycBN0FiotJ0yDQWTVA==}
+  /@graphql-tools/merge/8.4.0_graphql@16.6.0:
+    resolution: {integrity: sha512-3XYCWe0d3I4F1azNj1CdShlbHfTIfiDgj00R9uvFH8tHKh7i1IWN3F7QQYovcHKhayaR6zPok3YYMESYQcBoaA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
@@ -841,12 +841,12 @@ packages:
       value-or-promise: 1.0.11
     dev: false
 
-  /@graphql-tools/schema/9.0.16_graphql@16.6.0:
-    resolution: {integrity: sha512-kF+tbYPPf/6K2aHG3e1SWIbapDLQaqnIHVRG6ow3onkFoowwtKszvUyOASL6Krcv2x9bIMvd1UkvRf9OaoROQQ==}
+  /@graphql-tools/schema/9.0.17_graphql@16.6.0:
+    resolution: {integrity: sha512-HVLq0ecbkuXhJlpZ50IHP5nlISqH2GbNgjBJhhRzHeXhfwlUOT4ISXGquWTmuq61K0xSaO0aCjMpxe4QYbKTng==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/merge': 8.3.18_graphql@16.6.0
+      '@graphql-tools/merge': 8.4.0_graphql@16.6.0
       '@graphql-tools/utils': 9.2.1_graphql@16.6.0
       graphql: 16.6.0
       tslib: 2.5.0
@@ -1045,7 +1045,7 @@ packages:
     resolution: {integrity: sha512-uSvJdwQU5nK+Vdf6zxcWAY2A8r7uqe+gePwLWzJ+fsQehq18pc0I2hJKwypZ2aLM90+Er9u1xn4iLJPZ+xlL4g==}
     engines: {node: '>=8'}
 
-  /@nestjs/apollo/10.2.0_ag4z6z4wcxfyztoavmb533yzlq:
+  /@nestjs/apollo/10.2.0_kaadsj3c3uozowsphs6ngahewu:
     resolution: {integrity: sha512-ZIPu6t4JIhkRMa1Fpo2Et4p8eOQ3ci/hi0wNkvLCqykCYOyUvgNF5mPnim3LHLszK8WUvnaga/Rw73sDTwFJmw==}
     peerDependencies:
       '@apollo/gateway': ^0.44.1 || ^0.46.0 || ^0.48.0 || ^0.49.0 || ^0.50.0 || ^2.0.0
@@ -1071,7 +1071,7 @@ packages:
     dependencies:
       '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
       '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
-      '@nestjs/graphql': 10.2.0_mx67tdfoah2i42xit4xgrngpmm
+      '@nestjs/graphql': 11.0.0_mx67tdfoah2i42xit4xgrngpmm
       apollo-server-core: 3.12.0_graphql@16.6.0
       apollo-server-express: 3.12.0_5ha345eiak62qiwwva5z4dp6gu
       graphql: 16.6.0
@@ -1199,17 +1199,17 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/graphql/10.2.0_mx67tdfoah2i42xit4xgrngpmm:
-    resolution: {integrity: sha512-N/sca0eZLJIyyvfusZh1eabGnKBYgQ4LmOCvhI7+oDMiWWK4HOhOEeT5MC11bmd0vq850frWW9qqg+3qRKpiXw==}
+  /@nestjs/graphql/11.0.0_mx67tdfoah2i42xit4xgrngpmm:
+    resolution: {integrity: sha512-2rSSd7CS+RtFiQ2xcq2ErRdW/Q9Cxs8KLPe4f1JRdwcpbLTuQ46V9S/+eAEhP3Jg/DjaTgNiL1NI6Cb38r9lwQ==}
     peerDependencies:
-      '@apollo/subgraph': ^0.1.5 || ^0.3.0 || ^0.4.0 || ^2.0.0
-      '@nestjs/common': ^8.2.3 || ^9.0.0
-      '@nestjs/core': ^8.2.3 || ^9.0.0
+      '@apollo/subgraph': ^2.0.0
+      '@nestjs/common': ^9.3.8
+      '@nestjs/core': ^9.3.8
       class-transformer: '*'
       class-validator: '*'
-      graphql: ^15.8.0 || ^16.0.0
+      graphql: ^16.6.0
       reflect-metadata: ^0.1.13
-      ts-morph: ^13.0.2 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+      ts-morph: ^15.0.0 || ^16.0.0 || ^17.0.0
     peerDependenciesMeta:
       '@apollo/subgraph':
         optional: true
@@ -1220,8 +1220,8 @@ packages:
       ts-morph:
         optional: true
     dependencies:
-      '@graphql-tools/merge': 8.3.18_graphql@16.6.0
-      '@graphql-tools/schema': 9.0.16_graphql@16.6.0
+      '@graphql-tools/merge': 8.4.0_graphql@16.6.0
+      '@graphql-tools/schema': 9.0.17_graphql@16.6.0
       '@graphql-tools/utils': 9.2.1_graphql@16.6.0
       '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
       '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
@@ -1232,14 +1232,14 @@ packages:
       fast-glob: 3.2.12
       graphql: 16.6.0
       graphql-tag: 2.12.6_graphql@16.6.0
-      graphql-ws: 5.11.3_graphql@16.6.0
+      graphql-ws: 5.12.0_graphql@16.6.0
       lodash: 4.17.21
       normalize-path: 3.0.0
       reflect-metadata: 0.1.13
       subscriptions-transport-ws: 0.11.0_graphql@16.6.0
       tslib: 2.5.0
       uuid: 9.0.0
-      ws: 8.12.0
+      ws: 8.12.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -5096,8 +5096,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /graphql-ws/5.11.3_graphql@16.6.0:
-    resolution: {integrity: sha512-fU8zwSgAX2noXAsuFiCZ8BtXeXZOzXyK5u1LloCdacsVth4skdBMPO74EG51lBoWSIZ8beUocdpV8+cQHBODnQ==}
+  /graphql-ws/5.12.0_graphql@16.6.0:
+    resolution: {integrity: sha512-PA3ImUp8utrpEjoxBMhvxsjkStvFEdU0E1gEBREt8HZIWkxOUymwJBhFnBL7t/iHhUq1GVPeZevPinkZFENxTw==}
     engines: {node: '>=10'}
     peerDependencies:
       graphql: '>=0.11 <=16'
@@ -8067,8 +8067,8 @@ packages:
         optional: true
     dev: false
 
-  /ws/8.12.0:
-    resolution: {integrity: sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==}
+  /ws/8.12.1:
+    resolution: {integrity: sha512-1qo+M9Ba+xNhPB+YTWUlK6M17brTut5EXbcBaMRN5pH5dFrXz7lzz1ChFSUq3bOUl8yEvSenhHmYUNJxFzdJew==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1

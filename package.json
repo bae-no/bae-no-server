@@ -34,7 +34,7 @@
   "dependencies": {
     "@effect-ts/core": "0.60.5",
     "@effect-ts/otel": "0.14.1",
-    "@nestjs/apollo": "10.2.0",
+    "@nestjs/apollo": "11.0.3",
     "@nestjs/common": "9.3.9",
     "@nestjs/config": "2.3.1",
     "@nestjs/core": "9.3.9",

@@ -32,6 +32,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@apollo/server": "4.5.0",
     "@effect-ts/core": "0.60.5",
     "@effect-ts/otel": "0.14.1",
     "@nestjs/apollo": "11.0.3",
@@ -56,8 +57,6 @@
     "@opentelemetry/semantic-conventions": "1.9.1",
     "@prisma/client": "4.11.0",
     "@prisma/instrumentation": "4.11.0",
-    "apollo-server-core": "3.12.0",
-    "apollo-server-express": "3.12.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
     "cuid": "^3.0.0",

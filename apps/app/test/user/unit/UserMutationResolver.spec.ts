@@ -133,8 +133,8 @@ describe('UserMutationResolver', () => {
           "errors": [
             {
               "extensions": {
-                "code": "BAD_USER_INPUT",
-                "response": {
+                "code": "BAD_REQUEST",
+                "originalError": {
                   "error": "Bad Request",
                   "message": [
                     "address.alias should not be empty",
@@ -142,7 +142,16 @@ describe('UserMutationResolver', () => {
                   "statusCode": 400,
                 },
               },
+              "locations": [
+                {
+                  "column": 11,
+                  "line": 3,
+                },
+              ],
               "message": "Bad Request Exception",
+              "path": [
+                "enrollUser",
+              ],
             },
           ],
         }
@@ -218,8 +227,8 @@ describe('UserMutationResolver', () => {
           "errors": [
             {
               "extensions": {
-                "code": "BAD_USER_INPUT",
-                "response": {
+                "code": "BAD_REQUEST",
+                "originalError": {
                   "error": "Bad Request",
                   "message": [
                     "body should not be empty",
@@ -227,7 +236,16 @@ describe('UserMutationResolver', () => {
                   "statusCode": 400,
                 },
               },
+              "locations": [
+                {
+                  "column": 11,
+                  "line": 3,
+                },
+              ],
               "message": "Bad Request Exception",
+              "path": [
+                "leave",
+              ],
             },
           ],
         }

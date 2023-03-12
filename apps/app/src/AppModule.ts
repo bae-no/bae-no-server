@@ -1,5 +1,6 @@
 import * as path from 'path';
 
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { OTELModule } from '@app/custom/nest/aop/OTELModule';
 import { EventEmitterModule } from '@app/event-emitter/EventEmitterModule';
 import { PrismaModule } from '@app/prisma/PrismaModule';
@@ -11,7 +12,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { CategoryModule } from './module/category/CategoryModule';
 import { ChatModule } from './module/chat/ChatModule';
@@ -25,21 +25,6 @@ import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModul
   imports: [
     OTELModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      context: (context) => {
-        if (context?.extra?.request) {
-          return {
-            req: {
-              ...context?.extra?.request,
-              headers: {
-                ...context?.extra?.request?.headers,
-                ...context?.connectionParams,
-              },
-            },
-          };
-        }
-
-        return { req: context?.req };
-      },
       driver: ApolloDriver,
       autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
       sortSchema: true,

@@ -9,6 +9,6 @@ export class DBError extends Error {
   }
 }
 
-export function tryCatchDBE<V>(f: Lazy<Promise<V>>): T.IO<DBError, V> {
+export function tryCatchDB<V>(f: Lazy<Promise<V>>): T.IO<DBError, V> {
   return T.tryCatchPromise(f, (e) => new DBError(E.toError(e)));
 }

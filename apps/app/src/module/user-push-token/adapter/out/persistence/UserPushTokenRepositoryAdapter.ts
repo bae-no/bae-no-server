@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 
 import { UserPushTokenOrmMapper } from './UserPushTokenOrmMapper';
@@ -18,7 +18,7 @@ export class UserPushTokenRepositoryAdapter extends UserPushTokenRepositoryPort 
     return pipe(
       UserPushTokenOrmMapper.toOrm(userPushToken),
       ({ id, ...data }) =>
-        tryCatchDBE(() =>
+        tryCatchDB(() =>
           id
             ? this.prisma.userPushToken.update({ data, where: { id } })
             : this.prisma.userPushToken.create({ data }),

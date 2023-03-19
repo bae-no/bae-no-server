@@ -1,7 +1,7 @@
 import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { User as OrmUser } from '@prisma/client';
@@ -19,7 +19,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
 
   override findByAuth(auth: Auth): T.IO<DBError, O.Option<User>> {
     return pipe(
-      tryCatchDBE(() =>
+      tryCatchDB(() =>
         this.prisma.user.findFirst({
           where: {
             auth: {
@@ -35,7 +35,7 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
 
   override findById(id: UserId): T.IO<DBError | NotFoundException, User> {
     return pipe(
-      tryCatchDBE(() => this.prisma.user.findUnique({ where: { id } })),
+      tryCatchDB(() => this.prisma.user.findUnique({ where: { id } })),
       T.chain((ormUser) =>
         ormUser
           ? T.succeed(UserOrmMapper.toDomain(ormUser))
@@ -48,14 +48,14 @@ export class UserQueryRepositoryAdapter extends UserQueryRepositoryPort {
 
   override findByNickname(nickname: string): T.IO<DBError, O.Option<User>> {
     return pipe(
-      tryCatchDBE(() => this.prisma.user.findUnique({ where: { nickname } })),
+      tryCatchDB(() => this.prisma.user.findUnique({ where: { nickname } })),
       T.map(this.toOptionUser),
     );
   }
 
   override findByIds(ids: UserId[]): T.IO<DBError, User[]> {
     return pipe(
-      tryCatchDBE(async () =>
+      tryCatchDB(async () =>
         this.prisma.user.findMany({ where: { id: { in: ids } } }),
       ),
       T.map((ormUsers) => ormUsers.map(UserOrmMapper.toDomain)),

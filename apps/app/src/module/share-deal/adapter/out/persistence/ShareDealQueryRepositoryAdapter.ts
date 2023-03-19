@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { ShareDeal as OrmShareDeal } from '@prisma/client';
@@ -52,7 +52,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     }
 
     return pipe(
-      tryCatchDBE(async () => this.prisma.shareDeal.findMany(args)),
+      tryCatchDB(async () => this.prisma.shareDeal.findMany(args)),
       T.map((deals) => deals.map(ShareDealOrmMapper.toDomain)),
     );
   }
@@ -70,7 +70,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
       args.where = { ...args.where, category: command.category };
     }
 
-    return tryCatchDBE(async () => this.prisma.shareDeal.count(args));
+    return tryCatchDB(async () => this.prisma.shareDeal.count(args));
   }
 
   override findByNearest(
@@ -98,13 +98,13 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     };
 
     return pipe(
-      tryCatchDBE(async () => this.prisma.shareDeal.findRaw(args)),
+      tryCatchDB(async () => this.prisma.shareDeal.findRaw(args)),
       T.map((rows) => rows as unknown as { _id: { $oid: string } }[]),
       T.map((rows) => rows.map((row) => row._id.$oid)),
       T.chain((ids) =>
         T.structPar({
           ids: T.succeed(ids),
-          shareDeals: tryCatchDBE(async () =>
+          shareDeals: tryCatchDB(async () =>
             this.prisma.shareDeal.findMany({ where: { id: { in: ids } } }),
           ),
         }),
@@ -122,7 +122,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     id: ShareDealId,
   ): T.IO<DBError | NotFoundException, ShareDeal> {
     return pipe(
-      tryCatchDBE(() => this.prisma.shareDeal.findUnique({ where: { id } })),
+      tryCatchDB(() => this.prisma.shareDeal.findUnique({ where: { id } })),
       T.chain((deal) =>
         deal
           ? T.succeed(deal)
@@ -138,7 +138,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     userId: UserId,
     status: ShareDealStatus,
   ): T.IO<DBError, number> {
-    return tryCatchDBE(async () =>
+    return tryCatchDB(async () =>
       this.prisma.shareDeal.count({
         where: { status, participants: { is: { ids: { has: userId } } } },
       }),
@@ -149,7 +149,7 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     command: FindByUserShareDealCommand,
   ): T.IO<DBError, ShareDeal[]> {
     return pipe(
-      tryCatchDBE(async () =>
+      tryCatchDB(async () =>
         this.prisma.shareDeal.findMany({
           where: {
             status: command.status,

@@ -1,7 +1,7 @@
 import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
@@ -22,7 +22,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     userId: UserId,
   ): T.IO<DBError, O.Option<Chat>> {
     return pipe(
-      tryCatchDBE(() =>
+      tryCatchDB(() =>
         this.prisma.chat.findFirst({
           where: { shareDealId, userId },
           orderBy: { createdAt: 'desc' },
@@ -39,7 +39,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     userId: UserId,
   ): T.IO<DBError, number> {
     return pipe(
-      tryCatchDBE(async () =>
+      tryCatchDB(async () =>
         this.prisma.chat.count({
           where: {
             shareDealId,
@@ -53,7 +53,7 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
 
   override findByUser(command: FindChatByUserCommand): T.IO<DBError, Chat[]> {
     return pipe(
-      tryCatchDBE(async () =>
+      tryCatchDB(async () =>
         this.prisma.chat.findMany({
           where: { shareDealId: command.shareDealId, userId: command.userId },
           ...(command.cursor ? { cursor: { orderedKey: command.cursor } } : {}),

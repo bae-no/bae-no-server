@@ -1,7 +1,7 @@
 import { T, pipe, constVoid } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 
 import { ChatOrmMapper } from './ChatOrmMapper';
@@ -20,7 +20,7 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
     return pipe(
       chats.map((chat) => ChatOrmMapper.toOrm(chat)),
       (chats) =>
-        tryCatchDBE(async () =>
+        tryCatchDB(async () =>
           this.prisma.$transaction(
             chats.map((data) => this.prisma.chat.create({ data })),
           ),
@@ -34,7 +34,7 @@ export class ChatRepositoryAdapter extends ChatRepositoryPort {
     userId: UserId,
   ): T.IO<DBError, void> {
     return pipe(
-      tryCatchDBE(async () =>
+      tryCatchDB(async () =>
         this.prisma.chat.updateMany({
           where: { shareDealId, userId },
           data: { message: { update: { unread: false } } },

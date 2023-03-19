@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { NotFoundException } from '@app/domain/exception/NotFoundException';
 import { PrismaService } from '@app/prisma/PrismaService';
 
@@ -20,7 +20,7 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
     phoneVerification: PhoneVerification,
   ): T.IO<DBError, PhoneVerification> {
     return pipe(
-      tryCatchDBE(() =>
+      tryCatchDB(() =>
         this.prisma.phoneVerification.create({
           data: {
             code: phoneVerification.code,
@@ -40,7 +40,7 @@ export class PhoneVerificationRepositoryAdapter extends PhoneVerificationReposit
     userId: UserId,
   ): T.IO<DBError | NotFoundException, PhoneVerification> {
     return pipe(
-      tryCatchDBE(() =>
+      tryCatchDB(() =>
         this.prisma.phoneVerification.findFirst({
           where: { userId },
           orderBy: { createdAt: 'desc' },

@@ -8,6 +8,7 @@ import { LeaveShareDealInput } from './input/LeaveShareDealInput';
 import { OpenShareDealInput } from './input/OpenShareDealInput';
 import { StartShareDealInput } from './input/StartShareDealInput';
 import { UpdateShareDealInput } from './input/UpdateShareDealInput';
+import { OpenShareDealResponse } from './response/OpenShareDealResponse';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import type {
@@ -25,15 +26,15 @@ export class ShareDealMutationResolver {
     private readonly shareDealCommandUseCase: ShareDealCommandUseCase,
   ) {}
 
-  @Mutation(() => Boolean, { description: '공유딜 생성하기' })
+  @Mutation(() => OpenShareDealResponse, { description: '공유딜 생성하기' })
   openShareDeal(
     @Args('input') input: OpenShareDealInput,
     @CurrentSession() session: Session,
-  ): T.IO<DBError, true> {
+  ): T.IO<DBError, OpenShareDealResponse> {
     return pipe(
       input.toCommand(session.id),
       (command) => this.shareDealCommandUseCase.open(command),
-      T.map(() => true),
+      T.map(OpenShareDealResponse.of),
     );
   }
 

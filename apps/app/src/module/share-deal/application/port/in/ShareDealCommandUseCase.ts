@@ -10,6 +10,7 @@ import type { OpenShareDealCommand } from './dto/OpenShareDealCommand';
 import type { StartShareDealCommand } from './dto/StartShareDealCommand';
 import type { UpdateShareDealCommand } from './dto/UpdateShareDealCommand';
 import type { NotJoinableShareDealException } from './exception/NotJoinableShareDealException';
+import type { ShareDealId } from '../../../domain/ShareDeal';
 
 export type JoinShareDealError =
   | DBError
@@ -37,7 +38,7 @@ export type LeaveShareDealError =
   | IllegalStateException;
 
 export abstract class ShareDealCommandUseCase {
-  abstract open(command: OpenShareDealCommand): T.IO<DBError, void>;
+  abstract open(command: OpenShareDealCommand): T.IO<DBError, ShareDealId>;
 
   abstract join(command: JoinShareDealCommand): T.IO<JoinShareDealError, void>;
 

@@ -2,6 +2,7 @@ import { T, pipe, constVoid } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import type { DBError } from '@app/domain/error/DBError';
 
+import type { ShareDealId } from '../../domain/ShareDeal';
 import type { JoinShareDealCommand } from '../port/in/dto/JoinShareDealCommand';
 import type { LeaveShareDealCommand } from '../port/in/dto/LeaveShareDealCommand';
 import type { OpenShareDealCommand } from '../port/in/dto/OpenShareDealCommand';
@@ -26,10 +27,10 @@ export class ShareDealCommandService extends ShareDealCommandUseCase {
     super();
   }
 
-  override open(command: OpenShareDealCommand): T.IO<DBError, void> {
+  override open(command: OpenShareDealCommand): T.IO<DBError, ShareDealId> {
     return pipe(
       this.shareDealRepositoryPort.save(command.toDomain()),
-      T.map(constVoid),
+      T.map((deal) => deal.id),
     );
   }
 

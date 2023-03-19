@@ -27,7 +27,7 @@ describe('ShareDealQueryService', () => {
         id: ShareDealId('shareDealId'),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
 
@@ -53,7 +53,7 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
 
@@ -77,7 +77,7 @@ describe('ShareDealQueryService', () => {
         participantInfo: ParticipantInfo.of([UserId('user')], 2),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
 
@@ -104,7 +104,7 @@ describe('ShareDealQueryService', () => {
         ),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
 

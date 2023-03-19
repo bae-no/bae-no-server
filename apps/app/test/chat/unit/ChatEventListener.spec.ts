@@ -85,7 +85,7 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');
@@ -131,7 +131,7 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');
@@ -175,7 +175,7 @@ describe('ChatEventListener', () => {
         participantInfo: ParticipantInfo.of(['participantId'].map(UserId), 3),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
       ticketGeneratorPort.generateId.mockReturnValue('ticketId');

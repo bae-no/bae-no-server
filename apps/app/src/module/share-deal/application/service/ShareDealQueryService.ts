@@ -22,7 +22,7 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
     userId: UserId,
   ): T.IO<DBError | ShareDealAccessDeniedException, void> {
     return pipe(
-      this.shareDealQueryRepositoryPort.findByIdE(shareDealId),
+      this.shareDealQueryRepositoryPort.findById(shareDealId),
       T.filterOrElse(
         (shareDeal) => shareDeal.participantInfo.hasId(userId),
         () =>
@@ -42,7 +42,7 @@ export class ShareDealQueryService extends ShareDealQueryUseCase {
     UserId[]
   > {
     return pipe(
-      this.shareDealQueryRepositoryPort.findByIdE(shareDealId),
+      this.shareDealQueryRepositoryPort.findById(shareDealId),
       T.filterOrElse(
         (shareDeal) => shareDeal.canWriteChat(userId),
         () =>

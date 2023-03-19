@@ -296,7 +296,7 @@ describe('ShareDealQueryResolver', () => {
         participantInfo: ParticipantInfo.of([owner.id, participant.id], 2),
       });
 
-      shareDealQueryRepositoryPort.findByIdE.mockReturnValue(
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
         T.succeed(shareDeal),
       );
       userQueryRepositoryPort.findByIds.mockReturnValue(

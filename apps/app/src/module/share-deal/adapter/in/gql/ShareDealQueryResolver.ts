@@ -80,7 +80,7 @@ export class ShareDealQueryResolver {
     ShareDealStatusResponse
   > {
     return pipe(
-      this.shareDealQueryRepositoryPort.findByIdE(input.shareDealId),
+      this.shareDealQueryRepositoryPort.findById(input.shareDealId),
       T.filterOrElse(
         (shareDeal) => shareDeal.participantInfo.hasId(session.id),
         () =>

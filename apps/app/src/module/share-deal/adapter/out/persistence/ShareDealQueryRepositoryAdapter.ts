@@ -134,22 +134,6 @@ export class ShareDealQueryRepositoryAdapter extends ShareDealQueryRepositoryPor
     );
   }
 
-  override findByIdE(
-    id: ShareDealId,
-  ): T.IO<DBError | NotFoundException, ShareDeal> {
-    return pipe(
-      tryCatchDBE(() => this.prisma.shareDeal.findUnique({ where: { id } })),
-      T.chain((deal) =>
-        deal
-          ? T.succeed(deal)
-          : T.fail(
-              new NotFoundException(`${id}에 해당하는 공유딜이 없습니다.`),
-            ),
-      ),
-      T.map(ShareDealOrmMapper.toDomain),
-    );
-  }
-
   override countByStatus(
     userId: UserId,
     status: ShareDealStatus,

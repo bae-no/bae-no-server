@@ -27,10 +27,6 @@ export abstract class ShareDealQueryRepositoryPort {
     id: ShareDealId,
   ): T.IO<DBError | NotFoundException, ShareDeal>;
 
-  abstract findByIdE(
-    id: ShareDealId,
-  ): T.IO<DBError | NotFoundException, ShareDeal>;
-
   abstract countByStatus(
     userId: UserId,
     status: ShareDealStatus,

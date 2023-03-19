@@ -61,7 +61,7 @@ export class ChatEventListener {
     event: ShareDealStartedEvent | ShareDealEndedEvent | ShareDealClosedEvent,
   ) {
     await pipe(
-      this.shareDealQueryRepositoryPort.findByIdE(event.shareDealId),
+      this.shareDealQueryRepositoryPort.findById(event.shareDealId),
       T.map((shareDeal) => this.createChats(shareDeal, event)),
       T.chain((chats) => this.chatRepositoryPort.create(chats)),
       T.map((chats) => this.eventEmitterPort.emit(new ChatWrittenEvent(chats))),

@@ -216,7 +216,7 @@ type Mutation {
   leaveShareDeal(input: LeaveShareDealInput!): Boolean!
 
   """공유딜 생성하기"""
-  openShareDeal(input: OpenShareDealInput!): Boolean!
+  openShareDeal(input: OpenShareDealInput!): OpenShareDealResponse!
 
   """전화번호 인증번호 발송하기"""
   sendPhoneVerificationCode(input: SendPhoneVerificationCodeInput!): Boolean!
@@ -256,6 +256,10 @@ input OpenShareDealInput {
   storeName: String!
   thumbnail: String!
   title: String!
+}
+
+type OpenShareDealResponse {
+  shareDealId: ID!
 }
 
 type Query {

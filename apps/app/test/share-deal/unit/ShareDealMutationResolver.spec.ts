@@ -66,11 +66,15 @@ describe('ShareDealMutationResolver', () => {
 
       const mutation = gql`
         mutation openShareDeal($input: OpenShareDealInput!) {
-          openShareDeal(input: $input)
+          openShareDeal(input: $input) {
+            shareDealId
+          }
         }
       `;
 
-      sharedDealCommandUseCase.open.mockReturnValue(T.unit);
+      sharedDealCommandUseCase.open.mockReturnValue(
+        T.succeed(ShareDealId('shareDealId')),
+      );
 
       // when
       const response = await request(app.getHttpServer())
@@ -81,7 +85,9 @@ describe('ShareDealMutationResolver', () => {
       expect(response.body).toMatchInlineSnapshot(`
         {
           "data": {
-            "openShareDeal": true,
+            "openShareDeal": {
+              "shareDealId": "shareDealId",
+            },
           },
         }
       `);

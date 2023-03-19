@@ -57,14 +57,20 @@ describe('ShareDealCommandService', () => {
       );
 
       shareDealRepositoryPort.save.mockReturnValue(
-        T.succeed(command.toDomain()),
+        T.succeed(
+          command
+            .toDomain()
+            .setBase(ShareDealId('shareDealId'), new Date(), new Date()),
+        ),
       );
 
       // when
       const result = shareDealCommandService.open(command);
 
       // then
-      await assertResolvesSuccess(result);
+      await assertResolvesSuccess(result, (value) => {
+        expect(value).toBe('shareDealId');
+      });
     });
   });
 

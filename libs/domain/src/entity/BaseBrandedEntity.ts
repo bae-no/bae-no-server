@@ -9,8 +9,8 @@ export abstract class BaseBrandedEntity<PROPS, PK>
 {
   protected props: PROPS;
 
-  readonly #id: PK;
-  readonly #createdAt: Date;
+  #id: PK;
+  #createdAt: Date;
   #updatedAt: Date;
 
   protected constructor(props: PROPS) {
@@ -30,8 +30,8 @@ export abstract class BaseBrandedEntity<PROPS, PK>
   }
 
   setBase(id: PK, createdAt: Date, updatedAt: Date) {
-    (this.#id as any) = id;
-    (this.#createdAt as any) = createdAt;
+    this.#id = id;
+    this.#createdAt = createdAt;
     this.#updatedAt = updatedAt;
 
     return this;

@@ -1,14 +1,26 @@
-FROM node:18
+FROM node:18-alpine
 
-RUN npm install -g pnpm
+RUN mkdir -p /app
+WORKDIR /app
 
 COPY .npmrc package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY ./apps ./apps
+COPY ./libs ./libs
+COPY ./prisma ./prisma
+COPY ./schema ./schema
+COPY ./nest-cli.json ./
+COPY ./tsconfig.json ./
+COPY ./tsconfig.build.json ./
 RUN npm run build
 
-RUN adduser nonroot
+# add new user
+RUN adduser -D nonroot \
+        && mkdir -p /etc/sudoers.d \
+        && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/nonroot \
+        && chmod 0440 /etc/sudoers.d/nonroot
 
 USER nonroot
 

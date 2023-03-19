@@ -20,9 +20,6 @@ export class FoodCatalog {
     [FoodCategory.SALAD]: '샐러드',
     [FoodCategory.LUNCH_BOX]: '도시락',
   };
-  static readonly VALUES = Object.entries(FoodCatalog.foodCatalogs).map(
-    ([key, value]) => new FoodCatalog(key as FoodCategory, value),
-  );
 
   @Field(() => FoodCategory)
   code: FoodCategory;
@@ -35,3 +32,7 @@ export class FoodCatalog {
     this.name = name;
   }
 }
+
+export const FOOD_CATALOG_VALUES = Object.entries(FoodCatalog.foodCatalogs).map(
+  ([key, value]) => new FoodCatalog(key as FoodCategory, value),
+);

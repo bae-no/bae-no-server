@@ -1,17 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { AuthCategory } from './category/AuthCategory';
-import { FoodCatalog } from './category/FoodCatalog';
-import { ShareDealSortCategory } from './category/ShareDealSortCategory';
+import { AUTH_CATEGORY_VALUES, AuthCategory } from './category/AuthCategory';
+import { FOOD_CATALOG_VALUES, FoodCatalog } from './category/FoodCatalog';
+import {
+  SHARED_DEAL_SORT_TYPE,
+  ShareDealSortCategory,
+} from './category/ShareDealSortCategory';
 
 @ObjectType()
 export class CategoryResponse {
-  static readonly VALUES = new CategoryResponse(
-    AuthCategory.VALUES,
-    ShareDealSortCategory.VALUES,
-    FoodCatalog.VALUES,
-  );
-
   @Field(() => [AuthCategory])
   auth: AuthCategory[];
 
@@ -31,3 +28,9 @@ export class CategoryResponse {
     this.foodCatalog = foodCatalog;
   }
 }
+
+export const CATEGORY_VALUES = new CategoryResponse(
+  AUTH_CATEGORY_VALUES,
+  SHARED_DEAL_SORT_TYPE,
+  FOOD_CATALOG_VALUES,
+);

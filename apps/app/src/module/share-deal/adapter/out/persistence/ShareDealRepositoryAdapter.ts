@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { PrismaService } from '@app/prisma/PrismaService';
 
@@ -22,7 +22,7 @@ export class ShareDealRepositoryAdapter extends ShareDealRepositoryPort {
     return pipe(
       ShareDealOrmMapper.toOrm(shareDeal),
       ({ id, ...data }) =>
-        tryCatchDBE(() =>
+        tryCatchDB(() =>
           id
             ? this.prisma.shareDeal.update({ data, where: { id } })
             : this.prisma.shareDeal.create({ data }),

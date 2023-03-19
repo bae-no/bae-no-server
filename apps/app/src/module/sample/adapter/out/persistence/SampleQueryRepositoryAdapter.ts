@@ -1,7 +1,7 @@
 import { T, O, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 import type { Sample as OrmSample } from '@prisma/client';
 
@@ -17,7 +17,7 @@ export class SampleQueryRepositoryAdapter extends SampleQueryRepositoryPort {
 
   override findById(id: SampleId): T.IO<DBError, O.Option<Sample>> {
     return pipe(
-      tryCatchDBE(() => this.prisma.sample.findFirst({ where: { id } })),
+      tryCatchDB(() => this.prisma.sample.findFirst({ where: { id } })),
       T.map(this.toDomainSample),
     );
   }

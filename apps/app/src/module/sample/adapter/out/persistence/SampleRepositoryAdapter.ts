@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Repository } from '@app/custom/nest/decorator/Repository';
 import type { DBError } from '@app/domain/error/DBError';
-import { tryCatchDBE } from '@app/domain/error/DBError';
+import { tryCatchDB } from '@app/domain/error/DBError';
 import { PrismaService } from '@app/prisma/PrismaService';
 
 import { SampleOrmMapper } from './SampleOrmMapper';
@@ -16,7 +16,7 @@ export class SampleRepositoryAdapter extends SampleRepositoryPort {
 
   override save(sample: Sample): T.IO<DBError, Sample> {
     return pipe(
-      tryCatchDBE(() =>
+      tryCatchDB(() =>
         this.prisma.sample.create({
           data: {
             name: sample.name,

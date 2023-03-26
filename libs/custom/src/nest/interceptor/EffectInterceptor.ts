@@ -20,9 +20,11 @@ export class EffectInterceptor implements NestInterceptor {
         if (value instanceof T.Base) {
           return pipe(
             value,
-            T.provideService(Span)(
-              new SpanImpl(trace.getActiveSpan() as ApiSpan),
-            ),
+            process.env.OTLP_TRACE
+              ? T.provideService(Span)(
+                  new SpanImpl(trace.getActiveSpan() as ApiSpan),
+                )
+              : (v) => v,
             liveTracer,
             T.runPromise,
           );

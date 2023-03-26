@@ -1,5 +1,5 @@
 import type { AddressSystem } from './AddressSystem';
-import type { AddressType } from './AddressType';
+import { AddressType } from './AddressType';
 import { Coordinate } from './Coordinate';
 
 export class Address {
@@ -15,5 +15,9 @@ export class Address {
     longitude: number,
   ) {
     this.coordinate = Coordinate.of(latitude, longitude);
+  }
+
+  get isHomeAndWork(): boolean {
+    return this.type === AddressType.HOME || this.type === AddressType.WORK;
   }
 }

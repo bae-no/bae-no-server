@@ -20,6 +20,14 @@ export class UserAddressList {
   }
 
   append(address: Address): UserAddressList {
+    if (address.isHomeAndWork) {
+      const filtered = this.addresses.filter(
+        (item) => item.type !== address.type,
+      );
+
+      return UserAddressList.of([...filtered, address]);
+    }
+
     return UserAddressList.of([...this.addresses, address]);
   }
 

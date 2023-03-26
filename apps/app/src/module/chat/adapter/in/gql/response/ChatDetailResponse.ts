@@ -9,6 +9,9 @@ export class ChatDetailResponse {
   @Field(() => ID)
   id: string;
 
+  @Field()
+  createdAt: Date;
+
   @Field(() => MessageType)
   type: MessageType;
 
@@ -25,6 +28,7 @@ export class ChatDetailResponse {
     const response = new ChatDetailResponse();
 
     response.id = dto.chat.id;
+    response.createdAt = dto.chat.createdAt;
     response.type = dto.chat.message.type;
     response.content = dto.chat.message.content;
     response.authorName = dto.author.nickname;

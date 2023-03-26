@@ -45,6 +45,7 @@ type CategoryResponse {
 type ChatDetailResponse {
   authorName: String!
   content: String!
+  createdAt: DateTime!
   id: ID!
   type: MessageType!
 

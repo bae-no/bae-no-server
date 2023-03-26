@@ -112,6 +112,7 @@ describe('ChatQueryResolver', () => {
         query chatDetail($input: FindChatDetailInput!) {
           chatDetail(input: $input) {
             id
+            createdAt
             authorName
             content
             type
@@ -121,9 +122,12 @@ describe('ChatQueryResolver', () => {
       `;
       const chatByUserDto = new FindByUserDto(
         ChatFactory.create({
-          id: ChatId('id'),
           message: Message.normal(UserId('id'), 'content', true),
-        }),
+        }).setBase(
+          ChatId('id'),
+          new Date('2023-02-01T12:34:56.000Z'),
+          new Date(),
+        ),
         UserFactory.create({ id: UserId('id'), nickname: 'nickname' }),
       );
 
@@ -147,6 +151,7 @@ describe('ChatQueryResolver', () => {
               {
                 "authorName": "nickname",
                 "content": "content",
+                "createdAt": "2023-02-01T12:34:56.000Z",
                 "id": "id",
                 "type": "NORMAL",
                 "writtenByMe": false,

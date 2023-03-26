@@ -3,6 +3,7 @@ import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
+import { liveTracer } from '@app/monitoring/init';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
@@ -31,6 +32,7 @@ export class ChatEventListener {
   async handleChatReadEvent(event: ChatReadEvent) {
     await pipe(
       this.chatRepositoryPort.updateRead(event.shareDealId, event.userId),
+      liveTracer,
       T.runPromise,
     );
   }
@@ -65,6 +67,7 @@ export class ChatEventListener {
       T.map((shareDeal) => this.createChats(shareDeal, event)),
       T.chain((chats) => this.chatRepositoryPort.create(chats)),
       T.map((chats) => this.eventEmitterPort.emit(new ChatWrittenEvent(chats))),
+      liveTracer,
       T.runPromise,
     );
   }

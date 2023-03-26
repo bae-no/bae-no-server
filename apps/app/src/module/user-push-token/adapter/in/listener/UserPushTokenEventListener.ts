@@ -1,6 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
+import { liveTracer } from '@app/monitoring/init';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent';
@@ -31,6 +32,7 @@ export class UserPushTokenEventListener {
           T.collectAllPar,
         ),
       ),
+      liveTracer,
       T.runPromise,
     );
   }

@@ -3,7 +3,7 @@ import type { Address } from './Address';
 export class UserAddressList {
   static MAX_ADDRESSES_COUNT = 6;
 
-  private constructor(readonly addresses: Address[]) {}
+  private constructor(private readonly addresses: Address[]) {}
 
   get count(): number {
     return this.addresses.length;
@@ -32,5 +32,9 @@ export class UserAddressList {
 
   find(key: number): Address | undefined {
     return this.addresses[key];
+  }
+
+  map<T>(fn: (address: Address, index: number) => T): T[] {
+    return this.addresses.map(fn);
   }
 }

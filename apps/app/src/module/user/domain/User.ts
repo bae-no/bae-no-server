@@ -54,8 +54,8 @@ export class User extends BaseBrandedEntity<UserProps, UserId> {
     return this.props.profile;
   }
 
-  get addresses(): Address[] {
-    return this.props.addressList.addresses;
+  get addresses(): UserAddressList {
+    return this.props.addressList;
   }
 
   get isPhoneNumberVerified(): boolean {
@@ -112,7 +112,7 @@ export class User extends BaseBrandedEntity<UserProps, UserId> {
 
   appendAddress(address: Address): E.Either<IllegalStateException, this> {
     try {
-      this.props.addressList = UserAddressList.of([...this.addresses, address]);
+      this.props.addressList = this.props.addressList.append(address);
 
       return E.right(this);
     } catch (err) {

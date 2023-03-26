@@ -1,9 +1,9 @@
 import { CoordinateResponse } from '@app/custom/nest/response/CoordinateResponse';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import type { Address } from '../../../../domain/vo/Address';
 import { AddressSystem } from '../../../../domain/vo/AddressSystem';
 import { AddressType } from '../../../../domain/vo/AddressType';
+import type { UserAddressList } from '../../../../domain/vo/UserAddressList';
 
 @ObjectType()
 export class UserAddressResponse {
@@ -28,7 +28,7 @@ export class UserAddressResponse {
   @Field(() => CoordinateResponse)
   coordinate: CoordinateResponse;
 
-  static of(addresses: Address[]): UserAddressResponse[] {
+  static of(addresses: UserAddressList): UserAddressResponse[] {
     return addresses.map((address, index) => {
       const response = new UserAddressResponse();
 

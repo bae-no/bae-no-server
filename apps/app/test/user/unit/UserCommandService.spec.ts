@@ -119,7 +119,7 @@ describe('UserCommandService', () => {
       // then
       await assertResolvesSuccess(result);
       expect(user.nickname).toBe(command.nickname);
-      expect(user.addresses[0]).toStrictEqual(command.toAddress());
+      expect(user.addresses.find(0)).toStrictEqual(command.toAddress());
     });
 
     it('유저가 없으면 NotFoundException 을 반환한다', async () => {
@@ -236,8 +236,8 @@ describe('UserCommandService', () => {
 
       // then
       await assertResolvesSuccess(result);
-      expect(user.addresses).toHaveLength(1);
-      expect(user.addresses[0]).toStrictEqual(command.toAddress());
+      expect(user.addresses.count).toBe(1);
+      expect(user.addresses.find(0)).toStrictEqual(command.toAddress());
     });
   });
 
@@ -285,9 +285,9 @@ describe('UserCommandService', () => {
 
       // then
       await assertResolvesSuccess(result);
-      expect(user.addresses).toHaveLength(2);
-      expect(user.addresses[0].alias).toBe('alias1');
-      expect(user.addresses[1].alias).toBe('alias3');
+      expect(user.addresses.count).toBe(2);
+      expect(user.addresses.find(0)?.alias).toBe('alias1');
+      expect(user.addresses.find(1)?.alias).toBe('alias3');
     });
   });
 

@@ -21,6 +21,7 @@
     "noImplicitOverride": true,
     "strictPropertyInitialization": false,
     "noUnusedLocals": true,
+    "esModuleInterop": true,
     "noUnusedParameters": true,
     "paths": {
       "@app/prisma": [

@@ -1,11 +1,12 @@
 import { T, pipe } from '@app/custom/effect';
 import type { DBError } from '@app/domain/error/DBError';
 import { NotFoundException } from '@nestjs/common';
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Int, Query, Resolver } from '@nestjs/graphql';
 
 import { FindShareDealByNearestInput } from './input/FindShareDealByNearestInput';
 import { FindShareDealInput } from './input/FindShareDealInput';
 import { FindShareDealStatusInput } from './input/FindShareDealStatusInput';
+import { ShareDealDetailResponse } from './response/ShareDealDetailResponse';
 import { ShareDealResponse } from './response/ShareDealResponse';
 import { ShareDealStatusResponse } from './response/ShareDealStatusResponse';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
@@ -13,6 +14,7 @@ import { Session } from '../../../../user/adapter/in/gql/auth/Session';
 import { UserQueryRepositoryPort } from '../../../../user/application/port/out/UserQueryRepositoryPort';
 import { ShareDealAccessDeniedException } from '../../../application/port/in/exception/ShareDealAccessDeniedException';
 import { ShareDealQueryRepositoryPort } from '../../../application/port/out/ShareDealQueryRepositoryPort';
+import { ShareDealId } from '../../../domain/ShareDeal';
 import { ShareDealStatus } from '../../../domain/vo/ShareDealStatus';
 
 @Resolver()
@@ -99,6 +101,16 @@ export class ShareDealQueryResolver {
       T.map(({ shareDeal, users }) =>
         ShareDealStatusResponse.of(shareDeal, users, session.id),
       ),
+    );
+  }
+
+  @Query(() => ShareDealDetailResponse, { description: '공유딜 상세보기' })
+  shareDeal(
+    @Args('id', { type: () => ID }) id: ShareDealId,
+  ): T.IO<DBError, ShareDealDetailResponse> {
+    return pipe(
+      this.shareDealQueryRepositoryPort.findById(id),
+      T.map(ShareDealDetailResponse.of),
     );
   }
 }

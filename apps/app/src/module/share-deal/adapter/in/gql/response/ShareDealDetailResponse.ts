@@ -1,5 +1,6 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
+import { ShareZoneResponse } from './ShareZoneResponse';
 import { ShareDealId } from '../../../../domain/ShareDeal';
 import type { ShareDeal } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
@@ -27,6 +28,9 @@ export class ShareDealDetailResponse {
   @Field(() => Int)
   orderPrice: number;
 
+  @Field(() => ShareZoneResponse)
+  shareZone: ShareZoneResponse;
+
   static of(shareDeal: ShareDeal): ShareDealDetailResponse {
     const response = new ShareDealDetailResponse();
 
@@ -37,6 +41,7 @@ export class ShareDealDetailResponse {
     response.category = shareDeal.category;
     response.storeName = shareDeal.storeName;
     response.orderPrice = shareDeal.orderPrice;
+    response.shareZone = ShareZoneResponse.of(shareDeal.zone);
 
     return response;
   }

@@ -289,6 +289,9 @@ type Query {
   profile(userId: ID!): UserProfileResponse!
   sample(id: ID!): SampleResponse!
 
+  """공유딜 상세보기"""
+  shareDeal(id: ID!): ShareDealDetailResponse!
+
   """공유딜 상태보기"""
   shareDealStatus(input: FindShareDealStatusInput!): ShareDealStatusResponse!
 
@@ -307,6 +310,17 @@ type SampleResponse {
 
 input SendPhoneVerificationCodeInput {
   phoneNumber: String!
+}
+
+type ShareDealDetailResponse {
+  category: FoodCategory!
+  createdAt: DateTime!
+  id: ID!
+  maxParticipants: Int!
+  orderPrice: Int!
+  shareZone: ShareZoneResponse!
+  storeName: String!
+  title: String!
 }
 
 type ShareDealItemResponse {
@@ -369,6 +383,13 @@ type ShareDealStatusResponse {
   """api 요청한 사람이 방장인지 여부"""
   isOwner: Boolean!
   participants: [ShareDealParticipantResponse!]!
+}
+
+type ShareZoneResponse {
+  coordinate: CoordinateResponse!
+  detail: String!
+  path: String!
+  system: AddressSystem!
 }
 
 input SignInInput {

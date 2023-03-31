@@ -336,4 +336,82 @@ describe('ShareDealQueryResolver', () => {
       `);
     });
   });
+
+  describe('shareDeal', () => {
+    it('공유딜 상세정보를 가져온다', async () => {
+      // given
+      const shareDealId = ShareDealId('12345');
+      const query = gql`
+        query shareDeal($id: ID!) {
+          shareDeal(id: $id) {
+            id
+            title
+            orderPrice
+            createdAt
+            category
+            maxParticipants
+            shareZone {
+              system
+              path
+              detail
+              coordinate {
+                latitude
+                longitude
+              }
+            }
+          }
+        }
+      `;
+      const shareDeal = ShareDealFactory.createOpen({
+        title: 'title',
+        category: FoodCategory.AMERICAN,
+        orderPrice: 2000,
+        participantInfo: ParticipantInfo.of([], 10),
+        zone: new ShareZone(
+          AddressSystem.JIBUN,
+          'address path',
+          'address detail',
+          84.1691,
+          111.1734,
+        ),
+      }).setBase(
+        shareDealId,
+        new Date('2023-03-31T23:42:44.112Z'),
+        new Date('2023-03-31T23:42:44.112Z'),
+      );
+      shareDealQueryRepositoryPort.findById.mockReturnValue(
+        T.succeed(shareDeal),
+      );
+
+      // then
+      const response = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ query, variables: { id: shareDealId } });
+
+      // when
+      expect(response.body).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "shareDeal": {
+              "category": "AMERICAN",
+              "createdAt": "2023-03-31T23:42:44.112Z",
+              "id": "12345",
+              "maxParticipants": 10,
+              "orderPrice": 2000,
+              "shareZone": {
+                "coordinate": {
+                  "latitude": 84.1691,
+                  "longitude": 111.1734,
+                },
+                "detail": "address detail",
+                "path": "address path",
+                "system": "JIBUN",
+              },
+              "title": "title",
+            },
+          },
+        }
+      `);
+    });
+  });
 });

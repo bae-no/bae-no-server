@@ -4,8 +4,8 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY .npmrc package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN npm install -g --ignore-scripts pnpm
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 COPY ./apps ./apps
 COPY ./libs ./libs

@@ -78,6 +78,7 @@ describe('ShareDealQueryResolver', () => {
               status
               thumbnail
               category
+              isParticipant
               coordinate {
                 latitude
                 longitude
@@ -122,6 +123,7 @@ describe('ShareDealQueryResolver', () => {
                   "createdAt": "2022-01-01T00:00:00.000Z",
                   "currentParticipants": 3,
                   "id": "12345",
+                  "isParticipant": false,
                   "maxParticipants": 10,
                   "orderPrice": 1000,
                   "status": "OPEN",
@@ -158,6 +160,7 @@ describe('ShareDealQueryResolver', () => {
               status
               thumbnail
               category
+              isParticipant
               coordinate {
                 latitude
                 longitude
@@ -218,6 +221,7 @@ describe('ShareDealQueryResolver', () => {
                   "createdAt": "2022-01-01T00:00:00.000Z",
                   "currentParticipants": 3,
                   "id": "12345",
+                  "isParticipant": false,
                   "maxParticipants": 10,
                   "orderPrice": 1000,
                   "status": "OPEN",

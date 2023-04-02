@@ -1,6 +1,7 @@
 import { CoordinateResponse } from '@app/custom/nest/response/CoordinateResponse';
 import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
+import type { UserId } from '../../../../../user/domain/User';
 import type { ShareDeal } from '../../../../domain/ShareDeal';
 import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
@@ -28,6 +29,9 @@ export class ShareDealItemResponse {
   @Field()
   thumbnail: string;
 
+  @Field()
+  isParticipant: boolean;
+
   @Field(() => ShareDealStatus)
   status: ShareDealStatus;
 
@@ -37,7 +41,7 @@ export class ShareDealItemResponse {
   @Field(() => CoordinateResponse)
   coordinate: CoordinateResponse;
 
-  static of(shareDeal: ShareDeal): ShareDealItemResponse {
+  static of(shareDeal: ShareDeal, userId: UserId): ShareDealItemResponse {
     const response = new ShareDealItemResponse();
 
     response.id = shareDeal.id;
@@ -50,6 +54,7 @@ export class ShareDealItemResponse {
     response.thumbnail = shareDeal.thumbnail;
     response.category = shareDeal.category;
     response.coordinate = shareDeal.zone.coordinate;
+    response.isParticipant = shareDeal.participantInfo.hasId(userId);
 
     return response;
   }

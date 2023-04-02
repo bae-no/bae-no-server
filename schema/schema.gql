@@ -330,6 +330,7 @@ type ShareDealItemResponse {
   createdAt: DateTime!
   currentParticipants: Int!
   id: ID!
+  isParticipant: Boolean!
   maxParticipants: Int!
   orderPrice: Int!
   status: ShareDealStatus!

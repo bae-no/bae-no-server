@@ -27,6 +27,7 @@ export class ShareDealQueryResolver {
   @Query(() => ShareDealResponse, { description: '공유딜 목록' })
   shareDeals(
     @Args('input') input: FindShareDealInput,
+    @CurrentSession() session: Session,
   ): T.IO<DBError, ShareDealResponse> {
     return pipe(
       input.toCommand(),
@@ -35,7 +36,9 @@ export class ShareDealQueryResolver {
           items: this.shareDealQueryRepositoryPort.find(command),
           total: this.shareDealQueryRepositoryPort.count(command),
         }),
-      T.map(({ items, total }) => ShareDealResponse.of(items, total)),
+      T.map(({ items, total }) =>
+        ShareDealResponse.of(items, total, session.id),
+      ),
     );
   }
 
@@ -61,7 +64,9 @@ export class ShareDealQueryResolver {
           total: this.shareDealQueryRepositoryPort.count(command),
         }),
       ),
-      T.map(({ items, total }) => ShareDealResponse.of(items, total)),
+      T.map(({ items, total }) =>
+        ShareDealResponse.of(items, total, session.id),
+      ),
     );
   }
 

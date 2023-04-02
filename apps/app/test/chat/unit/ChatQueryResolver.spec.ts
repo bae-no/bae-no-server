@@ -117,11 +117,13 @@ describe('ChatQueryResolver', () => {
             content
             type
             writtenByMe
+            orderedKey
           }
         }
       `;
       const chatByUserDto = new FindByUserDto(
         ChatFactory.create({
+          orderedKey: '1234',
           message: Message.normal(UserId('id'), 'content', true),
         }).setBase(
           ChatId('id'),
@@ -153,6 +155,7 @@ describe('ChatQueryResolver', () => {
                 "content": "content",
                 "createdAt": "2023-02-01T12:34:56.000Z",
                 "id": "id",
+                "orderedKey": "1234",
                 "type": "NORMAL",
                 "writtenByMe": false,
               },

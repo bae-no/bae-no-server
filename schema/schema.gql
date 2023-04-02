@@ -47,6 +47,7 @@ type ChatDetailResponse {
   content: String!
   createdAt: DateTime!
   id: ID!
+  orderedKey: String!
   type: MessageType!
 
   """내가 쓴 글인지 여부"""

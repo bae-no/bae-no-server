@@ -24,6 +24,9 @@ export class ChatDetailResponse {
   @Field({ description: '내가 쓴 글인지 여부' })
   writtenByMe: boolean;
 
+  @Field()
+  orderedKey: string;
+
   static of(dto: FindByUserDto, userId: UserId): ChatDetailResponse {
     const response = new ChatDetailResponse();
 
@@ -33,6 +36,7 @@ export class ChatDetailResponse {
     response.content = dto.chat.message.content;
     response.authorName = dto.author.nickname;
     response.writtenByMe = dto.author.id === userId;
+    response.orderedKey = dto.chat.orderedKey;
 
     return response;
   }

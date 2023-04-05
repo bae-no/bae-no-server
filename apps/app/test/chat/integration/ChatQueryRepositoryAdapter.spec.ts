@@ -167,5 +167,34 @@ describe('ChatQueryRepositoryAdapter', () => {
         expect(result[1].orderedKey).toBe(chats[0].orderedKey);
       });
     });
+
+    it('지정한 key 보다 작은 항목들만 가져온다', async () => {
+      // given
+      const shareDealId = ShareDealId(faker.database.mongodbObjectId());
+      const userId = UserId(faker.database.mongodbObjectId());
+      const chats = [
+        ChatFactory.create({
+          shareDealId,
+          orderedKey: '100',
+          userId,
+        }),
+        ChatFactory.create({
+          shareDealId,
+          userId,
+          orderedKey: '200',
+        }),
+      ];
+      await prisma.chat.createMany({ data: chats.map(ChatOrmMapper.toOrm) });
+      const command = new FindChatByUserCommand(shareDealId, userId, '200');
+
+      // when
+      const result = chatQueryRepositoryAdapter.findByUser(command);
+
+      // then
+      await assertResolvesSuccess(result, (result) => {
+        expect(result.length).toBe(1);
+        expect(result[0].orderedKey).toBe(chats[0].orderedKey);
+      });
+    });
   });
 });

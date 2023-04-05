@@ -55,8 +55,11 @@ export class ChatQueryRepositoryAdapter extends ChatQueryRepositoryPort {
     return pipe(
       tryCatchDB(async () =>
         this.prisma.chat.findMany({
-          where: { shareDealId: command.shareDealId, userId: command.userId },
-          ...(command.cursor ? { cursor: { orderedKey: command.cursor } } : {}),
+          where: {
+            shareDealId: command.shareDealId,
+            userId: command.userId,
+            orderedKey: { lt: command.cursor },
+          },
           take: command.size,
           orderBy: { orderedKey: 'desc' },
         }),

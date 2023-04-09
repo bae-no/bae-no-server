@@ -252,7 +252,7 @@ type MyProfileResponse {
 
 input OpenShareDealInput {
   category: FoodCategory!
-  maxParticipant: Int!
+  maxParticipants: Int!
   orderPrice: Int!
   shareZone: CreateShareZoneInput!
   storeName: String!

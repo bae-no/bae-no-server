@@ -10,41 +10,49 @@ import { ChatCommandService } from '../../../src/module/chat/application/service
 import type { Chat } from '../../../src/module/chat/domain/Chat';
 import { ChatWrittenEvent } from '../../../src/module/chat/domain/event/ChatWrittenEvent';
 import { ShareDealAccessDeniedException } from '../../../src/module/share-deal/application/port/in/exception/ShareDealAccessDeniedException';
-import type { ShareDealQueryUseCase } from '../../../src/module/share-deal/application/port/in/ShareDealQueryUseCase';
+import type { ShareDealQueryRepositoryPort } from '../../../src/module/share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
+import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
+import { ShareDealFactory } from '../../fixture/ShareDealFactory';
 import { assertResolvesFail, assertResolvesSuccess } from '../../fixture/utils';
 
 describe('ChatCommandService', () => {
-  const shareDealQueryUseCase = mock<ShareDealQueryUseCase>();
+  const shareDealQueryQueryRepository = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
   const eventEmitter = new StubEventEmitter();
   const ticketGeneratorPort = mock<TicketGeneratorPort>();
   const shareDealCommandService = new ChatCommandService(
-    shareDealQueryUseCase,
     chatRepositoryPort,
     eventEmitter,
     ticketGeneratorPort,
+    shareDealQueryQueryRepository,
   );
 
   beforeEach(() => {
-    mockReset(shareDealQueryUseCase);
     mockReset(chatRepositoryPort);
     mockReset(ticketGeneratorPort);
+    mockReset(shareDealQueryQueryRepository);
     eventEmitter.clear();
   });
 
   describe('write', () => {
-    it('공유딜 권한이 없으면 에러가 발생한다', async () => {
+    it('채팅을 작성할 수 없는 공유딜이면 에러가 발생한다', async () => {
       // given
       const command = new WriteChatCommand(
         UserId('userId'),
         ShareDealId('shareDealId'),
         'content',
       );
+      const shareDeal = ShareDealFactory.create({
+        id: command.shareDealId,
+        participantInfo: ParticipantInfo.of([command.userId], 5),
+        status: ShareDealStatus.CLOSE,
+      });
 
-      shareDealQueryUseCase.participantIds.mockReturnValue(
-        T.fail(new ShareDealAccessDeniedException('error')),
+      shareDealQueryQueryRepository.findById.mockReturnValue(
+        T.succeed(shareDeal),
       );
 
       // when
@@ -63,11 +71,19 @@ describe('ChatCommandService', () => {
         ShareDealId('shareDealId'),
         'content',
       );
-      let db: Chat[] = [];
+      const shareDeal = ShareDealFactory.create({
+        id: command.shareDealId,
+        participantInfo: ParticipantInfo.of(
+          ['user 1', 'user 2', 'user 3'].map(UserId),
+          5,
+        ),
+        status: ShareDealStatus.START,
+      });
 
-      shareDealQueryUseCase.participantIds.mockReturnValue(
-        T.succeed(['user 1', 'user 2', 'user 3'].map(UserId)),
+      shareDealQueryQueryRepository.findById.mockReturnValue(
+        T.succeed(shareDeal),
       );
+      let db: Chat[] = [];
       chatRepositoryPort.create.mockImplementation((chats) => {
         db = chats;
 
@@ -122,10 +138,19 @@ describe('ChatCommandService', () => {
         ShareDealId('shareDealId'),
         'content',
       );
+      const shareDeal = ShareDealFactory.create({
+        id: command.shareDealId,
+        participantInfo: ParticipantInfo.of(
+          ['user 1', 'user 2', 'user 3'].map(UserId),
+          5,
+        ),
+        status: ShareDealStatus.START,
+      });
 
-      shareDealQueryUseCase.participantIds.mockReturnValue(
-        T.succeed(['user 1', 'user 2', 'user 3'].map(UserId)),
+      shareDealQueryQueryRepository.findById.mockReturnValue(
+        T.succeed(shareDeal),
       );
+
       chatRepositoryPort.create.mockImplementation((chats) => T.succeed(chats));
 
       // when

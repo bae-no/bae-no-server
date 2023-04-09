@@ -13,11 +13,23 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
   }
 
   getRequest(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
+    const req = GqlExecutionContext.create(context).getContext().req;
 
-    return ctx.getContext().req;
+    if (req.subscriptions && req.connectionParams) {
+      req.headers = Object.entries(req.connectionParams).reduce(
+        (acc, [key, value]) => {
+          acc[key.toLowerCase()] = value;
+
+          return acc;
+        },
+        {} as Record<string, unknown>,
+      );
+    }
+
+    return req;
   }
 
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
   override canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),

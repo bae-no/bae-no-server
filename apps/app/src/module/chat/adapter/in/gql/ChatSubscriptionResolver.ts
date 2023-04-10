@@ -19,6 +19,7 @@ export class ChatSubscriptionResolver {
 
   @Subscription(() => ChatWrittenResponse, {
     description: '채팅 작성 이벤트 구독하기',
+    resolve: (payload) => payload,
   })
   async chatWritten(
     @Args({ name: 'shareDealId', type: () => ID }) shareDealId: ShareDealId,

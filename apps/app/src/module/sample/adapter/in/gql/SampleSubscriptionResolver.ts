@@ -7,7 +7,7 @@ import { SampleResponse } from './response/SampleResponse';
 export class SampleSubscriptionResolver {
   constructor(private readonly pubSubPort: PubSubPort) {}
 
-  @Subscription(() => SampleResponse)
+  @Subscription(() => SampleResponse, { resolve: (payload) => payload })
   async sampleAdded(): Promise<AsyncIterator<SampleResponse>> {
     return this.pubSubPort.subscribe('sampleAdded');
   }

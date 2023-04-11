@@ -1,5 +1,5 @@
 export interface Publisher {
-  publish(trigger: string, data: unknown): void;
+  publish<T = unknown>(trigger: string, data: T): void;
 }
 
 export interface Subscriber {
@@ -7,7 +7,7 @@ export interface Subscriber {
 }
 
 export abstract class PubSubPort implements Publisher, Subscriber {
-  abstract publish(trigger: string, data: unknown): void;
+  abstract publish<T = unknown>(trigger: string, data: T): void;
 
   abstract subscribe<T>(trigger: string): AsyncIterator<T>;
 }

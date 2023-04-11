@@ -6,17 +6,18 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { liveTracer } from '@app/monitoring/init';
 import { OnEvent } from '@nestjs/event-emitter';
 
+import type { ChatWrittenPayload } from './ChatWritttenTrigger';
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealClosedEvent } from '../../../../share-deal/domain/event/ShareDealClosedEvent';
 import { ShareDealEndedEvent } from '../../../../share-deal/domain/event/ShareDealEndedEvent';
 import { ShareDealStartedEvent } from '../../../../share-deal/domain/event/ShareDealStartedEvent';
 import type { ShareDeal } from '../../../../share-deal/domain/ShareDeal';
+import { UserQueryRepositoryPort } from '../../../../user/application/port/out/UserQueryRepositoryPort';
 import { ChatRepositoryPort } from '../../../application/port/out/ChatRepositoryPort';
 import { Chat } from '../../../domain/Chat';
 import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
-import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
 
 @Service()
 export class ChatEventListener {
@@ -26,6 +27,7 @@ export class ChatEventListener {
     private readonly chatRepositoryPort: ChatRepositoryPort,
     private readonly eventEmitterPort: EventEmitterPort,
     private readonly ticketGeneratorPort: TicketGeneratorPort,
+    private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
   ) {}
 
   @OnEvent(ChatReadEvent.name, { async: true })
@@ -38,16 +40,25 @@ export class ChatEventListener {
   }
 
   @OnEvent(ChatWrittenEvent.name, { async: true })
-  handleChatWrittenEvent(event: ChatWrittenEvent) {
-    pipe(
+  async handleChatWrittenEvent(event: ChatWrittenEvent) {
+    await pipe(
       NEA.fromArray(event.chats),
       O.map(NEA.head),
-      O.map((chat) =>
-        this.pubSubPort.publish(
+      T.fromOption,
+      T.chain((chat) =>
+        T.structPar({
+          chat: T.succeed(chat),
+          author: this.userQueryRepositoryPort.findById(chat.message.authorId),
+        }),
+      ),
+      T.map(({ chat, author }) =>
+        this.pubSubPort.publish<ChatWrittenPayload>(
           ChatWrittenTrigger(chat.shareDealId),
-          ChatWrittenResponse.of(chat.message),
+          { chat, author },
         ),
       ),
+      liveTracer,
+      T.runPromise,
     );
   }
 

@@ -49,6 +49,7 @@ type ChatDetailResponse {
   id: ID!
   orderedKey: String!
   type: MessageType!
+  unread: Boolean!
 
   """내가 쓴 글인지 여부"""
   writtenByMe: Boolean!
@@ -64,9 +65,16 @@ type ChatResponse {
 }
 
 type ChatWrittenResponse {
-  authorId: ID!
+  authorName: String!
   content: String!
+  createdAt: DateTime!
+  id: ID!
+  orderedKey: String!
   type: MessageType!
+  unread: Boolean!
+
+  """내가 쓴 글인지 여부"""
+  writtenByMe: Boolean!
 }
 
 input CoordinateInput {

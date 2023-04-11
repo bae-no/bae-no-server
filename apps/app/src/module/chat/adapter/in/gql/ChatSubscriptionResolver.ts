@@ -8,6 +8,7 @@ import { ShareDealQueryUseCase } from '../../../../share-deal/application/port/i
 import { ShareDealId } from '../../../../share-deal/domain/ShareDeal';
 import { CurrentSession } from '../../../../user/adapter/in/gql/auth/CurrentSession';
 import { Session } from '../../../../user/adapter/in/gql/auth/Session';
+import type { ChatWrittenPayload } from '../listener/ChatWritttenTrigger';
 import { ChatWrittenTrigger } from '../listener/ChatWritttenTrigger';
 
 @Resolver()
@@ -19,7 +20,8 @@ export class ChatSubscriptionResolver {
 
   @Subscription(() => ChatWrittenResponse, {
     description: '채팅 작성 이벤트 구독하기',
-    resolve: (payload) => payload,
+    resolve: (payload: ChatWrittenPayload) =>
+      ChatWrittenResponse.of(payload.chat, payload.author),
   })
   async chatWritten(
     @Args({ name: 'shareDealId', type: () => ID }) shareDealId: ShareDealId,

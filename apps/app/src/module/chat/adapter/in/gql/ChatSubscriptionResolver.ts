@@ -20,8 +20,8 @@ export class ChatSubscriptionResolver {
 
   @Subscription(() => ChatWrittenResponse, {
     description: '채팅 작성 이벤트 구독하기',
-    resolve: (payload: ChatWrittenPayload) =>
-      ChatWrittenResponse.of(payload.chat, payload.author),
+    resolve: (payload: ChatWrittenPayload, _args, context) =>
+      ChatWrittenResponse.of(payload.chat, payload.author, context.req.user.id),
   })
   async chatWritten(
     @Args({ name: 'shareDealId', type: () => ID }) shareDealId: ShareDealId,

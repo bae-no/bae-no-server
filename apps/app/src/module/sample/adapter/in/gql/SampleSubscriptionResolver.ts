@@ -9,6 +9,6 @@ export class SampleSubscriptionResolver {
 
   @Subscription(() => SampleResponse, { resolve: (payload) => payload })
   async sampleAdded(): Promise<AsyncIterator<SampleResponse>> {
-    return this.pubSubPort.subscribe('sampleAdded');
+    return this.pubSubPort.subscribe<SampleResponse>('sampleAdded');
   }
 }

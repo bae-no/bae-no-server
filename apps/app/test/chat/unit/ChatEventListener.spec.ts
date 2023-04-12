@@ -5,7 +5,6 @@ import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
-import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/response/ChatWrittenResponse';
 import { ChatEventListener } from '../../../src/module/chat/adapter/in/listener/ChatEventListener';
 import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
 import type { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
@@ -17,15 +16,18 @@ import { ShareDealEndedEvent } from '../../../src/module/share-deal/domain/event
 import { ShareDealStartedEvent } from '../../../src/module/share-deal/domain/event/ShareDealStartedEvent';
 import { ShareDealId } from '../../../src/module/share-deal/domain/ShareDeal';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
+import type { UserQueryRepositoryPort } from '../../../src/module/user/application/port/out/UserQueryRepositoryPort';
 import { UserId } from '../../../src/module/user/domain/User';
 import { ChatFactory } from '../../fixture/ChatFactory';
 import { ShareDealFactory } from '../../fixture/ShareDealFactory';
+import { UserFactory } from '../../fixture/UserFactory';
 
 describe('ChatEventListener', () => {
   const pubSubPort = new StubPubSub();
   const shareDealQueryRepositoryPort = mock<ShareDealQueryRepositoryPort>();
   const chatRepositoryPort = mock<ChatRepositoryPort>();
   const ticketGeneratorPort = mock<TicketGeneratorPort>();
+  const userQueryRepositoryPort = mock<UserQueryRepositoryPort>();
   const eventEmitter = new StubEventEmitter();
   const chatEventListener = new ChatEventListener(
     pubSubPort,
@@ -33,6 +35,7 @@ describe('ChatEventListener', () => {
     chatRepositoryPort,
     eventEmitter,
     ticketGeneratorPort,
+    userQueryRepositoryPort,
   );
 
   beforeEach(() => {
@@ -60,18 +63,21 @@ describe('ChatEventListener', () => {
   });
 
   describe('handleChatWrittenEvent', () => {
-    it('채팅 작성 메시지를 전송한다', () => {
+    it('채팅 작성 메시지를 전송한다', async () => {
       // given
       const chat = ChatFactory.create();
       const event = new ChatWrittenEvent([chat]);
+      const user = UserFactory.create();
+
+      userQueryRepositoryPort.findById.mockReturnValue(T.succeed(user));
 
       // when
-      chatEventListener.handleChatWrittenEvent(event);
+      await chatEventListener.handleChatWrittenEvent(event);
 
       // then
       expect(
         pubSubPort.get(ChatWrittenTrigger(chat.shareDealId)),
-      ).toStrictEqual(ChatWrittenResponse.of(chat.message));
+      ).toStrictEqual({ chat, author: user });
     });
   });
 

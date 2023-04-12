@@ -24,7 +24,7 @@ export class SampleMutationResolver {
       (command) => this.sampleCommandUseCase.create(command),
       T.map((sample) => {
         const response = SampleResponse.of(sample);
-        this.pubSubPort.publish('sampleAdded', response);
+        this.pubSubPort.publish<SampleResponse>('sampleAdded', response);
 
         return sample;
       }),

@@ -27,6 +27,9 @@ export class ChatDetailResponse {
   @Field()
   orderedKey: string;
 
+  @Field()
+  unread: boolean;
+
   static of(dto: FindByUserDto, userId: UserId): ChatDetailResponse {
     const response = new ChatDetailResponse();
 
@@ -37,6 +40,7 @@ export class ChatDetailResponse {
     response.authorName = dto.author.nickname;
     response.writtenByMe = dto.author.id === userId;
     response.orderedKey = dto.chat.orderedKey;
+    response.unread = dto.chat.message.unread;
 
     return response;
   }

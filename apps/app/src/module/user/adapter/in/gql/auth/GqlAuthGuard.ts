@@ -15,8 +15,8 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const req = GqlExecutionContext.create(context).getContext().req;
 
-    if (req.subscriptions && req.connectionParams) {
-      req.headers = Object.entries(req.connectionParams).reduce(
+    if (req.subscriptions) {
+      req.headers = Object.entries(req.connectionParams ?? {}).reduce(
         (acc, [key, value]) => {
           acc[key.toLowerCase()] = value;
 

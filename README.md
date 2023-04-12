@@ -156,6 +156,7 @@ export abstract class SmsPort {
 - Effect -> T
 - Either -> E
 - Option -> O
+- NonEmptyArray -> NEA
 
 ```typescript
 // libs/custom/src/effect/index.ts
@@ -168,7 +169,7 @@ export * as NEA from '@effect-ts/core/Collections/Immutable/NonEmptyArray';
 import { T, O, E, NEA } from '@app/custom/effect';
 ```
 
-> Effect TS 에 대한 자세한 내용은 [블로그 글](https://jbl428.github.io/2023/02/11/write-testable-efficient-code-with-effect-ts/) 을 참고하세요.
+> Effect TS 에 대한 자세한 내용은 [블로그 글](https://jbl428.github.io/2023/02/11/Effect-TS%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%80%EB%8A%A5%ED%95%98%EA%B3%A0-%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B8-%EC%BD%94%EB%93%9C-%EC%9E%91%EC%84%B1%ED%95%98%EA%B8%B0) 을 참고하세요.
 
 ## Test
 
@@ -186,7 +187,6 @@ pnpm test:integration # 통합테스트
 본 프로젝트는 `open-telemetry` 를 사용하여 trace 정보를 수집합니다.  
 `docker-compose.yml` 파일에 jaeger 서버가 포함되어 있으며 `pnpm start` 명령어를 통해 서버를 실행하면 jaeger 서버에 trace 정보가 수집됩니다.  
 `http://localhost:16686` 으로 접속하여 trace 정보를 확인할 수 있습니다.
-
 
 ## 개발 관련 사항
 

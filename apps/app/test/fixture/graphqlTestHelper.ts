@@ -47,6 +47,10 @@ export async function graphQLTestHelper(
       GraphQLModule.forRoot<ApolloDriverConfig>({
         driver: ApolloDriver,
         autoSchemaFile: true,
+        subscriptions: {
+          'graphql-ws': true,
+          'subscriptions-transport-ws': false,
+        },
       }),
       ...(metadata.imports || []),
     ],

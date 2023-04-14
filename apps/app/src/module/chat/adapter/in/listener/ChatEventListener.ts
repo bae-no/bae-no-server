@@ -6,7 +6,6 @@ import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
 import { liveTracer } from '@app/monitoring/init';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import type { ChatWrittenPayload } from './ChatWritttenTrigger';
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
 import { ShareDealClosedEvent } from '../../../../share-deal/domain/event/ShareDealClosedEvent';
@@ -18,6 +17,7 @@ import { ChatRepositoryPort } from '../../../application/port/out/ChatRepository
 import { Chat } from '../../../domain/Chat';
 import { ChatReadEvent } from '../../../domain/event/ChatReadEvent';
 import { ChatWrittenEvent } from '../../../domain/event/ChatWrittenEvent';
+import { ChatWrittenResponse } from '../gql/response/ChatWrittenResponse';
 
 @Service()
 export class ChatEventListener {
@@ -52,9 +52,9 @@ export class ChatEventListener {
         }),
       ),
       T.map(({ chat, author }) =>
-        this.pubSubPort.publish<ChatWrittenPayload>(
+        this.pubSubPort.publish<ChatWrittenResponse>(
           ChatWrittenTrigger(chat.shareDealId),
-          { chat, author },
+          ChatWrittenResponse.of(chat, author),
         ),
       ),
       liveTracer,

@@ -9,7 +9,7 @@ import { mock, mockReset } from 'vitest-mock-extended';
 import WebSocket from 'ws';
 
 import { ChatSubscriptionResolver } from '../../../src/module/chat/adapter/in/gql/ChatSubscriptionResolver';
-import type { ChatWrittenPayload } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
+import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/response/ChatWrittenResponse';
 import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
 import { ChatId } from '../../../src/module/chat/domain/Chat';
 import { Message } from '../../../src/module/chat/domain/vo/Message';
@@ -75,8 +75,8 @@ describe('ChatSubscriptionResolver', () => {
         webSocketImpl: WebSocket,
         url: `ws://localhost:${app.getHttpServer().address().port}/graphql`,
       });
-      const payload: ChatWrittenPayload = {
-        chat: ChatFactory.create({
+      const payload = ChatWrittenResponse.of(
+        ChatFactory.create({
           id: ChatId('id'),
           createdAt: new Date('2021-01-01T00:00:00.000Z'),
           orderedKey: 'orderedKey',
@@ -86,8 +86,8 @@ describe('ChatSubscriptionResolver', () => {
             true,
           ),
         }),
-        author: UserFactory.create({ nickname: 'nickname' }),
-      };
+        UserFactory.create({ nickname: 'nickname' }),
+      );
       shareDealQueryUseCase.isParticipant.mockReturnValue(T.unit);
       const timer = setInterval(() => {
         pubSubAdapter.publish(ChatWrittenTrigger(ShareDealId('id')), payload);

@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 
 import type { User, UserId } from '../../../../../user/domain/User';
 import type { Chat } from '../../../../domain/Chat';
@@ -10,6 +11,7 @@ export class ChatWrittenResponse {
   id: string;
 
   @Field()
+  @Type(() => Date)
   createdAt: Date;
 
   @Field(() => MessageType)
@@ -30,7 +32,9 @@ export class ChatWrittenResponse {
   @Field()
   unread: boolean;
 
-  static of(chat: Chat, author: User, userId: UserId) {
+  authorId: UserId;
+
+  static of(chat: Chat, author: User) {
     const response = new ChatWrittenResponse();
 
     response.id = chat.id;
@@ -39,9 +43,15 @@ export class ChatWrittenResponse {
     response.content = chat.message.content;
     response.authorName = author.nickname;
     response.orderedKey = chat.orderedKey;
-    response.unread = chat.message.authorId !== userId;
-    response.writtenByMe = chat.message.authorId === userId;
+    response.authorId = author.id;
 
     return response;
+  }
+
+  enrichUserFields(userId: UserId): this {
+    this.writtenByMe = this.authorId === userId;
+    this.unread = !this.writtenByMe;
+
+    return this;
   }
 }

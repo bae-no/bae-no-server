@@ -5,6 +5,7 @@ import { mock, mockReset } from 'vitest-mock-extended';
 
 import { StubEventEmitter } from '../../../../../libs/event-emitter/test/fixture/StubEventEmitter';
 import { StubPubSub } from '../../../../../libs/pub-sub/test/fixture/StubPubSubModule';
+import { ChatWrittenResponse } from '../../../src/module/chat/adapter/in/gql/response/ChatWrittenResponse';
 import { ChatEventListener } from '../../../src/module/chat/adapter/in/listener/ChatEventListener';
 import { ChatWrittenTrigger } from '../../../src/module/chat/adapter/in/listener/ChatWritttenTrigger';
 import type { ChatRepositoryPort } from '../../../src/module/chat/application/port/out/ChatRepositoryPort';
@@ -77,7 +78,7 @@ describe('ChatEventListener', () => {
       // then
       expect(
         pubSubPort.get(ChatWrittenTrigger(chat.shareDealId)),
-      ).toStrictEqual({ chat, author: user });
+      ).toStrictEqual(ChatWrittenResponse.of(chat, user));
     });
   });
 

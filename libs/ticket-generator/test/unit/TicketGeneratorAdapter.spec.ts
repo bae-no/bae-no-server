@@ -15,6 +15,6 @@ describe('TicketGeneratorAdapter', () => {
 
     // then
     expect(result.size).toBe(1000);
-    expect(ids).toEqual([...result].sort());
+    expect(ids).toEqual([...result].sort((a, b) => a.localeCompare(b)));
   });
 });

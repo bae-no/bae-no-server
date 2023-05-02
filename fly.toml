@@ -1,7 +1,7 @@
 # fly.toml file generated for bae-no-server on 2022-08-27T20:17:40+09:00
 
 app = "bae-no-server-v2"
-primary_region = "ord"
+primary_region = "nrt"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []

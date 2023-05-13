@@ -53,7 +53,11 @@ describe('HttpClientService', () => {
     const result = httpClientService.get(url);
 
     // then
-    await assertResolvesFail(result);
+    await assertResolvesFail(result, (error) => {
+      expect(error).toMatchInlineSnapshot(
+        '[Error: The operation was aborted due to timeout]',
+      );
+    });
   }, 10000);
 
   it('Query 요청에 대해 응답한다.', async () => {

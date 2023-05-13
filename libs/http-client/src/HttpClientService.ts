@@ -52,27 +52,17 @@ export class HttpClientService extends HttpClientPort {
     url: string,
     option?: HttpOption,
   ): T.IO<HttpError, HttpResponse> {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.#timeout);
-
     return pipe(
       T.tryCatchPromise(
         async () => {
-          try {
-            const response = await fetch(url + this.makeSearchParam(option), {
-              method,
-              body: this.makeBody(option),
-              headers: this.makeHeader(option),
-              signal: controller.signal,
-            });
+          const response = await fetch(url + this.makeSearchParam(option), {
+            method,
+            body: this.makeBody(option),
+            headers: this.makeHeader(option),
+            signal: AbortSignal.timeout(this.#timeout),
+          });
 
-            return new NodeFetchResponse(
-              response.status,
-              await response.text(),
-            );
-          } finally {
-            clearTimeout(timeout);
-          }
+          return new NodeFetchResponse(response.status, await response.text());
         },
         (e) => new HttpError(e as Error),
       ),

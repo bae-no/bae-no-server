@@ -39,7 +39,7 @@ describe('ParticipantInfo', () => {
       const info = ParticipantInfo.of(['1', '2', '3'].map(UserId), 5);
 
       // when
-      const result = info.canStart;
+      const result = info.isQuorum;
 
       // then
       expect(result).toBe(true);
@@ -50,7 +50,7 @@ describe('ParticipantInfo', () => {
       const info = ParticipantInfo.of(['1', '2'].map(UserId), 5);
 
       // when
-      const result = info.canStart;
+      const result = info.isQuorum;
 
       // then
       expect(result).toBe(false);

@@ -8,7 +8,7 @@ export class ParticipantInfo {
     readonly remaining: number,
   ) {}
 
-  get canStart(): boolean {
+  get isQuorum(): boolean {
     return this.remaining <= this.current;
   }
 

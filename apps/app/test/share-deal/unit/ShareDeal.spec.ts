@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
@@ -283,6 +284,41 @@ describe('ShareDeal', () => {
 
       // then
       expect(result).toBe(false);
+    });
+  });
+
+  describe('join', () => {
+    it('입장 불가능한 공유딜에 참가할 수 없다', () => {
+      // given
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.READY,
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['user1', 'user2'].map(UserId), 2),
+      });
+
+      // when
+      const result = shareDeal.join(UserId('user3'));
+
+      // then
+      assertLeft(result, (error) => {
+        expect(error).toBeInstanceOf(NotJoinableShareDealException);
+      });
+    });
+
+    it('공유딜이 오픈 상태이고 과반수가 넘으면 준비상태로 변경한다', () => {
+      // given
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['user1', 'user2'].map(UserId), 5),
+      });
+
+      // when
+      const result = shareDeal.join(UserId('user3'));
+
+      // then
+      assertRight(result, (deal) => {
+        expect(deal.status).toBe(ShareDealStatus.READY);
+      });
     });
   });
 

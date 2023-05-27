@@ -123,7 +123,7 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
     return (
       this.status === ShareDealStatus.READY &&
       userId === this.ownerId &&
-      this.participantInfo.canStart
+      this.participantInfo.isQuorum
     );
   }
 
@@ -149,6 +149,10 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
       );
     }
     this.props.participantInfo = this.participantInfo.addId(participantId);
+
+    if (this.participantInfo.isQuorum || this.status === ShareDealStatus.OPEN) {
+      this.props.status = ShareDealStatus.READY;
+    }
 
     return E.right(this);
   }

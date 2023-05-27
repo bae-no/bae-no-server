@@ -14,27 +14,16 @@ import { ChatQueryRepositoryPort } from './application/port/out/ChatQueryReposit
 import { ChatRepositoryPort } from './application/port/out/ChatRepositoryPort';
 import { ChatCommandService } from './application/service/ChatCommandService';
 import { ChatQueryService } from './application/service/ChatQueryService';
-import { ShareDealQueryRepositoryAdapter } from '../share-deal/adapter/out/persistence/ShareDealQueryRepositoryAdapter';
-import { ShareDealQueryUseCase } from '../share-deal/application/port/in/ShareDealQueryUseCase';
-import { ShareDealQueryRepositoryPort } from '../share-deal/application/port/out/ShareDealQueryRepositoryPort';
-import { ShareDealQueryService } from '../share-deal/application/service/ShareDealQueryService';
-import { UserQueryRepositoryAdapter } from '../user/adapter/out/persistence/UserQueryRepositoryAdapter';
-import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryRepositoryPort';
+import { ShareDealModule } from '../share-deal/ShareDealModule';
+import { UserModule } from '../user/UserModule';
 
 @Module({
+  imports: [ShareDealModule, UserModule],
   providers: [
     ChatQueryResolver,
     ChatMutationResolver,
     ChatSubscriptionResolver,
     ChatEventListener,
-    {
-      provide: ShareDealQueryUseCase,
-      useClass: ShareDealQueryService,
-    },
-    {
-      provide: ShareDealQueryRepositoryPort,
-      useClass: ShareDealQueryRepositoryAdapter,
-    },
     {
       provide: ChatQueryUseCase,
       useClass: ChatQueryService,
@@ -50,10 +39,6 @@ import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryR
     {
       provide: ChatRepositoryPort,
       useClass: ChatRepositoryAdapter,
-    },
-    {
-      provide: UserQueryRepositoryPort,
-      useClass: UserQueryRepositoryAdapter,
     },
     {
       provide: TicketGeneratorPort,

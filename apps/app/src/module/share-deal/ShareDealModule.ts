@@ -10,10 +10,10 @@ import { ShareDealQueryRepositoryPort } from './application/port/out/ShareDealQu
 import { ShareDealRepositoryPort } from './application/port/out/ShareDealRepositoryPort';
 import { ShareDealCommandService } from './application/service/ShareDealCommandService';
 import { ShareDealQueryService } from './application/service/ShareDealQueryService';
-import { UserQueryRepositoryAdapter } from '../user/adapter/out/persistence/UserQueryRepositoryAdapter';
-import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryRepositoryPort';
+import { UserModule } from '../user/UserModule';
 
 @Module({
+  imports: [UserModule],
   providers: [
     ShareDealQueryResolver,
     ShareDealMutationResolver,
@@ -33,10 +33,7 @@ import { UserQueryRepositoryPort } from '../user/application/port/out/UserQueryR
       provide: ShareDealQueryUseCase,
       useClass: ShareDealQueryService,
     },
-    {
-      provide: UserQueryRepositoryPort,
-      useClass: UserQueryRepositoryAdapter,
-    },
   ],
+  exports: [ShareDealQueryUseCase, ShareDealQueryRepositoryPort],
 })
 export class ShareDealModule {}

@@ -103,5 +103,6 @@ import { UserCommandService } from './application/service/UserCommandService';
     JwtModule.register({ secret: process.env.JWT_SECRET }),
     SmsModule,
   ],
+  exports: [UserQueryRepositoryPort],
 })
 export class UserModule {}

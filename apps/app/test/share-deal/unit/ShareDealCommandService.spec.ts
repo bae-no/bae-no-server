@@ -131,7 +131,7 @@ describe('ShareDealCommandService', () => {
         ShareDealId('shareDealId'),
       );
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.OPEN,
+        status: ShareDealStatus.READY,
         ownerId: command.userId,
         participantInfo: ParticipantInfo.of([UserId('1')], 2),
       });

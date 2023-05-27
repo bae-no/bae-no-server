@@ -383,6 +383,7 @@ enum ShareDealStatus {
   CLOSE
   END
   OPEN
+  READY
   START
 }
 

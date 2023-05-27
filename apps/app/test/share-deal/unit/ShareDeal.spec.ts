@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { NotJoinableShareDealException } from '../../../src/module/share-deal/application/port/in/exception/NotJoinableShareDealException';
 import { ParticipantInfo } from '../../../src/module/share-deal/domain/vo/ParticipantInfo';
 import { ShareDealStatus } from '../../../src/module/share-deal/domain/vo/ShareDealStatus';
 import { UserId } from '../../../src/module/user/domain/User';
@@ -8,11 +9,11 @@ import { assertLeft, assertRight } from '../../fixture/utils';
 
 describe('ShareDeal', () => {
   describe('canWriteChat', () => {
-    it('공유딜이 시작 상태가 아니면 작성할 수 없다', () => {
+    it('공유딜이 준비 상태가 아니면 작성할 수 없다', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.CLOSE,
+        status: ShareDealStatus.OPEN,
         participantInfo: ParticipantInfo.of([UserId(userId)], 1),
       });
 
@@ -38,7 +39,22 @@ describe('ShareDeal', () => {
       expect(result).toBe(false);
     });
 
-    it('유효한 상태이면 작성할 수 있다', () => {
+    it('준비 상태이면 작성할 수 있다', () => {
+      // given
+      const userId = UserId('userId');
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.READY,
+        participantInfo: ParticipantInfo.of([UserId(userId)], 1),
+      });
+
+      // when
+      const result = shareDeal.canWriteChat(userId);
+
+      // then
+      expect(result).toBe(true);
+    });
+
+    it('시작 상태이면 작성할 수 있다', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
@@ -59,7 +75,7 @@ describe('ShareDeal', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.OPEN,
+        status: ShareDealStatus.READY,
         ownerId: userId,
         participantInfo: ParticipantInfo.of([userId, 'user 2'].map(UserId), 4),
       });
@@ -87,11 +103,11 @@ describe('ShareDeal', () => {
       expect(result).toBe(false);
     });
 
-    it('상태가 OPEN이 아닌 경우 시작할 수 없다', () => {
+    it('준비 상태가 아닌 경우 시작할 수 없다', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.START,
+        status: ShareDealStatus.OPEN,
         ownerId: userId,
         participantInfo: ParticipantInfo.of([userId, 'user 2'].map(UserId), 4),
       });
@@ -107,7 +123,7 @@ describe('ShareDeal', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.OPEN,
+        status: ShareDealStatus.READY,
         ownerId: userId,
         participantInfo: ParticipantInfo.of([UserId(userId)], 4),
       });
@@ -157,7 +173,7 @@ describe('ShareDeal', () => {
       // given
       const userId = UserId('userId');
       const shareDeal = ShareDealFactory.create({
-        status: ShareDealStatus.OPEN,
+        status: ShareDealStatus.READY,
         ownerId: userId,
         participantInfo: ParticipantInfo.of([userId, 'user 2'].map(UserId), 4),
       });
@@ -171,13 +187,33 @@ describe('ShareDeal', () => {
   });
 
   describe('canUpdate', () => {
-    it('자신의 공유딜이 시작 상태인 경우 수정할 수 있다.', () => {
+    it('자신의 공유딜이 오픈 상태인 경우 수정할 수 있다.', () => {
       // given
       const ownerId = UserId('ownerId');
       const maxParticipants = 10;
       const shareDeal = ShareDealFactory.create({
         ownerId,
         status: ShareDealStatus.OPEN,
+        participantInfo: ParticipantInfo.of(
+          ['user1', 'user2'].map(UserId),
+          maxParticipants,
+        ),
+      });
+
+      // when
+      const result = shareDeal.canUpdate(ownerId, maxParticipants);
+
+      // then
+      expect(result).toBe(true);
+    });
+
+    it('자신의 공유딜이 준비 상태인 경우 수정할 수 있다.', () => {
+      // given
+      const ownerId = UserId('ownerId');
+      const maxParticipants = 10;
+      const shareDeal = ShareDealFactory.create({
+        ownerId,
+        status: ShareDealStatus.READY,
         participantInfo: ParticipantInfo.of(
           ['user1', 'user2'].map(UserId),
           maxParticipants,
@@ -248,6 +284,41 @@ describe('ShareDeal', () => {
 
       // then
       expect(result).toBe(false);
+    });
+  });
+
+  describe('join', () => {
+    it('입장 불가능한 공유딜에 참가할 수 없다', () => {
+      // given
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.READY,
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['user1', 'user2'].map(UserId), 2),
+      });
+
+      // when
+      const result = shareDeal.join(UserId('user3'));
+
+      // then
+      assertLeft(result, (error) => {
+        expect(error).toBeInstanceOf(NotJoinableShareDealException);
+      });
+    });
+
+    it('공유딜이 오픈 상태이고 과반수가 넘으면 준비상태로 변경한다', () => {
+      // given
+      const shareDeal = ShareDealFactory.createOpen({
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['user1', 'user2'].map(UserId), 5),
+      });
+
+      // when
+      const result = shareDeal.join(UserId('user3'));
+
+      // then
+      assertRight(result, (deal) => {
+        expect(deal.status).toBe(ShareDealStatus.READY);
+      });
     });
   });
 

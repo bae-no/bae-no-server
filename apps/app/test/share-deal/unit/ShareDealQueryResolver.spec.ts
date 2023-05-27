@@ -318,7 +318,7 @@ describe('ShareDealQueryResolver', () => {
           "data": {
             "shareDealStatus": {
               "canEnd": false,
-              "canStart": true,
+              "canStart": false,
               "isOwner": true,
               "participants": [
                 {

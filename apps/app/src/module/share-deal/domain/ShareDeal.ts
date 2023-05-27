@@ -94,13 +94,16 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
 
   get isJoinable() {
     return (
-      this.status === ShareDealStatus.OPEN && this.participantInfo.hasRemaining
+      (this.status === ShareDealStatus.OPEN ||
+        this.status === ShareDealStatus.READY) &&
+      this.participantInfo.hasRemaining
     );
   }
 
   get isActive(): boolean {
     return (
       this.status === ShareDealStatus.START ||
+      this.status === ShareDealStatus.READY ||
       this.status === ShareDealStatus.OPEN
     );
   }
@@ -118,9 +121,9 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
 
   canStart(userId: UserId): boolean {
     return (
-      this.status === ShareDealStatus.OPEN &&
+      this.status === ShareDealStatus.READY &&
       userId === this.ownerId &&
-      this.participantInfo.canStart
+      this.participantInfo.isQuorum
     );
   }
 
@@ -129,7 +132,10 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
   }
 
   canWriteChat(userId: UserId): boolean {
-    if (this.status !== ShareDealStatus.START) {
+    if (
+      this.status !== ShareDealStatus.READY &&
+      this.status !== ShareDealStatus.START
+    ) {
       return false;
     }
 
@@ -143,6 +149,10 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
       );
     }
     this.props.participantInfo = this.participantInfo.addId(participantId);
+
+    if (this.participantInfo.isQuorum || this.status === ShareDealStatus.OPEN) {
+      this.props.status = ShareDealStatus.READY;
+    }
 
     return E.right(this);
   }
@@ -172,7 +182,8 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
   canUpdate(userId: UserId, maxParticipants: number): boolean {
     return (
       this.props.ownerId === userId &&
-      this.props.status === ShareDealStatus.OPEN &&
+      (this.props.status === ShareDealStatus.OPEN ||
+        this.props.status === ShareDealStatus.READY) &&
       this.participantInfo.isLessOrEquals(maxParticipants)
     );
   }

@@ -25,7 +25,7 @@ describe('ChatRepositoryAdapter', () => {
         Chat.of({
           shareDealId: ShareDealId(faker.database.mongodbObjectId()),
           userId: UserId(faker.database.mongodbObjectId()),
-          orderedKey: faker.random.numeric(),
+          orderedKey: faker.string.numeric(),
           message: Message.firstMessage(
             UserId(faker.database.mongodbObjectId()),
           ),
@@ -33,7 +33,7 @@ describe('ChatRepositoryAdapter', () => {
         Chat.of({
           shareDealId: ShareDealId(faker.database.mongodbObjectId()),
           userId: UserId(faker.database.mongodbObjectId()),
-          orderedKey: faker.random.numeric(),
+          orderedKey: faker.string.numeric(),
           message: Message.startShareDealMessage(
             UserId(faker.database.mongodbObjectId()),
           ),
@@ -65,7 +65,7 @@ describe('ChatRepositoryAdapter', () => {
         Chat.of({
           shareDealId,
           userId,
-          orderedKey: faker.random.numeric(),
+          orderedKey: faker.string.numeric(),
           message: Message.normal(
             UserId(faker.database.mongodbObjectId()),
             'content 1',
@@ -75,7 +75,7 @@ describe('ChatRepositoryAdapter', () => {
         Chat.of({
           shareDealId,
           userId,
-          orderedKey: faker.random.numeric(),
+          orderedKey: faker.string.numeric(),
           message: Message.normal(
             UserId(faker.database.mongodbObjectId()),
             'content 2',

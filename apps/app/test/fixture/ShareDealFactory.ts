@@ -23,10 +23,10 @@ export class ShareDealFactory {
   static create(props: Partial<ShareDealProps & BaseType> = {}): ShareDeal {
     const shareZone = new ShareZone(
       faker.helpers.arrayElement(Object.values(AddressSystem)),
-      faker.address.streetAddress(true),
-      faker.address.buildingNumber(),
-      +faker.address.latitude(undefined, 0),
-      +faker.address.longitude(undefined, 0),
+      faker.location.streetAddress(true),
+      faker.location.buildingNumber(),
+      +faker.location.latitude(undefined, 0),
+      +faker.location.longitude(undefined, 0),
     );
     const ownerId = UserId(props.ownerId ?? faker.database.mongodbObjectId());
 
@@ -36,11 +36,11 @@ export class ShareDealFactory {
       category: faker.helpers.arrayElement(Object.values(FoodCategory)),
       participantInfo:
         props.participantInfo ??
-        ParticipantInfo.of([ownerId], faker.datatype.number()),
-      orderPrice: faker.datatype.number(),
+        ParticipantInfo.of([ownerId], faker.number.int()),
+      orderPrice: faker.number.int(),
       ownerId,
       storeName: faker.word.noun(),
-      thumbnail: faker.image.imageUrl(),
+      thumbnail: faker.image.url(),
       zone: shareZone,
       ...props,
     }).setBase(

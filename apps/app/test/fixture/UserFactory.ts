@@ -17,7 +17,7 @@ type BaseType = {
 export class UserFactory {
   static create(props: Partial<UserProps & BaseType> = {}): User {
     const auth = new Auth(
-      faker.random.alphaNumeric(10),
+      faker.string.alphanumeric(10),
       faker.helpers.arrayElement(Object.values(AuthType)),
     );
 

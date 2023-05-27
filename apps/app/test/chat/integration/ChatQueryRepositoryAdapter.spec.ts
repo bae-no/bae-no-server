@@ -52,7 +52,7 @@ describe('ChatQueryRepositoryAdapter', () => {
             createdAt: new Date('2022-10-05'),
             userId,
             shareDealId,
-            orderedKey: faker.random.numeric(),
+            orderedKey: faker.string.numeric(),
             message: {
               type: MessageType.NORMAL,
               content: 'last',
@@ -64,7 +64,7 @@ describe('ChatQueryRepositoryAdapter', () => {
             createdAt: new Date('2022-10-01'),
             userId,
             shareDealId,
-            orderedKey: faker.random.numeric(),
+            orderedKey: faker.string.numeric(),
             message: {
               type: MessageType.NORMAL,
               content: 'first',
@@ -114,7 +114,7 @@ describe('ChatQueryRepositoryAdapter', () => {
         data: [true, true, false, true].map((unread) => ({
           userId,
           shareDealId,
-          orderedKey: faker.random.numeric(),
+          orderedKey: faker.string.numeric(),
           message: {
             type: MessageType.NORMAL,
             content: 'message',

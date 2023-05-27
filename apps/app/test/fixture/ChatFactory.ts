@@ -25,7 +25,7 @@ export class ChatFactory {
     return new Chat({
       shareDealId: ShareDealId(faker.database.mongodbObjectId()),
       userId: UserId(faker.database.mongodbObjectId()),
-      orderedKey: faker.random.numeric(),
+      orderedKey: faker.string.numeric(),
       message,
       ...props,
     }).setBase(

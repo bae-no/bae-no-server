@@ -34,7 +34,7 @@ describe('UserPushTokenQueryRepositoryAdapter', () => {
       const userPushToken = await prisma.userPushToken
         .create({
           data: {
-            token: faker.random.alphaNumeric(10),
+            token: faker.string.alphanumeric(10),
             userId: faker.database.mongodbObjectId(),
           },
         })

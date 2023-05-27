@@ -23,7 +23,7 @@ export class UserFactory {
 
     return new User({
       auth,
-      nickname: faker.name.firstName(),
+      nickname: faker.person.firstName(),
       addressList: props.addressList ?? UserAddressList.of(),
       phoneNumber: faker.phone.number(),
       agreement: new Agreement(

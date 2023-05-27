@@ -220,6 +220,8 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
     if (this.isOwner(userId) && this.isActive) {
       this.props.status = ShareDealStatus.CLOSE;
       this.addDomainEvent(new ShareDealClosedEvent(this.id));
+
+      return E.right(this);
     }
 
     return this.leaveMember(userId);
@@ -232,6 +234,12 @@ export class ShareDeal extends AggregateRoot<ShareDealProps, ShareDealId> {
   private leaveMember(userId: UserId): E.Either<IllegalStateException, this> {
     if (!this.participantInfo.hasId(userId)) {
       return E.left(new IllegalStateException('존재하지 않는 참가자입니다.'));
+    }
+
+    if (this.status === ShareDealStatus.START) {
+      return E.left(
+        new IllegalStateException('시작된 공유딜에서는 나갈 수 없습니다.'),
+      );
     }
 
     this.props.participantInfo = this.props.participantInfo.removeId(userId);

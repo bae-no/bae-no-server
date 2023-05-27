@@ -368,5 +368,22 @@ describe('ShareDeal', () => {
       // then
       expect(shareDeal.participantInfo.hasId(UserId('user2'))).toBe(false);
     });
+
+    it('공유딜시 시작 상태이고 방장이 아니면 나갈 수 없다', () => {
+      // given
+      const shareDeal = ShareDealFactory.create({
+        status: ShareDealStatus.START,
+        ownerId: UserId('ownerId'),
+        participantInfo: ParticipantInfo.of(['user1', 'user2'].map(UserId), 10),
+      });
+
+      // when
+      const result = shareDeal.leave(UserId('user2'));
+
+      // then
+      assertLeft(result, (error) => {
+        expect(error.message).toBe('시작된 공유딜에서는 나갈 수 없습니다.');
+      });
+    });
   });
 });

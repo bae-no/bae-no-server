@@ -23,6 +23,9 @@ import { ConfigService } from '@nestjs/config';
         };
       },
     }),
+    BullModule.registerQueue({
+      name: 'event-emitter',
+    }),
   ],
   providers: [{ provide: EventEmitterPort, useClass: EventEmitterAdapter }],
   exports: [EventEmitterPort],

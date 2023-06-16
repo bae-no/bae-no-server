@@ -12,7 +12,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  getRequest(context: ExecutionContext) {
+  override getRequest(context: ExecutionContext) {
     const req = GqlExecutionContext.create(context).getContext().req;
 
     if (req.subscriptions) {

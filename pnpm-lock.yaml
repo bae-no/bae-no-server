@@ -15,8 +15,8 @@ dependencies:
     specifier: 0.15.1
     version: 0.15.1(@effect-ts/core@0.60.5)(@opentelemetry/api@1.4.1)(@opentelemetry/core@1.14.0)(@opentelemetry/sdk-trace-base@1.14.0)
   '@nestjs/apollo':
-    specifier: 11.0.6
-    version: 11.0.6(@apollo/server@4.7.4)(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(@nestjs/graphql@11.0.6)(graphql@16.6.0)
+    specifier: 12.0.1
+    version: 12.0.1(@apollo/server@4.7.4)(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(@nestjs/graphql@11.0.6)(graphql@16.6.0)
   '@nestjs/common':
     specifier: 10.0.0
     version: 10.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -1208,16 +1208,16 @@ packages:
     resolution: {integrity: sha512-uSvJdwQU5nK+Vdf6zxcWAY2A8r7uqe+gePwLWzJ+fsQehq18pc0I2hJKwypZ2aLM90+Er9u1xn4iLJPZ+xlL4g==}
     engines: {node: '>=8'}
 
-  /@nestjs/apollo@11.0.6(@apollo/server@4.7.4)(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(@nestjs/graphql@11.0.6)(graphql@16.6.0):
-    resolution: {integrity: sha512-w9I8oZHkHcBdR2sXoag4USe5nCOqWVdINYZTAnsLq8tafIolkGQAI9O+o1cGLyyV+9wwh4GAty5b9+jx/x1sbA==}
+  /@nestjs/apollo@12.0.1(@apollo/server@4.7.4)(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(@nestjs/graphql@11.0.6)(graphql@16.6.0):
+    resolution: {integrity: sha512-qThl0gK3nFGohWh72FADM69JI6cW7tNDeox8zJpLtzxb8zCTncq5NOJpGjF8wlEyMgXnq7bdQw6aWmbWeSEgpw==}
     peerDependencies:
       '@apollo/gateway': ^2.0.0
       '@apollo/server': ^4.3.2
       '@apollo/subgraph': ^2.0.0
       '@as-integrations/fastify': ^1.3.0 || ^2.0.0
-      '@nestjs/common': ^9.0.0
-      '@nestjs/core': ^9.3.8
-      '@nestjs/graphql': ^11.0.0
+      '@nestjs/common': ^9.3.8 || ^10.0.0
+      '@nestjs/core': ^9.3.8 || ^10.0.0
+      '@nestjs/graphql': ^12.0.0
       graphql: ^16.6.0
     peerDependenciesMeta:
       '@apollo/gateway':
@@ -1235,7 +1235,7 @@ packages:
       graphql: 16.6.0
       iterall: 1.3.0
       lodash.omit: 4.5.0
-      tslib: 2.5.2
+      tslib: 2.5.3
     dev: false
 
   /@nestjs/cli@10.0.1(@swc/core@1.3.64):

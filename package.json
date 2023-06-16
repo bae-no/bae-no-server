@@ -37,7 +37,7 @@
     "@effect-ts/otel": "0.15.1",
     "@nestjs/apollo": "11.0.6",
     "@nestjs/common": "9.4.3",
-    "@nestjs/config": "2.3.4",
+    "@nestjs/config": "3.0.0",
     "@nestjs/core": "9.4.3",
     "@nestjs/event-emitter": "1.4.2",
     "@nestjs/graphql": "11.0.6",

@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     coverage: {
       reporter: ['lcov'],
+      provider: 'v8',
     },
   },
 });

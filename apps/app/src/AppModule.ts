@@ -21,36 +21,39 @@ import { GqlAuthGuard } from './module/user/adapter/in/gql/auth/GqlAuthGuard';
 import { UserModule } from './module/user/UserModule';
 import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModule';
 
+export const INFRA_MODULES = [
+  GraphQLModule.forRoot<ApolloDriverConfig>({
+    driver: ApolloDriver,
+    autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
+    sortSchema: true,
+    subscriptions: {
+      'graphql-ws': true,
+      'subscriptions-transport-ws': false,
+    },
+    playground: false,
+    plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    introspection: true,
+    cache: 'bounded',
+  }),
+  ConfigModule.forRoot({ isGlobal: true }),
+  OTELModule,
+  EventEmitterModule,
+  PrismaModule,
+  PubSubModule,
+  PushMessageModule,
+];
+
+export const BUSINESS_MODULES = [
+  CategoryModule,
+  SampleModule,
+  UserModule,
+  ChatModule,
+  ShareDealModule,
+  UserPushTokenModule,
+];
+
 @Module({
-  imports: [
-    OTELModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
-      sortSchema: true,
-      subscriptions: {
-        'graphql-ws': true,
-        'subscriptions-transport-ws': false,
-      },
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      introspection: true,
-      cache: 'bounded',
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    EventEmitterModule,
-    PrismaModule,
-    PubSubModule,
-    PushMessageModule,
-    CategoryModule,
-    SampleModule,
-    UserModule,
-    ChatModule,
-    ShareDealModule,
-    UserPushTokenModule,
-  ],
+  imports: [...INFRA_MODULES, ...BUSINESS_MODULES],
   providers: [
     {
       provide: APP_GUARD,

@@ -1,8 +1,8 @@
 import { T, pipe } from '@app/custom/effect';
 import { Service } from '@app/custom/nest/decorator/Service';
 import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
+import { OnDomainEvent } from '@app/event-emitter/decorator/OnDomainEvent';
 import { liveTracer } from '@app/monitoring/init';
-import { OnEvent } from '@nestjs/event-emitter';
 
 import { ChatWrittenEvent } from '../../../../chat/domain/event/ChatWrittenEvent';
 import { UserPushTokenQueryRepositoryPort } from '../../../application/port/out/UserPushTokenQueryRepositoryPort';
@@ -14,7 +14,7 @@ export class UserPushTokenEventListener {
     private readonly pushMessagePort: PushMessagePort,
   ) {}
 
-  @OnEvent(ChatWrittenEvent.name, { async: true })
+  @OnDomainEvent(ChatWrittenEvent)
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
     const userIds = event.chatsWithoutAuthor.map((chat) => chat.userId);
 

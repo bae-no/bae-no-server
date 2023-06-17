@@ -3,8 +3,8 @@ import { Service } from '@app/custom/nest/decorator/Service';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
 import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
+import { OnDomainEvent } from '@app/event-emitter/decorator/OnDomainEvent';
 import { liveTracer } from '@app/monitoring/init';
-import { OnEvent } from '@nestjs/event-emitter';
 
 import { ChatWrittenTrigger } from './ChatWritttenTrigger';
 import { ShareDealQueryRepositoryPort } from '../../../../share-deal/application/port/out/ShareDealQueryRepositoryPort';
@@ -30,7 +30,7 @@ export class ChatEventListener {
     private readonly userQueryRepositoryPort: UserQueryRepositoryPort,
   ) {}
 
-  @OnEvent(ChatReadEvent.name, { async: true })
+  @OnDomainEvent(ChatReadEvent)
   async handleChatReadEvent(event: ChatReadEvent) {
     await pipe(
       this.chatRepositoryPort.updateRead(event.shareDealId, event.userId),
@@ -39,7 +39,7 @@ export class ChatEventListener {
     );
   }
 
-  @OnEvent(ChatWrittenEvent.name, { async: true })
+  @OnDomainEvent(ChatWrittenEvent)
   async handleChatWrittenEvent(event: ChatWrittenEvent) {
     await pipe(
       NEA.fromArray(event.chats),
@@ -62,14 +62,11 @@ export class ChatEventListener {
     );
   }
 
-  @OnEvent(
-    [
-      ShareDealStartedEvent.name,
-      ShareDealEndedEvent.name,
-      ShareDealClosedEvent.name,
-    ],
-    { async: true },
-  )
+  @OnDomainEvent([
+    ShareDealStartedEvent,
+    ShareDealEndedEvent,
+    ShareDealClosedEvent,
+  ])
   async handleShareDealUpdatedEvent(
     event: ShareDealStartedEvent | ShareDealEndedEvent | ShareDealClosedEvent,
   ) {

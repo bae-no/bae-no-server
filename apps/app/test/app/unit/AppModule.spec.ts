@@ -1,12 +1,9 @@
-import { PushMessagePort } from '@app/domain/notification/PushMessagePort';
-import { PubSubPort } from '@app/domain/pub-sub/PubSubPort';
-import { PrismaService } from '@app/prisma/PrismaService';
 import type { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { AppModule } from '../../../src/AppModule';
+import { BUSINESS_MODULES } from '../../../src/AppModule';
+import { TestInfraModule } from '../../fixture/TestInfraModule';
 
 describe('AppModule', () => {
   let app: INestApplication;
@@ -14,17 +11,8 @@ describe('AppModule', () => {
   beforeAll(async () => {
     process.env.JWT_SECRET = 'secret';
     const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(PrismaService)
-      .useValue({})
-      .overrideProvider(PushMessagePort)
-      .useValue({})
-      .overrideProvider(PubSubPort)
-      .useValue({})
-      .overrideProvider(ConfigService)
-      .useValue({ getOrThrow: () => 'config' })
-      .compile();
+      imports: [TestInfraModule, ...BUSINESS_MODULES],
+    }).compile();
 
     app = module.createNestApplication();
     await app.init();

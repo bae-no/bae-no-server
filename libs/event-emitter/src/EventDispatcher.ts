@@ -1,4 +1,5 @@
 import type { DomainEvent } from '@app/domain/event/DomainEvent';
+import { EVENT_QUEUE } from '@app/event-emitter/constant';
 import type { Constructor } from '@app/event-emitter/decorator/OnDomainEvent';
 import { EVENTS_METADATA } from '@app/event-emitter/decorator/OnDomainEvent';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
@@ -9,7 +10,7 @@ import type { Job } from 'bullmq';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-@Processor('event-emitter')
+@Processor(EVENT_QUEUE)
 export class EventDispatcher extends WorkerHost implements OnModuleInit {
   private readonly logger = new Logger(EventDispatcher.name);
   private readonly eventProcessorMap: Map<

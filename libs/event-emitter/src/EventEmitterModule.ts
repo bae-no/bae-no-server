@@ -1,4 +1,5 @@
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import { EVENT_QUEUE } from '@app/event-emitter/constant';
 import { EventDispatcher } from '@app/event-emitter/EventDispatcher';
 import { EventEmitterAdapter } from '@app/event-emitter/EventEmitterAdapter';
 import { BullModule } from '@nestjs/bullmq';
@@ -22,9 +23,7 @@ import { Redis } from 'ioredis';
         return { connection: redis };
       },
     }),
-    BullModule.registerQueue({
-      name: 'event-emitter',
-    }),
+    BullModule.registerQueue({ name: EVENT_QUEUE }),
   ],
   providers: [
     { provide: EventEmitterPort, useClass: EventEmitterAdapter },

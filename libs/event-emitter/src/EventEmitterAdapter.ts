@@ -1,5 +1,6 @@
 import type { DomainEvent } from '@app/domain/event/DomainEvent';
 import { EventEmitterPort } from '@app/domain/event-emitter/EventEmitterPort';
+import { EVENT_QUEUE } from '@app/event-emitter/constant';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { Queue } from 'bullmq';
@@ -9,7 +10,7 @@ export class EventEmitterAdapter extends EventEmitterPort {
   private readonly logger = new Logger(EventEmitterAdapter.name);
 
   constructor(
-    @(InjectQueue('event-emitter') as any)
+    @(InjectQueue(EVENT_QUEUE) as any)
     private readonly queue: Queue,
   ) {
     super();

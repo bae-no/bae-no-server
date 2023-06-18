@@ -38,7 +38,7 @@ export class FakeHttpResponse<T> implements HttpResponse {
     );
   }
 
-  toEntity<T>(_entity: { new (...args: any[]): T }): E.Either<HttpError, T> {
+  toEntity<T>(): E.Either<HttpError, T> {
     return E.right(this._entity as any);
   }
 }

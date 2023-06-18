@@ -8,5 +8,5 @@ export interface HttpResponse {
 
   get body(): string;
 
-  toEntity<T>(entity: { new (...args: any[]): T }): E.Either<HttpError, T>;
+  toEntity<T>(entity: new (...args: any[]) => T): E.Either<HttpError, T>;
 }

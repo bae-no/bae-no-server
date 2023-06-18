@@ -24,7 +24,10 @@ import { UserPushTokenModule } from './module/user-push-token/UserPushTokenModul
 export const INFRA_MODULES = [
   GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
-    autoSchemaFile: path.join(process.cwd(), 'schema/schema.gql'),
+    autoSchemaFile:
+      process.env.NODE_ENV !== 'production'
+        ? path.join(process.cwd(), 'schema/schema.gql')
+        : true,
     sortSchema: true,
     subscriptions: {
       'graphql-ws': true,

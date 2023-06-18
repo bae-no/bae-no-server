@@ -107,6 +107,9 @@ dependencies:
   graphql-subscriptions:
     specifier: 2.0.0
     version: 2.0.0(graphql@16.6.0)
+  ioredis:
+    specifier: ^5.3.2
+    version: 5.3.2
   passport:
     specifier: 0.6.0
     version: 0.6.0

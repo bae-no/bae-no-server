@@ -5,6 +5,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DiscoveryModule } from '@nestjs/core';
+import { Redis } from 'ioredis';
 
 @Global()
 @Module({
@@ -16,14 +17,9 @@ import { DiscoveryModule } from '@nestjs/core';
         const connection: string = configService.getOrThrow(
           'REDIS_CONNECTION_NAME',
         );
-        const parts = connection.split(':');
+        const redis = new Redis(connection, { maxRetriesPerRequest: null });
 
-        return {
-          connection: {
-            host: parts.slice(0, -1).join(''),
-            port: Number(parts.at(-1)),
-          },
-        };
+        return { connection: redis };
       },
     }),
     BullModule.registerQueue({

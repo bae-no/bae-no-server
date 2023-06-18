@@ -18,7 +18,7 @@ export class NodeFetchResponse implements HttpResponse {
     return this.rawBody;
   }
 
-  toEntity<T>(entity: { new (...args: any[]): T }): E.Either<HttpError, T> {
+  toEntity<T>(entity: new (...args: any[]) => T): E.Either<HttpError, T> {
     return pipe(
       E.parseJSON((v) => v)(this.rawBody),
       E.chain((body) =>

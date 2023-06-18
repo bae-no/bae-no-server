@@ -31,7 +31,7 @@ export class LeaveUserInput {
       case LeaveReasonType.PRICE:
         return '생각보다 가격이 비효율적이기 때문에';
       case LeaveReasonType.ETC:
-        return this.body || '';
+        return this.body ?? '';
     }
   }
 }

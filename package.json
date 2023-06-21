@@ -57,7 +57,7 @@
     "@opentelemetry/semantic-conventions": "1.14.0",
     "@prisma/client": "4.15.0",
     "@prisma/instrumentation": "4.15.0",
-    "bullmq": "^3.15.6",
+    "bullmq": "^4.0.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
     "cuid": "^3.0.0",

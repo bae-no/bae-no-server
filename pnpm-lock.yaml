@@ -19,7 +19,7 @@ dependencies:
     version: 12.0.1(@apollo/server@4.7.4)(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/graphql@12.0.1)(graphql@16.6.0)
   '@nestjs/bullmq':
     specifier: 10.0.0
-    version: 10.0.0(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(bullmq@3.15.6)
+    version: 10.0.0(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(bullmq@4.0.0)
   '@nestjs/common':
     specifier: 10.0.2
     version: 10.0.2(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -81,8 +81,8 @@ dependencies:
     specifier: 4.15.0
     version: 4.15.0
   bullmq:
-    specifier: ^3.15.6
-    version: 3.15.6
+    specifier: ^4.0.0
+    version: 4.0.0
   class-transformer:
     specifier: 0.5.1
     version: 0.5.1
@@ -1309,7 +1309,7 @@ packages:
       tslib: 2.5.3
     dev: false
 
-  /@nestjs/bullmq@10.0.0(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(bullmq@3.15.6):
+  /@nestjs/bullmq@10.0.0(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(bullmq@4.0.0):
     resolution: {integrity: sha512-0H1iDYXQTPrl61KPV4Ime3hJu8/NWde9Y19IJmQRZgP4R2brTpRWIi/LrHbIXgB+vL/MCdfbJFXG8a1QqdCQ9Q==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -1319,7 +1319,7 @@ packages:
       '@nestjs/bull-shared': 10.0.0(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)
       '@nestjs/common': 10.0.2(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.0.2(@nestjs/common@10.0.2)(@nestjs/platform-express@10.0.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      bullmq: 3.15.6
+      bullmq: 4.0.0
       tslib: 2.5.3
     dev: false
 
@@ -3820,8 +3820,8 @@ packages:
       xtend: 4.0.2
     dev: false
 
-  /bullmq@3.15.6:
-    resolution: {integrity: sha512-MHmzSVzhxb088rY/kS65VWuTBbgJriVn4BmUpQtRzLH3VAm9jTodIClu6nRSw0Yss94/+cpJ1hMyjhieGDmeKw==}
+  /bullmq@4.0.0:
+    resolution: {integrity: sha512-t4SIOS6+/Xnd4zUQRefMdcyV2VlWJ8mTNGN4cftCnH5T4f8TKexc7F6Wp+EwmtTn6z2JvHw7U2XkIYSxPDu2YA==}
     dependencies:
       cron-parser: 4.8.1
       glob: 8.1.0

@@ -1,12 +1,10 @@
 import { TicketGeneratorPort } from '@app/domain/generator/TicketGeneratorPort';
-import cuid from 'cuid';
+import { monotonicFactory } from 'ulid';
 
 export class TicketGeneratorAdapter extends TicketGeneratorPort {
-  constructor() {
-    super();
-  }
+  #generator = monotonicFactory();
 
   override generateId(): string {
-    return cuid();
+    return this.#generator();
   }
 }

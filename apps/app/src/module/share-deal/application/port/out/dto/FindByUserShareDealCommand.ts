@@ -1,7 +1,7 @@
 import { PageCommand } from '@app/domain/command/PageCommand';
 
-import type { UserId } from '../../../../../user/domain/User';
-import type { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
+import { UserId } from '../../../../../user/domain/User';
+import { ShareDealStatus } from '../../../../domain/vo/ShareDealStatus';
 
 export class FindByUserShareDealCommand extends PageCommand {
   constructor(

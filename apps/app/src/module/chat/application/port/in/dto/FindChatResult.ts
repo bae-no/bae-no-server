@@ -1,6 +1,6 @@
-import type { O } from '@app/custom/effect';
+import { O } from '@app/custom/effect';
 
-import type { ShareDealId } from '../../../../../share-deal/domain/ShareDeal';
+import { ShareDealId } from '../../../../../share-deal/domain/ShareDeal';
 import type { Chat } from '../../../../domain/Chat';
 
 export class FindChatResult {

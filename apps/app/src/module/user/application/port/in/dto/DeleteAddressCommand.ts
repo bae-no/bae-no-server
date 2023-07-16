@@ -1,5 +1,8 @@
-import type { UserId } from '../../../../domain/User';
+import { UserId } from '../../../../domain/User';
 
 export class DeleteAddressCommand {
-  constructor(readonly key: string, readonly userId: UserId) {}
+  constructor(
+    readonly key: string,
+    readonly userId: UserId,
+  ) {}
 }

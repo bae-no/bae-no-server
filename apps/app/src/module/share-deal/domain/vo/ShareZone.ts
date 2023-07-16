@@ -1,4 +1,4 @@
-import type { AddressSystem } from '../../../user/domain/vo/AddressSystem';
+import { AddressSystem } from '../../../user/domain/vo/AddressSystem';
 import { Coordinate } from '../../../user/domain/vo/Coordinate';
 
 export class ShareZone {

@@ -1,6 +1,6 @@
 import { FindByUserShareDealCommand } from '../../../../../share-deal/application/port/out/dto/FindByUserShareDealCommand';
-import type { ShareDealStatus } from '../../../../../share-deal/domain/vo/ShareDealStatus';
-import type { UserId } from '../../../../../user/domain/User';
+import { ShareDealStatus } from '../../../../../share-deal/domain/vo/ShareDealStatus';
+import { UserId } from '../../../../../user/domain/User';
 
 export class FindChatCommand {
   constructor(

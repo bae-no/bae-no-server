@@ -1,4 +1,4 @@
-import type { UserId } from '../../../../../user/domain/User';
+import { UserId } from '../../../../../user/domain/User';
 
 export class UpdateUserPushTokenCommand {
   constructor(

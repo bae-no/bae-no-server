@@ -1,4 +1,4 @@
-import type { UserId } from '../../../../domain/User';
+import { UserId } from '../../../../domain/User';
 
 export class VerifyPhoneVerificationCodeCommand {
   constructor(

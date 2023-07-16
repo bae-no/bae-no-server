@@ -1,4 +1,4 @@
-import type { FoodCategory } from '../../../../domain/vo/FoodCategory';
+import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 export class CountShareDealCommand {
   constructor(

@@ -1,4 +1,4 @@
-import type { AuthType } from '../../../../domain/vo/AuthType';
+import { AuthType } from '../../../../domain/vo/AuthType';
 
 export class SignInUserCommand {
   constructor(

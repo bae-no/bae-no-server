@@ -1,5 +1,5 @@
-import type { AuthToken } from './AuthToken';
-import type { User } from '../../../../domain/User';
+import { AuthToken } from './AuthToken';
+import { User } from '../../../../domain/User';
 
 export class SignInUserDto {
   constructor(

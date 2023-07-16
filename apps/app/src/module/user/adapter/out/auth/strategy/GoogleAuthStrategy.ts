@@ -1,7 +1,7 @@
 import { T, pipe } from '@app/custom/effect';
 import { AuthError } from '@app/domain/error/AuthError';
 import { HttpError } from '@app/domain/error/HttpError';
-import type { HttpClientPort } from '@app/domain/http/HttpClientPort';
+import { HttpClientPort } from '@app/domain/http/HttpClientPort';
 import type { HttpResponse } from '@app/domain/http/HttpResponse';
 
 import type { AuthStrategy } from './AuthStrategy';

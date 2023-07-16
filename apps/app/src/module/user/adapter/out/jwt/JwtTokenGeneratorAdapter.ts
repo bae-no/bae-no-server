@@ -1,5 +1,5 @@
 import { pipe } from '@app/custom/effect';
-import type { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { addDays } from 'date-fns';
 
 import { AuthToken } from '../../../application/port/in/dto/AuthToken';

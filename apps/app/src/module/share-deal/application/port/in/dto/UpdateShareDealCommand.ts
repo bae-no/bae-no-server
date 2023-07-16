@@ -1,10 +1,8 @@
-import type { UserId } from '../../../../../user/domain/User';
-import type { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
-import type {
-  ShareDealId,
-  UpdateShareDealProps,
-} from '../../../../domain/ShareDeal';
-import type { FoodCategory } from '../../../../domain/vo/FoodCategory';
+import { UserId } from '../../../../../user/domain/User';
+import { AddressSystem } from '../../../../../user/domain/vo/AddressSystem';
+import { ShareDealId } from '../../../../domain/ShareDeal';
+import type { UpdateShareDealProps } from '../../../../domain/ShareDeal';
+import { FoodCategory } from '../../../../domain/vo/FoodCategory';
 
 export class UpdateShareDealCommand {
   constructor(

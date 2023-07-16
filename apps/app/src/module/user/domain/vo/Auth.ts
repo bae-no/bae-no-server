@@ -1,4 +1,4 @@
-import type { AuthType } from './AuthType';
+import { AuthType } from './AuthType';
 
 export class Auth {
   constructor(

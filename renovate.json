@@ -9,10 +9,14 @@
         "*"
       ],
       "matchUpdateTypes": [
-        "patch"
+        "major",
+        "minor"
       ],
-      "groupName": "all patch dependencies",
-      "groupSlug": "all-patch"
+      "groupName": "all dependencies",
+      "groupSlug": "all"
     }
-  ]
+  ],
+  "patch": {
+    "enabled": false
+  }
 }

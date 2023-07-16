@@ -1,3 +1,6 @@
 export class Agreement {
-  constructor(readonly information: boolean, readonly service: boolean) {}
+  constructor(
+    readonly information: boolean,
+    readonly service: boolean,
+  ) {}
 }

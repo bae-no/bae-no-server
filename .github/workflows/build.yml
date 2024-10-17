@@ -25,17 +25,17 @@ jobs:
 
     steps:
       - name: Set Timezone
-        uses: szenius/set-timezone@v1.2
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: Asia/Seoul
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -60,7 +60,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Check dependency cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-dependencies
         with:
           path: node_modules
